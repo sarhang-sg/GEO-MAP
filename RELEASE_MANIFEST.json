@@ -8,7 +8,7 @@
   "generatedForDate": "2026-08-27",
   "secretSafe": true,
   "fileCount": 1204,
-  "totalBytes": 280589872,
+  "totalBytes": 280591202,
   "files": {
     ".env.example": {
       "bytes": 3107,
@@ -47,8 +47,8 @@
       "sha256": "4fc11fb03d523fb843136d361abee46a5e95ada47f5ffa4111e8b632cb53ccae"
     },
     ".github/workflows/supabase-deploy.yml": {
-      "bytes": 3280,
-      "sha256": "ce15482ee810c4a672e32085ad99ee52aade829ef9f36b9fefee0797fa691da6"
+      "bytes": 4226,
+      "sha256": "0c46de65167025b4422f61579bcc7993aa424f0dad67f4b520967fe8997d30d8"
     },
     ".github/workflows/windows-native.yml": {
       "bytes": 1724,
@@ -4615,8 +4615,8 @@
       "sha256": "2245c37a2f4494f26acfd2a534f625e7444d833b9b29c4b710b8f6f3ed961607"
     },
     "supabase/README.md": {
-      "bytes": 1924,
-      "sha256": "fdfa498d7480804c6f640beb3f9aed65a8ea787cebd5c6a2b9c8ac016f4365dc"
+      "bytes": 2082,
+      "sha256": "6bc7202ac8b6f6eb7aef863d55dda0f10f8d258f0b99c27c4111b15de3fc0abd"
     },
     "TERMUX.sh": {
       "bytes": 2931,
@@ -4699,8 +4699,8 @@
       "sha256": "b9e182dfbd1fc9a243efdcb749116e9c61d84a7db9705565a783ffd9ae98b9ed"
     },
     "tools/data/prepare-supabase-ci-migrations.py": {
-      "bytes": 1656,
-      "sha256": "090809163f9da49c31c5031128f58128b3a0852830b33db43d738ddc3787c7aa"
+      "bytes": 1733,
+      "sha256": "b42c1b00170f487fcb63ba7a86e5607f837c7a06901c110dbd951ebda9e4793b"
     },
     "tools/data/rebuild-canonical-data.py": {
       "bytes": 72061,
@@ -4767,8 +4767,8 @@
       "sha256": "98d8efc5855a8c341ab993e0497ef7b9f776b68f61bed5ae09b09ab48cebb5b0"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 9875,
-      "sha256": "b456429a83f880182a6902ec22869e7cdd6679c7976558c3c1a988df1933bf53"
+      "bytes": 10024,
+      "sha256": "59cdb690205a7ea214b0b38cabcd91c91acf6163d46a6f45448e2c794d1b21bb"
     },
     "tools/verify/data.py": {
       "bytes": 9700,

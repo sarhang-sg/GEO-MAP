@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Create uniquely versioned disposable Supabase migrations for CI.
+"""Create uniquely versioned disposable Supabase CLI migrations.
 
 The production migration filenames are retained for compatibility with the
 already-deployed remote project. Supabase uses the text before the first
-underscore as the version, so same-day historical files need a CI-only 14-digit
-version made from YYYYMMDD + the existing six-digit sequence.
+underscore as the version, so same-day historical files need a staged 14-digit
+version made from YYYYMMDD + the existing six-digit sequence. CI and fresh
+production deployment both consume the disposable staged directory.
 """
 from __future__ import annotations
 

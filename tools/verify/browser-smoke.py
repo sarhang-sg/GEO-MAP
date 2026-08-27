@@ -138,8 +138,10 @@ def main() -> int:
             if not privacy_text:
                 raise AssertionError("visitor privacy disclosure is empty")
 
-            page.goto(f"{BASE_URL}/legal/privacy.html", wait_until="domcontentloaded", timeout=15_000)
-            body_text = page.locator("body").inner_text()
+            page.goto(f"{BASE_URL}/legal/privacy.html?lang=en", wait_until="domcontentloaded", timeout=15_000)
+            english_privacy = page.locator('article[data-legal-lang="en"]')
+            english_privacy.wait_for(state="visible", timeout=10_000)
+            body_text = english_privacy.inner_text()
             if "visible by default" not in body_text.lower() or "UUID" not in body_text:
                 raise AssertionError("privacy page is missing the visitor-list disclosure")
 

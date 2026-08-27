@@ -8,8 +8,10 @@ repository. The migration filenames are immutable database history.
 1. Add `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID` and
    `SUPABASE_DB_PASSWORD` as GitHub Actions secrets.
 2. Run `.github/workflows/supabase-deploy.yml` with `mode=database` and
-   `confirm=DEPLOY`. It links the selected project, previews the pending SQL,
-   then applies every pending file in `supabase/migrations` in numeric order.
+   `confirm=DEPLOY`. It stages canonical unique Supabase versions, links the
+   selected project, previews the pending SQL, then applies every pending file
+   in numeric order. Set `repair_legacy_history=true` only once if an earlier
+   fresh deploy stopped after applying the first three legacy-named migrations.
 3. Do not paste the migration set repeatedly into SQL Editor. The migration
    history table is the authority for what has already run.
 

@@ -16,6 +16,11 @@ on:
         description: Type DEPLOY to continue
         required: true
         type: string
+      repair_legacy_history:
+        description: One-time repair after the legacy same-day migration run stopped on a duplicate version
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -72,6 +77,20 @@ jobs:
 
       - name: Link the fresh production project
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Prepare canonical Supabase migration versions
+        if: ${{ inputs.mode == 'database' || inputs.mode == 'all' }}
+        run: |
+          python3 tools/data/prepare-supabase-ci-migrations.py
+          mv supabase/migrations supabase/migrations-source
+          mv supabase/migrations-ci supabase/migrations
+
+      - name: Repair the partial legacy migration history
+        if: ${{ (inputs.mode == 'database' || inputs.mode == 'all') && inputs.repair_legacy_history }}
+        run: |
+          supabase migration repair 20260707 20260708 20260712 --status reverted --linked
+          supabase migration repair 20260707000001 20260708000002 20260712000003 --status applied --linked
+          supabase migration list --linked
 
       - name: Preview pending database migrations
         if: ${{ inputs.mode == 'database' || inputs.mode == 'all' }}
