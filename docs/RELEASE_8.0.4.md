@@ -2,7 +2,7 @@
 
 Release ID: `2026-08-27-nav-kurd-v8.0.4`
 Cache schema: `84`
-Canonical origin: `https://geo-map-two.vercel.app`
+Canonical origin: `https://geo-map-kappa.vercel.app`
 
 ## Changes
 

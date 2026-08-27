@@ -10,7 +10,7 @@ export type ShareLocationOptions = {
 
 function publicAppUrl(): URL {
   const configured = import.meta.env.VITE_PUBLIC_APP_URL?.trim();
-  const base = configured || (typeof window !== "undefined" ? window.location.origin : "https://geo-map-two.vercel.app");
+  const base = configured || (typeof window !== "undefined" ? window.location.origin : "https://geo-map-kappa.vercel.app");
   return new URL(base);
 }
 

@@ -4,7 +4,7 @@
 <dict>
     <key>com.apple.developer.associated-domains</key>
     <array>
-        <string>applinks:geo-map-two.vercel.app</string>
+        <string>applinks:geo-map-kappa.vercel.app</string>
     </array>
 </dict>
 </plist>

@@ -305,7 +305,7 @@
           "value": "map-two.vercel.app"
         }
       ],
-      "destination": "https://geo-map-two.vercel.app/:path*",
+      "destination": "https://geo-map-kappa.vercel.app/:path*",
       "permanent": true
     }
   ]

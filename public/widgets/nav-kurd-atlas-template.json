@@ -26,12 +26,12 @@
     {
       "type": "Action.OpenUrl",
       "title": "Open NAV KURD",
-      "url": "https://geo-map-two.vercel.app/"
+      "url": "https://geo-map-kappa.vercel.app/"
     },
     {
       "type": "Action.OpenUrl",
       "title": "My location",
-      "url": "https://geo-map-two.vercel.app/?action=locate"
+      "url": "https://geo-map-kappa.vercel.app/?action=locate"
     }
   ]
 }

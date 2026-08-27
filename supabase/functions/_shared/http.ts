@@ -1,7 +1,7 @@
 export type JsonRecord = Record<string, unknown>;
 
 const DEFAULT_ALLOWED_ORIGINS = [
-  "https://geo-map-two.vercel.app",
+  "https://geo-map-kappa.vercel.app",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "http://localhost:4173",

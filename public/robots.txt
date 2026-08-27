@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://geo-map-two.vercel.app/sitemap.xml
+Sitemap: https://geo-map-kappa.vercel.app/sitemap.xml

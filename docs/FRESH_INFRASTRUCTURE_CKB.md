@@ -128,19 +128,19 @@ gh run watch "$SUPABASE_RUN_ID" --repo sarhang-sg/GEO-MAP --exit-status
 هەموو default/optional variable ـەکانی تر لە `.env.example` ـدان. database
 password، Supabase secret/service-role key و JKS مەخەرە Vercel browser env.
 
-### 3.2 کاتێ URL ـی نوێ دروست بوو
+### 3.2 URL ـی production
 
-یەکەم Deploy تەنها بۆ وەرگرتنی production domain ـە. URL ـەکە بە شێوەی
-`https://PROJECT.vercel.app` کۆپی بکە و بنێرە؛ پێش release ـی کۆتایی دەبێت
-canonical origin، App Links، redirect، sitemap، legal links و update feed لە
-هەردوو project ـدا بە یەک commit بگۆڕدرێن و validate بکرێن.
+Production domain ـی دیاریکراو `https://geo-map-kappa.vercel.app` ـە.
+Canonical origin، App Links، redirect، sitemap، legal links و update feed لە
+هەردوو project ـدا بۆ ئەم domain ـە یەکخراون و دەبێت هەر بە یەکەوە
+validate بکرێن.
 
-Edge Functions ـەکان دوای دۆزینەوەی URL:
+Edge Functions ـەکان بۆ production origin:
 
 ```bash
 gh variable set NAV_KURD_ALLOWED_ORIGINS \
   --repo sarhang-sg/GEO-MAP \
-  --body "https://YOUR-NEW-PROJECT.vercel.app"
+  --body "https://geo-map-kappa.vercel.app"
 
 gh workflow run supabase-deploy.yml \
   --repo sarhang-sg/GEO-MAP \

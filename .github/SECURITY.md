@@ -5,4 +5,4 @@ Report them privately to **sarhang.salah9@gmail.com** or through the repository 
 Do not include production credentials, access tokens or personal data in a report.
 
 The canonical machine-readable contact is:
-https://geo-map-two.vercel.app/.well-known/security.txt
+https://geo-map-kappa.vercel.app/.well-known/security.txt

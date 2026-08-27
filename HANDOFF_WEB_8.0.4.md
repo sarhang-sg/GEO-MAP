@@ -7,8 +7,7 @@ Use this file when continuing the web work in a new chat.
 - Vite/TypeScript/MapLibre/PMTiles app at this repository root
 - Version: `8.0.4`
 - Release source of truth: `release.config.json`
-- Current canonical deployment: `https://geo-map-two.vercel.app` (retain until
-  the exact new Vercel production URL is assigned and patched in both projects)
+- Current canonical deployment: `https://geo-map-kappa.vercel.app`
 - Canonical private GitHub repository: `sarhang-sg/GEO-MAP`
 - Production command: `npm run build:vercel` (publishes `dist/`)
 

@@ -8,11 +8,11 @@
   "generatedForDate": "2026-08-27",
   "secretSafe": true,
   "fileCount": 1204,
-  "totalBytes": 280591202,
+  "totalBytes": 280591080,
   "files": {
     ".env.example": {
-      "bytes": 3107,
-      "sha256": "ddb000f409b8714ee1ab02a3fd50271e1a64679d4458ce373cf04093ad7f16a8"
+      "bytes": 3113,
+      "sha256": "36a6e7fed1d6529b78f0470d7fd7cd8f1e9efd1c192a4d994167707c6b03288f"
     },
     ".gitattributes": {
       "bytes": 730,
@@ -31,8 +31,8 @@
       "sha256": "6216abf72154841cfbaaa5fa7f5836c4300c8991e8ba10f28483f4b83f77ead9"
     },
     ".github/SECURITY.md": {
-      "bytes": 376,
-      "sha256": "431eccf43ce3f3b9adecbe6c90d9851933d923c2fd7cf300723dd54ee844f687"
+      "bytes": 378,
+      "sha256": "d0f8df5a092e87f52e37280a9d62299374c2b4fb6310ca0991583ab564b85f6a"
     },
     ".github/workflows/android-native.yml": {
       "bytes": 2497,
@@ -91,8 +91,8 @@
       "sha256": "ff50b4c110a7434312f9af54171f9e8523b015836f707c9b387b76d4c38a97f8"
     },
     "android/app/src/main/AndroidManifest.xml": {
-      "bytes": 2631,
-      "sha256": "c012150adab392df4b995aa041016433fec80c0b5743a041724f3ecb123c8628"
+      "bytes": 2633,
+      "sha256": "6a9d1800deee36d48ce7fbf234dd2079b064c7815c172955e12f17ba7bb4d94e"
     },
     "android/app/src/main/java/com/navkurd/app/MainActivity.java": {
       "bytes": 316,
@@ -391,8 +391,8 @@
       "sha256": "1d1a62eecac1cfd2977b375651153af69846b6f8c74eae235c9bade325894a20"
     },
     "docs/FRESH_INFRASTRUCTURE_CKB.md": {
-      "bytes": 7687,
-      "sha256": "6660a57c7787846272f8af5e8be1df6d0effb8df8a4efcd3eed9bb8877b709c9"
+      "bytes": 7567,
+      "sha256": "aa5fe078d8ae32fed3f522ccbf8739dc2c0d31dcd478358976f9e907afb11335"
     },
     "docs/OFFLINE.md": {
       "bytes": 649,
@@ -403,20 +403,20 @@
       "sha256": "c651b569bb8b478247af066683661024255d95e63f2558213d2fd09b919eae7f"
     },
     "docs/RELEASE_8.0.4.md": {
-      "bytes": 2650,
-      "sha256": "71b1afabf9d1ba07697d0f2609a118f71b85b399ce8daf9b6d8ae32e260ecca8"
+      "bytes": 2652,
+      "sha256": "58cb58206eb06fa68f969e655969e4b5176032e4359146541cb33384dc0b5af5"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
       "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
     },
     "HANDOFF_WEB_8.0.4.md": {
-      "bytes": 3486,
-      "sha256": "69d849515ad6f7e84f68f3ef3e8327db004e91ad718ec2c13a11cdeb6b4f90d1"
+      "bytes": 3394,
+      "sha256": "021083aef57677880e88bd7251541831b1e70f79201561a4a2fd621acaa22483"
     },
     "index.html": {
-      "bytes": 3935,
-      "sha256": "d53a17cdd887476cf386f62c80325c1bf265f70007718561b2b6666494487e7d"
+      "bytes": 3947,
+      "sha256": "f79648116ee578667c6927a68f54179a180019bb7f7a38892df534d883ea87f6"
     },
     "ios/.gitignore": {
       "bytes": 206,
@@ -431,8 +431,8 @@
       "sha256": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542"
     },
     "ios/App/App/App.entitlements": {
-      "bytes": 324,
-      "sha256": "c996dce79fe78181bbafb5da018def7997081942897cbda95ec4cea0414628b4"
+      "bytes": 326,
+      "sha256": "19e06706bdb33cd05fc46efa37e5e10beb52feb794aac4be4f76bb59080a1bfd"
     },
     "ios/App/App/AppDelegate.swift": {
       "bytes": 3031,
@@ -527,12 +527,12 @@
       "sha256": "36ccc5e79c672a35627d4ee776c9484e0decea0e9eba4f1328838901677a0fbe"
     },
     "public/.well-known/security.txt": {
-      "bytes": 230,
-      "sha256": "eeb51c395191380b4d2050f99d14f924931607abbb12a52e06c9dc2006f88d99"
+      "bytes": 234,
+      "sha256": "742f215b22cd7253507a58d49fb531e78736787982bb20169fbe9fcfba7cdd99"
     },
     "public/.well-known/web-app-origin-association": {
-      "bytes": 64,
-      "sha256": "efd930a31ae1afb3bb28f0da8301cebe21870802d4ce96d92ee0c322cf6a74fe"
+      "bytes": 66,
+      "sha256": "f82647bd5f809b4cddf10f30e9e2271ce1052123de5b0a8b8b24f9b28d823569"
     },
     "public/assets/fonts/README.md": {
       "bytes": 267,
@@ -3795,12 +3795,12 @@
       "sha256": "85e6ea89da88e8e7c93342c721ee861394af6b6dccc25d570855fe88f091b3cd"
     },
     "public/legal/account-deletion.html": {
-      "bytes": 3202,
-      "sha256": "0b85a55226c0be5872fbfa0d9a1e5b901c309287b0d9f8c1aaba1d896dea8ed0"
+      "bytes": 3204,
+      "sha256": "a21b921aede99112fbbdec6aa979d8cc6792a4756d82b6ba848e908df88fbbcb"
     },
     "public/legal/contribution-guidelines.html": {
-      "bytes": 4376,
-      "sha256": "972def2365f634b44eb42cdccd0cfbe55a2691add313f06dd8354e1d40a8ba96"
+      "bytes": 4378,
+      "sha256": "fb532e6e36f55a7cb55ff1ba2a8c328ab006fd69400a7e10291e47290d33f488"
     },
     "public/legal/legal-i18n.js": {
       "bytes": 1418,
@@ -3811,20 +3811,20 @@
       "sha256": "ec399e301545efcb2479ae6ea744c5f72ac3d7c5db44284d52c3145752130fcb"
     },
     "public/legal/privacy.html": {
-      "bytes": 25107,
-      "sha256": "3e99ac50fb9d3740d4762339c2308e98a7cd8f8ef07b92068bfe89f3710d7cd6"
+      "bytes": 25119,
+      "sha256": "e5953855babb41a7ee7245ba4ed722ef48d5825a4b0432dfb1ee276973eadd3c"
     },
     "public/legal/security.html": {
-      "bytes": 2794,
-      "sha256": "d071f5fe022174fc9eb2845db8cb4c2d833e68756b8fe191ec5a316ca7f03a25"
+      "bytes": 2798,
+      "sha256": "60890363586a796d97cd77b1f779e23d17e3e4d9d4456b71ced0eec7110f998a"
     },
     "public/legal/terms.html": {
-      "bytes": 19737,
-      "sha256": "e4c2862daa2a7db5891b172b91d2b834163cf8eb38459a64d790ec2094f2f45f"
+      "bytes": 19749,
+      "sha256": "bf33bdf65cc84dfc2b8b0ce21a043e4ffa14203995bc469cfb3dcbed1f4831d5"
     },
     "public/manifest.webmanifest": {
-      "bytes": 4924,
-      "sha256": "f7092f43992952d24e385b3d39ce6f35c088e33a1cdfba5ee850699cef4440db"
+      "bytes": 4932,
+      "sha256": "6e1f75e2c0b0744bc1a8a68241454e51ff73ac6a7fc33a20317d1a24d78d3612"
     },
     "public/native-error.html": {
       "bytes": 2291,
@@ -3847,8 +3847,8 @@
       "sha256": "f4554a8e64805dd519d40f18ca62270e1156152f5cb63d87b04f23ecdbc46b12"
     },
     "public/robots.txt": {
-      "bytes": 76,
-      "sha256": "e01a4459c797dbd760ad6f68d4d8bfdd35d7d64f37447e846d46dea3261ae72f"
+      "bytes": 78,
+      "sha256": "ac6ec8630a51b1b2fcf148190d2b5f6cfeb447cb15bd8bce4725d4a80e21c8f9"
     },
     "public/screenshots/nav-kurd-narrow.png": {
       "bytes": 1235493,
@@ -3863,8 +3863,8 @@
       "sha256": "3ba9d585535dabe16c788f7c80907ca48ac5674db69e604e7bc221282d7f2338"
     },
     "public/sitemap.xml": {
-      "bytes": 239,
-      "sha256": "822fe79a6e34d37844c6abba80bf8f0508cb346a3024266fc871ad83ffbc5bdf"
+      "bytes": 241,
+      "sha256": "c4c6673245f52ee94ace4266187f1ec361c9b446f64e6129d778ae26b7d04342"
     },
     "public/sw.js": {
       "bytes": 30812,
@@ -3875,8 +3875,8 @@
       "sha256": "a0053384f935c84b3a83ee584197bc054f8aa9c644cf9cbb5abf9b45f6292e4e"
     },
     "public/widgets/nav-kurd-atlas-template.json": {
-      "bytes": 775,
-      "sha256": "556ee08f0e4328a02b9c1cce2ec6a242c77376f990d61032edf143813eff79eb"
+      "bytes": 779,
+      "sha256": "3c40bec8429f5f4dba6c5e5c5b3c6ef9e83344e250b9a829a275c07373b2603e"
     },
     "public/widgets/nav-kurd-atlas-widget.png": {
       "bytes": 280581,
@@ -4035,8 +4035,8 @@
       "sha256": "e98648918accb16d370c39fb1ab3a26ff3000a0778badba08a96ebe432f54bb8"
     },
     "src/lib/atlas-places.ts": {
-      "bytes": 70356,
-      "sha256": "0fe90d1dcbebc2108fc03d53f56c7a872362027b0e99afffdf63e4da37b95110"
+      "bytes": 70358,
+      "sha256": "f2f9e53cf6110bca685313629eba244e515a85569607fcddf691a9b4325d37a7"
     },
     "src/lib/atlas-taxonomy.ts": {
       "bytes": 113243,
@@ -4175,8 +4175,8 @@
       "sha256": "aad45cf5804ecb9155cb32495f8674be9778f07c9dec951f2db9bc4759a179cb"
     },
     "src/lib/native-share.ts": {
-      "bytes": 2531,
-      "sha256": "33a0e6d6dbcbcd9a2ceb5ef91f2653900a79a4fff02cd49761d7510a07734abc"
+      "bytes": 2533,
+      "sha256": "54f22f8b9b20d0ac1f6045374a5d624b41eda29464beaeda81a8c5aed8692d52"
     },
     "src/lib/offline-map-pack.ts": {
       "bytes": 34984,
@@ -4515,8 +4515,8 @@
       "sha256": "a7bbdc5acc7ea80c9a70c79d326e11e001f5e2d8bba4f264887a00aff54e2763"
     },
     "supabase/functions/_shared/http.ts": {
-      "bytes": 4350,
-      "sha256": "b8049f3ec6f9136b576ff3a251f185b4085ff5aeb81ff49f70c22838a5d6ca82"
+      "bytes": 4352,
+      "sha256": "8168e7fba95650430afe798e0c96a0db41123ca7ad5ac0eabcdd280e1c8a8fab"
     },
     "supabase/functions/delete-atlas-account/index.ts": {
       "bytes": 8401,
@@ -4635,8 +4635,8 @@
       "sha256": "3abce7e428ee8ae580bed1f3bfc945c76a72018e43fd65a4883e778449142575"
     },
     "tools/build/pwa-manifest-contract.mjs": {
-      "bytes": 293,
-      "sha256": "1c2d1a75a3b283f6489715e19271ca7d258ce6be07bc9ce0115f69b8544c04c8"
+      "bytes": 295,
+      "sha256": "dc1004a14800a004b98e3c062ce0fe84e623691feebbd8252454157bd95ce115"
     },
     "tools/data/align-data-release.py": {
       "bytes": 5995,
@@ -4819,8 +4819,8 @@
       "sha256": "b55fa6b537d8bbb4aa98eb39eb2bfea2868a54abd3d88b7f02478007f5df16f9"
     },
     "vercel.json": {
-      "bytes": 7769,
-      "sha256": "d8a416b5d354dc2aa1f195f1ecb2908471a4c733be08a1df5b5b4c184cb7353f"
+      "bytes": 7771,
+      "sha256": "ffff7969001c8fc64914f64524c8b4b34ab20030d802d18b15dfb17fc365068e"
     },
     "vite.config.ts": {
       "bytes": 657,

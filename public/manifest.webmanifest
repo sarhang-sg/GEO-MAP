@@ -27,8 +27,8 @@
   "related_applications": [
     {
       "platform": "webapp",
-      "url": "https://geo-map-two.vercel.app/manifest.webmanifest",
-      "id": "https://geo-map-two.vercel.app/"
+      "url": "https://geo-map-kappa.vercel.app/manifest.webmanifest",
+      "id": "https://geo-map-kappa.vercel.app/"
     }
   ],
   "launch_handler": {
@@ -163,8 +163,8 @@
       "description": "Quick access to the Southern Kurdistan atlas, map search and current location.",
       "tag": "nav-kurd-atlas",
       "template": "nav-kurd-atlas-card",
-      "ms_ac_template": "https://geo-map-two.vercel.app/widgets/nav-kurd-atlas-template.json",
-      "data": "https://geo-map-two.vercel.app/widgets/nav-kurd-atlas-data.json",
+      "ms_ac_template": "https://geo-map-kappa.vercel.app/widgets/nav-kurd-atlas-template.json",
+      "data": "https://geo-map-kappa.vercel.app/widgets/nav-kurd-atlas-data.json",
       "type": "application/json",
       "icons": [
         {
