@@ -1,0 +1,5 @@
+{
+  "https://geo-map-two.vercel.app/": {
+    "scope": "/"
+  }
+}

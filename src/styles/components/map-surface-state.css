@@ -1,0 +1,49 @@
+/*
+ * Canonical primary-map-surface state.
+ * The bottom card only fades/scales around its own center; it never enters from
+ * a horizontal edge. Visibility ownership is centralized here.
+ */
+.map-sheet {
+  transform-origin: center bottom;
+  will-change: opacity, transform;
+  transition:
+    opacity .18s ease,
+    transform .22s cubic-bezier(.22, .68, .22, 1),
+    visibility 0s linear 0s,
+    width .2s ease,
+    padding .2s ease,
+    max-height .22s ease;
+}
+
+@media (max-width: 700px) {
+  .map-sheet,
+  .map-sheet.is-collapsed {
+    left: 0 !important;
+    right: 0 !important;
+    margin-inline: auto !important;
+  }
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .map-sheet {
+  transform: translate3d(0, 8px, 0) scale(.988) !important;
+}
+
+.map-shell.has-active-route .map-sheet,
+.map-shell.has-destination-prompt .map-sheet,
+.map-shell.has-open-search .map-sheet,
+.map-shell.map-controls-hidden .map-sheet {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate3d(0, 10px, 0) scale(.982) !important;
+  transition-delay: 0s !important;
+}
+
+.map-shell.map-controls-hidden .map-actions,
+.map-shell.map-controls-hidden .search-card,
+.map-shell.map-controls-hidden .topbar {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: scale(.97) !important;
+}

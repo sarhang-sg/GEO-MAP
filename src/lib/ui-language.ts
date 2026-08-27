@@ -1,0 +1,120 @@
+import { isAtlasBackendConfigured } from "./atlas-places";
+import { query } from "./dom";
+import { UI, languageDirection } from "./i18n";
+import type { Language, MapMode } from "./types";
+
+type StatusSetter = (kind: "loading" | "ready" | "error", label: string) => void;
+
+type MapUiLanguageOptions = {
+  language: Language;
+  satelliteEnabled: boolean;
+  mapStyleButtons: readonly HTMLButtonElement[];
+  searchInput: HTMLInputElement;
+  backendState: HTMLElement;
+  actionsToggleButton: HTMLButtonElement;
+  setStatus: StatusSetter;
+};
+
+/** Applies translated copy and directionality to the static map shell. */
+export function applyMapUiLanguage(options: MapUiLanguageOptions): void {
+  const { language, mapStyleButtons, searchInput, backendState, actionsToggleButton, setStatus } = options;
+  const copy = UI[language];
+  document.documentElement.lang = language === "ku" ? "ckb-Arab-IQ" : language === "ar" ? "ar-IQ" : "en";
+  document.documentElement.dir = languageDirection(language);
+  document.body.dataset.language = language;
+  document.title = "NAV KURD";
+  query<HTMLElement>("#brandTitle").textContent = "NAV KURD";
+  query<HTMLElement>("#brandSubtitle").textContent = language === "ku" ? "نەخشەی کوردستان" : language === "ar" ? "أطلس كردستان" : "Kurdistan Atlas";
+  query<HTMLElement>("#mapTitle").textContent = copy.title;
+  query<HTMLElement>("#baseMapText").textContent = copy.mapData;
+  query<HTMLElement>("#locateTitle").textContent = copy.myLocation;
+  query<HTMLElement>("#locateSub").textContent = copy.myLocationSub;
+  query<HTMLElement>("#fitTitle").textContent = copy.region;
+  query<HTMLElement>("#fitSub").textContent = copy.regionSub;
+  query<HTMLElement>("#localityStatLabel").textContent = copy.places;
+  query<HTMLElement>("#baseSearchStatLabel").textContent = copy.searchData;
+  query<HTMLElement>("#ownerPlaceStatLabel").textContent = copy.ownerPlaces;
+  query<HTMLElement>("#mapNote").textContent = copy.note;
+  query<HTMLElement>("#regionEyebrow").textContent = language === "ku" ? "هەرێمی کوردستان" : language === "ar" ? "إقليم كردستان" : "KURDISTAN REGION";
+  query<HTMLElement>("#sheetHandleText").textContent = copy.mapDetails;
+  actionsToggleButton.setAttribute("aria-label", copy.moreControls);
+  actionsToggleButton.title = copy.moreControls;
+  mapStyleButtons.forEach((button) => {
+    const mode = button.dataset.mapMode as MapMode;
+    const label = mode === "street" ? copy.streetStyle : mode === "night" ? copy.nightStyle : copy.satelliteStyle;
+    button.textContent = label;
+    button.setAttribute("aria-label", label);
+  });
+  searchInput.placeholder = copy.search;
+  searchInput.setAttribute("aria-label", copy.search);
+  query<HTMLElement>("#searchLabelText").textContent = copy.openSearch;
+  query<HTMLElement>("#searchRegionHeading").textContent = copy.search;
+  query<HTMLElement>("#brandActionAssistive").textContent = copy.aboutOpen;
+  query<HTMLButtonElement>("#aboutCloseButton").setAttribute("aria-label", copy.aboutClose);
+  query<HTMLButtonElement>("#aboutDoneButton").textContent = copy.aboutDone;
+  query<HTMLButtonElement>("#feedbackButton").textContent = copy.feedbackOpen;
+  query<HTMLButtonElement>("#feedbackButton").setAttribute("aria-label", copy.feedbackOpen);
+  query<HTMLButtonElement>("#tutorialRestartButton").textContent = copy.tutorialButton;
+  query<HTMLButtonElement>("#tutorialRestartButton").setAttribute("aria-label", copy.tutorialButton);
+  query<HTMLButtonElement>("#supportButton").textContent = copy.supportButton;
+  query<HTMLButtonElement>("#supportButton").setAttribute("aria-label", copy.supportButton);
+  query<HTMLButtonElement>("#feedbackQuickButton").setAttribute("aria-label", copy.feedbackOpen);
+  query<HTMLButtonElement>("#feedbackQuickButton").title = copy.feedbackOpen;
+  query<HTMLElement>("#aboutTitle").textContent = copy.aboutTitle;
+  query<HTMLElement>("#aboutDescription").textContent = copy.aboutDescription;
+  query<HTMLElement>("#aboutVersionLabel").textContent = copy.aboutVersion;
+  query<HTMLElement>("#aboutMapEditionLabel").textContent = copy.aboutMapEdition;
+  query<HTMLElement>("#aboutDeveloperLabel").textContent = copy.aboutDeveloper;
+  query<HTMLElement>("#aboutCoverageLabel").textContent = copy.aboutCoverage;
+  query<HTMLElement>("#aboutCoverageValue").textContent = copy.aboutCoverageValue;
+  query<HTMLElement>("#aboutCvLabel").textContent = copy.aboutCv;
+  const aboutCvLink = query<HTMLElement>("#aboutCvLink");
+  aboutCvLink.setAttribute("aria-label", copy.aboutCv);
+  aboutCvLink.setAttribute("title", copy.aboutCv);
+  query<HTMLElement>("#supportSectionEyebrow").textContent = copy.supportEyebrow;
+  query<HTMLElement>("#supportSectionHeading").textContent = copy.supportHeading;
+  query<HTMLElement>("#supportSectionIntro").textContent = copy.supportIntro;
+  query<HTMLElement>("#supportSectionNote").textContent = copy.supportNote;
+  query<HTMLElement>("#supportFastPayLabel").textContent = copy.supportFastPay;
+  query<HTMLElement>("#supportFibLabel").textContent = copy.supportFib;
+  query<HTMLElement>("#supportSuperQiLabel").textContent = copy.supportSuperQi;
+  query<HTMLElement>("#supportPaymentHeading").textContent = copy.supportPaymentHeading;
+  query<HTMLElement>("#supportPaymentSub").textContent = copy.supportPaymentSub;
+  document.querySelector<HTMLElement>("#supportOnlineLabel")?.replaceChildren(document.createTextNode(copy.supportOnline));
+  document.querySelector<HTMLElement>("#mapOnlineIndicatorLabel")?.replaceChildren(document.createTextNode(copy.supportOnline));
+  query<HTMLElement>("#supportRecentVisitorsHeading").textContent = copy.supportRecentVisitors;
+  query<HTMLElement>("#supportRecentVisitorsSub").textContent = copy.supportRecentVisitorsSub;
+  query<HTMLElement>("#supportersHeading").textContent = copy.supportSupporters;
+  query<HTMLElement>("#supportersSub").textContent = copy.supportSupportersSub;
+  document.querySelectorAll<HTMLButtonElement>(".support-method__copy-button").forEach((button) => {
+    button.textContent = copy.supportCopy;
+    button.setAttribute("aria-label", copy.supportCopy);
+  });
+  query<HTMLDivElement>("#map").setAttribute("aria-label", copy.mapAria);
+  query<HTMLButtonElement>("#clearSearch").setAttribute("aria-label", copy.clearSearch);
+  query<HTMLButtonElement>("#baseMapButton").title = copy.mapData;
+  query<HTMLButtonElement>("#baseMapButton").setAttribute("aria-label", copy.mapData);
+  query<HTMLButtonElement>("#layersButton").title = copy.adminLayers;
+  query<HTMLButtonElement>("#layersButton").setAttribute("aria-label", copy.adminLayers);
+  query<HTMLButtonElement>("#placesButton").title = copy.placeLayers;
+  query<HTMLButtonElement>("#placesButton").setAttribute("aria-label", copy.placeLayers);
+  query<HTMLButtonElement>("#ownerStudioButton").title = copy.ownerTools;
+  query<HTMLButtonElement>("#ownerStudioButton").setAttribute("aria-label", copy.ownerTools);
+  query<HTMLButtonElement>("#locateButton").title = copy.showLocation;
+  query<HTMLButtonElement>("#locateButton").setAttribute("aria-label", copy.showLocation);
+  query<HTMLButtonElement>("#fitButton").title = copy.showRegion;
+  query<HTMLButtonElement>("#fitButton").setAttribute("aria-label", copy.showRegion);
+  query<HTMLButtonElement>("#threeDButton").title = copy.toggle3D;
+  query<HTMLButtonElement>("#threeDButton").setAttribute("aria-label", copy.toggle3D);
+  const loadingRoot = document.querySelector<HTMLElement>("#mapLoading");
+  const loadingText = loadingRoot?.querySelector<HTMLElement>("small");
+  const loadingRetry = document.querySelector<HTMLButtonElement>("#mapLoadingRetry");
+  if (loadingText) {
+    const phase = loadingRoot?.dataset.phase;
+    const offline = document.querySelector<HTMLElement>(".map-shell")?.dataset.networkState === "offline" || navigator.onLine === false;
+    loadingText.textContent = phase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard;
+  }
+  if (loadingRetry) loadingRetry.textContent = copy.loadingRetry;
+  backendState.textContent = isAtlasBackendConfigured ? copy.connected : copy.localBase;
+  setStatus("ready", copy.statusReady);
+}

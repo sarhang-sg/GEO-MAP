@@ -1,0 +1,10 @@
+{
+  "version": "8.0.4",
+  "versionCode": 80004,
+  "minimumVersion": "8.0.4",
+  "packageName": "com.navkurd.app",
+  "minimumAndroid": 24,
+  "directApkUrl": "/downloads/NAV-KURD-8.0.4.apk",
+  "apkPureUrl": "https://apkpure.com/nav-kurd/com.navkurd.app/download",
+  "publishedAt": "2026-08-27T00:00:00Z"
+}

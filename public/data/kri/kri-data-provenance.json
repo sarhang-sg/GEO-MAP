@@ -1,0 +1,186 @@
+{
+  "release": "2026-08-27-nav-kurd-v8.0.4",
+  "app_version": "8.0.4",
+  "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "scope": "NAV KURD operational coverage for the Kurdistan Region and the agreed disputed-area scope; not a legal/cadastral/political certification.",
+  "sources": [
+    {
+      "name": "Geofabrik Iraq OpenStreetMap extract",
+      "file": "iraq-260713.osm.pbf / iraq-260713-free.gpkg.zip",
+      "date": "2026-07-13",
+      "license": "ODbL / © OpenStreetMap contributors"
+    },
+    {
+      "name": "GeoNames Iraq and alternateNamesV2",
+      "file": "IQ.zip / alternateNamesV2.zip",
+      "date": "2026-07-14",
+      "license": "CC BY 4.0"
+    },
+    {
+      "name": "Iraq administrative boundaries",
+      "file": "irq_admin_boundaries.gdb.zip",
+      "role": "administrative geometry/hierarchy cross-check"
+    },
+    {
+      "name": "NAV KURD reviewed corrections",
+      "role": "source-backed Kurdish city/town names and deterministic quality corrections"
+    },
+    {
+      "name": "NAV KURD reviewed POI correction registry",
+      "file": "kri-reviewed-poi-corrections.geojson",
+      "date": "2026-07-17",
+      "role": "Source-ID-scoped reviewed replacements layered above immutable PMTiles"
+    },
+    {
+      "name": "NAV KURD canonical POI pipeline",
+      "file": "kri-pois.geojson / kri-pois-runtime.geojson",
+      "date": "2026-07-17",
+      "role": "Named POI/building/project expansion, strict contextual service-brand classification, semantic dedupe, category-specific icons and exact-language search integration."
+    }
+  ],
+  "counts": {
+    "localities": 12125,
+    "natural_features": 5210,
+    "road_labels": 1805,
+    "security_features": 35,
+    "search_records": 69329,
+    "search_kind_counts": {
+      "building": 7409,
+      "place": 12018,
+      "poi": 37450,
+      "street": 12452
+    },
+    "search_source_records": 69401,
+    "search_removed_without_exact_language_name": 0,
+    "canonical_pois": 33068,
+    "canonical_poi_categories": 166,
+    "taxonomy_icons": 422,
+    "search_removed_strict_duplicates": 72
+  },
+  "exact_language_coverage": {
+    "localities": {
+      "ku": 6933,
+      "ar": 8948,
+      "en": 11461
+    },
+    "natural_features": {
+      "ku": 120,
+      "ar": 3280,
+      "en": 4893
+    },
+    "road_labels": {
+      "ku": 956,
+      "ar": 515,
+      "en": 1520
+    },
+    "security_features": {
+      "ku": 23,
+      "ar": 16,
+      "en": 12
+    },
+    "search": {
+      "ku": 43097,
+      "ar": 28519,
+      "en": 49969
+    },
+    "canonical_pois": {
+      "ku": 26217,
+      "ar": 13397,
+      "en": 18548
+    }
+  },
+  "source_fingerprints": {
+    "osm_pbf": {
+      "name": "iraq-260713.osm.pbf",
+      "present": true,
+      "kind": "file",
+      "bytes": 89750634,
+      "sha256": "a8e16e22e48e597a32f9d10c144658eaa28110e7109fb824580f90a645fe96cf"
+    },
+    "osm_gpkg": {
+      "name": "iraq.gpkg",
+      "present": true,
+      "kind": "file",
+      "bytes": 390348800,
+      "sha256": "84cf6e2b0396c78612b6a3e4669fc3dc03b0982df066f5a8bc70f845e31bdeb7"
+    },
+    "geonames_iq": {
+      "name": "IQ.txt",
+      "present": true,
+      "kind": "file",
+      "bytes": 10226039,
+      "sha256": "b98c7e4e22ff474ebcace9f61453ef36b9c0bc049b7ee52cc07606b9a2815e20"
+    },
+    "geonames_alternate_names": {
+      "name": "alternateNamesV2.txt",
+      "present": true,
+      "kind": "file",
+      "bytes": 777029795,
+      "sha256": "cf99df2e58917a23495c61b77dbd0c75c1478750d8ee6485182295ecbb6e664b"
+    },
+    "iraq_admin_gdb": {
+      "name": "irq_admin_boundaries.gdb",
+      "present": true,
+      "kind": "directory",
+      "files": 40,
+      "bytes": 1095248,
+      "sha256_tree": "59259cddb7bc29be8f57a9d4b4c5208c3cd85947790c294d79ad649c493a8ed9"
+    }
+  },
+  "strict_language_policy": {
+    "automatic_translation": false,
+    "automatic_transliteration": false,
+    "cross_language_visible_fallback": false,
+    "missing_names": "empty/hidden and queued for review"
+  },
+  "quality_report": "kri-canonical-data-quality-report.json",
+  "version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "language_policy": "verified-kurdish-or-source-original",
+  "kirkuk_name_sources": [
+    {
+      "id": "ckb-kirkuk-admin-template",
+      "title": "پارێزگای کەرکووک — administrative divisions and settlements",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/داڕێژە:پارێزگای_کەرکووک",
+      "role": "Kurdish governorate, district, subdistrict and town spellings"
+    },
+    {
+      "id": "ckb-kirkuk-places-category",
+      "title": "شوێنەکانی پارێزگای کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/پۆل:شوێنەکانی_پارێزگای_کەرکووک",
+      "role": "Kurdish settlement and landmark name corpus"
+    },
+    {
+      "id": "ckb-kirkuk-city",
+      "title": "کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/کەرکووک",
+      "role": "City, historic neighbourhood and landmark spellings"
+    },
+    {
+      "id": "osm-geofabrik-iraq-2026-07-13",
+      "title": "OpenStreetMap Iraq extract",
+      "publisher": "Geofabrik / OpenStreetMap contributors",
+      "url": "https://download.geofabrik.de/asia/iraq.html",
+      "role": "Coordinates, source names, categories and aliases"
+    },
+    {
+      "id": "geonames-iq-2026-07-13",
+      "title": "GeoNames Iraq and alternate names",
+      "publisher": "GeoNames",
+      "url": "https://download.geonames.org/export/dump/",
+      "role": "Multilingual alternate-name corroboration"
+    },
+    {
+      "id": "google-maps-manual-cross-check",
+      "title": "Google Maps manual place cross-check",
+      "publisher": "Google Maps",
+      "url": "https://maps.google.com/",
+      "role": "Manual existence, category and commonly displayed-name cross-check; not used for bulk extraction"
+    }
+  ],
+  "kirkuk_correction_file": "kirkuk-verified-name-corrections.json",
+  "unresolved_name_policy": "Preserve the original source name; never invent or remove a place solely because a Kurdish translation is unavailable.",
+  "last_reviewed": "2026-08-27"
+}

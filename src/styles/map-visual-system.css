@@ -1,0 +1,402 @@
+/* NAV KURD 2027 — premium map experience, navigation surfaces and motion. */
+
+.map-focus-vignette,
+.map-edge-frame {
+  position: absolute;
+  pointer-events: none;
+}
+
+.map-focus-vignette {
+  inset: 0;
+  z-index: var(--z-map-effect);
+  opacity: calc(var(--map-focus-intensity) * .42);
+  background:
+    radial-gradient(circle at var(--map-location-focus-x) var(--map-location-focus-y), rgba(112, 187, 255, calc(var(--map-location-focus-opacity) * .16)) 0%, rgba(112, 187, 255, calc(var(--map-location-focus-opacity) * .08)) 14%, transparent 31%),
+    radial-gradient(ellipse 74% 70% at 50% 48%, transparent 0 48%, rgba(3, 5, 16, .07) 67%, rgba(2, 3, 10, .38) 100%),
+    linear-gradient(180deg, rgba(3, 4, 13, .05), transparent 24%, transparent 78%, rgba(2, 3, 12, .12));
+  transition: opacity .26s var(--premium-ease);
+  will-change: opacity;
+}
+
+.map-edge-frame {
+  z-index: var(--z-map-edge);
+  inset: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(135, 105, 255, .18);
+  border-radius: 27px;
+  box-shadow: inset 0 0 46px rgba(41, 57, 160, .09), 0 0 20px rgba(109, 75, 255, .08);
+  opacity: .72;
+}
+
+.map-edge-frame > span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: none;
+  box-shadow: none;
+  opacity: 0;
+}
+
+.map-shell.is-boundary-intro .map-edge-frame {
+  border-color: rgba(159, 125, 255, .32);
+  box-shadow: inset 0 0 54px rgba(49, 69, 186, .16), 0 0 28px rgba(120, 90, 255, .16);
+}
+
+.map-shell.is-boundary-intro .map-edge-frame > span {
+  opacity: 1;
+  animation: premium-map-edge-intro 1.35s var(--premium-ease) both;
+}
+
+.map-shell.is-deep-zoom .map-edge-frame {
+  border-color: rgba(151, 124, 255, .25);
+  box-shadow: inset 0 0 52px rgba(22, 31, 91, .16), 0 0 24px rgba(104, 75, 255, .12);
+}
+
+/* Event-driven auto-hide: no timeout and no map/navigation state mutation. */
+.topbar,
+.search-card,
+.map-actions,
+.map-sheet,
+.route-panel,
+.maplibregl-ctrl-top-left,
+.maplibregl-ctrl-bottom-left,
+.controls-visibility-button {
+  transition:
+    opacity .22s var(--premium-ease),
+    transform .26s var(--premium-spring),
+    filter .22s ease,
+    box-shadow .22s ease;
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .topbar {
+  opacity: .12;
+  transform: none;
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .search-card:not(:focus-within):not(.has-search-value) {
+  opacity: .22;
+  transform: translate3d(-50%, -8px, 0) scale(.92);
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .map-actions {
+  opacity: .24;
+  transform: translateX(10px) scale(.94);
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .map-sheet {
+  opacity: .28;
+  transform: translate3d(0, 13px, 0) scale(.985);
+}
+
+@media (min-width: 701px) {
+  .map-shell.is-map-interacting:not(.is-about-open) .map-sheet {
+    transform: translate3d(0, 13px, 0) scale(.985);
+  }
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .route-panel {
+  opacity: .72;
+  transform: translateY(5px) scale(.99);
+}
+
+.map-shell.is-map-interacting:not(.is-about-open) .maplibregl-ctrl-top-left,
+.map-shell.is-map-interacting:not(.is-about-open) .maplibregl-ctrl-bottom-left,
+.map-shell.is-map-interacting:not(.is-about-open) .map-3d-button,
+.map-shell.is-map-interacting:not(.is-about-open) .controls-visibility-button {
+  opacity: .22;
+}
+
+/* Premium floating map controls. */
+.map-actions {
+  gap: 8px;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .28));
+}
+
+@media (max-width: 700px) {
+  .map-actions { filter: none; background: transparent; box-shadow: none; }
+}
+
+.style-picker {
+  padding: 5px;
+  border-radius: 20px;
+  background:
+    linear-gradient(155deg, rgba(10, 13, 34, .91), rgba(5, 7, 20, .84)) padding-box,
+    var(--map-panel-border) border-box;
+  background-size: auto, 250% 100%;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .36), 0 0 28px rgba(104, 76, 255, .13), inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+.style-choice {
+  min-height: 32px;
+  border-radius: 12px;
+  letter-spacing: .035em;
+}
+
+.style-choice.is-active {
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(255,255,255,.32);
+}
+
+.round-button,
+.map-button,
+.maplibregl-ctrl-group {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .34), 0 0 23px rgba(92, 67, 242, .12), inset 0 1px 0 rgba(255,255,255,.075);
+}
+
+.round-button::after,
+.map-button::after {
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(145deg, rgba(255,255,255,.085), transparent 42%);
+  opacity: .64;
+}
+
+.round-button.is-active,
+.map-button.is-active,
+.route-pin-button.is-active,
+.round-button.is-tracking {
+  box-shadow:
+    0 0 0 1px rgba(138, 113, 255, .26),
+    0 15px 34px rgba(0, 0, 0, .36),
+    0 0 26px rgba(75, 116, 255, .25),
+    0 0 42px rgba(141, 80, 255, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .22);
+}
+
+.maplibregl-ctrl-group {
+  border-radius: 18px;
+  background:
+    linear-gradient(150deg, rgba(13, 17, 42, .91), rgba(6, 8, 22, .86)) padding-box,
+    linear-gradient(145deg, rgba(92, 181, 255, .35), rgba(153, 95, 255, .34), rgba(255, 255, 255, .08)) border-box;
+}
+
+.maplibregl-ctrl-group button {
+  transition: background .17s ease, transform .17s var(--premium-spring), filter .17s ease;
+}
+.maplibregl-ctrl-group button:hover { background: rgba(116, 83, 255, .14); }
+.maplibregl-ctrl-group button:active { transform: scale(.90); }
+
+/* Navigation card and travel-mode selector. */
+.route-panel {
+  overflow: hidden;
+  padding: 14px 15px;
+  border-radius: 27px;
+  background:
+    linear-gradient(150deg, rgba(10, 13, 35, .95), rgba(6, 7, 21, .91)) padding-box,
+    var(--map-panel-border) border-box;
+  background-size: auto, 250% 100%;
+  box-shadow: 0 27px 74px rgba(0,0,0,.52), 0 0 38px rgba(92, 62, 220, .18), inset 0 1px 0 rgba(255,255,255,.08);
+  animation: premium-route-panel-in .36s var(--premium-spring) both;
+}
+
+.route-panel::before {
+  position: absolute;
+  width: 190px;
+  height: 100px;
+  top: -72px;
+  inset-inline-end: -50px;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(125, 80, 255, .40), rgba(61, 133, 255, .17) 48%, transparent 72%);
+  filter: blur(10px);
+}
+
+.route-panel__content,
+.route-panel__clear { position: relative; z-index: var(--z-local-content); }
+.route-panel__body { gap: 4px; }
+.route-panel__body strong { color: #fff; letter-spacing: .005em; }
+.route-panel__body span { color: #bca8ff; text-shadow: 0 0 14px rgba(139, 91, 255, .23); }
+.route-panel[data-state="ready"] .route-panel__body span { color: #98dfff; }
+.route-panel__body small { color: rgba(219, 225, 247, .64); }
+
+.route-panel__modes {
+  gap: 6px;
+  padding: 5px;
+  border-radius: 16px;
+  border-color: rgba(153, 127, 255, .12);
+  background: linear-gradient(145deg, rgba(1, 3, 13, .54), rgba(54, 35, 111, .14));
+}
+
+.route-panel__modes button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 35px;
+  border-radius: 11px;
+}
+
+.route-panel__modes button svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 0 7px rgba(126, 168, 255, .24));
+}
+
+.route-panel__modes button svg path,
+.route-panel__modes button svg circle {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.route-panel__modes button.is-active {
+  background: linear-gradient(135deg, #347eff, #7758ff 52%, #aa5dff) padding-box, linear-gradient(135deg, #68d4ff, #ba89ff) border-box;
+  box-shadow: 0 9px 23px rgba(67, 83, 232, .28), 0 0 20px rgba(125, 82, 255, .22), inset 0 1px 0 rgba(255,255,255,.20);
+}
+
+.route-panel__modes button:active svg path,
+.route-panel__modes button:active svg circle {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: premium-icon-trace .34s var(--premium-ease) forwards;
+}
+
+.route-panel__clear {
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: #eeeaff;
+  background: linear-gradient(145deg, rgba(122, 86, 255, .12), rgba(255,255,255,.045));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.route-panel__clear svg { width: 18px; height: 18px; }
+.route-panel__clear:hover { color: #fff; background: rgba(133, 93, 255, .20); }
+.route-panel[data-state="loading"] { animation: premium-route-panel-in .36s var(--premium-spring) both, premium-route-breathe 1.8s ease-in-out infinite; }
+
+/* Popups gain a quieter premium glass treatment without changing their content. */
+.maplibregl-popup-content {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(150deg, rgba(11, 14, 37, .96), rgba(6, 7, 20, .94)) padding-box,
+    linear-gradient(135deg, rgba(95, 185, 255, .44), rgba(153, 95, 255, .48), rgba(255,255,255,.08)) border-box;
+  box-shadow: 0 22px 58px rgba(0,0,0,.47), 0 0 28px rgba(95, 62, 226, .15), inset 0 1px 0 rgba(255,255,255,.07);
+  }
+
+.maplibregl-popup-close-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  color: #e7dfff;
+}
+
+@keyframes premium-map-edge-intro {
+  0% { border-color: rgba(82, 214, 255, 0); box-shadow: 0 0 0 rgba(82, 214, 255, 0); }
+  42% { border-color: rgba(109, 185, 255, .68); box-shadow: inset 0 0 18px rgba(92, 151, 255, .10), 0 0 18px rgba(127, 86, 255, .22); }
+  100% { border-color: rgba(151, 124, 255, .20); box-shadow: inset 0 0 12px rgba(84, 102, 214, .07), 0 0 8px rgba(104, 75, 255, .06); }
+}
+@keyframes premium-route-panel-in { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes premium-route-breathe { 0%,100% { box-shadow: 0 27px 74px rgba(0,0,0,.52), 0 0 26px rgba(92,62,220,.12); } 50% { box-shadow: 0 27px 74px rgba(0,0,0,.52), 0 0 38px rgba(91,120,255,.23); } }
+
+@media (max-width: 700px) {
+  .map-edge-frame { inset: 3px; border-radius: 22px; }
+  .map-shell.is-map-interacting:not(.is-about-open) .topbar { opacity: .12; transform: none; }
+  .map-shell.is-map-interacting:not(.is-about-open) .map-sheet { opacity: .20; }
+  .route-panel { padding: 13px; border-radius: 25px; }
+  .route-panel__modes button { gap: 4px; min-height: 34px; padding-inline: 7px; }
+  .route-panel__modes button svg { width: 15px; height: 15px; }
+}
+
+@media (max-width: 390px) {
+  .route-panel__modes button span { font-size: .60rem; }
+  .route-panel__modes button { padding-inline: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-edge-frame > span,
+  .route-panel,
+  .route-panel[data-state="loading"] { animation: none !important; }
+  .map-focus-vignette,
+  .topbar,
+  .search-card,
+  .map-actions,
+  .map-sheet,
+  .route-panel,
+  .map-3d-button,
+  .maplibregl-ctrl-top-left,
+  .maplibregl-ctrl-bottom-left { transition-duration: .01ms !important; }
+}
+
+.map-shell.is-low-power-visual .map-edge-frame > span { animation: none; opacity: .08; }
+.map-shell.is-low-power-visual .map-focus-vignette { background: radial-gradient(ellipse 76% 72% at 50% 48%, transparent 0 54%, rgba(2,3,10,.30) 100%); }
+@supports not (background: conic-gradient(red, blue)) {
+  .map-edge-frame > span { display: none; }
+}
+
+/* Premium mobile polish — smoother bottom sheet centering, lighter GPU load and clearer deep zoom focus. */
+.map-shell.is-low-power-visual .map-edge-frame > span,
+.map-shell.is-low-power-visual .route-panel,
+.map-shell.is-low-power-visual .style-picker {
+  animation: none !important;
+}
+
+.map-shell.is-low-power-visual .map-focus-vignette {
+  transition-duration: .18s;
+}
+
+#map,
+.maplibregl-canvas,
+.map-focus-vignette,
+.map-edge-frame {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.map-shell.is-deep-zoom .map-focus-vignette {
+  opacity: calc(var(--map-focus-intensity) * .46);
+}
+
+/* Adaptive rendering retains the visual language while reducing constrained-device GPU work. */
+.map-shell.is-low-power-visual .route-panel::before,
+.map-shell.is-low-power-visual .about-dialog__aurora { display: none; }
+.map-shell.is-low-power-visual .route-panel[data-state="loading"] { animation: premium-route-panel-in .28s var(--premium-spring) both; }
+
+/* Final Technical Closure 2027 — audited accessibility overrides. */
+.map-shell .style-choice.is-active {
+  color: #fff;
+  background: linear-gradient(135deg, #181a4a, #3a174f);
+  text-shadow: none;
+}
+
+.map-shell #baseMapButton.is-active {
+  color: #fff;
+  background: linear-gradient(135deg, #171338, #30205d);
+  text-shadow: none;
+}
+
+.map-shell #baseMapButton.is-active #baseMapText {
+  color: #fff;
+  text-shadow: none;
+}
+
+.map-shell .maplibregl-ctrl-top-left .maplibregl-ctrl-group > button {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+/* Runtime-only old-device profile. Layout, colors, marker geometry and controls remain unchanged. */
+.map-shell.is-runtime-low-power *:not([data-essential-animation="true"]),
+.map-shell.is-runtime-low-power *::before,
+.map-shell.is-runtime-low-power *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 80ms !important;
+}
+.map-shell.is-runtime-low-power .map-control,
+.map-shell.is-runtime-low-power .map-sheet,
+.map-shell.is-runtime-low-power .place-popup,
+.map-shell.is-runtime-low-power .map-actions button,
+.map-shell.is-runtime-low-power .owner-marker,
+.map-shell.is-runtime-low-power .poi-icon {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 22%) !important;
+  filter: none !important;
+}
+.map-shell[data-webgl-context="lost"] #map { opacity: 0.985; }

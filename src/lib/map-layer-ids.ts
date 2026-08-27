@@ -1,0 +1,70 @@
+export const DYNAMIC_LAYER_IDS = [
+  "kri-locality-clusters-z7",
+  "kri-locality-cluster-count-z7",
+  "kri-locality-clusters-z8",
+  "kri-locality-cluster-count-z8",
+  "kri-locality-clusters-z9",
+  "kri-locality-cluster-count-z9",
+  "kri-locality-village",
+  "kri-locality-town",
+  "kri-locality-city",
+  "atlas-place-clusters",
+  "atlas-place-count",
+  "atlas-place-marker",
+  "atlas-place-marker-local",
+  "atlas-place-marker-community",
+  "atlas-place-marker-landmark",
+  "location-accuracy-fill",
+  "location-accuracy-line",
+  "location-pulse-outer",
+  "location-pulse-inner",
+  "location-dot-halo",
+  "location-direction-halo",
+  "location-direction-arrow",
+  "location-dot"
+] as const;
+
+export const DYNAMIC_SOURCE_IDS = [
+  "kri-locality-source",
+  "kri-locality-major-source",
+  "kri-locality-cluster-source",
+  "atlas-places-source",
+  "location-accuracy-source",
+  "location-point-source"
+] as const;
+
+export const ADMINISTRATIVE_LAYER_IDS = ["kri-districts", "kri-governorates"] as const;
+
+export const PLACE_VISIBILITY_LAYER_IDS = [
+  "kri-base-pois",
+  "kri-base-poi-icons-landmark",
+  "kri-base-poi-icons-community",
+  "kri-base-poi-icons-local",
+  "kri-natural-pois",
+  "kri-natural-poi-icons-landmark",
+  "kri-natural-poi-icons-community",
+  "kri-natural-poi-icons-local",
+  "kri-security-pois",
+  "kri-security-poi-icons-landmark",
+  "kri-security-poi-icons-community",
+  "kri-security-poi-icons-local",
+  "kri-reviewed-pois",
+  "kri-reviewed-poi-icons-landmark",
+  "kri-reviewed-poi-icons-community",
+  "kri-reviewed-poi-icons-local",
+  "kri-locality-clusters-z7",
+  "kri-locality-cluster-count-z7",
+  "kri-locality-clusters-z8",
+  "kri-locality-cluster-count-z8",
+  "kri-locality-clusters-z9",
+  "kri-locality-cluster-count-z9",
+  "kri-locality-village",
+  "kri-locality-town",
+  "kri-locality-city",
+  "atlas-place-clusters",
+  "atlas-place-count",
+  "atlas-place-marker",
+  "atlas-place-marker-local",
+  "atlas-place-marker-community",
+  "atlas-place-marker-landmark"
+] as const;

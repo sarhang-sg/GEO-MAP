@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>NAV KURD — Error</title>
+  <style>
+    @font-face { font-family:"NAVKurd Arabic"; src:url("fonts/UniQAIDAR-Money-Heist-002.ttf") format("truetype"); font-style:normal; font-weight:400 900; font-display:block; }
+    :root { color-scheme: dark; font-family:"NAVKurd Arabic",Tahoma,Arial,sans-serif; background:#090d19; color:#fff; }
+    * { box-sizing:border-box; }
+    body { min-height:100dvh; margin:0; display:grid; place-items:center; padding:max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background:radial-gradient(circle at top,#351348,#090d19 55%); }
+    main { width:min(440px,100%); text-align:center; padding:28px 22px; border:1px solid rgba(190,94,225,.35); border-radius:24px; background:rgba(10,14,27,.9); box-shadow:0 24px 70px rgba(0,0,0,.42); }
+    img { width:96px; height:96px; border-radius:24px; }
+    h1 { margin:16px 0 8px; font-size:1.35rem; }
+    p { margin:0 0 20px; color:rgba(255,255,255,.7); line-height:1.8; }
+    div { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    button { border:1px solid rgba(198,112,229,.48); border-radius:14px; padding:12px; color:#fff; background:#70278b; font:inherit; font-weight:750; }
+    button:last-child { background:rgba(255,255,255,.07); }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="icons/nav-kurd-logo.png" alt="NAV KURD">
+    <h1>NAV KURD نەکرایەوە</h1>
+    <p>تۆڕ، cache یان ڕێگەپێدانی GPS بپشکنە، پاشان دووبارە هەوڵ بدە.</p>
+    <div><button id="retry" type="button">دووبارە هەوڵدان</button><button id="settings" type="button">ڕێکخستنەکان</button></div>
+  </main>
+  <script>
+    document.getElementById('retry').addEventListener('click', () => location.reload());
+    document.getElementById('settings').addEventListener('click', async () => {
+      try { await window.Capacitor?.Plugins?.NavKurdNative?.openSettings(); } catch (_) { /* keep error page usable */ }
+    });
+  </script>
+</body>
+</html>

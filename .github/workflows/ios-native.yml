@@ -1,0 +1,95 @@
+name: NAV KURD native iOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - "src/**"
+      - "data-src/**"
+      - "public/**"
+      - "api/apple-app-site-association.js"
+      - "capacitor.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".gitattributes"
+      - "tools/**"
+      - "TERMUX.sh"
+      - ".github/workflows/ios-native.yml"
+  pull_request:
+    paths:
+      - "ios/**"
+      - "src/**"
+      - "data-src/**"
+      - "public/**"
+      - "api/apple-app-site-association.js"
+      - "capacitor.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".gitattributes"
+      - "tools/**"
+      - "TERMUX.sh"
+      - ".github/workflows/ios-native.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nav-kurd-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulator-build:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Build native web assets
+        run: npm run build:ios:web
+
+      - name: Synchronize Capacitor iOS project
+        run: npx cap sync ios
+
+      - name: Verify native iOS source contract
+        run: npm run verify:platform
+
+      - name: Build unsigned iOS Simulator application
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build | tee xcodebuild-ios-simulator.log
+
+      - name: Upload Xcode build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nav-kurd-ios-simulator-evidence
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            xcodebuild-ios-simulator.log
+            ios/App/App/Info.plist
+            ios/App/App/PrivacyInfo.xcprivacy
+            ios/App/App/App.entitlements

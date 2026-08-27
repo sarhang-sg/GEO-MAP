@@ -1,0 +1,304 @@
+/* Interaction behavior, unified language typography and the single authoritative map-attribution layout. */
+.map-button,
+.round-button,
+.action-card,
+.style-choice,
+.segmented button,
+.search-card__clear,
+.sheet-handle,
+.owner-studio button,
+.place-detail button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.map-button:active,
+.round-button:active,
+.action-card:active,
+.style-choice:active,
+.segmented button:active,
+.search-card__clear:active {
+  transform: none;
+  filter: brightness(1.04);
+}
+
+.map-sheet,
+.sheet-handle,
+.sheet-handle__text,
+.map-message,
+.map-note,
+.map-stats,
+.action-card,
+.map-stats strong,
+.map-stats span,
+.action-card strong,
+.action-card small {
+  font-family: var(--font-ui);
+}
+
+body[data-language="ku"] .sheet-handle__text,
+body[data-language="ar"] .sheet-handle__text,
+body[data-language="ku"] .map-note,
+body[data-language="ar"] .map-note {
+  font-family: var(--font-arabic);
+}
+
+.map-button--logo { overflow: hidden; }
+.map-button--logo svg { display: none; }
+.map-button__logo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
+  pointer-events: none;
+}
+
+body,
+button,
+input,
+textarea,
+select,
+.map-sheet,
+.topbar,
+.search-card,
+.maplibregl-popup,
+.place-popup,
+.place-detail,
+.owner-panel,
+.owner-studio,
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-ui);
+}
+
+body[data-language="en"] .locality-label,
+body[data-language="en"] .road-label,
+body[data-language="en"] .administrative-label,
+body[data-language="en"] .maplibregl-ctrl-attrib,
+body[data-language="en"] .eyebrow,
+body[data-language="en"] .place-detail__eyebrow {
+  font-family: var(--font-latin);
+}
+
+body[data-language="ku"] .locality-label,
+body[data-language="ku"] .road-label,
+body[data-language="ku"] .administrative-label,
+body[data-language="ar"] .locality-label,
+body[data-language="ar"] .road-label,
+body[data-language="ar"] .administrative-label {
+  font-family: var(--font-arabic);
+}
+
+.map-actions,
+.maplibregl-ctrl-top-left,
+.maplibregl-ctrl-bottom-left,
+.brand-card,
+.style-picker,
+.round-button,
+.map-button {
+  direction: ltr;
+}
+
+.search-card input,
+.map-sheet,
+.place-detail,
+.owner-panel,
+.search-results {
+  direction: inherit;
+}
+
+* { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+button, a, input, textarea, select { outline-color: transparent; }
+
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid #ffe19e;
+  outline-offset: 3px;
+}
+
+.maplibregl-ctrl-bottom-right { display: none; }
+
+/* The search field uses its parent card as the focus surface. This removes the
+   Android Chrome yellow rectangle while preserving a visible purple focus state. */
+.search-card input:focus,
+.search-card input:focus-visible {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  box-shadow: none;
+}
+
+.search-card:focus-within {
+  border-color: rgba(148, 116, 255, .34);
+}
+
+@media (forced-colors: active) {
+  :where(button, a, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid CanvasText;
+  }
+  .search-card input:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 1px;
+  }
+}
+
+.maplibregl-ctrl-compass { display: block !important; }
+
+/* Attribution is owned by the map card. The real MapLibre details/summary node
+   is moved into this slot so compact and expanded credit remain physically
+   attached to the card in every viewport and sheet state. */
+.maplibregl-ctrl-bottom-left { display: none !important; }
+
+.map-sheet__attribution-slot {
+  display: grid;
+  justify-items: center;
+  min-height: 20px;
+  margin: 0 0 7px;
+  direction: inherit;
+}
+.map-sheet__attribution-slot:empty { display: none; }
+.map-sheet__attribution-slot .maplibregl-ctrl-attrib.nav-kurd-attribution {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  max-width: min(100%, 320px);
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0;
+  color: rgba(240, 246, 255, .84);
+  background: transparent;
+  box-shadow: none;
+  opacity: .78;
+  direction: inherit;
+  text-align: center;
+  font-family: var(--font-ui);
+}
+.map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner {
+  max-width: min(100%, 304px);
+  padding: 3px 7px;
+  border: 1px solid rgba(225, 234, 255, .08);
+  border-radius: 8px;
+  color: rgba(240, 246, 255, .78);
+  background: rgba(8, 14, 27, .28);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, .12);
+  white-space: normal;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  line-height: 1.25;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution__project,
+.map-sheet__attribution-slot .nav-kurd-attribution__source {
+  display: block;
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: clip;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution__project {
+  color: rgba(255, 218, 138, .74);
+  font-size: 7.5px;
+  font-weight: 500;
+  line-height: 1.28;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution__source {
+  margin-top: 1px;
+  color: rgba(226, 235, 255, .54);
+  font-size: 6.5px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button {
+  position: relative !important;
+  inset: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 36px;
+  height: 18px !important;
+  margin: 0 auto !important;
+  padding: 0 6px !important;
+  transform: none !important;
+  border: 1px solid rgba(194, 180, 255, .14);
+  border-radius: 6px;
+  color: rgba(218, 213, 239, .66);
+  background: rgba(7, 11, 26, .30) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  font: 600 6.5px/1 var(--font-latin);
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button:focus-visible {
+  outline: 2px solid rgba(160, 132, 255, .78);
+  outline-offset: 1px;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution.maplibregl-compact {
+  display: grid;
+  justify-items: center;
+  min-width: 36px;
+  min-height: 18px;
+  padding: 0 !important;
+  border-radius: 8px;
+  background: transparent !important;
+}
+.map-sheet.is-collapsed .map-sheet__attribution-slot {
+  min-height: 18px;
+  margin-bottom: 4px;
+}
+.map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner { display: none !important; }
+.map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0;
+  padding-inline: 6px !important;
+}
+.map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button::after {
+  content: attr(data-compact-label);
+  display: inline-block;
+  color: rgba(226, 235, 255, .72);
+  font: 650 6.4px/1.15 var(--font-latin);
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+.map-sheet:not(.is-collapsed) .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner { display: block !important; }
+.map-sheet:not(.is-collapsed) .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button { display: none !important; }
+
+@media (max-width: 700px) {
+  .map-button__logo { width: 31px; height: 31px; }
+  .round-button, .map-button, .style-choice, .action-card, .segmented button { -webkit-tap-highlight-color: transparent; }
+  .road-label { opacity: .82; }
+  .map-sheet__attribution-slot { min-height: 18px; margin-bottom: 5px; }
+  .map-sheet__attribution-slot .maplibregl-ctrl-attrib.nav-kurd-attribution { max-width: min(100%, 300px); opacity: .72; }
+  .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner { max-width: min(100%, 292px); padding: 2px 6px; border-radius: 7px; }
+  .map-sheet__attribution-slot .nav-kurd-attribution__project { font-size: clamp(5.8px, 1.65vw, 7px); line-height: 1.25; }
+  .map-sheet__attribution-slot .nav-kurd-attribution__source { font-size: clamp(5.2px, 1.45vw, 6.2px); line-height: 1.22; }
+  .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button { min-width: 34px; height: 17px !important; padding-inline: 5px !important; border-radius: 6px; font-size: 6px; }
+  .map-sheet__attribution-slot .nav-kurd-attribution.maplibregl-compact { min-width: 34px; min-height: 17px; }
+  .map-sheet.is-collapsed .map-sheet__attribution-slot {
+    min-height: 14px;
+    margin-bottom: 1px;
+  }
+  .map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution.maplibregl-compact {
+    min-height: 14px;
+  }
+  .map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button {
+    height: 14px !important;
+    min-height: 14px;
+    padding-inline: 5px !important;
+    border-radius: 6px;
+  }
+  .map-sheet.is-collapsed .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button::after {
+    font-size: 5.8px;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 701px) and (max-height: 820px) {
+  .search-card { top: 72px; max-width: min(560px, calc(100vw - 210px)); }
+  .map-actions { top: 14px; right: 16px; }
+  .style-picker { max-width: 232px; }
+  .map-sheet { width: min(350px, calc(100vw - 38px)); padding: 13px; }
+  .map-stats > div { padding: 7px 6px; }
+  .action-card { min-height: 50px; }
+}

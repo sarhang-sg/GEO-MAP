@@ -1,0 +1,55 @@
+
+
+html[lang^="ckb"],
+html[lang^="ku"],
+html[lang^="ar"],
+body[data-language="ku"],
+body[data-language="ar"] {
+  font-family: var(--font-kurdish-arabic);
+}
+
+body[data-language="ku"] :where(button, input, textarea, select, option),
+body[data-language="ar"] :where(button, input, textarea, select, option),
+.language-transition[data-language="ku"],
+.language-transition[data-language="ar"],
+.language-transition[data-language="ku"] .language-transition__panel,
+.language-transition[data-language="ar"] .language-transition__panel,
+.language-transition[data-language="ku"] .language-transition__panel :where(strong, small),
+.language-transition[data-language="ar"] .language-transition__panel :where(strong, small) {
+  font-family: var(--font-kurdish-arabic);
+}
+
+.language-transition[data-language="ku"] .language-transition__panel :where(strong, small),
+.language-transition[data-language="ar"] .language-transition__panel :where(strong, small) {
+  letter-spacing: 0;
+}
+
+.language-transition[data-language="ku"],
+.language-transition[data-language="ar"] {
+  --font-ui: var(--font-kurdish-arabic);
+  --font-map-label: var(--font-kurdish-arabic);
+}
+
+.language-transition[data-language="en"] {
+  --font-ui: var(--font-latin);
+  --font-map-label: var(--font-latin);
+  font-family: var(--font-latin);
+}
+
+/* Mixed-language fragments retain the correct script font even when the
+   surrounding application language is different. */
+:where([lang^="ckb"], [lang^="ku"], [lang^="ar"]) {
+  font-family: var(--font-kurdish-arabic) !important;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-kerning: normal;
+}
+
+:where([lang="en"], [lang^="en-"]) {
+  font-family: var(--font-latin);
+}
+
+/* MapLibre controls and generated DOM labels must follow the active language. */
+body[data-language="ku"] :where(.maplibregl-ctrl, .maplibregl-popup, .locality-label, .road-label, .administrative-label),
+body[data-language="ar"] :where(.maplibregl-ctrl, .maplibregl-popup, .locality-label, .road-label, .administrative-label) {
+  font-family: var(--font-kurdish-arabic);
+}

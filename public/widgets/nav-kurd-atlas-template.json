@@ -1,0 +1,37 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "${title}",
+          "weight": "Bolder",
+          "size": "Large",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "${subtitle}",
+          "wrap": true,
+          "spacing": "Small"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "title": "Open NAV KURD",
+      "url": "https://geo-map-two.vercel.app/"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "My location",
+      "url": "https://geo-map-two.vercel.app/?action=locate"
+    }
+  ]
+}

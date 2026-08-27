@@ -1,0 +1,95 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "NAV KURD",
+  "version": "8.0.4",
+  "identifier": "com.navkurd.desktop",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://127.1.3.1:4173",
+    "beforeDevCommand": {
+      "script": "npm run dev",
+      "cwd": "..",
+      "wait": false
+    },
+    "beforeBuildCommand": {
+      "script": "npm run build:windows:web",
+      "cwd": ".."
+    }
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "NAV KURD",
+        "url": "index.html",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 760,
+        "minHeight": 560,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "visible": false,
+        "backgroundColor": "#090d19"
+      },
+      {
+        "label": "splash",
+        "title": "NAV KURD",
+        "url": "windows-splash.html",
+        "width": 430,
+        "height": 320,
+        "center": true,
+        "resizable": false,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "visible": true,
+        "backgroundColor": "#090d19"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' customprotocol: asset:; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' asset: data: blob: https://api.maptiler.com https://*.supabase.co https://lh3.googleusercontent.com; connect-src 'self' ipc: http://ipc.localhost https://api.maptiler.com https://api.mapbox.com https://events.mapbox.com https://router.project-osrm.org https://api.open-meteo.com https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; media-src 'self' blob: https://*.supabase.co"
+    },
+    "withGlobalTauri": true
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "navkurd"
+        ]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis",
+      "msi"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "shortDescription": "Kurdistan operational map with GPS, search and offline PMTiles",
+    "longDescription": "NAV KURD is a Kurdish-first operational map with native Windows GPS permission support, deep links, sharing and offline map data.",
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "minimumWebview2Version": "120.0.0.0",
+      "allowDowngrades": false,
+      "nsis": {
+        "installMode": "currentUser",
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": [
+          "en-US"
+        ]
+      }
+    }
+  }
+}

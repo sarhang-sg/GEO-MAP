@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+.vercel/
+.cache/
+coverage/
+*.log
+*.tmp
+*.bak
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+public/data/kri/.*.??????

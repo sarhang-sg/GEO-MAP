@@ -1,0 +1,140 @@
+{
+  "release": "2026-08-27-nav-kurd-v8.0.4",
+  "app_version": "8.0.4",
+  "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "source_dates": {
+    "osm_geofabrik": "2026-07-13",
+    "geonames": "2026-07-14",
+    "reviewed": "2026-07-17"
+  },
+  "source_fingerprints": {
+    "osm_pbf": {
+      "name": "iraq-260713.osm.pbf",
+      "present": true,
+      "kind": "file",
+      "bytes": 89750634,
+      "sha256": "a8e16e22e48e597a32f9d10c144658eaa28110e7109fb824580f90a645fe96cf"
+    },
+    "osm_gpkg": {
+      "name": "iraq.gpkg",
+      "present": true,
+      "kind": "file",
+      "bytes": 390348800,
+      "sha256": "84cf6e2b0396c78612b6a3e4669fc3dc03b0982df066f5a8bc70f845e31bdeb7"
+    },
+    "geonames_iq": {
+      "name": "IQ.txt",
+      "present": true,
+      "kind": "file",
+      "bytes": 10226039,
+      "sha256": "b98c7e4e22ff474ebcace9f61453ef36b9c0bc049b7ee52cc07606b9a2815e20"
+    },
+    "geonames_alternate_names": {
+      "name": "alternateNamesV2.txt",
+      "present": true,
+      "kind": "file",
+      "bytes": 777029795,
+      "sha256": "cf99df2e58917a23495c61b77dbd0c75c1478750d8ee6485182295ecbb6e664b"
+    },
+    "iraq_admin_gdb": {
+      "name": "irq_admin_boundaries.gdb",
+      "present": true,
+      "kind": "directory",
+      "files": 40,
+      "bytes": 1095248,
+      "sha256_tree": "59259cddb7bc29be8f57a9d4b4c5208c3cd85947790c294d79ad649c493a8ed9"
+    }
+  },
+  "published": {
+    "localities": 12125,
+    "natural_features": 5210,
+    "road_labels": 1805,
+    "security_features": 35,
+    "search_records": 69329,
+    "search_kind_counts": {
+      "building": 7409,
+      "place": 12018,
+      "poi": 37450,
+      "street": 12452
+    },
+    "search_source_records": 69401,
+    "search_removed_without_exact_language_name": 0,
+    "canonical_pois": 33068,
+    "canonical_poi_categories": 166,
+    "taxonomy_icons": 422,
+    "search_removed_strict_duplicates": 72
+  },
+  "exact_language_coverage": {
+    "localities": {
+      "ku": 6933,
+      "ar": 8948,
+      "en": 11461
+    },
+    "natural_features": {
+      "ku": 120,
+      "ar": 3280,
+      "en": 4893
+    },
+    "road_labels": {
+      "ku": 956,
+      "ar": 515,
+      "en": 1520
+    },
+    "security_features": {
+      "ku": 23,
+      "ar": 16,
+      "en": 12
+    },
+    "search": {
+      "ku": 69329,
+      "ar": 69329,
+      "en": 69329
+    },
+    "canonical_pois": {
+      "ku": 26217,
+      "ar": 13397,
+      "en": 18548
+    }
+  },
+  "quarantine_records": 235,
+  "quarantine_reason_counts": {
+    "duplicate-source-identity": 1,
+    "unnamed-or-generic-security-feature": 234
+  },
+  "reviewed_poi_corrections": 1,
+  "policy": "Source-backed operational data. Strict duplicate search identities are removed deterministically; verified Kurdish aliases are applied where available, otherwise the source-original name is preserved as an explicit fallback; no proper name is invented.",
+  "canonical_poi_catalog": {
+    "records": 33068,
+    "runtime_records": 33068,
+    "categories": 166,
+    "files": {
+      "catalog": {
+        "file": "kri-pois.geojson",
+        "bytes": 43246083,
+        "sha256": "31d49492aa3da5c5b49bd6f6f89df4e8c86f50d708f9b3a107d2140a42f9d041",
+        "records": 33068
+      },
+      "runtime": {
+        "file": "kri-pois-runtime.geojson",
+        "bytes": 22499118,
+        "sha256": "c3cb28fc474faaa7805a741a7ef0aadfac154b63ed54cc3b08ef19a98ab3306c",
+        "records": 33068
+      },
+      "report": {
+        "file": "kri-poi-catalog-report.json",
+        "bytes": 5720,
+        "sha256": "b49412503360c607fe3fb7d6fb84f6f5fb91ae207537ce4c4e0717711f3d4bb5"
+      },
+      "quarantine": {
+        "file": "kri-poi-quarantine.json",
+        "bytes": 852545,
+        "sha256": "dba656e9092931623760e94c642eb0c15345ab279864fd42fe83cb6190a7a309"
+      }
+    },
+    "policy": "Named, source-backed and boundary-contained only; strict service-brand context; no invented Kurdish names or inferred private ownership."
+  },
+  "last_reviewed": "2026-07-19",
+  "language_policy": "Verified Kurdish where source-backed; otherwise preserve source-original in every language shard. No fabricated proper names.",
+  "r26_final_report": "kri-data-quality-report.json",
+  "generated_at": "2026-08-27"
+}

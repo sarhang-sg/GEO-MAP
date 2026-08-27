@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NAV KURD</string>
+    <string name="title_activity_main">NAV KURD</string>
+    <string name="package_name">com.navkurd.app</string>
+    <string name="custom_url_scheme">com.navkurd.app</string>
+</resources>

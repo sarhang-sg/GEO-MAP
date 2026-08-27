@@ -1,0 +1,103 @@
+name: NAV KURD Supabase deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Deployment stage
+        required: true
+        default: database
+        type: choice
+        options:
+          - database
+          - functions
+          - all
+      confirm:
+        description: Type DEPLOY to continue
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nav-kurd-supabase-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm == 'DEPLOY' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      NAV_KURD_ALLOWED_ORIGINS: ${{ vars.NAV_KURD_ALLOWED_ORIGINS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Require protected deployment configuration
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -n "$SUPABASE_ACCESS_TOKEN" || {
+            echo "Missing Actions secret: SUPABASE_ACCESS_TOKEN" >&2
+            exit 1
+          }
+          test -n "$SUPABASE_DB_PASSWORD" || {
+            echo "Missing Actions secret: SUPABASE_DB_PASSWORD" >&2
+            exit 1
+          }
+          test -n "$SUPABASE_PROJECT_ID" || {
+            echo "Missing Actions secret: SUPABASE_PROJECT_ID" >&2
+            exit 1
+          }
+          if [[ "${{ inputs.mode }}" != "database" ]]; then
+            test -n "$NAV_KURD_ALLOWED_ORIGINS" || {
+              echo "Missing Actions variable: NAV_KURD_ALLOWED_ORIGINS" >&2
+              exit 1
+            }
+            [[ "$NAV_KURD_ALLOWED_ORIGINS" == https://* ]] || {
+              echo "NAV_KURD_ALLOWED_ORIGINS must begin with https://" >&2
+              exit 1
+            }
+          fi
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v2.1.1
+        with:
+          version: 2.101.0
+
+      - name: Link the fresh production project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Preview pending database migrations
+        if: ${{ inputs.mode == 'database' || inputs.mode == 'all' }}
+        run: supabase db push --linked --include-all --dry-run
+
+      - name: Apply pending database migrations
+        if: ${{ inputs.mode == 'database' || inputs.mode == 'all' }}
+        run: supabase db push --linked --include-all
+
+      - name: Set the exact browser origin for Edge Functions
+        if: ${{ inputs.mode == 'functions' || inputs.mode == 'all' }}
+        run: >-
+          supabase secrets set
+          --project-ref "$SUPABASE_PROJECT_ID"
+          "NAV_KURD_ALLOWED_ORIGINS=$NAV_KURD_ALLOWED_ORIGINS"
+
+      - name: Deploy all NAV KURD Edge Functions
+        if: ${{ inputs.mode == 'functions' || inputs.mode == 'all' }}
+        run: supabase functions deploy --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Record deployment result
+        run: |
+          {
+            echo "## NAV KURD Supabase"
+            echo ""
+            echo "- Project ref: \`$SUPABASE_PROJECT_ID\`"
+            echo "- Mode: \`${{ inputs.mode }}\`"
+            echo "- Status: completed"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,115 @@
+name: NAV KURD quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nav-kurd-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Build bounded production candidate
+        run: npm run build:vercel
+
+      - name: Verify PMTiles containers
+        run: npm run verify:pmtiles
+
+      - name: Run exhaustive source and runtime verifier suite
+        run: npm run verify:production
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Upload production evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nav-kurd-production-evidence
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            RELEASE_MANIFEST.json
+            public/data/kri/source-integrity-manifest.json
+            public/data/kri/kri-canonical-data-quality-report.json
+            public/data/kri/kri-data-provenance.json
+            dist/offline-manifest.json
+
+  browser-smoke:
+    needs: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install exact dependencies and build
+        run: |
+          npm ci
+          npm run build:vercel
+
+      - name: Install Playwright Chromium
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Run real browser smoke test
+        run: python3 tools/verify/browser-smoke.py
+
+  database-migrations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v2.1.1
+        with:
+          version: 2.101.0
+
+      - name: Prepare uniquely versioned CI migrations
+        run: |
+          python3 tools/data/prepare-supabase-ci-migrations.py
+          rm -rf supabase/migrations
+          mv supabase/migrations-ci supabase/migrations
+
+      - name: Start local Supabase and execute all migrations
+        run: |
+          supabase start
+          supabase db reset
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup

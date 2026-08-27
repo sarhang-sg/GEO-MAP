@@ -1,0 +1,45 @@
+{
+  "schema": "NAV KURD verified Kurdish settlement orthography registry v1",
+  "release": "7.1.9",
+  "policy": "Only source-backed Kurdish names are listed. Arabic-script code-point normalization is audited separately; no automatic translation or transliteration is allowed.",
+  "authoritative_sources": [
+    {
+      "publisher": "Kurdistan Region Statistics Office",
+      "purpose": "official administrative map and boundary reference"
+    },
+    {
+      "publisher": "Kurdistan Regional Government",
+      "purpose": "official Kurdish locality spellings"
+    }
+  ],
+  "verified": [
+    {
+      "name_en": "Akre",
+      "name_ku": "ئاکرێ"
+    },
+    {
+      "name_en": "Amedi",
+      "name_ku": "ئامێدی"
+    },
+    {
+      "name_en": "Erbil",
+      "name_ku": "هەولێر"
+    },
+    {
+      "name_en": "Duhok",
+      "name_ku": "دهۆک"
+    },
+    {
+      "name_en": "Sulaymaniyah",
+      "name_ku": "سلێمانی"
+    },
+    {
+      "name_en": "Halabja",
+      "name_ku": "هەڵەبجە"
+    },
+    {
+      "name_en": "Kalar",
+      "name_ku": "کەلار"
+    }
+  ]
+}

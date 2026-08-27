@@ -1,0 +1,31 @@
+{
+  "appVersion": "8.0.4",
+  "releaseId": "2026-08-27-nav-kurd-v8.0.4",
+  "releaseDate": "2026-08-27",
+  "mapEdition": "2027",
+  "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "cacheSchemaVersion": 84,
+  "offlinePackVersion": "2027.11",
+  "serviceWorkerRelease": "8.0.4",
+  "offlineMapFiles": [
+    {
+      "id": "base",
+      "path": "data/kri/kri-base.pmtiles",
+      "fileName": "kri-base.pmtiles",
+      "bytes": 15198962,
+      "sha256": "d169633076785cb361abcc5c3c9ef27a63ed5efd98669c2285d7e4fb30b7a0ea"
+    },
+    {
+      "id": "roads",
+      "path": "data/kri/kri-roads.pmtiles",
+      "fileName": "kri-roads.pmtiles",
+      "bytes": 4352351,
+      "sha256": "d5e18d6bce28cd8b5d161eff12fa2026976fd7a0d2ae0f3bd2c46d8463c685dd"
+    }
+  ],
+  "offlineRuntimeBytes": 53011521,
+  "releaseLabel": "NAV KURD 8.0.4 GPS recovery, multilingual live weather and verified Android release",
+  "uiTheme": "aurora",
+  "hardeningDate": "2026-08-27",
+  "hardeningRelease": "8.0.4"
+}

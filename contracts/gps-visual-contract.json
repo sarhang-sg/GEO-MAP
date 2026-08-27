@@ -1,0 +1,26 @@
+{
+  "schema": "NAV KURD GPS visual and route behavior contract v3",
+  "policy": "Preserve the verified GPS puck, accuracy circle, route line and live remaining-distance visuals while using fast acquisition, a fresh high-accuracy fix, continuous watch updates, movement-course priority, stationary compass stabilization and confirmed-jump rejection.",
+  "files": {
+    "src/lib/live-location-layers.ts": {
+      "bytes": 7946,
+      "sha256": "85cc5b7c19c28f389f541de026acea01a492db5ea68e9733e0c08c75ad4e0340"
+    },
+    "src/lib/live-location-controller.ts": {
+      "bytes": 29133,
+      "sha256": "ac2894289f94e868a8c4b94b570f3ad6e22f8c24b344589c8136482ec36e98e4"
+    },
+    "src/lib/location.ts": {
+      "bytes": 9527,
+      "sha256": "8ea0e54d89ec292210ffd7a098c86a5776df290a1364f7124b8ada85cdcead23"
+    },
+    "src/lib/native-geolocation.ts": {
+      "bytes": 5652,
+      "sha256": "dbd209d15f3c7f06c66d204a8b96291722519abd0d80fadc322fd10cb493bf3b"
+    },
+    "src/lib/routing-controller.ts": {
+      "bytes": 55808,
+      "sha256": "64e8b320d9ccc81ec6075fd8b52079c98e687efde9cc9a06465b93cb9100411b"
+    }
+  }
+}

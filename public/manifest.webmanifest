@@ -1,0 +1,196 @@
+{
+  "name": "NAV KURD",
+  "short_name": "NAV KURD",
+  "description": "NAV KURD Map Edition 2027 — a premium Southern Kurdistan atlas with GPS navigation, multilingual search, satellite context, an offline-ready app shell and an optional full offline map pack.",
+  "id": "./",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "tabbed",
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "lang": "ckb-Arab-IQ",
+  "dir": "rtl",
+  "background_color": "#0a0d20",
+  "theme_color": "#61106f",
+  "categories": [
+    "navigation",
+    "travel",
+    "maps",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://geo-map-two.vercel.app/manifest.webmanifest",
+      "id": "https://geo-map-two.vercel.app/"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": [
+      "focus-existing",
+      "navigate-existing",
+      "auto"
+    ]
+  },
+  "icons": [
+    {
+      "src": "icons/nav-kurd-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/nav-kurd-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/nav-kurd-icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/nav-kurd-icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "گەڕان لە ماپ",
+      "short_name": "گەڕان",
+      "description": "گەڕان بۆ شار، گوند، شەقام یان شوێن",
+      "url": "./?action=search",
+      "icons": [
+        {
+          "src": "icons/nav-kurd-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "شوێنی من",
+      "short_name": "شوێنی من",
+      "description": "شوێنی ئێستا لەسەر ماپ پیشان بدە",
+      "url": "./?action=locate",
+      "icons": [
+        {
+          "src": "icons/nav-kurd-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "باشووری کوردستان",
+      "short_name": "تەواوی هەرێم",
+      "description": "گەڕانەوە بۆ سنووری ماپ",
+      "url": "./?action=fit",
+      "icons": [
+        {
+          "src": "icons/nav-kurd-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/nav-kurd-wide.png",
+      "sizes": "1600x900",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "NAV KURD full-featured map, offline search and PWA showcase"
+    },
+    {
+      "src": "screenshots/nav-kurd-narrow.png",
+      "sizes": "1229x1536",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NAV KURD mobile navigation, route and map-interface showcase"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+navkurd",
+      "url": "./?protocol=%s"
+    }
+  ],
+  "share_target": {
+    "action": "./?source=share",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "share_title",
+      "text": "share_text",
+      "url": "share_url"
+    }
+  },
+  "edge_side_panel": {
+    "preferred_width": 420
+  },
+  "file_handlers": [
+    {
+      "action": "./?action=open-map-file",
+      "accept": {
+        "application/geo+json": [
+          ".geojson"
+        ],
+        "application/json": [
+          ".json"
+        ]
+      }
+    }
+  ],
+  "note_taking": {
+    "new_note_url": "./?action=new-place-note"
+  },
+  "widgets": [
+    {
+      "name": "NAV KURD Atlas",
+      "short_name": "NAV KURD",
+      "description": "Quick access to the Southern Kurdistan atlas, map search and current location.",
+      "tag": "nav-kurd-atlas",
+      "template": "nav-kurd-atlas-card",
+      "ms_ac_template": "https://geo-map-two.vercel.app/widgets/nav-kurd-atlas-template.json",
+      "data": "https://geo-map-two.vercel.app/widgets/nav-kurd-atlas-data.json",
+      "type": "application/json",
+      "icons": [
+        {
+          "src": "icons/nav-kurd-icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
+      "auth": false,
+      "update": 86400,
+      "screenshots": [
+        {
+          "src": "widgets/nav-kurd-atlas-widget.png",
+          "sizes": "800x450",
+          "label": "NAV KURD Map Edition 2027 atlas widget preview",
+          "platform": "Windows"
+        }
+      ],
+      "multiple": false
+    }
+  ],
+  "tab_strip": {
+    "new_tab_button": {
+      "url": "./?action=search"
+    }
+  },
+  "scope_extensions": [],
+  "version": "8.0.4"
+}
