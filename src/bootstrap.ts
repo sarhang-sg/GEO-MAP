@@ -6,24 +6,19 @@ declare global {
 }
 
 const callbackKeys = ["code", "error", "error_code", "error_description"] as const;
-const verifierKeyFragment = "auth-token-code-verifier";
-
-function hasPkceVerifier(): boolean {
-  try {
-    for (let index = 0; index < window.localStorage.length; index += 1) {
-      if (window.localStorage.key(index)?.includes(verifierKeyFragment)) return true;
-    }
-  } catch { /* A blocked storage area is treated as a missing verifier. */ }
-  return false;
-}
+const nativeHandoffMarker = "nav_kurd_native_auth";
 
 function androidOAuthHandoffUrl(): string | null {
   if (window.__NAV_KURD_FLUTTER__ === true) return null;
-  if (!/\bAndroid\b/iu.test(navigator.userAgent)) return null;
 
   const current = new URL(window.location.href);
+  // Only an OAuth request explicitly started by the Flutter shell may leave the
+  // web origin through the custom scheme. An Android user-agent or a temporarily
+  // missing PKCE verifier is not sufficient: both occur during ordinary mobile
+  // browser sign-in and previously stranded users on an "Open NAV KURD" page.
+  if (current.searchParams.get(nativeHandoffMarker) !== "1") return null;
   const hasCallback = callbackKeys.some((key) => current.searchParams.has(key));
-  if (!hasCallback || hasPkceVerifier()) return null;
+  if (!hasCallback) return null;
 
   const callback = new URL("navkurd://auth/callback");
   for (const key of callbackKeys) {

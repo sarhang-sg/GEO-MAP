@@ -267,7 +267,11 @@ export function atlasOAuthRedirectUrl(): string {
   // Keep the Android callback on the exact production URL that is already in
   // Supabase's redirect allow-list. Android App Links (with a custom-scheme
   // fallback in bootstrap.ts) return the one-time PKCE code to the WebView.
-  if (window.__NAV_KURD_FLUTTER__ === true) return ATLAS_CANONICAL_APP_URL;
+  if (window.__NAV_KURD_FLUTTER__ === true) {
+    const nativeRedirect = new URL(ATLAS_CANONICAL_APP_URL);
+    nativeRedirect.searchParams.set("nav_kurd_native_auth", "1");
+    return nativeRedirect.toString();
+  }
   const host = window.location.hostname.toLocaleLowerCase("en-US");
   if (isLocalDevelopmentHost(host) || ATLAS_TRUSTED_APP_HOSTS.has(host)) {
     return `${window.location.origin}${window.location.pathname}`;
@@ -481,15 +485,8 @@ function requireAtlasBackend(): SupabaseClient {
   return atlasSupabase;
 }
 
-function assertLocalizedTriplet(values: readonly [string | null | undefined, string | null | undefined, string | null | undefined], label: string, required: boolean): void {
-  const present = values.map((value) => Boolean(String(value ?? "").trim()));
-  if (required && present.some((value) => !value)) throw new Error(`${label} must be provided in Kurdish, Arabic and English.`);
-  if (!required && present.some(Boolean) && present.some((value) => !value)) throw new Error(`${label} must either be empty or complete in Kurdish, Arabic and English.`);
-}
-
 function assertPlaceInput(input: AtlasPlaceWriteInput): void {
-  assertLocalizedTriplet([input.name_ku, input.name_ar, input.name_en], "Place name", true);
-  assertLocalizedTriplet([input.description_ku, input.description_ar, input.description_en], "Place description", false);
+  if (!String(input.name_ku ?? "").trim()) throw new Error("Kurdish place name is required.");
   assertAtlasLocalizedText(input.name_ku, ATLAS_TEXT_LIMITS.name, "Kurdish name", "kurdish");
   assertAtlasLocalizedText(input.name_ar, ATLAS_TEXT_LIMITS.name, "Arabic name", "arabic");
   assertAtlasLocalizedText(input.name_en, ATLAS_TEXT_LIMITS.name, "English name", "latin");
@@ -519,7 +516,6 @@ function assertUserLocalizedPlaceInput(input: AtlasPlaceWriteInput): void {
 }
 
 function assertUserLocalizedPhotoInput(input: AtlasPhotoWriteInput): void {
-  assertLocalizedTriplet([input.caption_ku, input.caption_ar, input.caption_en], "Photo caption", false);
   assertAtlasLocalizedText(input.caption_ku, ATLAS_TEXT_LIMITS.caption, "Kurdish caption", "kurdish");
   assertAtlasLocalizedText(input.caption_ar, ATLAS_TEXT_LIMITS.caption, "Arabic caption", "arabic");
   assertAtlasLocalizedText(input.caption_en, ATLAS_TEXT_LIMITS.caption, "English caption", "latin");
@@ -898,11 +894,16 @@ export async function getAtlasAuthIdentity(): Promise<AtlasAuthIdentity | null> 
   if (inFlight && inFlight.userId === user.id) return inFlight.promise;
 
   const promise = (async (): Promise<AtlasAuthIdentity> => {
-    const { data: ownerRow, error: ownerError } = await atlasSupabase
+    const loadOwnerRole = () => atlasSupabase
       .from("atlas_owners")
       .select("user_id")
       .eq("user_id", user.id)
       .maybeSingle();
+    let { data: ownerRow, error: ownerError } = await loadOwnerRole();
+    if (ownerError && isLikelyNetworkError(ownerError)) {
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      ({ data: ownerRow, error: ownerError } = await loadOwnerRole());
+    }
     const metadata = user.user_metadata ?? {};
     const displayName = typeof metadata.full_name === "string" ? metadata.full_name
       : typeof metadata.name === "string" ? metadata.name
@@ -910,6 +911,25 @@ export async function getAtlasAuthIdentity(): Promise<AtlasAuthIdentity | null> 
     const avatarUrl = typeof metadata.avatar_url === "string" ? metadata.avatar_url
       : typeof metadata.picture === "string" ? metadata.picture
       : null;
+    if (ownerError && cached?.userId === user.id && isLikelyNetworkError(ownerError)) {
+      authIdentityCache = { ...cached, expiresAt: Date.now() + 60_000 };
+      return cached.identity;
+    }
+    if (ownerError && isLikelyNetworkError(ownerError)) {
+      // A short owner-role lookup outage must not strand a newly authenticated
+      // mobile user on the loading screen. Fail closed to the ordinary-user
+      // role; protected admin actions remain enforced by Supabase/Edge RLS and
+      // a later refresh can promote the cached identity after verification.
+      const identity: AtlasAuthIdentity = {
+        userId: user.id,
+        email: user.email ?? null,
+        displayName,
+        avatarUrl,
+        role: "user"
+      };
+      authIdentityCache = { userId: user.id, identity, expiresAt: Date.now() + 60_000 };
+      return identity;
+    }
     if (ownerError) throw new Error("NAV KURD could not verify the account role. Access is blocked until role verification succeeds.");
     const identity: AtlasAuthIdentity = {
       userId: user.id,

@@ -60,6 +60,8 @@ import { ownerName } from "./geo-format";
 type UserStudioView = "signin" | "dashboard" | "editor" | "admin-blocked" | "unavailable";
 type UserDashboardTab = "places" | "messages" | "notifications" | "account";
 type ChoiceKind = "group" | "type" | null;
+const PENDING_NEW_PLACE_STORAGE_KEY = "nav-kurd-pending-new-place-v1";
+const PENDING_NEW_PLACE_MAX_AGE_MS = 15 * 60 * 1000;
 type UserPendingConfirmation =
   | { kind: "signout" }
   | { kind: "delete-account" }
@@ -76,6 +78,11 @@ type UserStudioOptions = {
   onUnreadCountChange?: (count: number) => void;
   onAdminIdentity?: () => Promise<void> | void;
 };
+
+function localizedLegalUrl(path: string, language: StudioLanguage): string {
+  const target = appUrl(path);
+  return `${target}${target.includes("?") ? "&" : "?"}lang=${language}`;
+}
 
 type Copy = {
   title: string;
@@ -688,6 +695,7 @@ export class UserContributionStudio {
     this.host.className = "user-contribution-studio";
     this.host.hidden = true;
     document.body.append(this.host);
+    this.pendingNewPlaceCoordinate = this.loadPendingNewPlaceCoordinate();
     subscribeToAtlasAuth(() => { void this.handleAuthStateChange(); });
     subscribeToAtlasPlaces(() => {
       if (!this.identity || this.identity.role !== "user") return;
@@ -750,6 +758,58 @@ export class UserContributionStudio {
     try { localStorage.removeItem(key); } catch { /* private mode */ }
   }
 
+  private loadPendingNewPlaceCoordinate(): StudioCoordinate | null {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(PENDING_NEW_PLACE_STORAGE_KEY) ?? "null") as {
+        coordinate?: unknown;
+        updatedAt?: unknown;
+      } | null;
+      const coordinate = parsed?.coordinate;
+      const updatedAt = Number(parsed?.updatedAt);
+      if (!Array.isArray(coordinate) || coordinate.length !== 2 || !Number.isFinite(updatedAt)
+        || Date.now() - updatedAt > PENDING_NEW_PLACE_MAX_AGE_MS) {
+        localStorage.removeItem(PENDING_NEW_PLACE_STORAGE_KEY);
+        return null;
+      }
+      const longitude = Number(coordinate[0]);
+      const latitude = Number(coordinate[1]);
+      if (!Number.isFinite(longitude) || !Number.isFinite(latitude)
+        || longitude < -180 || longitude > 180 || latitude < -90 || latitude > 90) {
+        localStorage.removeItem(PENDING_NEW_PLACE_STORAGE_KEY);
+        return null;
+      }
+      return [longitude, latitude];
+    } catch {
+      return null;
+    }
+  }
+
+  private persistPendingNewPlaceCoordinate(coordinate: StudioCoordinate): void {
+    try {
+      localStorage.setItem(PENDING_NEW_PLACE_STORAGE_KEY, JSON.stringify({ coordinate, updatedAt: Date.now() }));
+    } catch { /* private mode / quota */ }
+  }
+
+  private clearPendingNewPlaceCoordinate(): void {
+    this.pendingNewPlaceCoordinate = null;
+    try { localStorage.removeItem(PENDING_NEW_PLACE_STORAGE_KEY); } catch { /* private mode */ }
+  }
+
+  private resumePendingNewPlace(): void {
+    if (!this.identity || this.identity.role !== "user") return;
+    this.pendingNewPlaceCoordinate ??= this.loadPendingNewPlaceCoordinate();
+    if (!this.pendingNewPlaceCoordinate) return;
+    this.host.hidden = false;
+    if (!this.profile?.terms_accepted_at || !this.profile?.privacy_accepted_at) {
+      this.view = "dashboard";
+      this.message = this.copy().legalRequired;
+      this.messageKind = "normal";
+      this.render();
+      return;
+    }
+    this.openNewPlace();
+  }
+
   async syncRole(): Promise<AtlasAuthIdentity | null> {
     try {
       const identity = await getAtlasAuthIdentity();
@@ -779,8 +839,9 @@ export class UserContributionStudio {
     this.editing = null;
     this.clearPendingPhoto();
     this.editorDraft = this.loadStoredDraft(null);
+    this.pendingNewPlaceCoordinate ??= this.loadPendingNewPlaceCoordinate();
     const chosen = this.pendingNewPlaceCoordinate ?? [44.0, 36.0];
-    this.pendingNewPlaceCoordinate = null;
+    this.clearPendingNewPlaceCoordinate();
     this.coordinate = [Number(formatAtlasCoordinate(chosen[0])), Number(formatAtlasCoordinate(chosen[1]))];
     if (this.editorDraft) {
       this.editorDraft.longitude = formatAtlasCoordinate(this.coordinate[0]);
@@ -796,6 +857,7 @@ export class UserContributionStudio {
   openNewPlaceAt(coordinate: StudioCoordinate): void {
     if (!Number.isFinite(coordinate[0]) || !Number.isFinite(coordinate[1])) return;
     this.pendingNewPlaceCoordinate = [coordinate[0], coordinate[1]];
+    this.persistPendingNewPlaceCoordinate(this.pendingNewPlaceCoordinate);
     this.openNewPlace();
   }
 
@@ -868,20 +930,25 @@ export class UserContributionStudio {
         this.view = "dashboard";
         this.render();
       }
-      const [profile, places, notifications, feedback] = await Promise.all([
+      const [profileResult, placesResult, notificationsResult, feedbackResult] = await Promise.allSettled([
         getAtlasUserProfile(this.identity),
         loadUserAtlasPlaces(this.identity),
         loadAtlasNotifications(),
         loadUserAtlasFeedback()
       ]);
       if (epoch !== this.refreshEpoch) return;
-      this.profile = profile;
-      this.places = places;
-      this.notifications = notifications;
-      this.feedback = feedback;
+      if (profileResult.status === "fulfilled") this.profile = profileResult.value;
+      if (placesResult.status === "fulfilled") this.places = placesResult.value;
+      if (notificationsResult.status === "fulfilled") this.notifications = notificationsResult.value;
+      if (feedbackResult.status === "fulfilled") this.feedback = feedbackResult.value;
       this.options.onUnreadCountChange?.(this.notifications.filter((item) => !item.is_read).length);
       if (this.view !== "editor") this.view = "dashboard";
+      if (this.messageKind === "error") {
+        this.message = "";
+        this.messageKind = "normal";
+      }
       this.render();
+      if (profileResult.status === "fulfilled") this.resumePendingNewPlace();
     } catch (error) {
       // A transient profile/place/notification failure must never impersonate a sign-out.
       // getAtlasAuthIdentity() already returns null for a genuinely missing auth session,
@@ -985,12 +1052,13 @@ export class UserContributionStudio {
   }
 
   private renderSignIn(copy: Copy): string {
+    const language = this.options.getLanguage();
     return `<section class="user-contrib__signin">
       <div class="user-contrib__signin-mark" aria-hidden="true">${googleBrandIcon()}</div>
       <h3>${escapeText(copy.signInTitle)}</h3>
       <p>${escapeText(copy.signInBody)}</p>
       <button class="user-contrib__google" type="button" data-user-action="google-signin" ${this.busy ? "disabled" : ""}><span>${googleBrandIcon()}</span>${escapeText(copy.signInGoogle)}</button>
-      <small>${escapeText(copy.legalPrefix)} <a href="${appUrl("legal/privacy.html")}" target="_blank" rel="noopener">${escapeText(copy.privacy)}</a>، <a href="${appUrl("legal/terms.html")}" target="_blank" rel="noopener">${escapeText(copy.terms)}</a> و <a href="${appUrl("legal/contribution-guidelines.html")}" target="_blank" rel="noopener">${escapeText(copy.guidelines)}</a>.</small>
+      <small>${escapeText(copy.legalPrefix)} <a href="${localizedLegalUrl("legal/privacy.html", language)}" target="_blank" rel="noopener">${escapeText(copy.privacy)}</a>، <a href="${localizedLegalUrl("legal/terms.html", language)}" target="_blank" rel="noopener">${escapeText(copy.terms)}</a> و <a href="${localizedLegalUrl("legal/contribution-guidelines.html", language)}" target="_blank" rel="noopener">${escapeText(copy.guidelines)}</a>.</small>
     </section>`;
   }
 
@@ -1071,14 +1139,14 @@ export class UserContributionStudio {
       : "";
 
     const placesPanel = `<section class="user-contrib__private-panel" data-private-panel="places">
-      ${!legalAccepted ? `<section class="user-legal-accept"><label><input id="atlasLegalAccept" name="atlas_legal_accept" type="checkbox"><span>${escapeText(copy.legalAccept)}</span></label><p><a href="${appUrl("legal/privacy.html")}" target="_blank" rel="noopener">${escapeText(copy.privacy)}</a> · <a href="${appUrl("legal/terms.html")}" target="_blank" rel="noopener">${escapeText(copy.terms)}</a> · <a href="${appUrl("legal/contribution-guidelines.html")}" target="_blank" rel="noopener">${escapeText(copy.guidelines)}</a></p><button type="button" data-user-action="legal-accept">${escapeText(copy.legalAcceptAction)}</button></section>` : `<button class="user-contrib__add" type="button" data-user-action="add">${userIcon("plus")}<span>${escapeText(copy.addPlace)}</span></button>`}
+      ${!legalAccepted ? `<section class="user-legal-accept"><label><input id="atlasLegalAccept" name="atlas_legal_accept" type="checkbox"><span>${escapeText(copy.legalAccept)}</span></label><p><a href="${localizedLegalUrl("legal/privacy.html", language)}" target="_blank" rel="noopener">${escapeText(copy.privacy)}</a> · <a href="${localizedLegalUrl("legal/terms.html", language)}" target="_blank" rel="noopener">${escapeText(copy.terms)}</a> · <a href="${localizedLegalUrl("legal/contribution-guidelines.html", language)}" target="_blank" rel="noopener">${escapeText(copy.guidelines)}</a></p><button type="button" data-user-action="legal-accept">${escapeText(copy.legalAcceptAction)}</button></section>` : `<button class="user-contrib__add" type="button" data-user-action="add">${userIcon("plus")}<span>${escapeText(copy.addPlace)}</span></button>`}
       <section class="user-contrib__section"><h3>${escapeText(privateCopy.tabs.places)} <span>${this.places.length}</span></h3><div class="user-contrib__list">${places}</div></section>
     </section>`;
     const messagesPanel = `<section class="user-contrib__private-panel" data-private-panel="messages"><header class="user-private-section__header"><div><h3>${escapeText(privateCopy.messagesTitle)}</h3><p>${escapeText(privateCopy.messagesHint)}</p></div><span>${this.feedback.length}</span></header><div class="user-private-message-list">${feedbackRows}</div></section>`;
     const notificationsPanel = `<section class="user-contrib__private-panel" data-private-panel="notifications"><section class="user-contrib__section"><h3>${escapeText(copy.notifications)} <span>${unreadCount}</span></h3>${notificationActions}<div class="user-contrib__notifications">${notifications}</div></section></section>`;
     const accountPanel = `<section class="user-contrib__private-panel" data-private-panel="account">
       <div class="user-account-private"><h3>${escapeText(privateCopy.tabs.account)}</h3><p>${escapeText(this.identity?.email ?? "")}</p></div>
-      <section class="user-contrib__privacy-actions"><a href="${appUrl("legal/privacy.html")}" target="_blank" rel="noopener" data-legal-kind="privacy">${escapeText(copy.privacy)}</a><a href="${appUrl("legal/terms.html")}" target="_blank" rel="noopener" data-legal-kind="terms">${escapeText(copy.terms)}</a><a href="${appUrl("legal/contribution-guidelines.html")}" target="_blank" rel="noopener" data-legal-kind="guidelines">${escapeText(copy.guidelines)}</a><button type="button" data-user-action="signout" data-account-action="signout">${userIcon("signout")}<span>${escapeText(copy.signOut)}</span></button><button type="button" data-user-action="delete-request" data-account-action="delete">${userIcon("trash")}<span>${escapeText(copy.deleteRequest)}</span></button></section>
+      <section class="user-contrib__privacy-actions"><a href="${localizedLegalUrl("legal/privacy.html", language)}" target="_blank" rel="noopener" data-legal-kind="privacy">${escapeText(copy.privacy)}</a><a href="${localizedLegalUrl("legal/terms.html", language)}" target="_blank" rel="noopener" data-legal-kind="terms">${escapeText(copy.terms)}</a><a href="${localizedLegalUrl("legal/contribution-guidelines.html", language)}" target="_blank" rel="noopener" data-legal-kind="guidelines">${escapeText(copy.guidelines)}</a><button type="button" data-user-action="signout" data-account-action="signout">${userIcon("signout")}<span>${escapeText(copy.signOut)}</span></button><button type="button" data-user-action="delete-request" data-account-action="delete">${userIcon("trash")}<span>${escapeText(copy.deleteRequest)}</span></button></section>
     </section>`;
     const panel = this.activeDashboardTab === "messages" ? messagesPanel
       : this.activeDashboardTab === "notifications" ? notificationsPanel
@@ -1305,6 +1373,7 @@ export class UserContributionStudio {
       const checkbox = this.host.querySelector<HTMLInputElement>("#atlasLegalAccept");
       if (!checkbox?.checked || !this.identity) { this.message = this.copy().legalRequired; this.messageKind = "error"; this.render(); return; }
       await this.run(async () => { this.profile = await acceptAtlasLegalTerms(this.options.getLanguage(), this.identity!); this.message = ""; }, "dashboard");
+      this.resumePendingNewPlace();
       return;
     }
     if (action === "delete-request" && this.identity) {
@@ -1338,6 +1407,7 @@ export class UserContributionStudio {
           this.profile = null;
           this.feedback = [];
           this.editorDraft = null;
+          this.clearPendingNewPlaceCoordinate();
           this.message = "";
           this.messageKind = "normal";
         }, "signin");
@@ -1356,6 +1426,7 @@ export class UserContributionStudio {
           this.notifications = [];
           this.feedback = [];
           this.clearEditorDraft();
+          this.clearPendingNewPlaceCoordinate();
           this.clearPendingPhoto();
           this.options.onUnreadCountChange?.(0);
           this.accountDeleteAcknowledged = false;

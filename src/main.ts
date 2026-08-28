@@ -12,14 +12,14 @@ import { loadStaticSearchManifest } from "./lib/static-search";
 import { resolveSatelliteSource, validateSatelliteSource } from "./lib/satellite";
 import { buildKriMapStyle } from "./lib/map-style";
 import { applyKriStyleState } from "./lib/map-style-state";
-import { distanceMeters, type LngLatTuple } from "./lib/location";
+import type { LngLatTuple } from "./lib/location";
 import { LiveLocationController } from "./lib/live-location-controller";
 import { renderAppShell } from "./lib/app-shell";
 import { installSelectionAndImageLocks, query } from "./lib/dom";
 import { UI, languageDirection } from "./lib/i18n";
 import { categoryValue, coordinateLabel, districtValue, escapeText, governorateValue, isMeaningfulMapName, languageValue, ownerDescription, ownerName, ownerPhotoCaption, stringProperty } from "./lib/geo-format";
 import { localizedPoiName, localizedRecordName, localizedStaticCategory, localizedStaticName } from "./lib/map-language";
-import type { BasePoiFeature, Language, LocalityFeature, LocalityProperties, MapMode, SearchChoice } from "./lib/types";
+import type { BasePoiFeature, Language, LocalityFeature, MapMode, SearchChoice } from "./lib/types";
 import { installRuntimePerformanceGuard, scheduleIdleTask } from "./lib/performance";
 import { installSearchController } from "./lib/search-controller";
 import { applyMapUiLanguage } from "./lib/ui-language";
@@ -57,7 +57,7 @@ import { installMapOverlayLayoutController, type MapOverlayLayoutController } fr
 import { installMapLeftControlRail } from "./lib/map-left-control-rail";
 import { installPwaLaunchIntentHandler } from "./lib/pwa-launch-intent";
 import { PwaMapFileController } from "./lib/pwa-file-handler";
-import { PlaceWeatherService, type PlaceWeatherBadgeMeta } from "./lib/place-weather";
+import { PlaceWeatherService } from "./lib/place-weather";
 import { installRuntimeDiagnostics, recordRuntimeDiagnostic } from "./lib/runtime-diagnostics";
 import { installSupportHub } from "./lib/support-hub";
 import { createPopupShareButton, shareMapLocation } from "./lib/native-share";
@@ -86,7 +86,6 @@ const mapElement = query<HTMLDivElement>("#map");
 const mapLoading = query<HTMLDivElement>("#mapLoading");
 const mapLoadingRetry = query<HTMLButtonElement>("#mapLoadingRetry");
 const mapSheet = query<HTMLElement>("#mapSheet");
-const currentWeatherDock = query<HTMLElement>("#currentWeatherDock");
 const mapAttributionSlot = query<HTMLElement>("#mapAttributionSlot");
 const mapActions = query<HTMLElement>(".map-actions");
 const topbar = query<HTMLElement>(".topbar");
@@ -211,8 +210,6 @@ class KurdistanAtlasController {
   private readonly tutorialMapDemo: TutorialMapDemoController;
   private readonly overlayLayout: MapOverlayLayoutController;
   private readonly weather = new PlaceWeatherService();
-  private ambientWeatherCoordinate: LngLatTuple | null = null;
-  private ambientWeatherRenderedAt = 0;
   private layers: KriLayers | null = null;
   private localities: LocalityFeature[] = [];
   private localityById = new Map<string, LocalityFeature>();
@@ -369,7 +366,6 @@ class KurdistanAtlasController {
         this.routing.updateLocation(snapshot);
         const coordinate = snapshot.coordinate ? [...snapshot.coordinate] as FocusCoordinate : null;
         mapExperience.setFocusCoordinate(coordinate);
-        if (coordinate) this.refreshAmbientWeather(coordinate);
       }
     });
     this.routing = new RoutingController({
@@ -1021,60 +1017,10 @@ class KurdistanAtlasController {
     health.refreshLanguage();
     this.deviceQa?.refreshSoon(160);
     this.map.triggerRepaint();
-    const coordinate = this.liveLocation.diagnosticSnapshot().coordinate;
-    if (coordinate) this.refreshAmbientWeather(coordinate, true);
   }
 
-  private weatherBadgeMetaForLocality(properties: LocalityProperties): PlaceWeatherBadgeMeta {
-    const category = typeof properties.place === "string" && properties.place.trim() ? properties.place.trim() : "locality";
-    return {
-      placeIconSrc: atlasMarkerAssetUrl(category),
-      placeIconLabel: categoryValue(category, this.language, UI[this.language].place)
-    };
-  }
-
-  private weatherBadgeMetaForBasePoi(properties: Record<string, unknown>): PlaceWeatherBadgeMeta {
-    const category = (poiIconIdForProperties(properties)
-      ?? stringProperty(properties, ["fclass", "class", "type", "amenity", "shop", "tourism", "leisure", "office", "healthcare", "historic", "natural", "category"]))
-      || "other";
-    return {
-      placeIconSrc: atlasMarkerAssetUrl(category),
-      placeIconLabel: categoryValue(category, this.language, UI[this.language].place)
-    };
-  }
-
-  private weatherBadgeMetaForOwner(place: AtlasPlace): PlaceWeatherBadgeMeta {
-    return {
-      placeIconSrc: atlasMarkerAssetUrl(place.category),
-      placeIconLabel: categoryValue(place.category, this.language, UI[this.language].place)
-    };
-  }
-
-  private weatherBadgeMetaForStaticChoice(choice: SearchChoice & { type: "base" }): PlaceWeatherBadgeMeta {
-    const category = typeof choice.item.c === "string" && choice.item.c.trim()
-      ? choice.item.c.trim()
-      : choice.item.k === "place"
-        ? "locality"
-        : "other";
-    return {
-      placeIconSrc: atlasMarkerAssetUrl(category),
-      placeIconLabel: localizedStaticCategory(choice.item, this.language, UI[this.language].place)
-    };
-  }
-
-  private attachWeather(container: HTMLElement, coordinate: LngLatTuple, meta: PlaceWeatherBadgeMeta): void {
-    container.append(this.weather.createBadge(coordinate, this.language, meta));
-  }
-
-  private refreshAmbientWeather(coordinate: LngLatTuple, force = false): void {
-    const now = Date.now();
-    if (!force && this.ambientWeatherCoordinate
-      && now - this.ambientWeatherRenderedAt < 5 * 60 * 1000
-      && distanceMeters(this.ambientWeatherCoordinate, coordinate) < 500) return;
-    this.ambientWeatherCoordinate = [coordinate[0], coordinate[1]];
-    this.ambientWeatherRenderedAt = now;
-    currentWeatherDock.replaceChildren(this.weather.createBadge(coordinate, this.language));
-    currentWeatherDock.hidden = false;
+  private attachWeather(container: HTMLElement, coordinate: LngLatTuple): void {
+    container.append(this.weather.createBadge(coordinate, this.language));
   }
 
   /**
@@ -1155,7 +1101,7 @@ class KurdistanAtlasController {
     content.dir = languageDirection(this.language);
     content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText([kind, district, governorate].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
-    this.attachWeather(content, coordinate, this.weatherBadgeMetaForLocality(props));
+    this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
   }
 
@@ -1177,7 +1123,7 @@ class KurdistanAtlasController {
     content.dir = languageDirection(this.language);
     content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText([category, address].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
-    this.attachWeather(content, coordinate, this.weatherBadgeMetaForBasePoi(properties));
+    this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
     return true;
   }
@@ -1195,7 +1141,7 @@ class KurdistanAtlasController {
     content.innerHTML = `${cover ? `<img class="atlas-place-popup__cover" src="${escapeText(cover)}" alt="${escapeText(caption || ownerName(place, this.language))}" loading="lazy">` : ""}<div class="atlas-place-popup__body"><div class="atlas-place-popup__identity"><span class="atlas-place-popup__text"><strong>${escapeText(ownerName(place, this.language))}</strong><small>${escapeText(categoryValue(place.category, this.language, UI[this.language].place))}</small></span><img class="atlas-place-popup__marker" src="${escapeText(markerIcon)}" alt="" aria-hidden="true"></div>${caption ? `<p class="atlas-place-popup__caption">${escapeText(caption)}</p>` : ""}${description ? `<p class="atlas-place-popup__description">${escapeText(description)}</p>` : ""}</div>`;
     const ownerPopupBody = content.querySelector<HTMLElement>(".atlas-place-popup__body") ?? content;
     this.appendShareAction(ownerPopupBody, coordinate, ownerName(place, this.language));
-    this.attachWeather(ownerPopupBody, coordinate, this.weatherBadgeMetaForOwner(place));
+    this.attachWeather(ownerPopupBody, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 16, closeButton: true, maxWidth: "310px" });
     placeDetail.open(place);
   }
@@ -1227,7 +1173,7 @@ class KurdistanAtlasController {
       const title = localizedStaticName(choice.item, this.language);
       content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText(localizedStaticCategory(choice.item, this.language, choice.item.k === "street" ? UI[this.language].street : UI[this.language].place))}</span>`;
       this.appendShareAction(content, coordinate, title);
-      this.attachWeather(content, coordinate, this.weatherBadgeMetaForStaticChoice(choice));
+      this.attachWeather(content, coordinate);
       this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "280px" });
     }
   }
@@ -1977,10 +1923,9 @@ async function boot(): Promise<void> {
     syncMapLoadingCopy();
     mapLoadingWatchdog = window.setTimeout(() => {
       if (!mapLoading.isConnected) return;
-      mapLoadingPhase = "retry";
-      syncMapLoadingCopy();
+      // A slow mobile connection is not a failed boot. Keep the neutral loading
+      // state and only expose a manual retry escape hatch.
       mapLoadingRetry.hidden = false;
-      mapLoadingRetry.focus({ preventScroll: true });
     }, 18000);
     brandFontsReadyPromise ??= loadBrandFonts();
     applySatelliteAvailability();

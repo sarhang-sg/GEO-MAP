@@ -94,7 +94,6 @@
 .android-download__store { background: linear-gradient(135deg, rgba(38, 186, 124, .28), rgba(15, 77, 63, .42)); }
 .android-download__apkpure { display: grid; width: 27px; height: 27px; place-items: center; flex: 0 0 auto; border-radius: 9px; background: #20cd7b; color: white; }
 .android-download__apkpure svg { width: 21px; height: 21px; }
-.android-download__integrity { margin: 9px 0 0; color: #7f92ad; font: 650 7px/1.4 var(--font-latin); direction: ltr; text-align: start; }
 
 html.is-flutter-android .android-download__primary,
 html.is-capacitor-android .android-download__primary { display: none; }

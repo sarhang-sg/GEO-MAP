@@ -16,7 +16,6 @@ type ReleaseCopy = {
   direct: string;
   directSub: string;
   store: string;
-  integrity: string;
   promoTitle: string;
   promoBody: string;
   promoDownload: string;
@@ -36,7 +35,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "APK دابگرە",
     directSub: "ڕاستەوخۆ · v8.0.4",
     store: "لە کۆگای APKPure",
-    integrity: "پەکێج: com.navkurd.app · بە هەمان کلیلی نوێکردنەوە واژۆ کراوە",
     promoTitle: "NAV KURD لە Android لەگەڵتە",
     promoBody: "ماپی خێراتر، ویجێتی کەش‌وهەوا و کارکردنی باشتر لە دەرەوەی وێبگەڕ.",
     promoDownload: "ئێستا APK دابگرە",
@@ -53,7 +51,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "تنزيل APK",
     directSub: "مباشر · v8.0.4",
     store: "من متجر APKPure",
-    integrity: "الحزمة: com.navkurd.app · موقعة بمفتاح التحديث نفسه",
     promoTitle: "NAV KURD معك على Android",
     promoBody: "خريطة أسرع وطقس على الشاشة الرئيسية وتجربة أفضل خارج المتصفح.",
     promoDownload: "تنزيل APK الآن",
@@ -70,7 +67,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "Download APK",
     directSub: "Direct · v8.0.4",
     store: "Get it from APKPure",
-    integrity: "Package: com.navkurd.app · Signed with the established update key",
     promoTitle: "Take NAV KURD with you on Android",
     promoBody: "Faster maps, live weather on your home screen, and a smoother experience outside the browser.",
     promoDownload: "Download the APK",
@@ -132,13 +128,11 @@ function updateSection(copy: ReleaseCopy): void {
   const direct = document.querySelector<HTMLElement>("#androidDirectDownload strong");
   const directSub = document.querySelector<HTMLElement>("#androidDirectDownload small");
   const store = document.querySelector<HTMLElement>("#androidApkPureLabel");
-  const integrity = document.querySelector<HTMLElement>("#androidDownloadIntegrity");
   if (title) title.textContent = copy.title;
   if (summary) summary.textContent = copy.summary;
   if (direct) direct.textContent = copy.direct;
   if (directSub) directSub.textContent = copy.directSub;
   if (store) store.textContent = copy.store;
-  if (integrity) integrity.textContent = copy.integrity;
 }
 
 export type AndroidReleaseExperience = {

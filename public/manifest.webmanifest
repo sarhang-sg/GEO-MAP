@@ -7,8 +7,6 @@
   "scope": "./",
   "display": "standalone",
   "display_override": [
-    "tabbed",
-    "window-controls-overlay",
     "standalone",
     "minimal-ui"
   ],
@@ -137,9 +135,6 @@
       "url": "share_url"
     }
   },
-  "edge_side_panel": {
-    "preferred_width": 420
-  },
   "file_handlers": [
     {
       "action": "./?action=open-map-file",
@@ -186,11 +181,6 @@
       "multiple": false
     }
   ],
-  "tab_strip": {
-    "new_tab_button": {
-      "url": "./?action=search"
-    }
-  },
   "scope_extensions": [],
   "version": "8.0.4"
 }

@@ -150,7 +150,14 @@ const mainSource = await readText("src/main.ts");
 const bootstrapSource = await readText("src/bootstrap.ts");
 const atlasPlacesSource = await readText("src/lib/atlas-places.ts");
 const assetLinksSource = await readText("api/assetlinks.js");
-assert(bootstrapSource.includes('new URL("navkurd://auth/callback")') && bootstrapSource.includes("auth-token-code-verifier") && bootstrapSource.includes("handoffTarget"), "Android OAuth callback handoff is incomplete.");
+assert(
+  bootstrapSource.includes('new URL("navkurd://auth/callback")')
+    && bootstrapSource.includes('const nativeHandoffMarker = "nav_kurd_native_auth"')
+    && bootstrapSource.includes('current.searchParams.get(nativeHandoffMarker) !== "1"')
+    && bootstrapSource.includes("handoffTarget")
+    && atlasPlacesSource.includes('nativeRedirect.searchParams.set("nav_kurd_native_auth", "1")'),
+  "Android OAuth callback handoff is incomplete or can capture ordinary mobile-browser sign-in."
+);
 assert(atlasPlacesSource.includes('flowType: "pkce"') && atlasPlacesSource.includes("skipBrowserRedirect: isFlutterAndroid") && atlasPlacesSource.includes("window.navKurdAndroid.openExternal(authUrl)"), "Google OAuth is not using the native PKCE/browser bridge.");
 assert(assetLinksSource.includes("RELEASE_FINGERPRINT") && assetLinksSource.includes("delegate_permission/common.handle_all_urls"), "Android App Link certificate fallback is missing.");
 const overlayLayout = await readText("src/lib/map-overlay-layout-controller.ts");

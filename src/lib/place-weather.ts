@@ -28,22 +28,11 @@ type WeatherCondition =
 
 type WeatherReading = {
   temperature: number;
-  apparentTemperature: number | null;
   weatherCode: number;
   isDay: boolean;
-  observedAt: string;
-  timezone: string;
-  timezoneAbbreviation: string;
-  humidity: number | null;
-  precipitation: number | null;
-  rain: number | null;
-  showers: number | null;
-  snowfall: number | null;
-  cloudCover: number | null;
   windSpeed: number | null;
   windGusts: number | null;
   dust: number | null;
-  pm10: number | null;
 };
 
 type CacheEntry = {
@@ -51,36 +40,17 @@ type CacheEntry = {
   value: WeatherReading;
 };
 
-export type PlaceWeatherBadgeMeta = {
-  placeIconSrc?: string;
-  placeIconLabel?: string;
-};
-
 type OpenMeteoResponse = {
   available?: boolean;
-  timezone?: unknown;
-  timezone_abbreviation?: unknown;
   current?: {
     temperature_2m?: unknown;
-    apparent_temperature?: unknown;
     weather_code?: unknown;
     is_day?: unknown;
-    time?: unknown;
-    relative_humidity_2m?: unknown;
-    precipitation?: unknown;
-    rain?: unknown;
-    showers?: unknown;
-    snowfall?: unknown;
-    cloud_cover?: unknown;
     wind_speed_10m?: unknown;
     wind_gusts_10m?: unknown;
     dust?: unknown;
-    pm10?: unknown;
   };
 };
-
-type SeasonName = "spring" | "summer" | "autumn" | "winter";
-type WeatherFact = { icon: "temperature" | "humidity" | "wind" | "dust"; value: string };
 
 const DUST_THRESHOLD = 50;
 const STRONG_WIND_KMH = 40;
@@ -155,18 +125,6 @@ const UI_COPY: Record<Language, { loading: string; current: string }> = {
   en: { loading: "Weather…", current: "Current temperature" }
 };
 
-const SEASON_COPY: Record<Language, Record<SeasonName, string>> = {
-  ku: { spring: "بەهار", summer: "هاوین", autumn: "پاییز", winter: "زستان" },
-  ar: { spring: "الربيع", summer: "الصيف", autumn: "الخريف", winter: "الشتاء" },
-  en: { spring: "Spring", summer: "Summer", autumn: "Autumn", winter: "Winter" }
-};
-
-const PHASE_COPY: Record<Language, { day: string; night: string }> = {
-  ku: { day: "ڕۆژ", night: "شەو" },
-  ar: { day: "نهار", night: "ليل" },
-  en: { day: "Day", night: "Night" }
-};
-
 function baseWeatherCondition(code: number): WeatherCondition {
   if (code === 19) return "tornado";
   if (code === 0) return "clear";
@@ -229,75 +187,6 @@ function optionalNumber(value: unknown): number | null {
   return Number.isFinite(number) ? number : null;
 }
 
-function localeFor(language: Language): string {
-  return language === "en" ? "en-US" : language === "ar" ? "ar-IQ" : "ckb-IQ";
-}
-
-function localMonth(timezone: string): number {
-  try {
-    const value = new Intl.DateTimeFormat("en-US", { timeZone: timezone, month: "numeric" })
-      .format(new Date());
-    const month = Number(value);
-    return Number.isInteger(month) && month >= 1 && month <= 12 ? month : new Date().getMonth() + 1;
-  } catch {
-    return new Date().getMonth() + 1;
-  }
-}
-
-function seasonFor(latitude: number, timezone: string): { name: SeasonName; asset: string } {
-  const month = localMonth(timezone);
-  const northernMonth = latitude < 0 ? ((month + 5) % 12) + 1 : month;
-  const name: SeasonName = northernMonth >= 3 && northernMonth <= 5
-    ? "spring"
-    : northernMonth >= 6 && northernMonth <= 8
-      ? "summer"
-      : northernMonth >= 9 && northernMonth <= 11
-        ? "autumn"
-        : "winter";
-  return { name, asset: `${import.meta.env.BASE_URL}assets/weather/seasons/${name}.svg` };
-}
-
-function localTime(reading: WeatherReading, language: Language): string {
-  try {
-    return new Intl.DateTimeFormat(localeFor(language), {
-      timeZone: reading.timezone,
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(new Date());
-  } catch {
-    const match = reading.observedAt.match(/T(\d{2}:\d{2})/u);
-    return match?.[1] || "—:—";
-  }
-}
-
-function weatherDetails(reading: WeatherReading, language: Language): WeatherFact[] {
-  const number = new Intl.NumberFormat(localeFor(language), { maximumFractionDigits: 0 });
-  const details: WeatherFact[] = [];
-  if (reading.apparentTemperature !== null) {
-    const prefix = language === "ku" ? "هەستپێکراو" : language === "ar" ? "المحسوسة" : "Feels";
-    details.push({ icon: "temperature", value: `${prefix} ${number.format(reading.apparentTemperature)}°` });
-  }
-  if (reading.humidity !== null) details.push({ icon: "humidity", value: `${number.format(reading.humidity)}%` });
-  if (reading.windSpeed !== null) details.push({ icon: "wind", value: `${number.format(reading.windSpeed)} km/h` });
-  if (reading.dust !== null && reading.dust >= DUST_THRESHOLD) {
-    details.push({ icon: "dust", value: `${number.format(reading.dust)} µg/m³` });
-  }
-  return details;
-}
-
-function weatherFact(asset: string, value: string): HTMLElement {
-  const fact = document.createElement("span");
-  const icon = document.createElement("img");
-  icon.src = asset;
-  icon.alt = "";
-  icon.decoding = "async";
-  icon.setAttribute("aria-hidden", "true");
-  const label = document.createElement("span");
-  label.textContent = value;
-  fact.append(icon, label);
-  return fact;
-}
-
 function coordinateKey([longitude, latitude]: LngLatTuple): string {
   return `${latitude.toFixed(2)},${longitude.toFixed(2)}`;
 }
@@ -321,7 +210,7 @@ function roundTemperature(value: number, language: Language): string {
   return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(Math.round(value))}°C`;
 }
 
-function buildWeatherBadge(language: Language, meta: PlaceWeatherBadgeMeta = {}): HTMLElement {
+function buildWeatherBadge(language: Language): HTMLElement {
   const copy = UI_COPY[language];
   const root = document.createElement("div");
   root.className = "place-weather";
@@ -339,13 +228,7 @@ function buildWeatherBadge(language: Language, meta: PlaceWeatherBadgeMeta = {})
   weatherImage.hidden = true;
   weatherImage.alt = "";
   weatherImage.decoding = "async";
-  const phase = document.createElement("img");
-  phase.className = "place-weather__phase";
-  phase.alt = "";
-  phase.decoding = "async";
-  phase.setAttribute("aria-hidden", "true");
-  phase.hidden = true;
-  visual.append(loading, weatherImage, phase);
+  visual.append(loading, weatherImage);
 
   const copyContainer = document.createElement("span");
   copyContainer.className = "place-weather__copy";
@@ -357,30 +240,9 @@ function buildWeatherBadge(language: Language, meta: PlaceWeatherBadgeMeta = {})
   condition.className = "place-weather__condition";
   condition.textContent = copy.loading;
 
-  const metaLine = document.createElement("small");
-  metaLine.className = "place-weather__meta";
-  metaLine.hidden = true;
-  const factsLine = document.createElement("small");
-  factsLine.className = "place-weather__facts";
-  factsLine.hidden = true;
-  copyContainer.append(temperature, condition, metaLine, factsLine);
+  copyContainer.append(temperature, condition);
 
   root.append(visual, copyContainer);
-
-  if (meta.placeIconSrc) {
-    const placeVisual = document.createElement("span");
-    placeVisual.className = "place-weather__place";
-    const label = meta.placeIconLabel?.trim() || "";
-    if (label) placeVisual.title = label;
-
-    const placeImage = document.createElement("img");
-    placeImage.src = meta.placeIconSrc;
-    placeImage.alt = label;
-    placeImage.loading = "lazy";
-    placeImage.decoding = "async";
-    placeVisual.append(placeImage);
-    root.append(placeVisual);
-  }
 
   return root;
 }
@@ -389,8 +251,8 @@ export class PlaceWeatherService {
   private readonly cache = new Map<string, CacheEntry>();
   private readonly inflight = new Map<string, Promise<WeatherReading>>();
 
-  createBadge(coordinate: LngLatTuple, language: Language, meta: PlaceWeatherBadgeMeta = {}): HTMLElement {
-    const root = buildWeatherBadge(language, meta);
+  createBadge(coordinate: LngLatTuple, language: Language): HTMLElement {
+    const root = buildWeatherBadge(language);
     void this.populate(root, coordinate, language);
     return root;
   }
@@ -407,49 +269,22 @@ export class PlaceWeatherService {
       const condition = weatherCondition(reading);
       const temperature = roundTemperature(reading.temperature, language);
       const conditionLabel = weatherConditionLabel(condition, reading.isDay, language);
-      const season = seasonFor(coordinate[1], reading.timezone);
-      const phaseLabel = PHASE_COPY[language][reading.isDay ? "day" : "night"];
-      const timeLabel = localTime(reading, language);
-      const seasonLabel = SEASON_COPY[language][season.name];
-      const metaLabel = `${timeLabel} · ${phaseLabel} · ${seasonLabel}`;
-      const details = weatherDetails(reading, language);
       const copy = UI_COPY[language];
       const image = root.querySelector<HTMLImageElement>(".place-weather__visual img");
       const loading = root.querySelector<HTMLElement>(".place-weather__loading");
-      const phase = root.querySelector<HTMLImageElement>(".place-weather__phase");
       const temperatureElement = root.querySelector<HTMLElement>(".place-weather__copy strong");
       const conditionElement = root.querySelector<HTMLElement>(".place-weather__condition");
-      const metaElement = root.querySelector<HTMLElement>(".place-weather__meta");
-      const factsElement = root.querySelector<HTMLElement>(".place-weather__facts");
-      if (!image || !loading || !phase || !temperatureElement || !conditionElement || !metaElement || !factsElement) return;
+      if (!image || !loading || !temperatureElement || !conditionElement) return;
 
       image.src = weatherIconAsset(condition, reading.isDay);
       image.hidden = false;
       loading.hidden = true;
-      phase.src = `${import.meta.env.BASE_URL}assets/weather/ui/${reading.isDay ? "day" : "night"}.svg`;
-      phase.hidden = condition === "clear" || condition === "partly-cloudy";
-      phase.dataset.phase = reading.isDay ? "day" : "night";
       temperatureElement.textContent = temperature;
       conditionElement.textContent = conditionLabel;
-      metaElement.replaceChildren(
-        weatherFact(`${import.meta.env.BASE_URL}assets/weather/ui/clock.svg`, timeLabel),
-        weatherFact(`${import.meta.env.BASE_URL}assets/weather/ui/${reading.isDay ? "day" : "night"}.svg`, phaseLabel),
-        weatherFact(season.asset, seasonLabel)
-      );
-      metaElement.hidden = false;
-      factsElement.replaceChildren(...details.map((detail) => weatherFact(
-        `${import.meta.env.BASE_URL}assets/weather/ui/${detail.icon}.svg`,
-        detail.value
-      )));
-      factsElement.hidden = details.length === 0;
       root.dataset.state = "ready";
       root.dataset.phase = reading.isDay ? "day" : "night";
-      root.dataset.season = season.name;
-      root.setAttribute(
-        "aria-label",
-        `${copy.current}: ${temperature}. ${conditionLabel}. ${metaLabel}.${details.length > 0 ? ` ${details.map((detail) => detail.value).join(", ")}.` : ""}`
-      );
-      root.title = `${copy.current}: ${temperature} · ${conditionLabel} · ${metaLabel}${details.length > 0 ? ` · ${details.map((detail) => detail.value).join(" · ")}` : ""}`;
+      root.setAttribute("aria-label", `${copy.current}: ${temperature}. ${conditionLabel}.`);
+      root.title = `${copy.current}: ${temperature} · ${conditionLabel}`;
     } catch {
       if (root.isConnected) root.remove();
     }
@@ -482,7 +317,7 @@ export class PlaceWeatherService {
     url.searchParams.set("longitude", longitude.toFixed(5));
     url.searchParams.set(
       "current",
-      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_gusts_10m"
+      "temperature_2m,is_day,weather_code,wind_speed_10m,wind_gusts_10m"
     );
     url.searchParams.set("temperature_unit", "celsius");
     url.searchParams.set("wind_speed_unit", "kmh");
@@ -507,26 +342,11 @@ export class PlaceWeatherService {
       }
       return {
         temperature,
-        apparentTemperature: optionalNumber(payload.current?.apparent_temperature),
         weatherCode,
         isDay: isDayValue === 1,
-        observedAt: typeof payload.current?.time === "string" ? payload.current.time : "",
-        timezone: typeof payload.timezone === "string" && payload.timezone.trim()
-          ? payload.timezone
-          : Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-        timezoneAbbreviation: typeof payload.timezone_abbreviation === "string"
-          ? payload.timezone_abbreviation
-          : "",
-        humidity: optionalNumber(payload.current?.relative_humidity_2m),
-        precipitation: optionalNumber(payload.current?.precipitation),
-        rain: optionalNumber(payload.current?.rain),
-        showers: optionalNumber(payload.current?.showers),
-        snowfall: optionalNumber(payload.current?.snowfall),
-        cloudCover: optionalNumber(payload.current?.cloud_cover),
         windSpeed: optionalNumber(payload.current?.wind_speed_10m),
         windGusts: optionalNumber(payload.current?.wind_gusts_10m),
-        dust: optionalNumber(payload.current?.dust),
-        pm10: optionalNumber(payload.current?.pm10)
+        dust: optionalNumber(payload.current?.dust)
       };
     } finally {
       window.clearTimeout(timeout);

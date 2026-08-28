@@ -997,11 +997,11 @@
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/402.json": {
       "bytes": 325142,
-      "sha256": "81815219a9e2bb0c2cd4f0c3d49776ac8119c9500e16328abe3014d2f5730138"
+      "sha256": "a81d46c3218f057ab2b70a34224f6e0954bb73c94a416f80f0839bd4a2afc100"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/403.json": {
       "bytes": 221183,
-      "sha256": "11e7de96220cc5102906b1424099fb7ae5b7a2cc7827d6e4d9d79ce403a70818"
+      "sha256": "42daf33106d8d153007b8147479f18687345db7c835a08e7dd18193efb82ea0f"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/404.json": {
       "bytes": 308253,
@@ -1013,7 +1013,7 @@
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/402.json": {
       "bytes": 187638,
-      "sha256": "52292ba8552736a9064679514a9f3ef5a04ba3ea60f8ec1f0a24757269a3edcc"
+      "sha256": "4bcfc436e30fff0e0a74e401b0c73668851ba492421f05db2364820cf45b3d58"
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/403.json": {
       "bytes": 234229,
@@ -1045,7 +1045,7 @@
     },
     "public/data/kri/viewport-poi-shards/natural/8/159/102.json": {
       "bytes": 13734,
-      "sha256": "52bc1253a9bd06c267b102f14daf17648461d28ef20d6d5781bd6065b40918c9"
+      "sha256": "d6dc81fc445cb09e85439279493c1a8dd88d715ff9f6715bc76d4b4efebd4c09"
     },
     "public/data/kri/viewport-poi-shards/natural/8/160/102.json": {
       "bytes": 96554,
@@ -1053,7 +1053,7 @@
     },
     "public/data/kri/viewport-poi-shards/natural/8/160/99.json": {
       "bytes": 10624,
-      "sha256": "5ad7532137e6db5c7316b606004b45c2ec1f906b66488546b72b02bd11c99f70"
+      "sha256": "8feb7de918b4f4cf5e54d3ac26893fd6ef344e5e11cf9d9dfb6023242f528d1c"
     },
     "public/data/kri/viewport-poi-shards/natural/9/316/198.json": {
       "bytes": 38273,
@@ -1105,11 +1105,11 @@
     },
     "public/data/kri/viewport-poi-shards/natural/9/319/203.json": {
       "bytes": 220852,
-      "sha256": "ae325f4a664089b1b269a6cd6c30f5cbe3158c7f2e25f2883a2951314da92f71"
+      "sha256": "b7ce3b96df772d5737081cc645d85979468bb27d4481df934cbfd621e227b784"
     },
     "public/data/kri/viewport-poi-shards/natural/9/320/200.json": {
       "bytes": 160961,
-      "sha256": "9f76bd5d66e81c762d60e8be8f751526c3e1257870742e959fd2ea7ebb73454f"
+      "sha256": "29415ae27fbb68401eccc500a3da0cf85a0587da38024c6635e01b4ed0c62b1a"
     },
     "public/data/kri/viewport-poi-shards/natural/9/320/203.json": {
       "bytes": 386816,

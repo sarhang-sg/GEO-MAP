@@ -21,6 +21,12 @@
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-pressed", String(active));
     });
+    document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach((link) => {
+      const target = new URL(link.href, location.href);
+      if (target.origin !== location.origin) return;
+      target.searchParams.set("lang", language);
+      link.href = target.href;
+    });
     try { localStorage.setItem("nav-kurd:legal-language", language); } catch { /* Optional storage. */ }
   };
 

@@ -16,8 +16,9 @@ Use this file when continuing the web work in a new chat.
 - `src/lib/live-location-controller.ts` — stale-watch/background recovery.
 - `src/lib/live-location-layers.ts` and `map-layer-priority.ts` — GPS/route/POI
   ordering.
-- `src/lib/place-weather.ts`, `public/assets/weather/` and
-  `src/styles/place-weather.css` — animated weather/season visual system.
+- `src/lib/place-weather.ts` and `src/styles/place-weather.css` — compact
+  selected-place temperature plus condition/day-night icon. Full weather facts
+  remain an Android-widget responsibility and are not rendered in map panels.
 - `src/lib/android-release-experience.ts` and `public/releases/latest.json` —
   direct/APKPure links, tutorial completion promotion and old-version checks.
 - `src/lib/native-platform.ts` and `hardware-profile.ts` — Flutter Android
@@ -64,13 +65,45 @@ permissions, downloads, notifications, widget and hardware integration.
 - Production source/data/runtime/security/platform/PMTiles/dependency/release
   gates: PASS.
 - Production output: `dist/`.
+- Mobile OAuth now keeps ordinary Chrome sign-in on the web origin. The
+  `navkurd://` handoff runs only for an OAuth request explicitly marked by the
+  Flutter shell, so switching Chrome desktop mode can no longer strand the user
+  on the `Open NAV KURD` fallback.
+- Account hydration tolerates transient profile/notification failures and the
+  owner-role lookup fails closed to an ordinary user during a short outage,
+  preventing the post-login red/stuck loading state without granting admin
+  privileges.
+- Pending long-press coordinates survive Google OAuth and reopen the add-place
+  form after sign-in/legal acceptance.
+- Migration `20260828_000023_release_runtime_fixes.sql` repairs trusted
+  approve/reject transitions and makes Arabic/English names, descriptions and
+  photo captions independently optional while retaining exact-language and
+  server-side validation.
+- Account deletion and contribution guidelines now render one complete
+  Kurdish, Arabic or English document at a time. Internal legal links retain
+  the selected language.
+- The redundant small APK signature/package sentence is removed. In-map full
+  weather/season/ambient panels are removed; only compact selected-place
+  temperature and condition/day-night icon remain.
 - Signed APK embedding is still pending; no placeholder or fake APK was added.
 - Fresh Supabase schema and Edge Functions deploy successfully; migration
   `20260828_000022_fresh_backend_owner_contract.sql` now supplies the missing
   fresh-project owner bootstrap and validates Auth/Realtime/notifications/RLS
   and both production Storage buckets.
 - Canonical Web production URL: `https://geo-map-kappa.vercel.app`.
-- Exact next step: deploy migration `000022`, configure the exact Auth Site URL,
-  Redirect URL and Google provider/callback from
-  `docs/FRESH_INFRASTRUCTURE_CKB.md`, then perform the first Google sign-in and
-  verify that `atlas_owners` contains the signed-in user.
+- Changed runtime files: `src/bootstrap.ts`, `src/main.ts`,
+  `src/lib/atlas-places.ts`, `src/lib/app-shell.ts`,
+  `src/lib/android-release-experience.ts`,
+  `src/lib/user-contribution-studio.ts`, `src/lib/place-weather.ts`,
+  `src/styles.css`, `src/styles/android-release.css`,
+  `src/styles/place-weather.css`, `public/manifest.webmanifest`,
+  `public/legal/account-deletion.html`,
+  `public/legal/contribution-guidelines.html`, `public/legal/legal-i18n.js`,
+  `tools/verify/source.mjs`, and migration `000023`.
+- Removed obsolete source: `src/styles/ambient-weather.css`.
+- Remaining: publish this source, deploy migration `000023` and current Edge
+  Functions, let Vercel redeploy `main`, then smoke-test mobile Google login,
+  pending-coordinate resume, approve/reject (with and without media), all three
+  legal languages and compact selected-place weather.
+- Exact next step: run the supplied Termux publish script, then verify the new
+  Supabase workflow and Vercel deployment are green.
