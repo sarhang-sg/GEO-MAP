@@ -58,13 +58,19 @@ of maintaining a second divergent map implementation. Web and Android share
 map/search/offline/account behavior; Android supplies native lifecycle,
 permissions, downloads, notifications, widget and hardware integration.
 
-## Current release checkpoint — 2026-08-27
+## Current release checkpoint — 2026-08-28
 
 - TypeScript type-check: PASS.
 - Production source/data/runtime/security/platform/PMTiles/dependency/release
   gates: PASS.
 - Production output: `dist/`.
 - Signed APK embedding is still pending; no placeholder or fake APK was added.
-- Exact next step: run the fresh bootstrap `web` command, then configure the new
-  Supabase/Vercel project without changing the old canonical URL until the new
-  production URL is known.
+- Fresh Supabase schema and Edge Functions deploy successfully; migration
+  `20260828_000022_fresh_backend_owner_contract.sql` now supplies the missing
+  fresh-project owner bootstrap and validates Auth/Realtime/notifications/RLS
+  and both production Storage buckets.
+- Canonical Web production URL: `https://geo-map-kappa.vercel.app`.
+- Exact next step: deploy migration `000022`, configure the exact Auth Site URL,
+  Redirect URL and Google provider/callback from
+  `docs/FRESH_INFRASTRUCTURE_CKB.md`, then perform the first Google sign-in and
+  verify that `atlas_owners` contains the signed-in user.

@@ -94,9 +94,21 @@ gh run watch "$SUPABASE_RUN_ID" --repo sarhang-sg/GEO-MAP --exit-status
 4. Realtime: تەنها table ـە پێویستەکان enable بکە.
 5. Storage bucket ـەکان: `kri-place-media` و
    `kri-place-media-private`؛ public/private و policy ـەکان بەپێی migration.
-6. Auth → URL Configuration: دوای ناسینی URL ـی Vercel، Site URL و Redirect
-   URLs بنووسە.
-7. Auth → Providers → Google: Client ID/Secret ـی Google Cloud دابنێ.
+6. Auth → URL Configuration:
+   - Site URL: `https://geo-map-kappa.vercel.app`
+   - Redirect URLs: `https://geo-map-kappa.vercel.app/**`
+7. Auth → Providers → Google: Google provider چالاک بکە و Client ID/Secret ـی
+   Google Cloud Web application دابنێ.
+8. لە Google Cloud → OAuth Web client، ئەم callback ـە وەک Authorized redirect
+   URI زیاد بکە:
+   `https://kaydgjhwnspnuqabaiqw.supabase.co/auth/v1/callback`
+9. migration ـی `20260828_000022_fresh_backend_owner_contract.sql` ئەکاونتی
+   `s.pasha0101@gmail.com` لە private allow-list دادەنێت؛ لە یەکەم Google login
+   ـدا trigger ـەکە خۆکارانە ڕۆڵی admin دروست دەکات.
+
+ئەم migration ـە هەروەها Auth/notification/presence/RLS، پێنج table ـی
+Realtime و دوو bucket ـی ڕاستەقینە دەپشکنێت. ئەگەر یەکێکیان کەم بێت workflow
+بە error دەوەستێت و backend ـی نیمچە بڵاوناکرێتەوە.
 
 ## 3. Vercel ـی نوێ
 

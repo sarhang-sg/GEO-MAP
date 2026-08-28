@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.11",
   "generatedForDate": "2026-08-27",
   "secretSafe": true,
-  "fileCount": 1204,
-  "totalBytes": 280591080,
+  "fileCount": 1205,
+  "totalBytes": 280599785,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -391,8 +391,8 @@
       "sha256": "1d1a62eecac1cfd2977b375651153af69846b6f8c74eae235c9bade325894a20"
     },
     "docs/FRESH_INFRASTRUCTURE_CKB.md": {
-      "bytes": 7567,
-      "sha256": "aa5fe078d8ae32fed3f522ccbf8739dc2c0d31dcd478358976f9e907afb11335"
+      "bytes": 8385,
+      "sha256": "805af0f9213b9a49dad6ebc1e127754fb208a91636d4d1d48baad6edf3647e3e"
     },
     "docs/OFFLINE.md": {
       "bytes": 649,
@@ -411,8 +411,8 @@
       "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
     },
     "HANDOFF_WEB_8.0.4.md": {
-      "bytes": 3394,
-      "sha256": "021083aef57677880e88bd7251541831b1e70f79201561a4a2fd621acaa22483"
+      "bytes": 3812,
+      "sha256": "f3b687cf70a0d3dd901eea17c48c72e03f16a54716fd3de224a548b2cf72f50f"
     },
     "index.html": {
       "bytes": 3947,
@@ -4614,9 +4614,13 @@
       "bytes": 8393,
       "sha256": "2245c37a2f4494f26acfd2a534f625e7444d833b9b29c4b710b8f6f3ed961607"
     },
+    "supabase/migrations/20260828_000022_fresh_backend_owner_contract.sql": {
+      "bytes": 6481,
+      "sha256": "bb79767f0972880645f4b0409152ab4aef52da2e7781899da87c65b0a5d0e319"
+    },
     "supabase/README.md": {
-      "bytes": 2082,
-      "sha256": "6bc7202ac8b6f6eb7aef863d55dda0f10f8d258f0b99c27c4111b15de3fc0abd"
+      "bytes": 3070,
+      "sha256": "fe52c30114e364943afe9198e93c47716d79d534f984b7fddfae2b49378998a2"
     },
     "TERMUX.sh": {
       "bytes": 2931,

@@ -36,6 +36,29 @@ After the final Vercel production URL is known:
 4. Put only the public project URL and publishable key in Vercel browser
    variables. Never expose a secret/service-role key through `VITE_*`.
 
+## Fresh production completion
+
+Migration `20260828_000022_fresh_backend_owner_contract.sql` closes the
+fresh-project bootstrap without using mock data. It:
+
+- registers the verified production owner email only in the private database
+  schema and grants the administrator row on first Google sign-in;
+- guarantees the real public/private media buckets and limits;
+- guarantees the five required Postgres Changes tables;
+- aborts deployment if required Auth, notification, presence, Storage or RLS
+  objects are missing.
+
+The production dashboard values are:
+
+- Auth Site URL: `https://geo-map-kappa.vercel.app`
+- Auth Redirect URL: `https://geo-map-kappa.vercel.app/**`
+- Google OAuth callback:
+  `https://kaydgjhwnspnuqabaiqw.supabase.co/auth/v1/callback`
+
+Enable Google in **Authentication → Providers → Google** using the Google Cloud
+Web client ID and secret. These credentials must remain in the Supabase/Google
+dashboards and must never be committed or prefixed with `VITE_`.
+
 The migration set provides authenticated profiles, owner/admin review,
 notifications, place revisions, account deletion, activity timestamps,
 public-directory consent and visitor presence. Public tables use RLS and
