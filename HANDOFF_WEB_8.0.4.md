@@ -107,3 +107,36 @@ permissions, downloads, notifications, widget and hardware integration.
   legal languages and compact selected-place weather.
 - Exact next step: run the supplied Termux publish script, then verify the new
   Supabase workflow and Vercel deployment are green.
+
+## PWA/direct-download checkpoint — 2026-08-29
+
+- `public/pwa-init.js` now registers `/sw.js` synchronously from the document
+  head, before the heavy map bundle. The runtime controller reuses that single
+  promise instead of creating a duplicate registration. This fixes the short
+  PWABuilder Puppeteer window that previously reported no Service Worker.
+- The existing production worker remains the canonical offline owner and still
+  implements atomic shell caching, offline fallback, background sync, periodic
+  sync, push notifications and Windows widget events. Installer binaries,
+  byte-range traffic, `/api`, `/auth` and mutable release metadata are now
+  explicitly excluded from CacheStorage.
+- The manifest now opts into Edge Side Panel, Window Controls Overlay, Tabbed
+  Display and the verified previous-production-origin scope extension. The
+  reciprocal `web-app-origin-association` file contains the canonical app ID.
+- IARC deliberately remains environment-gated. Set
+  `NAV_KURD_IARC_RATING_ID` only after IARC issues a real certificate; never
+  invent an ID merely to turn an optional analyzer item green.
+- Direct APK release metadata is now artifact-gated. Without a real APK the
+  direct button is hidden and no broken 0.08 KB download is exposed. With
+  `public/downloads/NAV-KURD-8.0.4.apk`, the build validates ZIP/APK structure,
+  requires a 10–95 MiB size, computes SHA-256 and publishes exact byte/hash
+  metadata. The browser performs a same-origin HEAD/size/MIME check before it
+  reveals the direct button.
+- The canonical signed APK must come from the successful GEO-ANDROID workflow
+  release directory and use certificate SHA-256
+  `A2:45:75:43:8C:D4:E1:AF:D6:11:FE:2E:C8:F7:2E:EF:70:D5:C1:1F:3F:E9:BA:EF:0E:75:D5:76:EC:CE:12:46`.
+- Native Capacitor/iOS/Windows web builds remove the standalone APK from their
+  generated `dist/`, preventing an installer from being recursively bundled
+  inside another native package. The Vercel web build retains it.
+- Exact next step: run the supplied `NAV-KURD-v8.0.4-WEB-PWA-DIRECT-FIX.sh`
+  from Termux after the GEO-ANDROID signed release folder exists in Download,
+  then wait for GitHub quality/browser-smoke and Vercel production to pass.

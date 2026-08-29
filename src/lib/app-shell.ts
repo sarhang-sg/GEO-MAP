@@ -150,7 +150,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
             <div><p>NAV KURD 8.0.4</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
           </div>
           <div class="android-download__actions">
-            <a id="androidDirectDownload" class="android-download__primary" href="${appUrl("downloads/NAV-KURD-8.0.4.apk")}" download>
+            <a id="androidDirectDownload" class="android-download__primary" aria-disabled="true" hidden>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18v2h14v-2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span><strong>APK دابگرە</strong><small>ڕاستەوخۆ · v8.0.4</small></span>
             </a>

@@ -2,7 +2,16 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { MANIFEST_ID, MANIFEST_START_URL, MANIFEST_SCOPE, CANONICAL_APP_ID, CANONICAL_ORIGIN, SCOPE_EXTENSIONS } from "./pwa-manifest-contract.mjs";
+import {
+  CANONICAL_APP_ID,
+  CANONICAL_ORIGIN,
+  DISPLAY_OVERRIDE,
+  EDGE_SIDE_PANEL,
+  MANIFEST_ID,
+  MANIFEST_SCOPE,
+  MANIFEST_START_URL,
+  SCOPE_EXTENSIONS
+} from "./pwa-manifest-contract.mjs";
 const root = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const manifestPath = resolve(root, "public/manifest.webmanifest");
 const offlinePath = resolve(root, "public/offline-manifest.json");
@@ -13,6 +22,8 @@ manifest.version = release.appVersion;
 manifest.id = MANIFEST_ID;
 manifest.start_url = MANIFEST_START_URL;
 manifest.scope = MANIFEST_SCOPE;
+manifest.display_override = [...DISPLAY_OVERRIDE];
+manifest.edge_side_panel = { ...EDGE_SIDE_PANEL };
 manifest.scope_extensions = SCOPE_EXTENSIONS.map((entry) => ({ ...entry }));
 manifest.related_applications = [{ platform: "webapp", url: `${CANONICAL_ORIGIN}/manifest.webmanifest`, id: CANONICAL_APP_ID }];
 if (Array.isArray(manifest.widgets) && manifest.widgets[0]) {

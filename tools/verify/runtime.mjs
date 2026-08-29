@@ -1,10 +1,14 @@
 #!/usr/bin/env node
-import { assert, readJson, readText } from "../lib/project.mjs";
+import { assert, fileExists, fileMeta, readJson, readText } from "../lib/project.mjs";
 
 const release = await readJson("release.config.json");
 const manifest = await readJson("public/manifest.webmanifest");
 const offline = await readJson("public/offline-manifest.json");
+const androidRelease = await readJson("public/releases/latest.json");
 const sw = await readText("public/sw.js");
+const pwaInit = await readText("public/pwa-init.js");
+const indexHtml = await readText("index.html");
+const offlineBuilder = await readText("tools/build/build-offline-runtime.mjs");
 const lifecycle = await readText("src/lib/app-lifecycle-controller.ts");
 const main = await readText("src/main.ts");
 const scheduler = await readText("src/lib/map-animation-scheduler.ts");
@@ -30,8 +34,15 @@ const sprite = await readJson("public/assets/icons/atlas/runtime-sprite/nav-kurd
 
 assert(manifest.version === release.appVersion, "PWA version mismatch.");
 assert(manifest.id === "./" && manifest.scope === "./", "PWA scope is not deployment-safe.");
+assert(manifest.display_override?.includes("window-controls-overlay") && manifest.display_override?.includes("tabbed"), "Advanced desktop display modes are missing.");
+assert(manifest.edge_side_panel?.preferred_width >= 376, "Edge side-panel manifest capability is missing.");
+assert(manifest.scope_extensions?.some((entry) => entry.type === "origin" && entry.origin === "https://geo-map-two.vercel.app"), "Previous production origin is not a valid PWA scope extension.");
 assert(offline.release === release.appVersion, "Offline manifest version mismatch.");
+assert(indexHtml.includes('<script src="%BASE_URL%pwa-init.js"></script>'), "Early service-worker bootstrap is not loaded from HTML.");
+assert(pwaInit.includes("navigator.serviceWorker.register") && pwaInit.includes('new URL("sw.js", scriptUrl)'), "Early service-worker registration is incomplete.");
+assert(offlineBuilder.includes('"pwa-init.js"'), "Early service-worker bootstrap is not in the atomic offline shell.");
 assert(sw.includes("__KRI_RELEASE_ID__") && sw.includes("__KRI_PRECACHE__"), "Service worker build placeholders are incomplete.");
+assert(sw.includes("isReleaseBinaryRequest") && sw.includes("isPrivateOrMutableRequest"), "Service worker can cache installers or private API responses.");
 assert(!/LEGACY_VIEWPORT|isLegacyViewport|canonicalViewportShardRequest/u.test(sw), "Obsolete viewport compatibility remains in service worker.");
 assert(sw.includes("inactiveForMs") && sw.includes("MAINTAIN_RUNTIME_CACHES"), "Inactive-cache maintenance contract is missing.");
 assert(sw.includes("schema: 1") && !/marker\?\.schema\s*[<>=!]+\s*[2345]/u.test(sw), "Offline readiness marker is not on the single current schema.");
@@ -72,5 +83,16 @@ assert(!/LEGACY_STORAGE_KEYS|offline-map-pack-v[2345]/u.test(offlinePack), "Obso
 assert(sprite.release === release.appVersion && sprite.count >= 150, "Runtime sprite release/count is invalid.");
 for (const variant of sprite.variants ?? []) {
   assert(variant.image.startsWith("nav-kurd-poi-runtime-") && !/r\d/iu.test(variant.image), "Runtime sprite uses a revision filename.");
+}
+
+const apkPath = `public/downloads/NAV-KURD-${release.appVersion}.apk`;
+if (androidRelease.directApkAvailable === true) {
+  assert(androidRelease.directApkUrl === `/downloads/NAV-KURD-${release.appVersion}.apk`, "Direct APK URL is not canonical.");
+  assert(/^[a-f0-9]{64}$/u.test(androidRelease.apkSha256 ?? ""), "Direct APK hash is missing.");
+  assert(await fileExists(apkPath), "Direct APK metadata points to a missing file.");
+  const apk = await fileMeta(apkPath);
+  assert(apk.bytes === androidRelease.apkBytes && apk.sha256 === androidRelease.apkSha256, "Direct APK metadata does not match the signed file.");
+} else {
+  assert(androidRelease.directApkUrl === null && !(await fileExists(apkPath)), "Unavailable direct APK state still exposes a broken installer.");
 }
 console.log(`PASS runtime contracts: PWA/offline ${release.appVersion}, lifecycle restore, frame budget, GPS jump confirmation and verified offline pack.`);

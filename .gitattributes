@@ -30,6 +30,7 @@
 *.webp binary
 *.pmtiles binary
 *.zip binary
+*.apk binary
 *.ico binary
 *.woff binary
 *.woff2 binary

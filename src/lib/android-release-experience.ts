@@ -6,7 +6,10 @@ declare global {
 type LatestRelease = {
   version: string;
   minimumVersion: string;
-  directApkUrl: string;
+  directApkAvailable: boolean;
+  directApkUrl: string | null;
+  apkBytes: number | null;
+  apkSha256: string | null;
   apkPureUrl: string;
 };
 
@@ -28,6 +31,7 @@ type ReleaseCopy = {
 };
 
 const APKPURE_URL = "https://apkpure.com/nav-kurd/com.navkurd.app/download";
+const MINIMUM_DIRECT_APK_BYTES = 10 * 1024 * 1024;
 const COPY: Record<Language, ReleaseCopy> = {
   ku: {
     title: "ئەپی Android دابگرە",
@@ -101,7 +105,25 @@ function installedAndroidVersion(): string | null {
 
 function absoluteReleaseUrl(value: string): string {
   try { return new URL(value, window.location.origin).toString(); }
-  catch { return new URL("downloads/NAV-KURD-8.0.4.apk", window.location.href).toString(); }
+  catch { return ""; }
+}
+
+async function directApkIsReachable(url: string, expectedBytes: number): Promise<boolean> {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      cache: "no-store",
+      redirect: "error",
+      credentials: "same-origin",
+    });
+    if (!response.ok) return false;
+    const contentLength = Number(response.headers.get("content-length") ?? 0);
+    const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
+    return contentLength === expectedBytes
+      && (contentType.includes("android.package-archive") || contentType.includes("octet-stream"));
+  } catch {
+    return false;
+  }
 }
 
 async function readLatestRelease(): Promise<LatestRelease | null> {
@@ -113,10 +135,24 @@ async function readLatestRelease(): Promise<LatestRelease | null> {
     if (!response.ok) return null;
     const value = await response.json() as Partial<LatestRelease>;
     if (!/^\d+\.\d+\.\d+$/u.test(value.version ?? "")) return null;
+    const apkBytes = Number.isSafeInteger(value.apkBytes) ? Number(value.apkBytes) : 0;
+    const apkSha256 = /^[a-f0-9]{64}$/u.test(value.apkSha256 ?? "") ? value.apkSha256! : null;
+    const candidateUrl = value.directApkAvailable === true && typeof value.directApkUrl === "string"
+      ? absoluteReleaseUrl(value.directApkUrl)
+      : "";
+    const directApkAvailable = Boolean(
+      candidateUrl
+      && apkBytes >= MINIMUM_DIRECT_APK_BYTES
+      && apkSha256
+      && await directApkIsReachable(candidateUrl, apkBytes)
+    );
     return {
       version: value.version!,
       minimumVersion: /^\d+\.\d+\.\d+$/u.test(value.minimumVersion ?? "") ? value.minimumVersion! : value.version!,
-      directApkUrl: absoluteReleaseUrl(value.directApkUrl ?? "downloads/NAV-KURD-8.0.4.apk"),
+      directApkAvailable,
+      directApkUrl: directApkAvailable ? candidateUrl : null,
+      apkBytes: directApkAvailable ? apkBytes : null,
+      apkSha256: directApkAvailable ? apkSha256 : null,
       apkPureUrl: value.apkPureUrl?.startsWith("https://") ? value.apkPureUrl : APKPURE_URL,
     };
   } catch { return null; }
@@ -150,7 +186,19 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
   let latest: LatestRelease | null = null;
   const synchronizeLinks = (release: LatestRelease): void => {
     latest = release;
-    if (directLink) directLink.href = release.directApkUrl;
+    if (directLink) {
+      if (release.directApkAvailable && release.directApkUrl) {
+        directLink.href = release.directApkUrl;
+        directLink.download = `NAV-KURD-${release.version}.apk`;
+        directLink.hidden = false;
+        directLink.removeAttribute("aria-disabled");
+      } else {
+        directLink.removeAttribute("href");
+        directLink.removeAttribute("download");
+        directLink.hidden = true;
+        directLink.setAttribute("aria-disabled", "true");
+      }
+    }
     if (storeLink) storeLink.href = release.apkPureUrl;
   };
 
@@ -168,9 +216,9 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     overlay.querySelector<HTMLElement>("h2")!.textContent = copy.promoTitle;
     overlay.querySelector<HTMLElement>("p")!.textContent = copy.promoBody;
     const download = overlay.querySelector<HTMLAnchorElement>("a")!;
-    download.href = latest?.directApkUrl ?? directLink?.href ?? absoluteReleaseUrl("downloads/NAV-KURD-8.0.4.apk");
+    download.href = latest?.directApkUrl ?? storeLink?.href ?? APKPURE_URL;
     download.textContent = copy.promoDownload;
-    download.setAttribute("download", "NAV-KURD-8.0.4.apk");
+    if (latest?.directApkUrl) download.setAttribute("download", `NAV-KURD-${latest.version}.apk`);
     overlay.querySelector<HTMLButtonElement>("button")!.textContent = copy.promoClose;
     const close = (): void => { overlay.remove(); };
     overlay.querySelectorAll<HTMLElement>("[data-release-close]").forEach((element) => element.addEventListener("click", close));
@@ -194,7 +242,7 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     overlay.querySelector<HTMLElement>("h2")!.textContent = copy.updateTitle;
     overlay.querySelector<HTMLElement>("p")!.textContent = copy.updateBody(release.version);
     const update = overlay.querySelector<HTMLAnchorElement>("a")!;
-    update.href = nativeAndroid() ? release.apkPureUrl : release.directApkUrl;
+    update.href = nativeAndroid() ? release.apkPureUrl : (release.directApkUrl ?? release.apkPureUrl);
     update.textContent = copy.updateNow;
     const later = overlay.querySelector<HTMLButtonElement>("button")!;
     later.textContent = copy.updateLater;

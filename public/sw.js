@@ -59,6 +59,14 @@ const isStaticVisualAsset = (url) => /\/(?:icons|fonts)\//.test(url.pathname) ||
 const isVersionedDataAsset = (url) => url.pathname.includes("/data/kri/") && !url.pathname.endsWith(".pmtiles");
 const isSentinelTileRequest = (url) => url.pathname.endsWith("/api/sentinel2") && url.searchParams.has("z") && url.searchParams.has("x") && url.searchParams.has("y");
 const isMapTilerSatelliteRequest = (url) => url.origin === "https://api.maptiler.com" && /^\/tiles\/satellite-v2\/\d+\/\d+\/\d+\.jpg$/u.test(url.pathname);
+const isReleaseBinaryRequest = (request, url) => request.headers.has("range")
+  || url.pathname.startsWith("/downloads/")
+  || /\.(?:apk|aab|msi|exe|dmg|pkg)$/iu.test(url.pathname);
+const isPrivateOrMutableRequest = (request, url) => request.headers.has("authorization")
+  || url.pathname === "/api"
+  || url.pathname.startsWith("/api/")
+  || url.pathname.startsWith("/auth/")
+  || url.pathname.startsWith("/releases/");
 
 function offlineFailureResponse(request, message = "Resource unavailable while offline") {
   const url = new URL(request.url);
@@ -775,6 +783,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (!isSameOrigin(request)) return;
+  // Never retain signed installers, byte-range responses, credentials or
+  // mutable API payloads in CacheStorage. These requests stay browser/network
+  // owned and therefore cannot leak into the offline runtime cache.
+  if (isReleaseBinaryRequest(request, url) || isPrivateOrMutableRequest(request, url)) return;
 
   if (request.mode === "navigate") {
     event.respondWith(offlineNavigation(event));

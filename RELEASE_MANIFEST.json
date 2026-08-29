@@ -7,16 +7,16 @@
   "offlinePackVersion": "2027.11",
   "generatedForDate": "2026-08-27",
   "secretSafe": true,
-  "fileCount": 1206,
-  "totalBytes": 280619448,
+  "fileCount": 1210,
+  "totalBytes": 329420576,
   "files": {
     ".env.example": {
       "bytes": 3113,
       "sha256": "36a6e7fed1d6529b78f0470d7fd7cd8f1e9efd1c192a4d994167707c6b03288f"
     },
     ".gitattributes": {
-      "bytes": 730,
-      "sha256": "01b76e618de1a432d6de53147ce64c22d6dc3256916ffddfb30962f6076e542b"
+      "bytes": 743,
+      "sha256": "980e74fa45d3bcf9ff2c90bbfa853dcd5c8d3ab94b7f940b92a72ad0f6946eeb"
     },
     ".github/dependabot.yml": {
       "bytes": 271,
@@ -411,12 +411,12 @@
       "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
     },
     "HANDOFF_WEB_8.0.4.md": {
-      "bytes": 5890,
-      "sha256": "5bd8746d8eccf81cec7d83cebfa1f8426029614ffc9cb8bb1170963e65990306"
+      "bytes": 8112,
+      "sha256": "69dca609a07e57288d2a11f888f3b28c23dce80632ba8dee85eb332288490533"
     },
     "index.html": {
-      "bytes": 3947,
-      "sha256": "f79648116ee578667c6927a68f54179a180019bb7f7a38892df534d883ea87f6"
+      "bytes": 4156,
+      "sha256": "1f278c976417a067cdcb3d81ec2fcde8f1273a81fa58bc791552a9a06cef9508"
     },
     "ios/.gitignore": {
       "bytes": 206,
@@ -523,20 +523,20 @@
       "sha256": "e5a128e5d1f7da4bc6cb489dfde6c98dbd8745f103a7576d5ee45a763ab09076"
     },
     "package.json": {
-      "bytes": 5163,
-      "sha256": "49eb3205049806ead82e0e756a06e158f419e86e1bc6ccd4f9018c7c6f1feb98"
+      "bytes": 5428,
+      "sha256": "7f96de520951f1e65dbce23385a9bdfc467af8174af1e4d3a77d931ddcec52f4"
     },
     "public/_headers": {
-      "bytes": 2142,
-      "sha256": "36ccc5e79c672a35627d4ee776c9484e0decea0e9eba4f1328838901677a0fbe"
+      "bytes": 2601,
+      "sha256": "6eba5a01d85eb203cd2d3702c69f25ce81b1637f033e207bf49f1049670e266f"
     },
     "public/.well-known/security.txt": {
       "bytes": 230,
       "sha256": "eeb51c395191380b4d2050f99d14f924931607abbb12a52e06c9dc2006f88d99"
     },
     "public/.well-known/web-app-origin-association": {
-      "bytes": 64,
-      "sha256": "efd930a31ae1afb3bb28f0da8301cebe21870802d4ce96d92ee0c322cf6a74fe"
+      "bytes": 127,
+      "sha256": "4ee161492a8b6c60030851051229823b6ccc423d2f68ea3189a195afe75313fe"
     },
     "public/assets/fonts/README.md": {
       "bytes": 267,
@@ -3754,6 +3754,10 @@
       "bytes": 12409,
       "sha256": "1e11dc6ef3d6a90fd79959c34ecab11f983255700f286242dd44ecc61983a88c"
     },
+    "public/downloads/NAV-KURD-8.0.4.apk": {
+      "bytes": 48784090,
+      "sha256": "cff2032fb38a5b91503c5c565dfa277105869fcd3e55240e2ea4c3fe99102c3b"
+    },
     "public/fonts/README.md": {
       "bytes": 214,
       "sha256": "e31702f7bf3eba1072c87236583dd2a33c352ca19d9f1f7b06359d1102f4624c"
@@ -3827,8 +3831,8 @@
       "sha256": "bf33bdf65cc84dfc2b8b0ce21a043e4ffa14203995bc469cfb3dcbed1f4831d5"
     },
     "public/manifest.webmanifest": {
-      "bytes": 4748,
-      "sha256": "4359dc3840bab7b5468f620c998536852a93578138941263f4a0ba63de8489c9"
+      "bytes": 4936,
+      "sha256": "561b03901b26d1cadc044eab56afcbffc2ff3ba07f3e52d5ab0bb5c64ff2e40e"
     },
     "public/native-error.html": {
       "bytes": 2291,
@@ -3846,9 +3850,13 @@
       "bytes": 1652,
       "sha256": "d8d0f2a37e2b185122f04cf782f8b7b2252a3c56d490f7684c9b3b358c942109"
     },
+    "public/pwa-init.js": {
+      "bytes": 1182,
+      "sha256": "6fdfcd78bc5c4f6134b564d2cd15f479a878ebb4a9debb09d4505d029b1448cb"
+    },
     "public/releases/latest.json": {
-      "bytes": 303,
-      "sha256": "f4554a8e64805dd519d40f18ca62270e1156152f5cb63d87b04f23ecdbc46b12"
+      "bytes": 440,
+      "sha256": "4f6b52af117471b1d3f6b138f87a2828fd795f74ac51d5da5b5d4c2a592c8e0d"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3871,8 +3879,8 @@
       "sha256": "c4c6673245f52ee94ace4266187f1ec361c9b446f64e6129d778ae26b7d04342"
     },
     "public/sw.js": {
-      "bytes": 30812,
-      "sha256": "5b46d29b697733af19f2a5e2bf54f2721ce3f362d53265b29c2f35e19f0118a7"
+      "bytes": 31550,
+      "sha256": "c33a1ec0ab23f171410badc1c16833ce3c218dd971232ff2cb3850b847d3fdbd"
     },
     "public/widgets/nav-kurd-atlas-data.json": {
       "bytes": 166,
@@ -3999,8 +4007,8 @@
       "sha256": "4e02776b3c219a1e9b6cc87353a1298b886cb303c93633846183b71d78d7f008"
     },
     "src/lib/android-release-experience.ts": {
-      "bytes": 11345,
-      "sha256": "72112cecc2aea44186521dab2ff242f1bf59e008917eaefac131b1446c21568f"
+      "bytes": 13151,
+      "sha256": "29f7585e5cfe881bf0971523e9d90ae59e4d24f97e45336d07e73e358e6f8f9b"
     },
     "src/lib/app-health.ts": {
       "bytes": 6407,
@@ -4011,8 +4019,8 @@
       "sha256": "20783fa9d0e3742ade69a8a9aacc97c51cc039f80d52254a47f37ec2534ca457"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 29437,
-      "sha256": "8dfb46862398a316d7517abe4fbe2ebd0cc120e3f1282e08f63791f6f4af59be"
+      "bytes": 29407,
+      "sha256": "f42424385b8334598d7acc2b33c034e325fddc6ae5be8d288c280fc2951d271a"
     },
     "src/lib/app-url.ts": {
       "bytes": 308,
@@ -4351,8 +4359,8 @@
       "sha256": "7b824db3b5a4fd59a3dc5d91207760a70f82eda589a432136dfeffd95447ebdc"
     },
     "src/pwa-register.ts": {
-      "bytes": 682,
-      "sha256": "2a26f5c94384f78fa9771610279a86d4f24363223e1acffd7bbdf67d1dd77ce8"
+      "bytes": 728,
+      "sha256": "66508b33619969170507872bf40f40a8a6e86e9130a7f6b86aa858c006c757ec"
     },
     "src/styles.css": {
       "bytes": 1409,
@@ -4447,8 +4455,8 @@
       "sha256": "cd90ac43aa9fd7e69924cf6fb37cddf475b2717430247b98c2782a80a1fcb4ff"
     },
     "src/styles/native-platform.css": {
-      "bytes": 3556,
-      "sha256": "72085c966c1ca95a11bc8394d476be0616572dee82c26c9d7aca525004d3f929"
+      "bytes": 4005,
+      "sha256": "3b42e365fa2dd14cdf8c61922318ed2698806eb2be4d81637799d444812a527d"
     },
     "src/styles/network-resilience.css": {
       "bytes": 1673,
@@ -4631,20 +4639,24 @@
       "sha256": "35f6cc68d5b26e9371d8ceb8cf924fbd4269d136a3ef3522833a499bbfff2fd2"
     },
     "tools/build/build-offline-runtime.mjs": {
-      "bytes": 6502,
-      "sha256": "1c6c98a29d0aadbe8e0258a2c7f5c3b3fd82ad35fa4e327e388f08f70b94eb72"
+      "bytes": 6519,
+      "sha256": "070b9c6b3a29d3de629232e5676dc3b1026f3326d5294f6840a19c2702f68354"
     },
     "tools/build/generate-pwa-manifest.mjs": {
-      "bytes": 2174,
-      "sha256": "65ea6602455ea513e4ece6ab89b6f7af9619681de575f829065f79789de1632b"
+      "bytes": 2327,
+      "sha256": "cac2f76ac53d10c98e55dafae757a36727519ed26fa952246b498660aa74c0a8"
+    },
+    "tools/build/prepare-native-dist.mjs": {
+      "bytes": 973,
+      "sha256": "256f5e2121b0137c3ed84c2a698e04868dfe915636a10b83d22b07c6112ff3c3"
     },
     "tools/build/prune-production-dist.mjs": {
       "bytes": 1614,
       "sha256": "3abce7e428ee8ae580bed1f3bfc945c76a72018e43fd65a4883e778449142575"
     },
     "tools/build/pwa-manifest-contract.mjs": {
-      "bytes": 295,
-      "sha256": "dc1004a14800a004b98e3c062ce0fe84e623691feebbd8252454157bd95ce115"
+      "bytes": 725,
+      "sha256": "d810a022cb864ce1a78defdc062a73379e93ff6fd99161f4ed69b5b4e6c773ff"
     },
     "tools/data/align-data-release.py": {
       "bytes": 5995,
@@ -4774,9 +4786,13 @@
       "bytes": 5590,
       "sha256": "98d8efc5855a8c341ab993e0497ef7b9f776b68f61bed5ae09b09ab48cebb5b0"
     },
+    "tools/release/prepare-android-download.mjs": {
+      "bytes": 2916,
+      "sha256": "c33e3a48e73d74c77651261df84282aba2c8ba0dca791e3bfd927c85532fb46a"
+    },
     "tools/verify/browser-smoke.py": {
-      "bytes": 10024,
-      "sha256": "59cdb690205a7ea214b0b38cabcd91c91acf6163d46a6f45448e2c794d1b21bb"
+      "bytes": 11641,
+      "sha256": "8757da1ae71d9a961cc3c17803b3ede288014d04e35bfd139071ab259dc49570"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4799,16 +4815,16 @@
       "sha256": "f40696007ffa62680abb5c5a1aecc12d239bfa76a8ddc301b9b971837a80bb44"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 9738,
-      "sha256": "80da3c1902034b19de69e4ebd69d99d3721233c3ebc8f7cbc9d240a1800c313b"
+      "bytes": 11837,
+      "sha256": "e04db896b2d90bd7ac29173fbd6f35255db1857aa227bf912d2f34a20a840977"
     },
     "tools/verify/security.mjs": {
       "bytes": 4436,
       "sha256": "b96af5c6f9a3eeecfcbd0132c6261287209f2331eaeca23350b2071085f8f679"
     },
     "tools/verify/source.mjs": {
-      "bytes": 13486,
-      "sha256": "40192ca395db1798528e4562687ad356d6063052bc8dba7c66cb766e2c290122"
+      "bytes": 13525,
+      "sha256": "c36bf2dcf1b5e6f432de915acff7e308e7a65f1fb620da35f572789e4eb08de2"
     },
     "tools/verify/styles.py": {
       "bytes": 6196,
@@ -4827,8 +4843,8 @@
       "sha256": "b55fa6b537d8bbb4aa98eb39eb2bfea2868a54abd3d88b7f02478007f5df16f9"
     },
     "vercel.json": {
-      "bytes": 7771,
-      "sha256": "ffff7969001c8fc64914f64524c8b4b34ab20030d802d18b15dfb17fc365068e"
+      "bytes": 8818,
+      "sha256": "77025ef03ba5b53a7c3106270b4d74241fc0acd5b3f30c2792db9ecc8dd9709d"
     },
     "vite.config.ts": {
       "bytes": 657,

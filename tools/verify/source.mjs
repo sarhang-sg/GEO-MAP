@@ -68,6 +68,7 @@ const runtimeTextFiles = [
   ...(await walk(resolve(ROOT, "docs"))).filter((path) => /\.(?:md|txt)$/u.test(path)),
   ...(await walk(resolve(ROOT, "api"))).filter((path) => /\.(?:js|mjs)$/u.test(path)),
   resolve(ROOT, "public/sw.js"),
+  resolve(ROOT, "public/pwa-init.js"),
   resolve(ROOT, "README.md"),
   resolve(ROOT, "TERMUX.sh"),
   resolve(ROOT, ".env.example"),

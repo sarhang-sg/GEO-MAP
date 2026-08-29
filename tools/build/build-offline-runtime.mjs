@@ -59,6 +59,7 @@ for (const assetPath of directBuildAssets) {
 
 const requiredStaticAssets = new Set([
   "index.html",
+  "pwa-init.js",
   "manifest.webmanifest",
   "offline-manifest.json",
   "offline.html",

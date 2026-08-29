@@ -85,6 +85,36 @@ def main() -> int:
             assert page.locator("#supportVisitorPrivacyControl").count() == 1
             assert page.locator("#offlineMapPack").count() == 1
 
+            # A direct APK button may only appear when the same-origin signed
+            # binary exists and its byte count matches verified release metadata.
+            android_release = page.evaluate(
+                "async () => (await fetch('/releases/latest.json', { cache: 'no-store' })).json()"
+            )
+            direct_download = page.locator("#androidDirectDownload")
+            if android_release.get("directApkAvailable"):
+                direct_download.wait_for(state="attached", timeout=10_000)
+                page.wait_for_function(
+                    "() => !document.querySelector('#androidDirectDownload')?.hidden",
+                    timeout=10_000,
+                )
+                direct_probe = page.evaluate(
+                    """async expected => {
+                      const response = await fetch('/downloads/NAV-KURD-8.0.4.apk', {
+                        method: 'HEAD', cache: 'no-store', redirect: 'error'
+                      });
+                      return {
+                        ok: response.ok,
+                        bytes: Number(response.headers.get('content-length') || 0),
+                        expected
+                      };
+                    }""",
+                    android_release.get("apkBytes"),
+                )
+                if not direct_probe["ok"] or direct_probe["bytes"] != direct_probe["expected"]:
+                    raise AssertionError(f"direct APK probe failed: {direct_probe}")
+            elif not direct_download.is_hidden():
+                raise AssertionError("direct APK button is visible without a verified binary")
+
             # The language controls belong to the map sheet and are intentionally
             # hidden while the mobile shell is still booting/collapsed. Wait for
             # the actual interactive handoff, then open the sheet exactly as a

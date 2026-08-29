@@ -7,6 +7,8 @@
   "scope": "./",
   "display": "standalone",
   "display_override": [
+    "window-controls-overlay",
+    "tabbed",
     "standalone",
     "minimal-ui"
   ],
@@ -151,6 +153,9 @@
   "note_taking": {
     "new_note_url": "./?action=new-place-note"
   },
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
   "widgets": [
     {
       "name": "NAV KURD Atlas",
@@ -181,6 +186,11 @@
       "multiple": false
     }
   ],
-  "scope_extensions": [],
+  "scope_extensions": [
+    {
+      "type": "origin",
+      "origin": "https://geo-map-two.vercel.app"
+    }
+  ],
   "version": "8.0.4"
 }

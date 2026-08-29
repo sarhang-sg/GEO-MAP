@@ -145,6 +145,20 @@ html:not(.is-native-app) .native-share-location {
   }
 }
 
+/* Keep the map controls clear of the desktop title-bar buttons when the PWA
+   runs with Window Controls Overlay. Unsupported browsers resolve the env()
+   fallback to zero and retain the ordinary standalone layout. */
+@media (display-mode: window-controls-overlay) {
+  html {
+    --native-safe-top: max(env(safe-area-inset-top, 0px), env(titlebar-area-height, 0px));
+  }
+
+  html, body, #app {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
 html.is-native-android { --native-platform-accent: #8acb66; }
 html.is-native-windows { --native-platform-accent: #67b7ff; }
 html.is-native-windows body { user-select: none; }
