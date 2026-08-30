@@ -12,6 +12,13 @@
   font-weight: 300 900;
   font-display: block;
 }
+@font-face {
+  font-family: "Droid Logo";
+  src: url("/fonts/DroidLogo-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 
 /* Base tokens, reset and language fonts. */
 

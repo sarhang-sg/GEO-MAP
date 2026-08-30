@@ -67,6 +67,7 @@ const requiredStaticAssets = new Set([
   "icons/nav-kurd-logo.png",
   "fonts/RedHatDisplay-Variable.woff2",
   "fonts/UniQAIDAR-Money-Heist-002.ttf",
+  "fonts/DroidLogo-Bold.ttf",
   "icons/nav-kurd-icon-192.png",
   "icons/favicon-32x32.png",
   "assets/icons/social/instagram.svg"
