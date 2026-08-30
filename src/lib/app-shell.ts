@@ -16,8 +16,8 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
             <span class="map-loading__beacon"></span>
           </div>
           <div class="map-loading__copy">
-            <span class="map-loading__kicker">NAV KURD</span>
-            <strong>KURDISTAN ATLAS</strong>
+            <span class="map-loading__kicker">MAP EDITION 2027</span>
+            <strong>NAV KURD</strong>
             <small>خەریکە ماپەکە ئامادە دەکرێت…</small>
           </div>
         </div>
@@ -145,7 +145,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           <span class="android-download__sky" aria-hidden="true"><i></i><i></i><i></i></span>
           <div class="android-download__heading">
             <span class="android-download__mark" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none"><path d="M14 17.5h20a5 5 0 0 1 5 5V36a4 4 0 0 1-4 4h-2v4a2 2 0 0 1-4 0v-4H19v4a2 2 0 0 1-4 0v-4h-2a4 4 0 0 1-4-4V22.5a5 5 0 0 1 5-5Z" fill="currentColor"/><path d="m15 15-3.5-5M33 15l3.5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="18" cy="25" r="1.8" fill="#071321"/><circle cx="30" cy="25" r="1.8" fill="#071321"/></svg>
+              <img src="${appUrl("assets/android-brand.png")}" alt="" width="1536" height="1536" loading="lazy" decoding="async" draggable="false" />
             </span>
             <div><p>NAV KURD 8.0.4</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
           </div>
@@ -176,9 +176,9 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           </section>
         </div>
         <section id="nativeIosPanel" class="native-ios-panel" aria-labelledby="nativeIosHeading" hidden>
-          <div class="native-ios-panel__header"><div><p id="nativePlatformEyebrow">NATIVE APP</p><h3 id="nativeIosHeading">ڕێکخستنەکانی ئەپی NAV KURD</h3></div><span id="nativePlatformIcon">◆</span></div>
+          <div class="native-ios-panel__header"><div><p id="nativePlatformEyebrow">NATIVE APP</p><h3 id="nativeIosHeading">ڕێکخستنەکانی ئەپی NAV KURD</h3></div><span id="nativePlatformIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="6.4" y="2.8" width="11.2" height="18.4" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M9.4 6.2h5.2M10 17.7h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="2.25" stroke="currentColor" stroke-width="1.55"/></svg></span></div>
           <dl class="native-ios-panel__status"><div><dt id="nativeConnectionTerm">تۆڕ</dt><dd id="nativeConnectionValue">—</dd></div><div><dt id="nativeStorageTerm">خەزن</dt><dd id="nativeCacheValue">—</dd></div></dl>
-          <div class="native-ios-panel__actions"><button id="nativeClearCacheButton" type="button">پاککردنەوەی cache ـی کاتی</button><button id="nativeOpenSettingsButton" type="button">کردنەوەی Settings</button></div>
+          <div class="native-ios-panel__actions"><button id="nativeClearCacheButton" type="button" aria-label="پاککردنەوەی cache ـی کاتی" title="پاککردنەوەی cache ـی کاتی"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 8.5h15M9 4.5h6l1 4H8l1-4Zm-2.8 4 1 11h11.6l1-11M9.2 12v4.8m5.6-4.8v4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="nativeClearCacheLabel" class="native-ios-panel__action-label">پاککردنەوەی cache ـی کاتی</span></button><button id="nativeOpenSettingsButton" type="button" aria-label="کردنەوەی Settings" title="کردنەوەی Settings"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3.1" stroke="currentColor" stroke-width="1.7"/><path d="M19 13.2v-2.4l-2-.7a7.7 7.7 0 0 0-.7-1.7l.9-1.9-1.7-1.7-1.9.9a7.7 7.7 0 0 0-1.7-.7l-.7-2H8.8l-.7 2a7.7 7.7 0 0 0-1.7.7l-1.9-.9-1.7 1.7.9 1.9a7.7 7.7 0 0 0-.7 1.7l-2 .7v2.4l2 .7c.16.6.4 1.17.7 1.7l-.9 1.9 1.7 1.7 1.9-.9c.53.3 1.1.54 1.7.7l.7 2h2.4l.7-2a7.7 7.7 0 0 0 1.7-.7l1.9.9 1.7-1.7-.9-1.9c.3-.53.54-1.1.7-1.7l2-.7Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/></svg><span id="nativeOpenSettingsLabel" class="native-ios-panel__action-label">کردنەوەی Settings</span></button></div>
           <p id="nativeIosNote">GPS permission، offline data، safe-area و deep links لە ڕێگەی سیستەمی ئامێرەکەت بەڕێوە دەبرێن.</p>
         </section>
         <div class="about-dialog__utility-actions">

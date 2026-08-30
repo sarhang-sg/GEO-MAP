@@ -214,13 +214,12 @@ export async function showNativeFatalError(message: string, language: Language):
   } catch { /* in-web error remains visible */ }
 }
 
-type PlatformCopy = { eyebrow: string; icon: string; heading: string; network: string; storage: string; clear: string; settings: string; note: string };
+type PlatformCopy = { eyebrow: string; heading: string; network: string; storage: string; clear: string; settings: string; note: string };
 function platformCopy(runtime: NativeRuntimeKind, language: Language): PlatformCopy {
   const platform = runtime === "ios" ? "iPhone / iPad" : runtime === "android" ? "Android" : "Windows";
-  const icon = runtime === "ios" ? "" : runtime === "android" ? "◆" : "⊞";
-  if (language === "ar") return { eyebrow: `${platform.toUpperCase()} NATIVE`, icon, heading: `إعدادات تطبيق ${platform}`, network: "الشبكة", storage: "التخزين", clear: "مسح الذاكرة المؤقتة", settings: "فتح الإعدادات", note: `يدير ${platform} إذن GPS وحالة الاتصال والروابط العميقة. مسح الذاكرة المؤقتة لا يحذف حزمة الخرائط دون اتصال.` };
-  if (language === "en") return { eyebrow: `${platform.toUpperCase()} NATIVE`, icon, heading: `${platform} app settings`, network: "Network", storage: "Storage", clear: "Clear transient cache", settings: "Open Settings", note: `${platform} manages GPS permission, connectivity and deep links. Clearing transient cache does not delete the offline map pack.` };
-  return { eyebrow: `${platform.toUpperCase()} NATIVE`, icon, heading: `ڕێکخستنەکانی ئەپی ${platform}`, network: "تۆڕ", storage: "خەزن", clear: "پاککردنەوەی cache ـی کاتی", settings: "کردنەوەی Settings", note: `GPS permission، network status و deep links لە ڕێگەی ${platform} بەڕێوە دەبرێن. پاککردنەوەی cache ـی کاتی پەکی ماپی ئۆفلاین ناسڕێتەوە.` };
+  if (language === "ar") return { eyebrow: `${platform.toUpperCase()} NATIVE`, heading: `إعدادات تطبيق ${platform}`, network: "الشبكة", storage: "التخزين", clear: "مسح الذاكرة المؤقتة", settings: "فتح الإعدادات", note: `يدير ${platform} إذن GPS وحالة الاتصال والروابط العميقة. مسح الذاكرة المؤقتة لا يحذف حزمة الخرائط دون اتصال.` };
+  if (language === "en") return { eyebrow: `${platform.toUpperCase()} NATIVE`, heading: `${platform} app settings`, network: "Network", storage: "Storage", clear: "Clear transient cache", settings: "Open Settings", note: `${platform} manages GPS permission, connectivity and deep links. Clearing transient cache does not delete the offline map pack.` };
+  return { eyebrow: `${platform.toUpperCase()} NATIVE`, heading: `ڕێکخستنەکانی ئەپی ${platform}`, network: "تۆڕ", storage: "خەزن", clear: "پاککردنەوەی cache ـی کاتی", settings: "کردنەوەی Settings", note: `GPS permission، network status و deep links لە ڕێگەی ${platform} بەڕێوە دەبرێن. پاککردنەوەی cache ـی کاتی پەکی ماپی ئۆفلاین ناسڕێتەوە.` };
 }
 
 export function installNativeSettingsPanel(getLanguage: () => Language): void {
@@ -230,7 +229,6 @@ export function installNativeSettingsPanel(getLanguage: () => Language): void {
   panel.hidden = runtime === "web";
   if (runtime === "web") return;
   const eyebrow = panel.querySelector<HTMLElement>("#nativePlatformEyebrow");
-  const icon = panel.querySelector<HTMLElement>("#nativePlatformIcon");
   const heading = panel.querySelector<HTMLElement>("#nativeIosHeading");
   const connectionTerm = panel.querySelector<HTMLElement>("#nativeConnectionTerm");
   const storageTerm = panel.querySelector<HTMLElement>("#nativeStorageTerm");
@@ -238,17 +236,20 @@ export function installNativeSettingsPanel(getLanguage: () => Language): void {
   const cache = panel.querySelector<HTMLElement>("#nativeCacheValue");
   const clear = panel.querySelector<HTMLButtonElement>("#nativeClearCacheButton");
   const settings = panel.querySelector<HTMLButtonElement>("#nativeOpenSettingsButton");
+  const clearLabel = panel.querySelector<HTMLElement>("#nativeClearCacheLabel");
+  const settingsLabel = panel.querySelector<HTMLElement>("#nativeOpenSettingsLabel");
   const note = panel.querySelector<HTMLElement>("#nativeIosNote");
 
   const updateCopy = (): void => {
     const copy = platformCopy(runtime, getLanguage());
     if (eyebrow) eyebrow.textContent = copy.eyebrow;
-    if (icon) icon.textContent = copy.icon;
     if (heading) heading.textContent = copy.heading;
     if (connectionTerm) connectionTerm.textContent = copy.network;
     if (storageTerm) storageTerm.textContent = copy.storage;
-    if (clear) clear.textContent = copy.clear;
-    if (settings) settings.textContent = copy.settings;
+    if (clearLabel) clearLabel.textContent = copy.clear;
+    if (settingsLabel) settingsLabel.textContent = copy.settings;
+    if (clear) { clear.setAttribute("aria-label", copy.clear); clear.title = copy.clear; }
+    if (settings) { settings.setAttribute("aria-label", copy.settings); settings.title = copy.settings; }
     if (note) note.textContent = copy.note;
   };
 
