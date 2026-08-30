@@ -10,7 +10,7 @@
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-  background: linear-gradient(180deg, rgba(72, 0, 76, .86) 0%, rgba(38, 0, 62, .84) 46%, rgba(3, 17, 43, .88) 100%);
+  background: linear-gradient(180deg, rgba(37, 0, 43, .95) 0%, rgba(0, 5, 56, .95) 100%);
   -webkit-backdrop-filter: saturate(.78) blur(.7px);
   backdrop-filter: saturate(.78) blur(.7px);
   opacity: 1;
@@ -130,10 +130,12 @@
 .map-loading__equation {
   margin: 0;
   color: #fff;
-  font: 900 clamp(18px, 2.2vw, 25px)/1 var(--font-latin);
+  direction: ltr;
+  font: 700 clamp(18px, 2.2vw, 25px)/1 "Droid Logo", var(--font-latin);
   letter-spacing: .08em;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .22);
+  unicode-bidi: isolate;
   white-space: nowrap;
 }
 

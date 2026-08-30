@@ -132,7 +132,7 @@
 .about-dialog__utility-actions button, .about-dialog__utility-actions a { display: inline-flex; align-items: center; min-height: 34px; padding: 0 10px; border: 1px solid rgba(166,145,255,.14); border-radius: 10px; color: #b9c5dc; background: rgba(255,255,255,.035); text-decoration: none; font: 850 8px/1 var(--font-ui); }
 
 @media (max-width: 700px) {
-  .user-contrib__panel { top: auto; right: 0; bottom: 0; left: 0; width: 100%; max-height: min(92dvh,850px); border-right: 0; border-bottom: 0; border-left: 0; border-radius: 26px 26px 0 0; }
+  .user-contrib__panel { top: auto; right: 0; bottom: 0; left: 0; width: 100%; height: min(92vh,850px); height: min(92svh,850px); max-height: calc(100vh - env(safe-area-inset-top)); max-height: calc(100svh - env(safe-area-inset-top)); border-right: 0; border-bottom: 0; border-left: 0; border-radius: 26px 26px 0 0; }
   .user-contrib__header { padding: 15px 16px 12px; }
   .user-contrib__content { padding: 13px 15px calc(18px + env(safe-area-inset-bottom)); }
   .user-contrib__coords { grid-template-columns: 1fr; }
@@ -393,7 +393,7 @@
 .user-notification,
 .user-submission { max-width: 100%; min-width: 0; }
 @media (max-width: 420px) {
-  .user-contrib__panel { max-height: min(94dvh, 900px); }
+  .user-contrib__panel { height: min(94vh, 900px); height: min(94svh, 900px); }
   .user-contrib__header { padding: 14px 15px 11px; }
   .user-contrib__header h2 { font-size: 17px; }
   .user-contrib__header span { font-size: 9px; line-height: 1.6; }

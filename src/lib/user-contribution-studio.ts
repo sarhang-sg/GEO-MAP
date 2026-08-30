@@ -1253,13 +1253,13 @@ export class UserContributionStudio {
       </section>
       <section class="user-contrib__form-section">
         <h3>${escapeText(copy.nameKu)}</h3>
-        ${textField("userPlaceNameKu", "name_ku", copy.nameKu, value("name_ku", place?.name_ku ?? ""), ATLAS_TEXT_LIMITS.name, "arabic", { required: true })}
+        ${textField("userPlaceNameKu", "name_ku", copy.nameKu, value("name_ku", place?.name_ku ?? ""), ATLAS_TEXT_LIMITS.name, "kurdish", { required: true })}
         ${textField("userPlaceNameAr", "name_ar", copy.nameAr, value("name_ar", place?.name_ar ?? ""), ATLAS_TEXT_LIMITS.name, "arabic")}
         ${textField("userPlaceNameEn", "name_en", copy.nameEn, value("name_en", place?.name_en ?? ""), ATLAS_TEXT_LIMITS.name, "latin")}
       </section>
       <section class="user-contrib__form-section">
         <h3>${escapeText(copy.descriptionKu)}</h3>
-        ${textField("userPlaceDescKu", "description_ku", copy.descriptionKu, value("description_ku", place?.description_ku ?? ""), ATLAS_TEXT_LIMITS.description, "arabic", { textarea: true, rows: 5 })}
+        ${textField("userPlaceDescKu", "description_ku", copy.descriptionKu, value("description_ku", place?.description_ku ?? ""), ATLAS_TEXT_LIMITS.description, "kurdish", { textarea: true, rows: 5 })}
         ${textField("userPlaceDescAr", "description_ar", copy.descriptionAr, value("description_ar", place?.description_ar ?? ""), ATLAS_TEXT_LIMITS.description, "arabic", { textarea: true, rows: 4 })}
         ${textField("userPlaceDescEn", "description_en", copy.descriptionEn, value("description_en", place?.description_en ?? ""), ATLAS_TEXT_LIMITS.description, "latin", { textarea: true, rows: 4 })}
       </section>
@@ -1280,7 +1280,7 @@ export class UserContributionStudio {
           ${preview}
         </div>
         ${managedPhotos ? `<div class="user-contrib__managed-photos">${managedPhotos}</div>` : ""}
-        ${textField("userPhotoCaptionKu", "caption_ku", copy.captionKu, value("caption_ku"), ATLAS_TEXT_LIMITS.caption, "arabic")}
+        ${textField("userPhotoCaptionKu", "caption_ku", copy.captionKu, value("caption_ku"), ATLAS_TEXT_LIMITS.caption, "kurdish")}
         ${textField("userPhotoCaptionAr", "caption_ar", copy.captionAr, value("caption_ar"), ATLAS_TEXT_LIMITS.caption, "arabic")}
         ${textField("userPhotoCaptionEn", "caption_en", copy.captionEn, value("caption_en"), ATLAS_TEXT_LIMITS.caption, "latin")}
       </section>` : ""}
@@ -1739,9 +1739,9 @@ export class UserContributionStudio {
     const script = field.dataset.atlasScript as AtlasScriptPolicy | undefined;
     if (!message && value && script) {
       try {
-        if (!atlasTextMatchesScript(value, script)) message = script === "arabic" ? copy.wrongArabicScript : copy.wrongLatinScript;
+        if (!atlasTextMatchesScript(value, script)) message = script === "latin" ? copy.wrongLatinScript : copy.wrongArabicScript;
       } catch {
-        message = script === "arabic" ? copy.wrongArabicScript : copy.wrongLatinScript;
+        message = script === "latin" ? copy.wrongLatinScript : copy.wrongArabicScript;
       }
     }
     return this.setFieldError(field, showError ? message : "") && !message;
@@ -1805,6 +1805,14 @@ export class UserContributionStudio {
     this.photoProcessing = true;
     this.uploadProgress = null;
     this.uploadStatus = this.copy().photoCompressing;
+
+    // Android Chrome can report a transient, near-zero visual viewport while
+    // returning from its native gallery. Let that picker task and two layout
+    // frames finish before replacing the form DOM.
+    await new Promise<void>((resolve) => {
+      window.setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())), 0);
+    });
+    if (selectionEpoch !== this.photoSelectionEpoch) return;
     this.render();
     try {
       const prepared = await prepareAtlasImage(original, (stage) => {
