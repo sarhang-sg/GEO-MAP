@@ -646,17 +646,19 @@ body {
   background: linear-gradient(135deg, rgba(255,255,255,.025), rgba(255,255,255,.04));
 }
 .support-person__avatar {
+  position: relative;
+  z-index: var(--z-local-content);
   display: grid;
   width: 44px;
   height: 44px;
   place-items: center;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(106, 121, 255, .42), rgba(255, 76, 130, .35));
   color: #fff;
   font: 900 .9rem/1 var(--font-latin);
 }
-.support-person__avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.support-person__avatar img { display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
 .support-person__avatar--supporter { background: linear-gradient(135deg, rgba(255, 208, 95, .52), rgba(255, 92, 122, .38)); }
 .support-person__body { display: grid; gap: 3px; min-width: 0; }
 .support-person__body strong { color: #f8fbff; font-size: .82rem; overflow-wrap: anywhere; }

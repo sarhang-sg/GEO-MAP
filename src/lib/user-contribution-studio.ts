@@ -5,6 +5,7 @@ import {
   atlasPlaceWithRevisionPreview,
   deleteAtlasAccountAndData,
   deleteAtlasNotification,
+  deleteManagedAtlasPhoto,
   deleteOwnAtlasFeedback,
   deleteReadAtlasNotifications,
   deleteUserAtlasPlace,
@@ -17,6 +18,7 @@ import {
   loadUserAtlasPlaces,
   markAllAtlasNotificationsRead,
   markAtlasNotificationRead,
+  orderedAtlasPhotos,
   saveUserAtlasSubmission,
   updateOwnAtlasFeedback,
   signInAtlasWithGoogle,
@@ -66,6 +68,7 @@ type UserPendingConfirmation =
   | { kind: "signout" }
   | { kind: "delete-account" }
   | { kind: "delete-place"; placeId: string }
+  | { kind: "delete-photo"; placeId: string; photoId: string }
   | { kind: "delete-feedback"; feedbackId: string }
   | { kind: "delete-notification"; notificationId: string }
   | null;
@@ -128,6 +131,12 @@ type Copy = {
   noFileChosen: string;
   photoHelp: string;
   photoSelected: string;
+  photoChange: string;
+  photoRemove: string;
+  photoDelete: string;
+  photoDeleteConfirm: string;
+  photoDeleted: string;
+  photoCleanupWarning: string;
   invalidPhoto: string;
   photoTooLarge: string;
   characters: string;
@@ -228,6 +237,12 @@ const COPY: Record<StudioLanguage, Copy> = {
     noFileChosen: "هێشتا هیچ وێنەیەک هەڵنەبژێردراوە",
     photoHelp: "تەنها JPEG، PNG یان WebP · زۆرترین 10 MB بۆ هەر وێنە · زۆرترین 12 وێنە بۆ هەر شوێن",
     photoSelected: "وێنەی هەڵبژێردراو",
+    photoChange: "گۆڕینی وێنە",
+    photoRemove: "لابردنی وێنە",
+    photoDelete: "سڕینەوەی وێنە",
+    photoDeleteConfirm: "دڵنیایت دەتەوێت ئەم وێنەیە بە هەمیشەیی بسڕیتەوە؟ گەڕاندنەوەی نییە.",
+    photoDeleted: "وێنەکە بە سەرکەوتوویی سڕایەوە.",
+    photoCleanupWarning: "وێنەکە لە لیستەکە سڕایەوە، بەڵام پاککردنەوەی فایلی هەڵگیراو پێویستی بە دووبارە هەوڵدان هەیە.",
     invalidPhoto: "تەنها وێنەی JPEG، PNG یان WebP ڕێگەپێدراوە.",
     photoTooLarge: "قەبارەی وێنەکە نابێت لە 10 MB زیاتر بێت.",
     characters: "پیت",
@@ -326,6 +341,12 @@ const COPY: Record<StudioLanguage, Copy> = {
     noFileChosen: "لم يتم اختيار صورة بعد",
     photoHelp: "JPEG أو PNG أو WebP فقط · 10 MB كحد أقصى لكل صورة · 12 صورة كحد أقصى لكل مكان",
     photoSelected: "الصورة المختارة",
+    photoChange: "تغيير الصورة",
+    photoRemove: "إزالة الصورة",
+    photoDelete: "حذف الصورة",
+    photoDeleteConfirm: "هل أنت متأكد من حذف هذه الصورة نهائياً؟ لا يمكن التراجع عن ذلك.",
+    photoDeleted: "تم حذف الصورة بنجاح.",
+    photoCleanupWarning: "تم حذف الصورة من القائمة، لكن ملف التخزين يحتاج إلى محاولة تنظيف إضافية.",
     invalidPhoto: "يسمح فقط بصور JPEG أو PNG أو WebP.",
     photoTooLarge: "يجب ألا يتجاوز حجم الصورة 10 MB.",
     characters: "حرف",
@@ -424,6 +445,12 @@ const COPY: Record<StudioLanguage, Copy> = {
     noFileChosen: "No image selected yet",
     photoHelp: "JPEG, PNG or WebP only · maximum 10 MB per image · maximum 12 images per place",
     photoSelected: "Selected image",
+    photoChange: "Change image",
+    photoRemove: "Remove image",
+    photoDelete: "Delete image",
+    photoDeleteConfirm: "Permanently delete this image? This cannot be undone.",
+    photoDeleted: "The image was deleted successfully.",
+    photoCleanupWarning: "The image was removed from the list, but its stored file needs another cleanup attempt.",
     invalidPhoto: "Only JPEG, PNG or WebP images are allowed.",
     photoTooLarge: "The image must be 10 MB or smaller.",
     characters: "characters",
@@ -649,7 +676,7 @@ function feedbackStatusLabel(status: AtlasFeedback["status"], language: StudioLa
 }
 
 function safeAvatarUrl(value: string | null | undefined): string | null {
-  if (!value || value.length > 1000) return null;
+  if (!value || value.length > 4096) return null;
   try {
     const parsed = new URL(value);
     return parsed.protocol === "https:" ? parsed.toString() : null;
@@ -683,6 +710,7 @@ export class UserContributionStudio {
   private photoPreviewUrl: string | null = null;
   private photoCompressionInfo = "";
   private photoProcessing = false;
+  private photoSelectionEpoch = 0;
   private uploadProgress: number | null = null;
   private uploadStatus = "";
   private pendingConfirmation: UserPendingConfirmation = null;
@@ -823,6 +851,7 @@ export class UserContributionStudio {
 
   async open(): Promise<void> {
     this.host.hidden = false;
+    this.render();
     await this.refresh();
   }
 
@@ -1015,14 +1044,17 @@ export class UserContributionStudio {
     const isSignOut = pending.kind === "signout";
     const isAccount = pending.kind === "delete-account";
     const isPlace = pending.kind === "delete-place";
+    const isPhoto = pending.kind === "delete-photo";
     const title = isSignOut ? copy.signOutConfirmTitle
       : isAccount ? copy.deleteAccountTitle
       : isPlace ? copy.deletePlace
+      : isPhoto ? copy.photoDelete
       : pending.kind === "delete-feedback" ? privateCopy.messageDelete
       : privateCopy.notificationDelete;
     const detail = isSignOut ? copy.signOutConfirmBody
       : isAccount ? copy.deleteConfirm
       : isPlace ? copy.deletePlaceConfirm
+      : isPhoto ? copy.photoDeleteConfirm
       : pending.kind === "delete-feedback" ? privateCopy.deleteMessageConfirm
       : privateCopy.deleteNotificationConfirm;
     const acknowledgement = language === "ar"
@@ -1197,7 +1229,12 @@ export class UserContributionStudio {
     const latitude = formatAtlasCoordinate(value("latitude", String(place?.latitude ?? this.coordinate[1])));
     const selectedFileName = this.pendingPhotoFile?.name ?? copy.noFileChosen;
     const selectedFileSize = this.pendingPhotoFile ? formatFileSize(this.pendingPhotoFile.size) : "";
-    const preview = this.photoPreviewUrl ? `<div class="user-contrib__file-preview"><img src="${escapeText(this.photoPreviewUrl)}" alt="${escapeText(copy.photoSelected)}"></div>` : "";
+    const preview = this.photoPreviewUrl ? `<div class="user-contrib__file-preview"><img src="${escapeText(this.photoPreviewUrl)}" alt="${escapeText(copy.photoSelected)}"><div class="user-contrib__file-preview-actions"><label for="userPlacePhoto">${escapeText(copy.photoChange)}</label><button type="button" data-user-action="photo-clear">${userIcon("trash")}<span>${escapeText(copy.photoRemove)}</span></button></div></div>` : "";
+    const managedPhotos = place ? orderedAtlasPhotos(place).map((photo) => {
+      const mediaUrl = safeAvatarUrl(photo.media_url);
+      if (!mediaUrl) return "";
+      return `<article class="user-contrib__managed-photo"><img src="${escapeText(mediaUrl)}" alt="${escapeText(photo.caption_ku || photo.caption_ar || photo.caption_en || copy.photoSelected)}" loading="lazy" decoding="async"><button type="button" data-user-action="photo-delete" data-id="${escapeText(photo.id)}">${userIcon("trash")}<span>${escapeText(copy.photoDelete)}</span></button></article>`;
+    }).join("") : "";
     const progressVisible = this.uploadProgress !== null || Boolean(this.uploadStatus);
     const progressHidden = progressVisible ? "" : " hidden";
     const numericProgress = this.uploadProgress ?? 0;
@@ -1236,12 +1273,13 @@ export class UserContributionStudio {
       </section>
       ${canUploadPhoto ? `<section class="user-contrib__form-section user-contrib__media-section"><h3>${escapeText(copy.photo)}</h3>
         <div class="user-contrib__file-card">
-          <input class="user-contrib__file-input" id="userPlacePhoto" name="photo_file" type="file" accept="${escapeText(ATLAS_MEDIA_POLICY.accept)}" data-user-photo-input>
+          <input class="user-contrib__file-input" id="userPlacePhoto" name="photo_file" type="file" accept="${escapeText(ATLAS_MEDIA_POLICY.accept)}" data-user-photo-input ${this.photoProcessing ? "disabled" : ""}>
           <label class="user-contrib__file-picker" for="userPlacePhoto"><span class="user-contrib__file-icon" aria-hidden="true">${userIcon("image")}</span><strong>${escapeText(copy.chooseFile)}</strong><small>${escapeText(copy.photoHelp)}</small></label>
           <div class="user-contrib__file-status" data-user-file-status><span>${escapeText(selectedFileName)}</span>${selectedFileSize ? `<b>${escapeText(selectedFileSize)}</b>` : ""}${this.photoCompressionInfo ? `<small>${escapeText(this.photoCompressionInfo)}</small>` : ""}</div>
           <p class="user-contrib__field-error" id="userPlacePhotoError" data-field-error-for="userPlacePhoto" role="alert" hidden></p>
           ${preview}
         </div>
+        ${managedPhotos ? `<div class="user-contrib__managed-photos">${managedPhotos}</div>` : ""}
         ${textField("userPhotoCaptionKu", "caption_ku", copy.captionKu, value("caption_ku"), ATLAS_TEXT_LIMITS.caption, "arabic")}
         ${textField("userPhotoCaptionAr", "caption_ar", copy.captionAr, value("caption_ar"), ATLAS_TEXT_LIMITS.caption, "arabic")}
         ${textField("userPhotoCaptionEn", "caption_en", copy.captionEn, value("caption_en"), ATLAS_TEXT_LIMITS.caption, "latin")}
@@ -1389,6 +1427,22 @@ export class UserContributionStudio {
       this.render();
       return;
     }
+    if (action === "photo-clear") {
+      this.clearPendingPhoto();
+      this.render();
+      return;
+    }
+    if (action === "photo-delete" && id && this.identity && this.editing) {
+      const place = this.places.find((item) => item.id === this.editing?.id);
+      const ownsEditableDraft = place?.created_by === this.identity.userId
+        && place.submission_source === "user"
+        && place.status === "draft"
+        && place.review_status !== "approved";
+      if (!place || !ownsEditableDraft || !orderedAtlasPhotos(place).some((photo) => photo.id === id)) return;
+      this.pendingConfirmation = { kind: "delete-photo", placeId: place.id, photoId: id };
+      this.render();
+      return;
+    }
     if (action === "confirm-cancel") {
       if (this.busy) return;
       this.pendingConfirmation = null;
@@ -1485,6 +1539,31 @@ export class UserContributionStudio {
         } finally {
           this.busy = false;
           this.view = "dashboard";
+          this.render();
+        }
+        return;
+      }
+      if (pending.kind === "delete-photo") {
+        const place = this.places.find((item) => item.id === pending.placeId);
+        if (!place || place.created_by !== this.identity.userId || place.submission_source !== "user") return;
+        this.busy = true;
+        this.message = "";
+        this.messageKind = "normal";
+        this.render();
+        try {
+          const result = await deleteManagedAtlasPhoto(place, pending.photoId);
+          this.places = await loadUserAtlasPlaces(this.identity);
+          const refreshed = this.places.find((item) => item.id === place.id) ?? null;
+          this.editing = refreshed ? atlasPlaceWithRevisionPreview(refreshed) : null;
+          this.message = result.mediaCleanupWarning ? this.copy().photoCleanupWarning : this.copy().photoDeleted;
+          this.messageKind = result.mediaCleanupWarning ? "error" : "success";
+          await this.options.onPlacesChanged();
+        } catch (error) {
+          this.message = atlasErrorMessage(error);
+          this.messageKind = "error";
+        } finally {
+          this.busy = false;
+          this.view = this.editing ? "editor" : "dashboard";
           this.render();
         }
         return;
@@ -1712,6 +1791,7 @@ export class UserContributionStudio {
     const original = input.files?.[0] ?? null;
     if (!original) { this.clearPendingPhoto(); this.render(); return; }
     this.captureEditorDraft();
+    const selectionEpoch = ++this.photoSelectionEpoch;
     this.pendingPhotoFile = original;
     this.photoCompressionInfo = "";
     if (!this.validatePhoto(original, true)) {
@@ -1720,33 +1800,38 @@ export class UserContributionStudio {
       return;
     }
 
+    if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
+    this.photoPreviewUrl = URL.createObjectURL(original);
     this.photoProcessing = true;
     this.uploadProgress = null;
     this.uploadStatus = this.copy().photoCompressing;
-    input.disabled = true;
-    const progressRoot = this.host.querySelector<HTMLElement>("[data-user-upload-progress]");
-    const progressLabel = progressRoot?.querySelector<HTMLElement>("[data-user-upload-status]");
-    const submit = this.host.querySelector<HTMLButtonElement>(".user-contrib__submit");
-    if (progressRoot) progressRoot.hidden = false;
-    if (progressLabel) progressLabel.textContent = this.uploadStatus;
-    if (submit) submit.disabled = true;
+    this.render();
     try {
       const prepared = await prepareAtlasImage(original, (stage) => {
+        if (selectionEpoch !== this.photoSelectionEpoch) return;
         this.uploadStatus = stage === "complete" ? this.copy().photoCompressed : this.copy().photoCompressing;
+        const progressRoot = this.host.querySelector<HTMLElement>("[data-user-upload-progress]");
+        const progressLabel = progressRoot?.querySelector<HTMLElement>("[data-user-upload-status]");
         if (progressRoot) progressRoot.hidden = false;
         if (progressLabel) progressLabel.textContent = this.uploadStatus;
       });
+      if (selectionEpoch !== this.photoSelectionEpoch) return;
       this.pendingPhotoFile = prepared.file;
       this.photoCompressionInfo = prepared.compressed
         ? `${formatFileSize(prepared.originalBytes)} → ${formatFileSize(prepared.outputBytes)}`
         : formatFileSize(prepared.outputBytes);
-      if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
-      this.photoPreviewUrl = URL.createObjectURL(prepared.file);
+      if (prepared.file !== original) {
+        if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
+        this.photoPreviewUrl = URL.createObjectURL(prepared.file);
+      }
     } catch (error) {
+      if (selectionEpoch !== this.photoSelectionEpoch) return;
       this.clearPendingPhoto();
       this.message = atlasErrorMessage(error);
       this.messageKind = "error";
+      this.render();
     } finally {
+      if (selectionEpoch !== this.photoSelectionEpoch) return;
       this.uploadProgress = null;
       this.uploadStatus = "";
       this.photoProcessing = false;
@@ -1755,8 +1840,12 @@ export class UserContributionStudio {
   }
 
   private clearPendingPhoto(): void {
+    this.photoSelectionEpoch += 1;
     this.pendingPhotoFile = null;
     this.photoCompressionInfo = "";
+    this.photoProcessing = false;
+    this.uploadProgress = null;
+    this.uploadStatus = "";
     if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
     this.photoPreviewUrl = null;
   }

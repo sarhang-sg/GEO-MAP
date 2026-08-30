@@ -112,8 +112,19 @@ def main() -> int:
                 )
                 if not direct_probe["ok"] or direct_probe["bytes"] != direct_probe["expected"]:
                     raise AssertionError(f"direct APK probe failed: {direct_probe}")
-            elif not direct_download.is_hidden():
-                raise AssertionError("direct APK button is visible without a verified binary")
+            else:
+                direct_download.wait_for(state="visible", timeout=10_000)
+                fallback = direct_download.evaluate(
+                    """element => ({
+                      href: element.href,
+                      download: element.getAttribute('download'),
+                      target: element.getAttribute('target')
+                    })"""
+                )
+                if fallback["href"] != android_release.get("apkPureUrl"):
+                    raise AssertionError(f"APKPure fallback URL mismatch: {fallback}")
+                if fallback["download"] is not None or fallback["target"] != "_blank":
+                    raise AssertionError(f"APKPure fallback attributes are unsafe: {fallback}")
 
             # The language controls belong to the map sheet and are intentionally
             # hidden while the mobile shell is still booting/collapsed. Wait for

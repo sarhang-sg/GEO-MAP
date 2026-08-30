@@ -1,4 +1,4 @@
--- NAV KURD 8.0.4 — release runtime fixes.
+-- NAV KURD 9.0.0 — release runtime fixes.
 -- Repairs trusted moderation and makes translated place fields genuinely optional.
 
 begin;

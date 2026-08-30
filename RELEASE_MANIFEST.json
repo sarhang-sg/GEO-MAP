@@ -8,7 +8,7 @@
   "generatedForDate": "2026-08-30",
   "secretSafe": true,
   "fileCount": 1220,
-  "totalBytes": 282087108,
+  "totalBytes": 282095760,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -19,8 +19,8 @@
       "sha256": "980e74fa45d3bcf9ff2c90bbfa853dcd5c8d3ab94b7f940b92a72ad0f6946eeb"
     },
     ".github/dependabot.yml": {
-      "bytes": 271,
-      "sha256": "afde96f202071cc1f341ee249dc8e42f4fe8e447c0920194a3af3da44fd69784"
+      "bytes": 490,
+      "sha256": "4b86f08f9c3788403a5774330aa08650add4c93f1aca7f9e6e7d46bff6a2c38f"
     },
     ".github/images/nav-kurd-hero.png": {
       "bytes": 332187,
@@ -532,7 +532,7 @@
     },
     "NAV-KURD-V9-WEB-FIRST.sh": {
       "bytes": 6472,
-      "sha256": "53745867a31f597a115b9d49949447dd372d64f8ec71fa4049f47521bdba244d"
+      "sha256": "b17e5993e33ed122ee51882b9d8b0df792bf5e9a2eee8d9c5f43c0836d7e562f"
     },
     "package-lock.json": {
       "bytes": 80710,
@@ -4039,8 +4039,8 @@
       "sha256": "4e02776b3c219a1e9b6cc87353a1298b886cb303c93633846183b71d78d7f008"
     },
     "src/lib/android-release-experience.ts": {
-      "bytes": 13439,
-      "sha256": "54fa643a36a58c39e78a16ad7b24aedc532e56198ab07b87c5ebf1083b78e2ce"
+      "bytes": 13848,
+      "sha256": "f3ec66e159b9641c13bdd2d633169f2ddd62ab8f89c716c20a7eae2037961640"
     },
     "src/lib/app-health.ts": {
       "bytes": 6407,
@@ -4051,8 +4051,8 @@
       "sha256": "20783fa9d0e3742ade69a8a9aacc97c51cc039f80d52254a47f37ec2534ca457"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 30121,
-      "sha256": "a3ba5f0a314d775c5baddb25dfdb288083cfbc6880fa36a8107c4e596b46676f"
+      "bytes": 29889,
+      "sha256": "33fa6e78086d1e8084d01496b1c6e60a8c6020c192e463299cf8b4f3ac9c4243"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -4067,8 +4067,8 @@
       "sha256": "612c134295f33f0100c033964534c19d6e0ac60a9437eb0e24b4f8f9405a4c3d"
     },
     "src/lib/atlas-image-processor.ts": {
-      "bytes": 4617,
-      "sha256": "a0aba7ca843f5f85ea762ec220f7d6f5d6d785a40f934ac3e31a28573c200d8c"
+      "bytes": 6293,
+      "sha256": "08113dd98c4dad7227640b3d20c3e86897302f67bba23e69b6a12712f90c3ac3"
     },
     "src/lib/atlas-marker-catalog.ts": {
       "bytes": 5126,
@@ -4123,16 +4123,16 @@
       "sha256": "490dcb26725eb1a36ae6b0d4958b13827259cfaa5bc7f160c5542bfca6b463be"
     },
     "src/lib/kri-layer-installer.ts": {
-      "bytes": 5852,
-      "sha256": "f967810ffce1900f0f7575887608525c9c4b8e911fb298d4b0cec521f3c40651"
+      "bytes": 5898,
+      "sha256": "bb65089275332ddad69dc2399f55b00747cf1d523b4241d432046c4e02621f0f"
     },
     "src/lib/kri.ts": {
       "bytes": 2959,
       "sha256": "db46d45722c123abec7d8c2471610835dbf5f9968dfd13d8375fbee0159c9851"
     },
     "src/lib/label-controller.ts": {
-      "bytes": 21305,
-      "sha256": "e86d00ffd933c996fa21278e41ce3cb7b7c66ff2c403476e28e5e95dc8ebb5ad"
+      "bytes": 22554,
+      "sha256": "c4c017da3927aa161defe48ffc64b291dcad930429f437f324a8d07d6cf233e7"
     },
     "src/lib/language-asset-cache.ts": {
       "bytes": 3946,
@@ -4379,16 +4379,16 @@
       "sha256": "ef5b7bd017af3731c1d2646449cff825902c4cbe0dd0f1052b1f1aa8a6b4ac39"
     },
     "src/lib/user-contribution-studio.ts": {
-      "bytes": 105624,
-      "sha256": "295e7ca589ef93ca170a7ccf680f7f4adfa75e24ec71fd57d2d83d70e8159ac5"
+      "bytes": 110757,
+      "sha256": "d979346fb7a28a1f45619841c6f7c436108ad4a9de6b9ab90f6514c8fb4d978a"
     },
     "src/lib/viewport-poi-source.ts": {
       "bytes": 22236,
       "sha256": "60efdd017d11a4e52757618c015be4f310b8d2687e7c8e126cf4d94a557f8475"
     },
     "src/main.ts": {
-      "bytes": 97111,
-      "sha256": "ba791cb600e3b44afe18f39ac58be4041f2d873d827efa8ae26438fcc91be480"
+      "bytes": 97398,
+      "sha256": "4b23b8a7a56d23d0fc44d3ecdc2458b3c44843c1d3bdf0480427285611812c0a"
     },
     "src/pwa-register.ts": {
       "bytes": 728,
@@ -4415,8 +4415,8 @@
       "sha256": "c777d1cff36acebf3fd9c752b15953f82565fb38f05a370b7ec048ad79875845"
     },
     "src/styles/components/loader.css": {
-      "bytes": 7422,
-      "sha256": "8fde072dc04e9d6d3b833af49b67bd1d696a062fc948690726bb8fd5e98aff01"
+      "bytes": 6539,
+      "sha256": "88d6baca85f1c3e77696007aab189b588b0be5026033fed296dc09779b8d1616"
     },
     "src/styles/components/map-control-rail.css": {
       "bytes": 4789,
@@ -4507,8 +4507,8 @@
       "sha256": "54b67a2ebd4cb9c001c218e6886985a1416b931e628a4bb11f8fbc35b83d2a89"
     },
     "src/styles/premium-refresh.css": {
-      "bytes": 13286,
-      "sha256": "f27358aee00aa90d0f601ef58a938f7b2e83c8ae0657d7caf3864deffd6a6fe7"
+      "bytes": 11144,
+      "sha256": "cfd62a3544851d286ffc913aa6eb70fd60b18931ec33784d7538d34f86fddd22"
     },
     "src/styles/realtime-operations.css": {
       "bytes": 2545,
@@ -4527,24 +4527,24 @@
       "sha256": "91d5ac5683ccb253489b14cedf5a61b35e57f82f62588cab9114a590fb1887ff"
     },
     "src/styles/support-payment.css": {
-      "bytes": 16796,
-      "sha256": "40a5618a7dfee3eaddd5e1778700195498a8f37c8825bc9dfb7ec7ed2cf98807"
+      "bytes": 16854,
+      "sha256": "2fbb94e9439e13082859cb8305f22f6b9bdfbfebcd6d7f5eee840323552104d0"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
       "sha256": "270637333a4fe44e31bf20eadb1cc072f391eab52541d94b8b4fb001929fb4f6"
     },
     "src/styles/user-contribution.css": {
-      "bytes": 42451,
-      "sha256": "1e2801c652ee30a0a64aaabc9b65319be3af2d58ad13d4ccec820f147160936f"
+      "bytes": 44290,
+      "sha256": "f8fe9c0dde0f81c454196f0793d93aa552a08d2f5ac4adaaad1bd0f6c095588f"
     },
     "src/styles/v9-luxe.css": {
       "bytes": 14734,
       "sha256": "00b66061944026bb56c6a879985d48d0fa1a31ac0d19a50abc038608df148054"
     },
     "src/styles/visual-system.css": {
-      "bytes": 33885,
-      "sha256": "0fd3c02cb26a7a0c5269da7d0eaa5a6f3e0a2d030cb78f93c9dc5e68136259a1"
+      "bytes": 33967,
+      "sha256": "2169b391772add33d4e8e7e90e35140b9f6619a0974bfe9a9d8a63414542ca68"
     },
     "src/vite-env.d.ts": {
       "bytes": 1622,
@@ -4664,11 +4664,11 @@
     },
     "supabase/migrations/20260828_000022_fresh_backend_owner_contract.sql": {
       "bytes": 6481,
-      "sha256": "bb79767f0972880645f4b0409152ab4aef52da2e7781899da87c65b0a5d0e319"
+      "sha256": "3464612f297988aeef88cc41404e404d70187865b25a60452212598f139c212e"
     },
     "supabase/migrations/20260828_000023_release_runtime_fixes.sql": {
       "bytes": 15080,
-      "sha256": "9b4202f11b0463263f624292f83866c9eb27a5bd22ea28b15228b9746d1eb0ff"
+      "sha256": "5c26e0454451d32837359c6ffa65d5ea51236449c682c5e371cf72485a6edf06"
     },
     "supabase/README.md": {
       "bytes": 3070,
@@ -4680,7 +4680,7 @@
     },
     "tools/build/build-offline-runtime.mjs": {
       "bytes": 6558,
-      "sha256": "2efe3140e26e7a6069ee8a5bb5e1c983267b72ff9189e2ac9aa807ad190fa74b"
+      "sha256": "ff912d51b895431106b613b87c060bd67f44bbc6c9a1b8fec310f0c363cf33c3"
     },
     "tools/build/generate-pwa-manifest.mjs": {
       "bytes": 2327,
@@ -4831,8 +4831,8 @@
       "sha256": "c33e3a48e73d74c77651261df84282aba2c8ba0dca791e3bfd927c85532fb46a"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 11641,
-      "sha256": "c9cdf693a385d19e25f5430d6f4b253e2fb28b4422ebfa7090002cae7a76f990"
+      "bytes": 12235,
+      "sha256": "a62048ee14be7f697b08221ae4204a365d2e6054008f1811ef84b460d316abfd"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4855,8 +4855,8 @@
       "sha256": "f40696007ffa62680abb5c5a1aecc12d239bfa76a8ddc301b9b971837a80bb44"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 11802,
-      "sha256": "4a99725c2520f1ff77974d0871c4384293c4a3a09c8325acf9effb947f11af23"
+      "bytes": 12119,
+      "sha256": "6850f0c94adda2565c41b87d6435e53926c45427b87f5d5cbce6155b284127c1"
     },
     "tools/verify/security.mjs": {
       "bytes": 4436,

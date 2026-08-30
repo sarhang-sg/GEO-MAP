@@ -8,5 +8,15 @@ updates:
     groups:
       production-runtime:
         dependency-type: production
+        update-types:
+          - minor
+          - patch
       development-tooling:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major

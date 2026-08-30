@@ -547,6 +547,7 @@ html[dir="rtl"] #supportVisitorPrivacyControl.support-visitors-privacy {
 
 #supportRecentVisitorsList .support-person__online-dot {
   position: absolute;
+  z-index: var(--z-local-raised);
   inset-inline-end: -2px;
   inset-block-end: -2px;
   width: 11px;
@@ -555,6 +556,7 @@ html[dir="rtl"] #supportVisitorPrivacyControl.support-visitors-privacy {
   border-radius: 999px;
   background: #55df9f;
   box-shadow: 0 0 0 3px rgba(85, 223, 159, .14), 0 0 12px rgba(85, 223, 159, .42);
+  pointer-events: none;
 }
 
 #supportRecentVisitorsList .support-person.is-online .support-person__body small {

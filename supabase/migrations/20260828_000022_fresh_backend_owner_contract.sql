@@ -1,4 +1,4 @@
--- NAV KURD 8.0.4 — fresh-production backend ownership and contract closure.
+-- NAV KURD 9.0.0 — fresh-production backend ownership and contract closure.
 -- Run after 20260724_000021_visitor_presence_share.sql.
 --
 -- This migration is intentionally idempotent. It gives the final production

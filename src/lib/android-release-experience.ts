@@ -19,6 +19,7 @@ type ReleaseCopy = {
   direct: string;
   directSub: string;
   store: string;
+  storeSub: string;
   promoTitle: string;
   promoBody: string;
   promoDownload: string;
@@ -39,6 +40,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "APK دابگرە",
     directSub: "ڕاستەوخۆ · v9.0.0",
     store: "لە کۆگای APKPure",
+    storeSub: "APKPure · v9.0.0",
     promoTitle: "NAV KURD لە Android لەگەڵتە",
     promoBody: "ماپی خێراتر، ویجێتی کەش‌وهەوا و کارکردنی باشتر لە دەرەوەی وێبگەڕ.",
     promoDownload: "ئێستا APK دابگرە",
@@ -55,6 +57,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "تنزيل APK",
     directSub: "مباشر · v9.0.0",
     store: "من متجر APKPure",
+    storeSub: "APKPure · v9.0.0",
     promoTitle: "NAV KURD معك على Android",
     promoBody: "خريطة أسرع وطقس على الشاشة الرئيسية وتجربة أفضل خارج المتصفح.",
     promoDownload: "تنزيل APK الآن",
@@ -71,6 +74,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "Download APK",
     directSub: "Direct · v9.0.0",
     store: "Get it from APKPure",
+    storeSub: "APKPure · v9.0.0",
     promoTitle: "Take NAV KURD with you on Android",
     promoBody: "Faster maps, live weather on your home screen, and a smoother experience outside the browser.",
     promoDownload: "Download the APK",
@@ -158,7 +162,7 @@ async function readLatestRelease(): Promise<LatestRelease | null> {
   } catch { return null; }
 }
 
-function updateSection(copy: ReleaseCopy): void {
+function updateSection(copy: ReleaseCopy, directAvailable: boolean): void {
   const title = document.querySelector<HTMLElement>("#androidDownloadTitle");
   const summary = document.querySelector<HTMLElement>("#androidDownloadSummary");
   const direct = document.querySelector<HTMLElement>("#androidDirectDownload strong");
@@ -166,8 +170,8 @@ function updateSection(copy: ReleaseCopy): void {
   const store = document.querySelector<HTMLElement>("#androidApkPureLabel");
   if (title) title.textContent = copy.title;
   if (summary) summary.textContent = copy.summary;
-  if (direct) direct.textContent = copy.direct;
-  if (directSub) directSub.textContent = copy.directSub;
+  if (direct) direct.textContent = directAvailable ? copy.direct : copy.store;
+  if (directSub) directSub.textContent = directAvailable ? copy.directSub : copy.storeSub;
   if (store) store.textContent = copy.store;
 }
 
@@ -180,6 +184,7 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
   if (window.__NAV_KURD_FLUTTER__ === true) document.documentElement.classList.add("is-flutter-android");
   const directLink = document.querySelector<HTMLAnchorElement>("#androidDirectDownload");
   const storeLink = document.querySelector<HTMLAnchorElement>("#androidApkPureDownload");
+  let latest: LatestRelease | null = null;
   directLink?.addEventListener("click", () => {
     directLink.classList.add("is-loading");
     directLink.setAttribute("aria-busy", "true");
@@ -188,24 +193,26 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
       directLink.removeAttribute("aria-busy");
     }, 2000);
   });
-  updateSection(COPY[getLanguage()]);
-  window.addEventListener("nav-kurd:language-change", () => updateSection(COPY[getLanguage()]));
+  updateSection(COPY[getLanguage()], false);
+  window.addEventListener("nav-kurd:language-change", () => updateSection(COPY[getLanguage()], latest?.directApkAvailable === true));
 
-  let latest: LatestRelease | null = null;
   const synchronizeLinks = (release: LatestRelease): void => {
     latest = release;
+    updateSection(COPY[getLanguage()], release.directApkAvailable);
     if (directLink) {
       if (release.directApkAvailable && release.directApkUrl) {
         directLink.href = release.directApkUrl;
         directLink.download = `NAV-KURD-${release.version}.apk`;
-        directLink.hidden = false;
-        directLink.removeAttribute("aria-disabled");
+        directLink.removeAttribute("target");
+        directLink.removeAttribute("rel");
       } else {
-        directLink.removeAttribute("href");
+        directLink.href = release.apkPureUrl;
         directLink.removeAttribute("download");
-        directLink.hidden = true;
-        directLink.setAttribute("aria-disabled", "true");
+        directLink.target = "_blank";
+        directLink.rel = "noopener noreferrer";
       }
+      directLink.hidden = false;
+      directLink.removeAttribute("aria-disabled");
     }
     if (storeLink) storeLink.href = release.apkPureUrl;
   };
