@@ -13,8 +13,8 @@ assert(pkg.version === release.appVersion, "package.json and release.config.json
 assert(manifest.version === release.appVersion, "PWA manifest version differs from release.config.json.");
 assert(release.serviceWorkerRelease === release.appVersion, "Service worker release differs from app version.");
 assert(/^\d+\.\d+\.\d+$/u.test(release.appVersion), "App version is not semantic.");
-assert(release.cacheSchemaVersion >= 84, "Cache schema must invalidate pre-8.0.4 service-worker shells.");
-assert(release.offlinePackVersion === "2027.11", "Offline pack identity differs from the current verified map release.");
+assert(release.cacheSchemaVersion >= 90, "Cache schema must invalidate pre-9.0.0 service-worker shells.");
+assert(release.offlinePackVersion === "2027.12", "Offline pack identity differs from the current verified map release.");
 
 const activeRoots = ["src", "tools", "docs", "api", "public/legal"];
 const activeFiles = (await Promise.all(activeRoots.map((path) => walk(resolve(ROOT, path))))).flat();

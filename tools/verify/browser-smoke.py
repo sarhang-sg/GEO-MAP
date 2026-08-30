@@ -99,7 +99,7 @@ def main() -> int:
                 )
                 direct_probe = page.evaluate(
                     """async expected => {
-                      const response = await fetch('/downloads/NAV-KURD-8.0.4.apk', {
+                      const response = await fetch('/downloads/NAV-KURD-9.0.0.apk', {
                         method: 'HEAD', cache: 'no-store', redirect: 'error'
                       });
                       return {

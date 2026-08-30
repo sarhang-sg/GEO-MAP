@@ -4,7 +4,7 @@
  */
 
 
-.map-shell[data-ui-theme="aurora"] {
+.map-shell[data-ui-theme="luxe-ocean"] {
   --premium-gradient: var(--nk-aurora-gradient);
   --premium-purple: var(--nk-aurora-violet);
   --premium-blue: var(--nk-aurora-blue);

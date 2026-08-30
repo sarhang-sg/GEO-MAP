@@ -1,4 +1,5 @@
 import type { LngLatTuple } from "./location";
+import { documentBaseUrl, safeUrl } from "./app-url";
 
 export type PwaLaunchIntentHandlers = {
   focusSearch: (value?: string) => void;
@@ -59,7 +60,7 @@ function finiteCoordinate(params: URLSearchParams): LngLatTuple | null {
 }
 
 export function parsePwaLaunchParams(urlValue: string): LaunchParams {
-  const url = new URL(urlValue, window.location.origin);
+  const url = safeUrl(urlValue, documentBaseUrl()) ?? safeUrl(documentBaseUrl())!;
   const params = url.searchParams;
   const schemeAction = url.protocol === "navkurd:" ? (url.hostname || url.pathname.replace(/^\/+/, "")) : "";
   const action = (params.get("action")?.trim() || schemeAction).toLowerCase();

@@ -64,7 +64,7 @@ async function fetchAirQuality(latitude, longitude) {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { Accept: "application/json", "User-Agent": "NAV-KURD-Weather-Proxy/8.0.4" },
+      headers: { Accept: "application/json", "User-Agent": "NAV-KURD-Weather-Proxy/9.0.0" },
       cache: "no-store"
     });
     if (!response.ok) return { dust: null, pm10: null };

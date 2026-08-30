@@ -1,6 +1,6 @@
 {
   "schema": "NAV KURD Offline Runtime Manifest v2",
-  "release": "8.0.4",
+  "release": "9.0.0",
   "assets": [
     {
       "path": "assets/icons/atlas/groups-manifest.json",
@@ -1923,8 +1923,8 @@
   ],
   "mapEdition": "2027",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "cacheSchemaVersion": 84,
-  "offlinePackVersion": "2027.11",
+  "cacheSchemaVersion": 90,
+  "offlinePackVersion": "2027.12",
   "version": "2027.55",
   "scope": "Small app shell is installed atomically. Map data and selected language locality/search files are cached on first use and retained for later switches; parsed runtime memory remains bounded. Base/roads PMTiles download separately. Satellite, live weather, routing and accounts require network access; cached map data, search, labels, weather icons and widget resources remain available offline.",
   "generatedAt": "2026-08-22T00:00:00.000Z"

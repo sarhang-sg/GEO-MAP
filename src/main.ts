@@ -1087,7 +1087,7 @@ class KurdistanAtlasController {
     const content = document.createElement("div");
     content.className = "place-popup place-popup--rich";
     content.dir = languageDirection(this.language);
-    content.innerHTML = `<strong>${escapeText(title)}</strong><small>${escapeText(coordinateLabel(coordinate))}</small>`;
+    content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl("landmark"))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     content.append(createPopupShareButton({ coordinate, title }, this.shareCopy()));
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: true, maxWidth: "300px" });
   }
@@ -1110,7 +1110,7 @@ class KurdistanAtlasController {
     const content = document.createElement("div");
     content.className = "place-popup place-popup--rich";
     content.dir = languageDirection(this.language);
-    content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText([kind, district, governorate].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
+    content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(props.place))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([kind, district, governorate].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
     this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
@@ -1121,7 +1121,8 @@ class KurdistanAtlasController {
     const coordinate = feature.geometry.coordinates as LngLatTuple;
     const sourceClass = stringProperty(properties, ["fclass", "class", "type", "amenity", "shop", "tourism", "leisure", "office", "healthcare", "historic", "natural"]);
     const sourceCategory = stringProperty(properties, ["category"]);
-    const category = categoryValue(poiIconIdForProperties(properties) ?? (sourceClass || sourceCategory), this.language, UI[this.language].category);
+    const markerCategory = poiIconIdForProperties(properties) ?? (sourceClass || sourceCategory);
+    const category = categoryValue(markerCategory, this.language, UI[this.language].category);
     const exactTitle = localizedPoiName(properties, this.language);
     // A POI can carry a verified name only in another source language. It must
     // not become an unclickable visible marker: use the localized category as a
@@ -1132,7 +1133,7 @@ class KurdistanAtlasController {
     const content = document.createElement("div");
     content.className = "place-popup place-popup--rich";
     content.dir = languageDirection(this.language);
-    content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText([category, address].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
+    content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(markerCategory))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([category, address].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
     this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
@@ -1184,7 +1185,7 @@ class KurdistanAtlasController {
       content.className = "place-popup place-popup--rich";
       content.dir = languageDirection(this.language);
       const title = localizedStaticName(choice.item, this.language);
-      content.innerHTML = `<strong>${escapeText(title)}</strong><span>${escapeText(localizedStaticCategory(choice.item, this.language, choice.item.k === "street" ? UI[this.language].street : UI[this.language].place))}</span>`;
+      content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(choice.item.k))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText(localizedStaticCategory(choice.item, this.language, choice.item.k === "street" ? UI[this.language].street : UI[this.language].place))}</span>`;
       this.appendShareAction(content, coordinate, title);
       this.attachWeather(content, coordinate);
       this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "280px" });
@@ -1703,7 +1704,13 @@ const shareCurrentLocation = (): void => {
     return;
   }
   const title = currentLanguage() === "ar" ? "موقعي في NAV KURD" : currentLanguage() === "en" ? "My NAV KURD location" : "شوێنی من لە NAV KURD";
-  void shareMapLocation({ coordinate, title });
+  void shareMapLocation({ coordinate, title }).then((shared) => {
+    const language = currentLanguage();
+    const message = shared
+      ? (language === "ar" ? "تم فتح المشاركة أو نسخ الرابط." : language === "en" ? "Share opened or the link was copied." : "پەنجەرەی هاوبەشکردن کرایەوە یان لینکەکە کۆپی کرا.")
+      : (language === "ar" ? "تم إلغاء المشاركة." : language === "en" ? "Sharing was cancelled." : "هاوبەشکردن هەڵوەشایەوە.");
+    setMessage(message, shared ? "success" : "normal");
+  });
 };
 [shareLocationButton, sheetShareLocationButton].forEach((button) => button.addEventListener("click", shareCurrentLocation));
 [fitButton, sheetFitButton].forEach((button) => button.addEventListener("click", () => controller.fitToKri()));

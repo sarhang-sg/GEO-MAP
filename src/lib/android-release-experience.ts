@@ -37,7 +37,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "ئەپی Android دابگرە",
     summary: "وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر",
     direct: "APK دابگرە",
-    directSub: "ڕاستەوخۆ · v8.0.4",
+    directSub: "ڕاستەوخۆ · v9.0.0",
     store: "لە کۆگای APKPure",
     promoTitle: "NAV KURD لە Android لەگەڵتە",
     promoBody: "ماپی خێراتر، ویجێتی کەش‌وهەوا و کارکردنی باشتر لە دەرەوەی وێبگەڕ.",
@@ -53,7 +53,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "تنزيل تطبيق Android",
     summary: "نسخة موقعة وموثقة لنظام Android 7 أو أحدث",
     direct: "تنزيل APK",
-    directSub: "مباشر · v8.0.4",
+    directSub: "مباشر · v9.0.0",
     store: "من متجر APKPure",
     promoTitle: "NAV KURD معك على Android",
     promoBody: "خريطة أسرع وطقس على الشاشة الرئيسية وتجربة أفضل خارج المتصفح.",
@@ -69,7 +69,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "Download the Android app",
     summary: "Signed and verified for Android 7 or newer",
     direct: "Download APK",
-    directSub: "Direct · v8.0.4",
+    directSub: "Direct · v9.0.0",
     store: "Get it from APKPure",
     promoTitle: "Take NAV KURD with you on Android",
     promoBody: "Faster maps, live weather on your home screen, and a smoother experience outside the browser.",
@@ -180,6 +180,14 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
   if (window.__NAV_KURD_FLUTTER__ === true) document.documentElement.classList.add("is-flutter-android");
   const directLink = document.querySelector<HTMLAnchorElement>("#androidDirectDownload");
   const storeLink = document.querySelector<HTMLAnchorElement>("#androidApkPureDownload");
+  directLink?.addEventListener("click", () => {
+    directLink.classList.add("is-loading");
+    directLink.setAttribute("aria-busy", "true");
+    window.setTimeout(() => {
+      directLink.classList.remove("is-loading");
+      directLink.removeAttribute("aria-busy");
+    }, 2000);
+  });
   updateSection(COPY[getLanguage()]);
   window.addEventListener("nav-kurd:language-change", () => updateSection(COPY[getLanguage()]));
 
@@ -205,8 +213,8 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
   const showPostTutorialPromotion = (): void => {
     if (nativeAndroid()) return;
     try {
-      if (sessionStorage.getItem("nav-kurd:android-promo:8.0.4") === "shown") return;
-      sessionStorage.setItem("nav-kurd:android-promo:8.0.4", "shown");
+      if (sessionStorage.getItem("nav-kurd:android-promo:9.0.0") === "shown") return;
+      sessionStorage.setItem("nav-kurd:android-promo:9.0.0", "shown");
     } catch { /* A private browser may not expose session storage. */ }
     const copy = COPY[getLanguage()];
     const overlay = document.createElement("div");

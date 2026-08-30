@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src=".github/images/nav-kurd-readme-showcase.png" alt="NAV KURD showcase" width="960" />
+  <img src=".github/images/nav-kurd-v9-cover.jpg" alt="NAV KURD 9 cover" width="1080" />
 </p>
 
 ## Overview
@@ -20,20 +20,22 @@ NAV KURD is a polished MapLibre-based mapping platform focused on South Kurdista
 
 ## Product preview
 
-| Mobile | Wide screen |
-|---|---|
-| ![NAV KURD mobile map preview](public/screenshots/nav-kurd-narrow.png) | ![NAV KURD wide map preview](public/screenshots/nav-kurd-wide.png) |
+<p align="center">
+  <img src=".github/images/nav-kurd-v9-screen-1.jpg" alt="NAV KURD APK release preview" width="31%" />
+  <img src=".github/images/nav-kurd-v9-screen-2.jpg" alt="NAV KURD map preview" width="31%" />
+  <img src=".github/images/nav-kurd-v9-screen-3.jpg" alt="NAV KURD download preview" width="31%" />
+</p>
 
 ## Release snapshot
 
 | Field | Value |
 |---|---|
-| Application | `8.0.4` |
-| Release | `2026-08-27-nav-kurd-v8.0.4` |
+| Application | `9.0.0` |
+| Release | `2026-08-30-nav-kurd-v9.0.0` |
 | Map edition | `2027` |
 | Map data | `2026-07-22-nav-kurd-systematic-dedupe-2027` |
-| Cache schema | `84` |
-| Offline pack | `2027.11` |
+| Cache schema | `90` |
+| Offline pack | `2027.12` |
 | Toolchain | Node.js `24.x`, npm `11.x` |
 
 `release.config.json` is the single source of truth for release identity. The web app, service worker, offline runtime, native wrappers and generated release artifacts must remain aligned with it.
@@ -107,7 +109,7 @@ A downloaded pack becomes usable only after all configured files pass size, head
 - CSP, HSTS, frame denial, MIME protection and bounded permissions are defined in hosting configuration.
 - Sensitive local files, signing credentials, caches, dependencies and build output are excluded from source packages.
 
-See [8.0.4 release notes](docs/RELEASE_8.0.4.md), [Security](docs/SECURITY.md),
+See [9.0.0 release notes](docs/RELEASE_9.0.0.md), [Security](docs/SECURITY.md),
 [Architecture](docs/ARCHITECTURE.md), [Data](docs/DATA.md),
 [Offline](docs/OFFLINE.md), [Deployment](docs/DEPLOYMENT.md) and the
 [Kurdish fresh-infrastructure guide](docs/FRESH_INFRASTRUCTURE_CKB.md).
@@ -119,8 +121,8 @@ See [8.0.4 release notes](docs/RELEASE_8.0.4.md), [Security](docs/SECURITY.md),
 ```bash
 termux-wake-lock
 cd "$HOME"
-unzip -q /sdcard/Download/NAV-KURD-v8.0.4-WEB.zip
-cd GEO-MAP-WEB-8.0.4
+unzip -q /sdcard/Download/NAV-KURD-v9.0.0-WEB.zip
+cd GEO-MAP-WEB-9.0.0
 chmod +x TERMUX.sh
 bash TERMUX.sh setup
 bash TERMUX.sh check
@@ -131,6 +133,10 @@ The production output is written to `dist/`.
 
 ## Deployment
 
+- **Web-first authenticated release:** place `NAV-KURD-v9.0.0-WEB.zip`, its
+  checksum and `NAV-KURD-v9.0.0-WEB-FIRST.sh` in Android `Download`, then run
+  the script from Termux. It uses a private review branch and merges only after
+  production, Chromium and database-migration checks pass.
 - **Vercel:** `npm run build:vercel`, then publish `dist/`
 - **Android:** `npm run android:sync`, then build through Gradle / Android Studio
 - **iOS:** `npm run ios:sync`, then build through Xcode

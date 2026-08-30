@@ -63,17 +63,17 @@
   --premium-stroke-strong: rgba(195, 173, 255, .42);
   --premium-text: #f7f5ff;
   --premium-muted: #a9b0cf;
-  --premium-purple: #8c5cff;
-  --premium-purple-deep: #5b2ddd;
-  --premium-violet: #bd74ff;
-  --premium-blue: #3d8cff;
-  --premium-cyan: #52d7ff;
+  --premium-purple: #3f7ee8;
+  --premium-purple-deep: #164a9d;
+  --premium-violet: #70b8ff;
+  --premium-blue: #286fdf;
+  --premium-cyan: #4edcff;
   --premium-gold: #ffd58a;
   --premium-success: #6ce0b2;
   --premium-danger: #ff8da7;
-  --premium-gradient: linear-gradient(135deg, #397cff 0%, #7655ff 48%, #b65aff 100%);
-  --premium-gradient-soft: linear-gradient(135deg, rgba(57, 124, 255, .34), rgba(118, 85, 255, .30) 48%, rgba(182, 90, 255, .28));
-  --premium-border-gradient: linear-gradient(115deg, rgba(89, 165, 255, .58), rgba(157, 102, 255, .56), rgba(255, 117, 214, .36), rgba(89, 165, 255, .58));
+  --premium-gradient: linear-gradient(135deg, #1558bd 0%, #257fe8 48%, #45cfff 100%);
+  --premium-gradient-soft: linear-gradient(135deg, rgba(34, 103, 214, .34), rgba(43, 139, 235, .30) 48%, rgba(69, 207, 255, .24));
+  --premium-border-gradient: linear-gradient(115deg, rgba(89, 165, 255, .64), rgba(116, 207, 255, .54), rgba(255, 255, 255, .30), rgba(89, 165, 255, .64));
   --premium-shadow: 0 22px 56px rgba(0, 0, 0, .43), 0 0 34px rgba(92, 58, 212, .10);
   --premium-glow: 0 0 0 1px rgba(150, 113, 255, .20), 0 13px 34px rgba(0, 0, 0, .34), 0 0 28px rgba(104, 73, 255, .16);
   --premium-radius-lg: 24px;
@@ -100,9 +100,9 @@
   /* Font ownership aliases. */
   --font-kurdish-arabic: var(--font-arabic);
   /* Aurora visual-system tokens. */
-  --nk-aurora-blue: #4c7dff;
-  --nk-aurora-violet: #9b4dff;
-  --nk-aurora-pink: #d45dff;
+  --nk-aurora-blue: #276edf;
+  --nk-aurora-violet: #3f9bf0;
+  --nk-aurora-pink: #65d8ff;
   --nk-aurora-cyan: #45d7ff;
   --nk-aurora-success: #22c98a;
   --nk-aurora-warning: #f2b84b;
@@ -110,9 +110,9 @@
   --nk-aurora-surface: rgba(7, 10, 28, .84);
   --nk-aurora-surface-strong: rgba(7, 9, 25, .96);
   --nk-aurora-stroke: rgba(190, 202, 255, .20);
-  --nk-aurora-stroke-active: rgba(155, 108, 255, .60);
+  --nk-aurora-stroke-active: rgba(103, 194, 255, .62);
   --nk-aurora-shadow: 0 22px 58px rgba(0, 0, 0, .42), 0 0 0 1px rgba(255, 255, 255, .025) inset;
-  --nk-aurora-glow: 0 0 0 1px rgba(135, 102, 255, .23), 0 14px 36px rgba(0, 0, 0, .34), 0 0 24px rgba(92, 78, 255, .16);
+  --nk-aurora-glow: 0 0 0 1px rgba(88, 169, 255, .24), 0 14px 36px rgba(0, 0, 0, .34), 0 0 24px rgba(62, 173, 255, .17);
   --nk-aurora-gradient: linear-gradient(135deg, var(--nk-aurora-blue), var(--nk-aurora-violet) 54%, var(--nk-aurora-pink));
   --nk-aurora-gradient-soft: linear-gradient(135deg, rgba(76, 125, 255, .24), rgba(155, 77, 255, .22) 54%, rgba(212, 93, 255, .15));
   --nk-aurora-ease: cubic-bezier(.22, 1, .36, 1);

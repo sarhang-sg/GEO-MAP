@@ -22,9 +22,9 @@
   Content-Type: application/javascript; charset=utf-8
   Service-Worker-Allowed: /
 
-/downloads/NAV-KURD-8.0.4.apk
+/downloads/NAV-KURD-9.0.0.apk
   Content-Type: application/vnd.android.package-archive
-  Content-Disposition: attachment; filename="NAV-KURD-8.0.4.apk"
+  Content-Disposition: attachment; filename="NAV-KURD-9.0.0.apk"
   Cache-Control: public, max-age=86400, s-maxage=604800, immutable
   X-Content-Type-Options: nosniff
 

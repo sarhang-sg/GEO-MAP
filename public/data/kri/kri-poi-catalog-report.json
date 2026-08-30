@@ -198,7 +198,7 @@
     "catalog": {
       "file": "kri-pois.geojson",
       "bytes": 63846573,
-      "sha256": "7d2dea5ff287d89b27ecdc1291cd71ab020e4fb12ff3d90652e51ac801b497c2"
+      "sha256": "af9be1296d5e8a02c8d04ac612309a639478eaf1b0baa702172cad99279f6f99"
     },
     "runtime": {
       "file": "kri-pois-runtime.geojson",
@@ -218,8 +218,8 @@
     "brand": "Telecom/payment brand classification requires a matching service context; ordinary schools, fuel stations, cafes and place names are never reclassified only because a person/place name resembles a brand.",
     "boundary": "Canonical operational application boundary; not a legal or cadastral certification."
   },
-  "release": "2026-08-27-nav-kurd-v8.0.4",
-  "app_version": "8.0.4",
+  "release": "2026-08-30-nav-kurd-v9.0.0",
+  "app_version": "9.0.0",
   "audit_history": {
     "strict_context_brand_false_positives_corrected": 109,
     "detailed_transport_security_class_upgrades": 115,
@@ -230,5 +230,5 @@
     "category_icons": "one generated marker asset per taxonomy entry",
     "fallback": "canonical purple dot only if an icon fails to decode"
   },
-  "last_reviewed": "2026-08-27"
+  "last_reviewed": "2026-08-30"
 }

@@ -1,4 +1,4 @@
-/* NAV KURD 8.0.4 — shared Web + Android visual refresh.
+/* NAV KURD 9.0.0 — shared Web + Android visual refresh.
    The red support/payment section intentionally remains under its own files. */
 
 .map-shell {
@@ -218,7 +218,7 @@ html.is-native-app .search-card {
 }
 .native-ios-panel > p { display: none; }
 
-/* Android release card: preserve APKPure branding, use the supplied Android art. */
+/* Android release card: use the supplied Android art and direct-download action. */
 .android-download {
   border-color: rgba(104, 160, 244, .22);
   border-radius: 21px;
