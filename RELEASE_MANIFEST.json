@@ -8,7 +8,7 @@
   "generatedForDate": "2026-08-30",
   "secretSafe": true,
   "fileCount": 1220,
-  "totalBytes": 282087069,
+  "totalBytes": 282087108,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -4679,8 +4679,8 @@
       "sha256": "f3981d5c245f232ca89f83ea528661c47cb966faf7a0682bddd96c570a278237"
     },
     "tools/build/build-offline-runtime.mjs": {
-      "bytes": 6519,
-      "sha256": "070b9c6b3a29d3de629232e5676dc3b1026f3326d5294f6840a19c2702f68354"
+      "bytes": 6558,
+      "sha256": "2efe3140e26e7a6069ee8a5bb5e1c983267b72ff9189e2ac9aa807ad190fa74b"
     },
     "tools/build/generate-pwa-manifest.mjs": {
       "bytes": 2327,
