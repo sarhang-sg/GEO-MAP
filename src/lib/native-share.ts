@@ -1,6 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import type { LngLatTuple } from "./location";
+import { browserEnv } from "./runtime-env";
 
 export type ShareLocationOptions = {
   coordinate: LngLatTuple;
@@ -8,10 +9,24 @@ export type ShareLocationOptions = {
   text?: string;
 };
 
+const CANONICAL_APP_URL = "https://geo-map-kappa.vercel.app/";
+
 function publicAppUrl(): URL {
-  const configured = import.meta.env.VITE_PUBLIC_APP_URL?.trim();
-  const base = configured || (typeof window !== "undefined" ? window.location.origin : "https://geo-map-kappa.vercel.app");
-  return new URL(base);
+  const candidates = [
+    browserEnv.publicAppUrl,
+    typeof window !== "undefined" ? window.location.origin : "",
+    CANONICAL_APP_URL
+  ];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      const parsed = new URL(candidate);
+      if (parsed.protocol === "https:" || parsed.protocol === "http:") return parsed;
+    } catch {
+      // A malformed deployment variable must never break the share action.
+    }
+  }
+  return new URL(CANONICAL_APP_URL);
 }
 
 export function locationDeepLink(options: ShareLocationOptions): string {
@@ -45,9 +60,9 @@ async function clipboardFallback(value: string): Promise<boolean> {
 
 export async function shareMapLocation(options: ShareLocationOptions): Promise<boolean> {
   const title = options.title?.trim() || "NAV KURD";
-  const url = locationDeepLink(options);
   const text = options.text?.trim() || `${title}\n${options.coordinate[1].toFixed(6)}, ${options.coordinate[0].toFixed(6)}`;
   try {
+    const url = locationDeepLink(options);
     if (Capacitor.isNativePlatform()) {
       await Share.share({ title, text, url, dialogTitle: title });
       return true;
@@ -56,10 +71,15 @@ export async function shareMapLocation(options: ShareLocationOptions): Promise<b
       await navigator.share({ title, text, url });
       return true;
     }
+    return clipboardFallback(`${text}\n${url}`);
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") return false;
+    const fallback = new URL(CANONICAL_APP_URL);
+    fallback.searchParams.set("action", "coordinate");
+    fallback.searchParams.set("lng", options.coordinate[0].toFixed(6));
+    fallback.searchParams.set("lat", options.coordinate[1].toFixed(6));
+    return clipboardFallback(`${text}\n${fallback.toString()}`);
   }
-  return clipboardFallback(`${text}\n${url}`);
 }
 
 export function createPopupShareButton(options: ShareLocationOptions, label: string): HTMLButtonElement {

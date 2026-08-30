@@ -1065,11 +1065,22 @@ class KurdistanAtlasController {
     return coordinate ? [coordinate[0], coordinate[1]] : null;
   }
 
+  private beginManualMapFocus(): void {
+    // Search, shared links and region-fit are explicit user destinations. Keep
+    // the GPS marker alive, but stop camera-follow before MapLibre emits its
+    // zoomend event; otherwise zoomend immediately recenters on the device and
+    // makes the selected result appear to jump or overlap the live location.
+    this.liveLocation.stopFollow();
+    this.liveLocation.lockAgainstGpsJitter();
+    this.map.stop();
+  }
+
   focusSharedCoordinate(coordinate: LngLatTuple, label?: string): void {
     if (!this.layers || !isInsideKri(coordinate, this.layers.boundary)) {
       setMessage(UI[this.language].routeOutsideBoundary, "error");
       return;
     }
+    this.beginManualMapFocus();
     this.collapseSheetForMapFocus();
     this.map.flyTo({ center: coordinate, zoom: Math.max(this.map.getZoom(), 15), duration: 680, essential: true });
     const title = label?.trim() || (this.language === "ar" ? "الموقع المشترك" : this.language === "en" ? "Shared location" : "شوێنی هاوبەشکراو");
@@ -1147,6 +1158,7 @@ class KurdistanAtlasController {
   }
 
   private focusLocality(feature: LocalityFeature): void {
+    this.beginManualMapFocus();
     this.collapseSheetForMapFocus();
     const coordinate = feature.geometry.coordinates as LngLatTuple; this.map.flyTo({ center: coordinate, zoom: Math.max(this.map.getZoom(), feature.properties.place === "city" ? 11.7 : 13), duration: 680, essential: true }); this.showLocalityPopup(feature);
   }
@@ -1162,6 +1174,7 @@ class KurdistanAtlasController {
   focusSearch(choice: SearchChoice): void {
     this.collapseSheetForMapFocus();
     if (choice.type === "local") { this.focusLocality(choice.feature); return; }
+    this.beginManualMapFocus();
     const coordinate: LngLatTuple = choice.type === "owner" ? [choice.place.longitude, choice.place.latitude] : [choice.item.x, choice.item.y];
     const zoom = choice.type === "base" && choice.item.k === "street" ? 15 : 14;
     this.map.flyTo({ center: coordinate, zoom: Math.max(this.map.getZoom(), zoom), duration: 680, essential: true });
@@ -1213,6 +1226,7 @@ class KurdistanAtlasController {
   }
   fitToKri(animate = true): void {
     const fit = (): void => {
+      this.beginManualMapFocus();
       this.map.setMinZoom(this.coverageMinZoom());
       this.map.resize();
       this.map.fitBounds(KRI_BOUNDS as LngLatBoundsLike, {

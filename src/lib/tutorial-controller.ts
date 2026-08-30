@@ -101,16 +101,16 @@ function nextFrame(): Promise<void> { return new Promise((resolve) => window.req
 function timeout(ms: number): Promise<void> { return new Promise((resolve) => window.setTimeout(resolve, ms)); }
 function tutorialVisual(step: number): string {
   const paths = [
-    '<path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18h14"/><path d="M6 6h3M15 6h3"/>',
-    '<circle cx="12" cy="8" r="3"/><path d="M6.5 19c.6-4 2.4-6 5.5-6s4.9 2 5.5 6M18 4.5l2 1v2.3c0 1.8-.8 3.1-2 3.7-1.2-.6-2-1.9-2-3.7V5.5l2-1Z"/>',
-    '<circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9.5v.2M6.5 18.2l11-12.4"/>',
-    '<circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4.5 4.5M7.5 10.5h6M10.5 7.5v6"/>',
-    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>',
-    '<path d="m4 7 8-4 8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/>',
-    '<path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/>',
-    '<path d="m4 8 8-5 8 5-8 5-8-5Zm0 0v8l8 5 8-5V8M12 13v8"/>'
+    '<path d="M12 3v11m0 0 4-4m-4 4-4-4M5 19h14"/>',
+    '<circle cx="10" cy="8" r="3"/><path d="M4.8 19c.5-3.8 2.25-5.7 5.2-5.7 1.3 0 2.38.36 3.2 1.08M15.5 17l1.6 1.6 3.1-3.3"/>',
+    '<circle cx="12" cy="12" r="8.5"/><path d="M12 10.7v5.1M12 7.4h.01"/>',
+    '<circle cx="10.6" cy="10.6" r="6.1"/><path d="m15.1 15.1 4.4 4.4"/>',
+    '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2.5V5m0 14v2.5M2.5 12H5m14 0h2.5"/>',
+    '<path d="m4 7.2 8-4 8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/>',
+    '<path d="M12 21s6-5.7 6-11a6 6 0 1 0-12 0c0 5.3 6 11 6 11Z"/><path d="M12 7v6m-3-3h6"/>',
+    '<path d="m4 8 8-4.5L20 8l-8 4.5L4 8Zm0 0v8l8 4.5 8-4.5V8M12 12.5v8"/>'
   ];
-  return `<div class="nav-tutorial__visual" aria-hidden="true"><span class="nav-tutorial__visual-orbit"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths[step] ?? paths[0]}</svg></div>`;
+  return `<div class="nav-tutorial__visual" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[step] ?? paths[0]}</svg></div>`;
 }
 async function waitForDocumentLayout(): Promise<void> {
   const fontsReady = document.fonts?.ready ?? Promise.resolve();

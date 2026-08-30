@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.11",
   "generatedForDate": "2026-08-27",
   "secretSafe": true,
-  "fileCount": 1210,
-  "totalBytes": 329420576,
+  "fileCount": 1212,
+  "totalBytes": 329239553,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -537,6 +537,10 @@
     "public/.well-known/web-app-origin-association": {
       "bytes": 127,
       "sha256": "4ee161492a8b6c60030851051229823b6ccc423d2f68ea3189a195afe75313fe"
+    },
+    "public/assets/android-brand.png": {
+      "bytes": 166714,
+      "sha256": "2c19bcfa64053afee58b6b95a2477ede5223020fbb5208468fb6b412499c6440"
     },
     "public/assets/fonts/README.md": {
       "bytes": 267,
@@ -3755,8 +3759,8 @@
       "sha256": "1e11dc6ef3d6a90fd79959c34ecab11f983255700f286242dd44ecc61983a88c"
     },
     "public/downloads/NAV-KURD-8.0.4.apk": {
-      "bytes": 48784090,
-      "sha256": "cff2032fb38a5b91503c5c565dfa277105869fcd3e55240e2ea4c3fe99102c3b"
+      "bytes": 48419524,
+      "sha256": "28932213c1e235a9156a93d6a5d1d91156761c954c6340df8cf90b56d114eb04"
     },
     "public/fonts/README.md": {
       "bytes": 214,
@@ -3856,7 +3860,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 440,
-      "sha256": "4f6b52af117471b1d3f6b138f87a2828fd795f74ac51d5da5b5d4c2a592c8e0d"
+      "sha256": "237d36aae620402ad7b9fa6cc01dcbc9c8c6195ccf26c09f2d75a070985e3426"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -4019,8 +4023,8 @@
       "sha256": "20783fa9d0e3742ade69a8a9aacc97c51cc039f80d52254a47f37ec2534ca457"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 29407,
-      "sha256": "f42424385b8334598d7acc2b33c034e325fddc6ae5be8d288c280fc2951d271a"
+      "bytes": 30592,
+      "sha256": "673762ab81d0f0b2cecdd58ced441ecb5dcfd494c135aa0ae6ee6a957bfbe68d"
     },
     "src/lib/app-url.ts": {
       "bytes": 308,
@@ -4183,12 +4187,12 @@
       "sha256": "0d293677cc6d8a43e5fa2f7ece76b6b5b4a13c6cf32f80f73c78621cbeffbd02"
     },
     "src/lib/native-platform.ts": {
-      "bytes": 14828,
-      "sha256": "aad45cf5804ecb9155cb32495f8674be9778f07c9dec951f2db9bc4759a179cb"
+      "bytes": 14982,
+      "sha256": "c3b69cd2255d9e225b3fa09df86a44236c314fa1df88e577986bdda53678d6e4"
     },
     "src/lib/native-share.ts": {
-      "bytes": 2533,
-      "sha256": "54f22f8b9b20d0ac1f6045374a5d624b41eda29464beaeda81a8c5aed8692d52"
+      "bytes": 3232,
+      "sha256": "389f947fe48247b3102fe3e65b3d80e16449c0af9b73ef07539a470be756913a"
     },
     "src/lib/offline-map-pack.ts": {
       "bytes": 34984,
@@ -4327,8 +4331,8 @@
       "sha256": "65d2e68e3cde0a7dd0fa20e548b53a27676122790f7476bc7f7087376b9149dd"
     },
     "src/lib/tutorial-controller.ts": {
-      "bytes": 21896,
-      "sha256": "9ab3c96981b0a1430d0c939f042d9dbf3b3ac263842b00bfba8d11e97e93c3f7"
+      "bytes": 21794,
+      "sha256": "7237a64b92b5bf11a5d7930791256f5b475c26d1b95c03efe50f34c274cb8f5d"
     },
     "src/lib/tutorial-map-demo-controller.ts": {
       "bytes": 6184,
@@ -4355,16 +4359,16 @@
       "sha256": "60efdd017d11a4e52757618c015be4f310b8d2687e7c8e126cf4d94a557f8475"
     },
     "src/main.ts": {
-      "bytes": 95424,
-      "sha256": "7b824db3b5a4fd59a3dc5d91207760a70f82eda589a432136dfeffd95447ebdc"
+      "bytes": 96018,
+      "sha256": "43ae77fec12deba50f8f330b2fcdcf61854ad63bd56905f7ab656bd92becdba7"
     },
     "src/pwa-register.ts": {
       "bytes": 728,
       "sha256": "66508b33619969170507872bf40f40a8a6e86e9130a7f6b86aa858c006c757ec"
     },
     "src/styles.css": {
-      "bytes": 1409,
-      "sha256": "eba42340554fd6d73e9c28fe42db1f935d024488a2fcc42ec0d88c7ac9583771"
+      "bytes": 1449,
+      "sha256": "8aa742e6940e040a29a0ffcfda1d0518bed4e9d679be414ef73a187e66f8a2f6"
     },
     "src/styles/about-support.css": {
       "bytes": 6843,
@@ -4473,6 +4477,10 @@
     "src/styles/platform-data.css": {
       "bytes": 1714,
       "sha256": "54b67a2ebd4cb9c001c218e6886985a1416b931e628a4bb11f8fbc35b83d2a89"
+    },
+    "src/styles/premium-refresh.css": {
+      "bytes": 13286,
+      "sha256": "ee118ac89f4d4536308ca0fc260ba5fc57f19938786a54e7288777cb1763b11d"
     },
     "src/styles/realtime-operations.css": {
       "bytes": 2545,
@@ -4847,8 +4855,8 @@
       "sha256": "77025ef03ba5b53a7c3106270b4d74241fc0acd5b3f30c2792db9ecc8dd9709d"
     },
     "vite.config.ts": {
-      "bytes": 657,
-      "sha256": "7e8299cae99a5bd997d883697754e75d286ea48dad99e40e05fa3f41f3356f3b"
+      "bytes": 1630,
+      "sha256": "9b457bf28be84933cdec41d91f6b2d0b7a30e2c041f27df555fe58e5f6b2e1de"
     }
   }
 }
