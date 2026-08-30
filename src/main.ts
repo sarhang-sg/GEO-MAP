@@ -1412,6 +1412,11 @@ class KurdistanAtlasController {
     this.overlayLayout.refresh();
     this.routing.restoreVisualState();
     this.liveLocation.restoreVisualState();
+    if (this.mapMode === "satellite") {
+      this.resetSatelliteHealthCycle();
+      this.applySatelliteFallback(Boolean(satelliteSource.enabled && (satelliteSource.fallbackSource || satelliteSource.detailSource)));
+      setMessage(UI[this.language].satelliteLoading, "normal");
+    }
     this.map.triggerRepaint();
     // Fresh data is requested after a meaningful absence, without discarding
     // the currently rendered map or forcing a document reload.

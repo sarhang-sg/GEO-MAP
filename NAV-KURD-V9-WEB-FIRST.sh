@@ -87,8 +87,8 @@ rsync -a \
   --exclude='dist/' \
   "$source_root/" "$repo_dir/"
 git -C "$repo_dir" rm -f --ignore-unmatch \
-  HANDOFF_WEB_8.0.4.md \
-  NAV-KURD-v8.0.4-PUBLISH-RUNTIME-FIXES.sh \
+  HANDOFF_WEB_9.0.0.md \
+  NAV-KURD-v9.0.0-PUBLISH-RUNTIME-FIXES.sh \
   public/assets/android-brand.png \
   src/styles/ambient-weather.css
 (

@@ -185,8 +185,18 @@
 .user-contrib__file-status { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; padding: 8px 10px; border: 1px solid rgba(157,137,255,.10); border-radius: 11px; color: #9eafd0; background: rgba(255,255,255,.025); font-size: 8px; }
 .user-contrib__file-status span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .user-contrib__file-status b { flex: 0 0 auto; color: #c9d6ed; font: 850 8px/1 var(--font-latin, var(--font-ui)); }
-.user-contrib__file-preview { overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid rgba(166,148,255,.16); border-radius: 14px; background: rgba(2,7,20,.7); }
+.user-contrib__file-preview { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid rgba(166,148,255,.16); border-radius: 14px; background: rgba(2,7,20,.7); }
 .user-contrib__file-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.user-contrib__file-preview-actions { position: absolute; right: 8px; bottom: 8px; left: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 7px; }
+.user-contrib__file-preview-actions label,
+.user-contrib__file-preview-actions button { display: inline-flex !important; min-height: 34px; align-items: center; justify-content: center; gap: 6px; padding: 0 10px; border: 1px solid rgba(219,228,255,.22); border-radius: 10px; color: #f7f9ff !important; background: rgba(5,10,27,.82); box-shadow: 0 6px 18px rgba(0,0,0,.26); backdrop-filter: blur(8px); font: 850 8px/1 var(--font-ui); cursor: pointer; }
+.user-contrib__file-preview-actions button { color: #ffd1da !important; border-color: rgba(255,139,165,.28); }
+.user-contrib__file-preview-actions .user-ui-icon { width: 14px; height: 14px; }
+.user-contrib__managed-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.user-contrib__managed-photo { position: relative; overflow: hidden; min-width: 0; aspect-ratio: 4 / 3; border: 1px solid rgba(166,148,255,.16); border-radius: 13px; background: rgba(2,7,20,.7); }
+.user-contrib__managed-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.user-contrib__managed-photo button { position: absolute; right: 7px; bottom: 7px; display: inline-flex; min-height: 32px; align-items: center; justify-content: center; gap: 5px; padding: 0 9px; border: 1px solid rgba(255,139,165,.26); border-radius: 9px; color: #ffd1da; background: rgba(28,6,19,.84); backdrop-filter: blur(8px); font: 850 8px/1 var(--font-ui); }
+.user-contrib__managed-photo button .user-ui-icon { width: 14px; height: 14px; }
 
 .user-contrib__upload-progress { display: grid; gap: 7px; padding: 10px 11px; border: 1px solid rgba(143,120,255,.20); border-radius: 13px; background: linear-gradient(135deg,rgba(56,82,181,.16),rgba(128,70,218,.14)); }
 .user-contrib__upload-progress[hidden] { display: none; }
@@ -357,7 +367,9 @@
   cursor: text;
 }
 .user-contrib__panel { display: grid; grid-template-rows: auto auto minmax(0, 1fr); overflow: hidden; }
-.user-contrib__content { min-height: 0; overflow: hidden auto; scrollbar-gutter: stable; overscroll-behavior: contain; }
+.user-contrib__header { grid-row: 1; }
+.user-contrib__message { grid-row: 2; }
+.user-contrib__content { grid-row: 3; min-height: 0; overflow: hidden auto; scrollbar-gutter: stable; overscroll-behavior: contain; }
 .user-contrib__dashboard { min-width: 0; }
 .user-private-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 6px; }
 .user-private-tabs button { position: relative; grid-template-columns: 1fr; align-content: center; min-height: 58px; padding: 7px 4px 6px; line-height: 1.35; }
@@ -387,4 +399,5 @@
   .user-contrib__header span { font-size: 9px; line-height: 1.6; }
   .user-contrib__content { padding: 12px 13px calc(18px + env(safe-area-inset-bottom)); }
   .user-account-card { grid-template-columns: auto minmax(0,1fr) auto; padding: 10px; }
+  .user-contrib__managed-photos { grid-template-columns: 1fr; }
 }

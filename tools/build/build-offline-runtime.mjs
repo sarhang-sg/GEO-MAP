@@ -64,12 +64,12 @@ const requiredStaticAssets = new Set([
   "offline-manifest.json",
   "offline.html",
   "offline.css",
-  "assets/icons/social/instagram.svg",
   "icons/nav-kurd-logo.png",
   "fonts/RedHatDisplay-Variable.woff2",
   "fonts/UniQAIDAR-Money-Heist-002.ttf",
   "icons/nav-kurd-icon-192.png",
-  "icons/favicon-32x32.png"
+  "icons/favicon-32x32.png",
+  "assets/icons/social/instagram.svg"
 ]);
 
 const existing = new Map(

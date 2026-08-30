@@ -96,9 +96,9 @@ export class LabelController {
         this.captureFrameContext();
         this.resetVisualReservations();
         this.refreshProtectedRouteSegments();
-        this.refreshAdministrativeLabels();
-        await yieldToMainThread();
         this.refreshLocalityLabels();
+        await yieldToMainThread();
+        this.refreshAdministrativeLabels();
         await yieldToMainThread();
         this.refreshRoadLabels();
       } while (this.labelsRefreshPending && this.getLayers());
@@ -203,6 +203,26 @@ export class LabelController {
     return true;
   }
 
+  /**
+   * Major cities are the first visual anchors at country-scale zooms. Use a
+   * slightly finer collision grid for this small, deterministic set while also
+   * reserving the normal cell so lower-priority boundary and road labels yield.
+   */
+  private reserveLowZoomCityLabel(coordinate: LngLatTuple, keys: readonly string[]): boolean {
+    const point = this.map.project(coordinate);
+    if (!this.isLabelAnchorInsideSafeViewport(point, keys)) return false;
+    if (this.intersectsProtectedRoute(point, keys)) return false;
+    const normalizedKeys = keys.map(labelKey).filter(Boolean);
+    if (normalizedKeys.some((key) => this.visibleLabelNameKeys.has(key))) return false;
+    const cityUnit = this.frameCompact ? 100 : 88;
+    const cityCell = `city:${Math.floor(point.x / cityUnit)}:${Math.floor(point.y / cityUnit)}`;
+    if (this.occupiedLabelCells.has(cityCell)) return false;
+    this.occupiedLabelCells.add(cityCell);
+    this.occupiedLabelCells.add(this.visualCell(point));
+    normalizedKeys.forEach((key) => this.visibleLabelNameKeys.add(key));
+    return true;
+  }
+
   private refreshLocalityLabels(): void {
     if (!this.getPlacesVisible()) {
       this.localityMarkers.forEach((marker) => marker.remove());
@@ -219,8 +239,8 @@ export class LabelController {
     const compact = this.isMobileViewport() || this.lowPowerProfile;
     const minimumRank = zoom < 7.6 ? 100 : zoom < 9.2 ? 90 : zoom < 10.8 ? 80 : zoom < 13 ? 55 : 45;
     const maxLabels = compact
-      ? (zoom < 7.6 ? 6 : zoom < 9.2 ? 10 : zoom < 10.8 ? 18 : zoom < 13 ? 30 : 48)
-      : (zoom < 7.6 ? 8 : zoom < 9.2 ? 16 : zoom < 10.8 ? 28 : zoom < 13 ? 46 : 72);
+      ? (zoom < 7.6 ? 12 : zoom < 9.2 ? 10 : zoom < 10.8 ? 18 : zoom < 13 ? 30 : 48)
+      : (zoom < 7.6 ? 14 : zoom < 9.2 ? 16 : zoom < 10.8 ? 28 : zoom < 13 ? 46 : 72);
     const seenNames = new Set<string>();
     const selected: LocalityFeature[] = [];
     const selectedIds = new Set<string>();
@@ -239,7 +259,10 @@ export class LabelController {
       const name = languageValue(feature.properties, language);
       const nameKey = labelKey(name);
       if (!nameKey || seenNames.has(nameKey)) return;
-      if (!this.reserveVisualLabel(coordinate, [name])) return;
+      const reserved = zoom < 7.6 && placeRank(feature.properties.place) >= 100
+        ? this.reserveLowZoomCityLabel(coordinate, [name])
+        : this.reserveVisualLabel(coordinate, [name]);
+      if (!reserved) return;
       seenNames.add(nameKey);
       selectedIds.add(feature.properties.id);
       selected.push(feature);

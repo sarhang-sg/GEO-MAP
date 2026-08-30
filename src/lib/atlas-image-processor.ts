@@ -14,6 +14,55 @@ export type AtlasImageProcessingProgress = (stage: "decode" | "compress" | "comp
 const HIGH_FIDELITY_QUALITY = 0.94;
 const MAX_LONG_EDGE = 2560;
 const MIN_BYTES_FOR_REENCODE = 512 * 1024;
+const IMAGE_DECODE_TIMEOUT_MS = 7000;
+const IMAGE_ENCODE_TIMEOUT_MS = 8000;
+
+async function bounded<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("Image processing timed out."));
+    }, timeoutMs);
+    promise.then((value) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(value);
+    }, (error: unknown) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      reject(error);
+    });
+  });
+}
+
+async function decodeBitmap(file: File): Promise<ImageBitmap> {
+  return new Promise<ImageBitmap>((resolve, reject) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("Image decoding timed out."));
+    }, IMAGE_DECODE_TIMEOUT_MS);
+    void createImageBitmap(file, { imageOrientation: "from-image" }).then((bitmap) => {
+      if (settled) {
+        bitmap.close();
+        return;
+      }
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(bitmap);
+    }, (error: unknown) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      reject(error);
+    });
+  });
+}
 
 function normalizedImageName(name: string, mime: string): string {
   const stem = name.replace(/\.[^.]+$/u, "") || "nav-kurd-image";
@@ -37,10 +86,25 @@ async function canvasBlob(
   quality: number
 ): Promise<Blob | null> {
   if (typeof OffscreenCanvas !== "undefined" && canvas instanceof OffscreenCanvas) {
-    try { return await canvas.convertToBlob({ type, quality }); } catch { return null; }
+    try {
+      return await bounded(canvas.convertToBlob({ type, quality }), IMAGE_ENCODE_TIMEOUT_MS);
+    } catch {
+      return null;
+    }
   }
   return new Promise((resolve) => {
-    (canvas as HTMLCanvasElement).toBlob((blob) => resolve(blob), type, quality);
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve(null);
+    }, IMAGE_ENCODE_TIMEOUT_MS);
+    (canvas as HTMLCanvasElement).toBlob((blob) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(blob);
+    }, type, quality);
   });
 }
 
@@ -84,7 +148,7 @@ export async function prepareAtlasImage(
   onProgress?.("decode", 10);
   let bitmap: ImageBitmap;
   try {
-    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+    bitmap = await decodeBitmap(file);
   } catch {
     onProgress?.("complete", 100);
     return fallback;
