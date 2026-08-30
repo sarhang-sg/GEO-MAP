@@ -8,7 +8,7 @@
   "generatedForDate": "2026-08-30",
   "secretSafe": true,
   "fileCount": 1220,
-  "totalBytes": 282095760,
+  "totalBytes": 282096178,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -4831,8 +4831,8 @@
       "sha256": "c33e3a48e73d74c77651261df84282aba2c8ba0dca791e3bfd927c85532fb46a"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 12235,
-      "sha256": "a62048ee14be7f697b08221ae4204a365d2e6054008f1811ef84b460d316abfd"
+      "bytes": 12653,
+      "sha256": "68a1885eadbe052031b1c2e6d3371f3a124aa5dad6085f98c69bfd3126545ba4"
     },
     "tools/verify/data.py": {
       "bytes": 9700,

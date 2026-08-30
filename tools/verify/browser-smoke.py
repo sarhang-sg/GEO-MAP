@@ -113,17 +113,22 @@ def main() -> int:
                 if not direct_probe["ok"] or direct_probe["bytes"] != direct_probe["expected"]:
                     raise AssertionError(f"direct APK probe failed: {direct_probe}")
             else:
-                direct_download.wait_for(state="visible", timeout=10_000)
+                # The download control lives inside the closed About dialog at
+                # this point in the smoke flow. Validate its enabled DOM state
+                # and destination here; visibility is exercised after the user
+                # opens the dialog below.
+                direct_download.wait_for(state="attached", timeout=10_000)
                 fallback = direct_download.evaluate(
                     """element => ({
                       href: element.href,
                       download: element.getAttribute('download'),
-                      target: element.getAttribute('target')
+                      target: element.getAttribute('target'),
+                      hidden: element.hidden
                     })"""
                 )
                 if fallback["href"] != android_release.get("apkPureUrl"):
                     raise AssertionError(f"APKPure fallback URL mismatch: {fallback}")
-                if fallback["download"] is not None or fallback["target"] != "_blank":
+                if fallback["hidden"] or fallback["download"] is not None or fallback["target"] != "_blank":
                     raise AssertionError(f"APKPure fallback attributes are unsafe: {fallback}")
 
             # The language controls belong to the map sheet and are intentionally
@@ -162,6 +167,7 @@ def main() -> int:
             about_button.wait_for(state="visible", timeout=10_000)
             about_button.click()
             page.locator("#aboutDialog").wait_for(state="visible", timeout=10_000)
+            direct_download.wait_for(state="visible", timeout=10_000)
             support_button = page.locator("#supportButton")
             support_button.wait_for(state="visible", timeout=10_000)
             support_button.click()
