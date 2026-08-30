@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "NAV KURD",
-  "version": "8.0.4",
+  "version": "9.0.0",
   "identifier": "com.navkurd.desktop",
   "build": {
     "frontendDist": "../dist",
@@ -30,7 +30,7 @@
         "resizable": true,
         "fullscreen": false,
         "visible": false,
-        "backgroundColor": "#090d19"
+        "backgroundColor": "#061225"
       },
       {
         "label": "splash",
@@ -43,7 +43,7 @@
         "decorations": false,
         "alwaysOnTop": true,
         "visible": true,
-        "backgroundColor": "#090d19"
+        "backgroundColor": "#061225"
       }
     ],
     "security": {

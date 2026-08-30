@@ -1,3 +1,5 @@
+import { absoluteAppUrl, safeUrl } from "./app-url";
+
 const REGISTRATION_RETRYABLE_PATTERNS = [
   /not found/iu,
   /failed to update a serviceworker/iu,
@@ -12,13 +14,13 @@ export type ServiceWorkerRegistrationResult = {
 };
 
 export function serviceWorkerScriptUrl(): string {
-  const base = new URL(import.meta.env.BASE_URL, window.location.origin);
-  return new URL("sw.js", base).toString();
+  return absoluteAppUrl("sw.js");
 }
 
 export function serviceWorkerScope(): string {
-  const base = new URL(import.meta.env.BASE_URL, window.location.origin);
-  return base.pathname.endsWith("/") ? base.pathname : `${base.pathname}/`;
+  const base = safeUrl(absoluteAppUrl("./"));
+  const path = base?.pathname || "/";
+  return path.endsWith("/") ? path : `${path}/`;
 }
 
 export function isTransientServiceWorkerAvailabilityError(error: unknown): boolean {

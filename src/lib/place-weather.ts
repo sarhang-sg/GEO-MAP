@@ -1,8 +1,12 @@
 import type { LngLatTuple } from "./location";
 import type { Language } from "./types";
+import { absoluteAppUrl, safeUrl } from "./app-url";
 
-const DEFAULT_WEATHER_API_BASE_URL = new URL("api/weather", new URL(import.meta.env.BASE_URL, window.location.origin)).toString();
-const WEATHER_API_BASE_URL = import.meta.env.VITE_KRI_WEATHER_API_BASE_URL?.trim() || DEFAULT_WEATHER_API_BASE_URL;
+const DEFAULT_WEATHER_API_BASE_URL = absoluteAppUrl("api/weather");
+const configuredWeatherUrl = import.meta.env.VITE_KRI_WEATHER_API_BASE_URL?.trim() ?? "";
+const WEATHER_API_BASE_URL = safeUrl(configuredWeatherUrl)?.protocol === "https:"
+  ? configuredWeatherUrl
+  : DEFAULT_WEATHER_API_BASE_URL;
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 5500;
 const MAX_CACHE_ENTRIES = 240;

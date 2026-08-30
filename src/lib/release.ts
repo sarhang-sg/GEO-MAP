@@ -1,4 +1,5 @@
 import releaseConfig from "../../release.config.json";
+import { documentBaseUrl, safeUrl } from "./app-url";
 
 export type OfflineMapFileConfig = {
   id: "base" | "roads";
@@ -31,7 +32,8 @@ export const OFFLINE_MAP_FILES = config.offlineMapFiles;
 export const OFFLINE_RUNTIME_BYTES = config.offlineRuntimeBytes;
 
 export function versionedAssetUrl(url: string, version: string): string {
-  const parsed = new URL(url, window.location.href);
+  const parsed = safeUrl(url, documentBaseUrl());
+  if (!parsed) return url;
   parsed.searchParams.set("v", version);
   return parsed.toString();
 }

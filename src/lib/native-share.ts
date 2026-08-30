@@ -63,6 +63,14 @@ export async function shareMapLocation(options: ShareLocationOptions): Promise<b
   const text = options.text?.trim() || `${title}\n${options.coordinate[1].toFixed(6)}, ${options.coordinate[0].toFixed(6)}`;
   try {
     const url = locationDeepLink(options);
+    const flutterWindow = window as unknown as {
+      __NAV_KURD_FLUTTER__?: boolean;
+      navKurdAndroid?: { share?: (data: { title: string; text: string; url: string }) => Promise<boolean> };
+    };
+    if (flutterWindow.__NAV_KURD_FLUTTER__ === true && flutterWindow.navKurdAndroid?.share) {
+      const handled = await flutterWindow.navKurdAndroid.share({ title, text, url });
+      if (handled) return true;
+    }
     if (Capacitor.isNativePlatform()) {
       await Share.share({ title, text, url, dialogTitle: title });
       return true;
@@ -73,7 +81,7 @@ export async function shareMapLocation(options: ShareLocationOptions): Promise<b
     }
     return clipboardFallback(`${text}\n${url}`);
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") return false;
+    if (error instanceof DOMException && error.name === "AbortError" && window.__NAV_KURD_FLUTTER__ !== true) return false;
     const fallback = new URL(CANONICAL_APP_URL);
     fallback.searchParams.set("action", "coordinate");
     fallback.searchParams.set("lng", options.coordinate[0].toFixed(6));

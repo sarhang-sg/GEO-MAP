@@ -69,7 +69,7 @@ push_repo(){
   git init
   git branch -M "$branch"
   git add -A
-  git commit -m "NAV KURD 8.0.4 GPS, weather, widget and reliability release" || true
+  git commit -m "NAV KURD 9.0.0 GPS, weather, widget and reliability release" || true
   local remote="https://github.com/${owner}/${repository}.git"
   if git remote get-url origin >/dev/null 2>&1; then git remote set-url origin "$remote"; else git remote add origin "$remote"; fi
   git push -u origin "$branch"

@@ -1,13 +1,11 @@
 {
-  "version": "8.0.4",
-  "versionCode": 80004,
-  "minimumVersion": "8.0.4",
+  "version": "9.0.0",
+  "versionCode": 90000,
+  "minimumVersion": "9.0.0",
   "packageName": "com.navkurd.app",
   "minimumAndroid": 24,
-  "directApkAvailable": true,
-  "directApkUrl": "/downloads/NAV-KURD-8.0.4.apk",
+  "directApkAvailable": false,
+  "directApkUrl": null,
   "apkPureUrl": "https://apkpure.com/nav-kurd/com.navkurd.app/download",
-  "publishedAt": "2026-08-27T00:00:00Z",
-  "apkBytes": 48419524,
-  "apkSha256": "28932213c1e235a9156a93d6a5d1d91156761c954c6340df8cf90b56d114eb04"
+  "publishedAt": "2026-08-30T00:00:00Z"
 }

@@ -58,10 +58,10 @@ assert(presence.includes('status === "CHANNEL_ERROR" || status === "TIMED_OUT"')
 assert(!presence.includes('| "error"') && !presence.includes('setState("error")'), "Realtime presence still exposes an unreachable false-red error state.");
 assert(shell.indexOf('id="mapOnlineIndicator"') < shell.indexOf('id="brandAboutButton"'), "Header DOM order is not status/online/brand.");
 assert(layout.includes('grid-template-areas: "status online brand"') && layout.includes('grid-area: brand') && layout.includes('justify-self: end'), "Brand card is not physically anchored to the upper-right.");
-assert(shell.includes('class="map-loading__deck"') && shell.includes('class="map-loading__route"') && shell.includes('class="map-loading__meter"'), "Map-themed loader deck is incomplete.");
+assert(shell.includes('class="map-loading__word"') && shell.includes('class="map-loading__slice"') && shell.includes('class="map-loading__line"'), "Nine-slice Loading composition is incomplete.");
 assert(shell.includes('src="${brandLogoSrc}"') && !/nav-kurd-loader(?:-offline|-restored)?\.(?:gif|webp)/u.test(shell), "Loader still depends on obsolete animated media assets.");
-assert(loader.includes('.map-loading__terrain') && loader.includes('.map-loading__route-runner') && loader.includes('.map-loading__network-label::before'), "New loader visual/network states are incomplete.");
-assert(loader.includes('transform: translate3d(var(--nav-kurd-loader-run, 272px)') && loader.includes('@media (prefers-reduced-motion: reduce)'), "Loader animation is not compositor-oriented or reduced-motion safe.");
+assert(loader.includes('.map-loading__slice:nth-child(9)') && loader.includes('.map-loading__identity') && loader.includes('nav-kurd-loading-wobble'), "New Loading component states are incomplete.");
+assert(loader.includes('transform: translateX(-90%)') && loader.includes('@media (prefers-reduced-motion: reduce)'), "Loader animation is not transform-based or reduced-motion safe.");
 assert(!loader.includes('.map-loading__spinner') && !loader.includes('.map-loading__signal') && !loader.includes('.map-loading__orbit'), "Legacy loader CSS remains in the canonical loader owner.");
 assert(!(offline.assets ?? []).some((entry) => /nav-kurd-loader(?:-offline|-restored)?\.(?:gif|webp)$/u.test(entry.path ?? "")), "Offline runtime still catalogs obsolete loader media.");
 assert(leftRail.includes('maplibregl-ctrl map-left-control-rail__extras') && leftRail.includes('extras.append(threeDButton)') && leftRail.includes('extras.append(visibilityButton)') && leftRail.includes('style.pointerEvents = \"auto\"'), "3D and visibility controls are not mounted into an interactive MapLibre control surface.");

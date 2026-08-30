@@ -1,12 +1,12 @@
 {
-  "appVersion": "8.0.4",
-  "releaseId": "2026-08-27-nav-kurd-v8.0.4",
-  "releaseDate": "2026-08-27",
+  "appVersion": "9.0.0",
+  "releaseId": "2026-08-30-nav-kurd-v9.0.0",
+  "releaseDate": "2026-08-30",
   "mapEdition": "2027",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "cacheSchemaVersion": 84,
-  "offlinePackVersion": "2027.11",
-  "serviceWorkerRelease": "8.0.4",
+  "cacheSchemaVersion": 90,
+  "offlinePackVersion": "2027.12",
+  "serviceWorkerRelease": "9.0.0",
   "offlineMapFiles": [
     {
       "id": "base",
@@ -24,8 +24,8 @@
     }
   ],
   "offlineRuntimeBytes": 53011521,
-  "releaseLabel": "NAV KURD 8.0.4 GPS recovery, multilingual live weather and verified Android release",
-  "uiTheme": "aurora",
-  "hardeningDate": "2026-08-27",
-  "hardeningRelease": "8.0.4"
+  "releaseLabel": "NAV KURD 9.0.0 luxe blue interface, clean multilingual widget and hardened native Android release",
+  "uiTheme": "luxe-ocean",
+  "hardeningDate": "2026-08-30",
+  "hardeningRelease": "9.0.0"
 }

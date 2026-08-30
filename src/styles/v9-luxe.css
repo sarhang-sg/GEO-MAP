@@ -1,0 +1,351 @@
+/* NAV KURD 9 — one blue/white visual language across Web and Android WebView.
+   The red payment/support surface deliberately keeps its existing brand color. */
+.map-shell {
+  --nk-ink: #f8fbff;
+  --nk-muted: #a9bdd9;
+  --nk-line: rgba(138, 190, 255, .18);
+  --nk-line-strong: rgba(116, 199, 255, .36);
+  --nk-panel: rgba(4, 13, 34, .94);
+  --nk-panel-soft: rgba(8, 24, 52, .90);
+  --nk-blue: #3b83ef;
+  --nk-cyan: #55d7ff;
+  --nk-violet: #72adff;
+}
+
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel, .route-panel):not(.support-section) {
+  border-color: var(--nk-line) !important;
+  background:
+    radial-gradient(circle at 86% -10%, rgba(52, 143, 255, .17), transparent 36%),
+    linear-gradient(155deg, rgba(7, 20, 47, .98), rgba(3, 10, 27, .98) 64%, rgba(5, 26, 49, .97)) !important;
+  box-shadow: 0 26px 68px rgba(0, 9, 29, .52), inset 0 1px 0 rgba(255,255,255,.065) !important;
+}
+
+html.is-native-app .search-card {
+  top: max(58px, calc(var(--native-safe-top, 0px) + 47px)) !important;
+  margin-top: 0 !important;
+}
+
+.search-card {
+  border-color: rgba(112, 184, 255, .30) !important;
+  background: linear-gradient(145deg, rgba(8, 25, 55, .97), rgba(3, 11, 29, .96)) !important;
+  box-shadow: 0 16px 42px rgba(0, 12, 38, .44), inset 0 1px 0 rgba(255,255,255,.075) !important;
+}
+.search-card:focus-within,
+.search-card.is-search-open {
+  border-color: rgba(91, 209, 255, .65) !important;
+  box-shadow: 0 20px 52px rgba(0,12,38,.48), 0 0 0 3px rgba(55,146,255,.12) !important;
+}
+.search-card__icon { color: #d9eaff !important; }
+.search-card:focus-within .search-card__icon { color: #63dcff !important; }
+
+/* Physical map controls, adapted from the supplied Settings example. */
+.map-actions :where(.round-button, .map-button),
+.map-3d-button,
+.controls-visibility-button {
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  border: 1px solid rgba(141, 194, 255, .22) !important;
+  border-radius: 16px !important;
+  color: #e4efff !important;
+  background: linear-gradient(145deg, rgba(13, 34, 68, .97), rgba(3, 12, 31, .96)) !important;
+  box-shadow: 0 13px 32px rgba(0, 10, 32, .38), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  transform: translateZ(0);
+  transition: transform .24s cubic-bezier(.2,.9,.2,1), border-color .22s ease, box-shadow .22s ease, filter .22s ease !important;
+}
+.map-actions :where(.round-button, .map-button)::before {
+  position: absolute;
+  inset: 50%;
+  border: 1px solid rgba(107, 211, 255, .28);
+  border-radius: inherit;
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+}
+.map-actions :where(.round-button, .map-button):active,
+.map-3d-button:active,
+.controls-visibility-button:active { transform: scale(.92) !important; }
+.map-actions :where(.round-button, .map-button).is-active,
+.map-actions :where(.round-button, .map-button)[aria-pressed="true"] {
+  border-color: rgba(111, 211, 255, .52) !important;
+  background: linear-gradient(145deg, rgba(30, 104, 213, .94), rgba(21, 153, 210, .90)) !important;
+  box-shadow: 0 14px 34px rgba(0, 85, 176, .34), 0 0 24px rgba(69, 192, 255, .17), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+
+#actionsToggleButton svg circle { transform-box: fill-box; transform-origin: center; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+#actionsToggleButton:hover svg circle:nth-child(1) { transform: translateY(-3px); }
+#actionsToggleButton:hover svg circle:nth-child(2) { transform: translateY(3px); }
+#actionsToggleButton:hover svg circle:nth-child(3) { transform: translateY(-3px); }
+
+#userAccountButton svg { transition: transform .32s cubic-bezier(.34,1.56,.64,1), filter .24s ease; }
+#userAccountButton::after {
+  position: absolute;
+  inset: 8px;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(255,255,255,.78);
+  border-radius: 50%;
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+}
+#userAccountButton:hover svg { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(118,218,255,.70)); }
+#userAccountButton:hover::after { opacity: 1; animation: nk-v9-spin 1.15s linear infinite; }
+
+#locateButton::after,
+#routePinButton::after {
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(104, 222, 255, .55);
+  border-radius: 50%;
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+}
+#locateButton:hover::after,
+#routePinButton:hover::after { animation: nk-v9-gps-ring 1.05s ease-out infinite; }
+#locateButton:hover svg,
+#routePinButton:hover svg { animation: nk-v9-gps-pulse .62s ease-in-out infinite alternate; }
+
+#layersButton svg path,
+#fitButton svg path,
+#shareLocationButton svg circle,
+#shareLocationButton svg path { transform-box: fill-box; transform-origin: center; transition: transform .32s cubic-bezier(.34,1.56,.64,1), opacity .25s ease; }
+#layersButton:hover svg path:nth-child(1) { transform: translateY(-2px); }
+#layersButton:hover svg path:nth-child(2) { transform: translateY(2px); }
+#fitButton:hover svg path:first-child { transform: scale(1.14); }
+#fitButton:hover svg path:last-child { transform: scale(.88); }
+#shareLocationButton:hover svg circle:nth-child(1) { transform: translate(1px,-1px) scale(1.1); }
+#shareLocationButton:hover svg circle:nth-child(2) { transform: translateX(-1px) scale(1.1); }
+#shareLocationButton:hover svg circle:nth-child(3) { transform: translate(1px,1px) scale(1.1); }
+
+@media (hover:hover) {
+  .map-actions :where(.round-button, .map-button):hover,
+  .map-3d-button:hover,
+  .controls-visibility-button:hover {
+    border-color: rgba(108, 215, 255, .48) !important;
+    box-shadow: 0 17px 38px rgba(0,16,46,.46), 0 0 0 2px rgba(109,196,255,.10), 0 0 25px rgba(62,181,255,.18) !important;
+    filter: brightness(1.08);
+    transform: translateY(-4px) scale(1.035) !important;
+  }
+  .map-actions :where(.round-button, .map-button):hover::before {
+    inset: -6px;
+    opacity: 1;
+    transition: inset .3s ease, opacity .3s ease;
+  }
+}
+
+.style-picker {
+  border-color: rgba(132, 190, 255, .22) !important;
+  background: linear-gradient(180deg, rgba(9,27,58,.96), rgba(3,12,31,.97)) !important;
+}
+.style-choice.is-active {
+  color: #fff !important;
+  background: linear-gradient(135deg, #1e64ca, #31a8df) !important;
+  box-shadow: 0 8px 22px rgba(0,97,184,.32) !important;
+}
+
+/* About/menu reflow with the requested cover, clean hierarchy and compact tools. */
+.about-dialog__panel { width: min(680px, calc(100vw - 24px)) !important; }
+.about-dialog__scroll { padding-top: 20px !important; }
+.about-dialog__close-row {
+  position: sticky;
+  z-index: var(--z-local-critical);
+  top: -20px;
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: flex-end;
+  margin: -20px -10px 4px;
+  padding: 6px 10px 3px;
+  background: linear-gradient(180deg, rgba(4,15,37,.98) 70%, rgba(4,15,37,0));
+  backdrop-filter: blur(10px);
+}
+.about-dialog__close {
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 auto;
+}
+.about-dialog__brand { padding-inline: 4px; }
+.about-dialog__cover {
+  position: relative;
+  z-index: var(--z-local-content);
+  margin: 17px 0 14px;
+  overflow: hidden;
+  border: 1px solid rgba(122, 192, 255, .20);
+  border-radius: 19px;
+  background: #07142f;
+  box-shadow: 0 18px 42px rgba(0,9,30,.34), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.about-dialog__cover img { display:block; width:100%; height:auto; max-height:260px; object-fit:cover; object-position:center; }
+.about-dialog__cover figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 2px;
+  padding: 28px 14px 11px;
+  color: #f8fbff;
+  background: linear-gradient(transparent, rgba(2,10,27,.92));
+}
+.about-dialog__cover figcaption span { font: 850 8px/1.2 var(--font-latin); letter-spacing:.16em; color:#7ddcff; }
+.about-dialog__cover figcaption strong { font: 800 10px/1.4 var(--font-ui); }
+.about-dialog__meta { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.about-dialog__meta > div { min-width:0; grid-template-columns: auto minmax(0,1fr) !important; background: linear-gradient(145deg,rgba(29,92,174,.10),rgba(34,165,219,.07)) !important; }
+.about-dialog__utility-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px !important;
+}
+.about-dialog__utility-actions > :where(button,a) {
+  min-height: 42px !important;
+  justify-content: center;
+  border-color: rgba(122,188,255,.20) !important;
+  border-radius: 13px !important;
+  color: #dceaff !important;
+  background: linear-gradient(145deg,rgba(17,48,91,.72),rgba(5,18,43,.76)) !important;
+  font-size: 9px !important;
+  transition: transform .18s ease,border-color .18s ease,background .18s ease !important;
+}
+.about-dialog__utility-actions > :where(button,a):hover { border-color:rgba(102,213,255,.48) !important; background:linear-gradient(145deg,rgba(31,98,190,.66),rgba(15,77,126,.70)) !important; transform:translateY(-2px); }
+.about-dialog__utility-actions > :where(button,a):active { transform:scale(.97); }
+
+.dialog-close-button {
+  z-index: var(--z-local-critical);
+  inset-block-start: 14px !important;
+  inset-inline-end: 14px !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-color: rgba(146, 196, 255, .22) !important;
+  background: rgba(5, 18, 43, .90) !important;
+}
+
+/* Native Android tools: icon-first, aligned and still fully accessible. */
+.native-ios-panel {
+  border-color: rgba(117,190,255,.22) !important;
+  background: linear-gradient(145deg,rgba(8,28,59,.95),rgba(4,14,34,.96)) !important;
+}
+.native-ios-panel__actions { justify-content: flex-start !important; }
+.native-ios-panel__actions button {
+  display: grid !important;
+  width: 46px !important;
+  min-width: 46px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  color: #dcecff !important;
+  background: linear-gradient(145deg,rgba(29,78,140,.58),rgba(6,23,51,.78)) !important;
+}
+.native-ios-panel__actions button svg { width:22px !important; height:22px !important; }
+.native-ios-panel__action-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+#nativeOpenSettingsButton svg { transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+#nativeOpenSettingsButton:hover svg { transform: rotate(42deg) scale(1.08); }
+#nativeClearCacheButton:hover svg { animation: nk-v9-bin .5s cubic-bezier(.34,1.56,.64,1); }
+
+.nav-tutorial__ring {
+  border-color: #74dcff !important;
+  box-shadow: 0 0 0 7px rgba(67,153,255,.12),0 0 34px rgba(79,197,255,.52) !important;
+}
+.nav-tutorial__progress { color:#a9d8ff !important; }
+.nav-tutorial__progress-track span {
+  background: linear-gradient(90deg,#1f65d3,#4aaeff,#9ae9ff) !important;
+  box-shadow: 0 0 14px rgba(67,172,255,.52) !important;
+}
+
+.place-popup__title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+.place-popup__title img {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(133, 202, 255, .20);
+  border-radius: 10px;
+  object-fit: contain;
+  background: rgba(24, 91, 164, .12);
+  filter: drop-shadow(0 6px 11px rgba(0, 15, 42, .32));
+}
+.place-popup__title strong { min-width: 0; overflow-wrap: anywhere; }
+
+/* Keep the close affordance in a reserved logical corner for both RTL and LTR.
+ * This prevents the X from covering the title, category icon, or a cover image. */
+.place-detail__panel { isolation: isolate; }
+.place-detail__close {
+  inset-block-start: 12px !important;
+  inset-inline-end: 12px !important;
+  top: auto !important;
+  right: auto !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-color: rgba(137, 203, 255, .28) !important;
+  border-radius: 14px !important;
+  background: rgba(4, 18, 43, .92) !important;
+  box-shadow: 0 10px 24px rgba(0, 10, 32, .34), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.place-detail__body { padding-block-start: 62px !important; }
+.place-detail__cover + .place-detail__body { padding-block-start: 17px !important; }
+.place-detail__cover { padding-block-start: 0; }
+
+:where(.about-dialog__scroll,.feedback-studio__scroll,.owner-studio__scroll,.user-contrib__content,.owner-choice__list,.user-choice__list,.search-results,.place-detail__panel,.nav-tutorial__card) {
+  scrollbar-color: rgba(76, 176, 255, .90) rgba(5, 24, 54, .46) !important;
+}
+:where(.about-dialog__scroll,.feedback-studio__scroll,.owner-studio__scroll,.user-contrib__content,.owner-choice__list,.user-choice__list,.search-results,.place-detail__panel,.nav-tutorial__card)::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg,#2f8cff,#55d7ff) padding-box !important;
+  box-shadow: 0 0 14px rgba(54, 174, 255, .22) !important;
+}
+
+/* Space.html idea, reduced to a performant weather-only star field. */
+.place-weather { position:relative; isolation:isolate; border-color:rgba(118,190,255,.20); background:linear-gradient(135deg,rgba(22,82,159,.17),rgba(20,155,197,.10)); }
+.place-weather[data-phase="night"]::before {
+  position:absolute;
+  inset:0;
+  opacity:.55;
+  background-image:
+    radial-gradient(circle at 12% 28%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 72% 22%,#91ddff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 43% 74%,#fff 0 1px,transparent 1.5px);
+  background-size:47px 47px,73px 73px,91px 91px;
+  content:"";
+  animation:nk-v9-stars 8s linear infinite alternate;
+}
+
+@keyframes nk-v9-spin { to { transform:rotate(360deg); } }
+@keyframes nk-v9-gps-ring { from { inset:12px; opacity:.65; } to { inset:-8px; opacity:0; } }
+@keyframes nk-v9-gps-pulse { from { transform:scale(.88); } to { transform:scale(1.15); } }
+@keyframes nk-v9-bin { 35% { transform:rotate(-9deg) translateY(-2px); } 70% { transform:rotate(7deg) translateY(1px); } }
+@keyframes nk-v9-stars { to { transform:translate3d(4px,3px,0); opacity:.75; } }
+
+@media (max-width:700px) {
+  .about-dialog__meta { grid-template-columns:1fr; }
+  .about-dialog__cover img { max-height:205px; }
+  .about-dialog__utility-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .map-actions { top: max(126px, calc(var(--native-safe-top,0px) + 112px)) !important; }
+}
+
+@media (max-width:360px) {
+  .about-dialog__utility-actions { grid-template-columns:1fr; }
+  .about-dialog__cover figcaption strong { font-size:9px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  #userAccountButton:hover::after,
+  #locateButton:hover::after,
+  #routePinButton:hover::after,
+  #locateButton:hover svg,
+  #routePinButton:hover svg,
+  #nativeClearCacheButton:hover svg,
+  .place-weather[data-phase="night"]::before { animation:none !important; }
+}

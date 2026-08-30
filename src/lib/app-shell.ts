@@ -2,36 +2,20 @@ import { appUrl } from "./app-url";
 
 export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVersion: string, mapEdition: string): void {
   app.innerHTML = `
-  <main class="map-shell" data-atlas="true" data-ui-theme="aurora" data-load-state="loading" data-network-state="online" aria-busy="true">
+  <main class="map-shell" data-atlas="true" data-ui-theme="luxe-ocean" data-load-state="loading" data-network-state="online" aria-busy="true">
     <div id="map" role="region" aria-label="Kurdistan geographic map"></div>
     <div class="map-focus-vignette" aria-hidden="true"></div>
     <div class="map-edge-frame" aria-hidden="true"><span></span></div>
     <div id="mapLoading" class="map-loading" data-phase="loading" role="status" aria-live="polite" aria-atomic="true">
-      <div class="map-loading__terrain" aria-hidden="true"></div>
-      <div class="map-loading__deck">
-        <div class="map-loading__brand">
-          <div class="map-loading__mark" aria-hidden="true">
-            <span class="map-loading__mark-grid"></span>
-            <img src="${brandLogoSrc}" width="1024" height="1024" alt="" decoding="async" loading="eager" fetchpriority="high" draggable="false" />
-            <span class="map-loading__beacon"></span>
-          </div>
-          <div class="map-loading__copy">
-            <span class="map-loading__kicker">MAP EDITION 2027</span>
-            <strong>NAV KURD</strong>
-            <small>خەریکە ماپەکە ئامادە دەکرێت…</small>
-          </div>
+      <span class="map-loading__ambient" aria-hidden="true"></span>
+      <div class="map-loading__content">
+        <div class="map-loading__word" aria-hidden="true">
+          ${Array.from({ length: 9 }, () => '<span class="map-loading__slice"><b>Loading</b></span>').join("")}
+          <span class="map-loading__line"></span>
         </div>
-        <div class="map-loading__route" aria-hidden="true">
-          <span class="map-loading__route-line"></span>
-          <span class="map-loading__route-node map-loading__route-node--a"></span>
-          <span class="map-loading__route-node map-loading__route-node--b"></span>
-          <span class="map-loading__route-node map-loading__route-node--c"></span>
-          <span class="map-loading__route-runner"></span>
-        </div>
-        <div class="map-loading__meta" aria-hidden="true">
-          <span class="map-loading__state-dot"></span>
-          <span class="map-loading__network-label"></span>
-          <span class="map-loading__meter"><span></span></span>
+        <div class="map-loading__identity">
+          <img src="${brandLogoSrc}" width="1024" height="1024" alt="" decoding="async" loading="eager" fetchpriority="high" draggable="false" />
+          <span><strong>NAV KURD</strong><small>خەریکە ماپەکە ئامادە دەکرێت…</small></span>
         </div>
         <button id="mapLoadingRetry" class="map-loading__retry" type="button" hidden>دووبارە هەوڵدان</button>
       </div>
@@ -106,14 +90,20 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
     <div id="aboutDialog" class="about-dialog" hidden>
       <section class="about-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" aria-describedby="aboutDescription">
         <span class="about-dialog__aurora" aria-hidden="true"></span>
-        <button id="aboutCloseButton" class="dialog-close-button about-dialog__close" type="button" aria-label="Close about panel">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
         <div class="about-dialog__scroll">
+        <div class="about-dialog__close-row">
+          <button id="aboutCloseButton" class="dialog-close-button about-dialog__close" type="button" aria-label="Close about panel">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
         <div class="about-dialog__brand">
           <span class="about-dialog__logo"><img src="${brandLogoSrc}" alt="NAV KURD logo" width="1024" height="1024" /></span>
           <div><p id="aboutEyebrow">NAV KURD</p><h2 id="aboutTitle">Kurdistan Atlas</h2></div>
         </div>
+        <figure class="about-dialog__cover">
+          <img src="${appUrl("assets/promo/nav-kurd-v9-cover.jpg")}" alt="NAV KURD 9 application showcase" width="1536" height="910" loading="lazy" decoding="async" draggable="false" />
+          <figcaption><span>NAV KURD 9</span><strong>Built for Kurdistan. Native on Android. Fast on the web.</strong></figcaption>
+        </figure>
         <p id="aboutDescription" class="about-dialog__description">A modern geographic atlas for roads, places, navigation, GPS and satellite context across the Kurdistan Region.</p>
         <dl class="about-dialog__meta">
           <div><dt id="aboutVersionLabel">Version</dt><dd>${releaseVersion}</dd></div>
@@ -142,21 +132,17 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           </div>
         </section>
         <section id="androidDownloadSection" class="android-download" aria-labelledby="androidDownloadTitle">
-          <span class="android-download__sky" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="android-download__sky" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <div class="android-download__heading">
             <span class="android-download__mark" aria-hidden="true">
-              <img src="${appUrl("assets/android-brand.png")}" alt="" width="1536" height="1536" loading="lazy" decoding="async" draggable="false" />
+              <img src="${appUrl("assets/android-brand.jpg")}" alt="" width="1536" height="1536" loading="lazy" decoding="async" draggable="false" />
             </span>
-            <div><p>NAV KURD 8.0.4</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
+            <div><p>NAV KURD ${releaseVersion}</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
           </div>
           <div class="android-download__actions">
-            <a id="androidDirectDownload" class="android-download__primary" aria-disabled="true" hidden>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18v2h14v-2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span><strong>APK دابگرە</strong><small>ڕاستەوخۆ · v8.0.4</small></span>
-            </a>
-            <a id="androidApkPureDownload" class="android-download__store" href="https://apkpure.com/nav-kurd/com.navkurd.app/download" target="_blank" rel="noopener noreferrer">
-              <span class="android-download__apkpure" aria-hidden="true"><svg viewBox="0 0 36 36"><path d="M18 3 3 30h7l8-15 8 15h7L18 3Z" fill="currentColor"/><path d="M14 24h8l-4-7-4 7Z" fill="#071321"/></svg></span>
-              <span><strong>APKPure</strong><small id="androidApkPureLabel">لە کۆگای APKPure</small></span>
+            <a id="androidDirectDownload" class="android-download__primary Download-button" aria-disabled="true" hidden>
+              <svg viewBox="0 0 640 512" aria-hidden="true"><path fill="currentColor" d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144Zm79-167 80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24v134.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9Z"/></svg>
+              <span><strong>APK دابگرە</strong><small>ڕاستەوخۆ · v${releaseVersion}</small></span>
             </a>
           </div>
         </section>

@@ -64,6 +64,7 @@ const requiredStaticAssets = new Set([
   "offline-manifest.json",
   "offline.html",
   "offline.css",
+  "assets/icons/social/instagram.svg",
   "icons/nav-kurd-logo.png",
   "fonts/RedHatDisplay-Variable.woff2",
   "fonts/UniQAIDAR-Money-Heist-002.ttf",

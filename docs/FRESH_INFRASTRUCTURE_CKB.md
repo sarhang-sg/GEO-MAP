@@ -1,4 +1,4 @@
-# ڕێبەری ژێرخانی تازە — NAV KURD 8.0.4
+# ڕێبەری ژێرخانی تازە — NAV KURD 9.0.0
 
 ئەم ڕێبەرە بۆ ئەکاونتی کۆتایی `sarhang-sg` ـە. هەردوو کۆگاکە دەبێت
 Private بن:
@@ -14,18 +14,18 @@ Private بن:
 
 ئەم فایلانە بە هەمان ناو بخەرە Download ـی مۆبایل:
 
-- `NAV-KURD-v8.0.4-WEB.zip`
-- `NAV-KURD-v8.0.4-ANDROID.zip`
-- `NAV-KURD-v8.0.4-FRESH-SETUP.sh`
+- `NAV-KURD-v9.0.0-WEB.zip`
+- `NAV-KURD-v9.0.0-ANDROID.zip`
+- `NAV-KURD-v9.0.0-FRESH-SETUP.sh`
 - `SHA256SUMS.txt`
 
 لە Termux:
 
 ```bash
 termux-setup-storage
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh setup
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh login
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh web
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh setup
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh login
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh web
 ```
 
 سکریپتەکە SHA-256 و ZIP و secret leak دەپشکنێت، کۆگای Private دروست دەکات
@@ -165,9 +165,9 @@ gh workflow run supabase-deploy.yml \
 دوای تەواوبوونی URL/Supabase/Web:
 
 ```bash
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh android
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh signing
-bash /storage/emulated/0/Download/NAV-KURD-v8.0.4-FRESH-SETUP.sh android-build
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh android
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh signing
+bash /storage/emulated/0/Download/NAV-KURD-v9.0.0-FRESH-SETUP.sh android-build
 ```
 
 `signing` تەنها JKS ـی دامەزراوی پێشوو وەردەگرێت، fingerprint ـەکە بە
@@ -182,7 +182,7 @@ SHA-256 ـی NAV KURD دەپشکنێت و دواتر چوار secret ـەکە ب
 | MapTiler | URL restriction ـی browser key بۆ domain ـی نوێ بگۆڕە |
 | Mapbox | Allowed URL ـی public token بۆ domain ـی نوێ بگۆڕە |
 | Copernicus Data Space | client ID/secret لە Vercel دابنێ یان rotate بکە |
-| APKPure | package/fingerprint هەمانە؛ APK 8.0.4 و What's New نوێ بکە |
+| APKPure | package/fingerprint هەمانە؛ APK 9.0.0 و What's New نوێ بکە |
 | GitHub Pages CV | لینکی کۆنی `sarhang-cs.github.io/Sarhang-Cv` بگوازەوە یان نوێ بکەرەوە |
 | Apple Developer | تەنها ئەگەر iOS بڵاودەکەیتەوە، `APPLE_TEAM_ID` و Universal Links |
 

@@ -1250,7 +1250,7 @@ export class UserContributionStudio {
         <div><span data-user-upload-status>${escapeText(this.uploadStatus || copy.uploadPreparing)}</span><b data-user-upload-percent>${escapeText(progressPercent)}</b></div>
         <progress max="100"${progressValue}></progress>
       </div>
-      <button class="user-contrib__submit" type="submit" ${this.busy ? "disabled" : ""}>${escapeText(copy.save)}</button>
+      <button class="user-contrib__submit" type="submit" ${this.busy || this.photoProcessing ? "disabled" : ""}>${escapeText(copy.save)}</button>
     </form>`;
   }
 
@@ -1711,6 +1711,7 @@ export class UserContributionStudio {
   private async handlePhotoSelection(input: HTMLInputElement): Promise<void> {
     const original = input.files?.[0] ?? null;
     if (!original) { this.clearPendingPhoto(); this.render(); return; }
+    this.captureEditorDraft();
     this.pendingPhotoFile = original;
     this.photoCompressionInfo = "";
     if (!this.validatePhoto(original, true)) {
@@ -1722,14 +1723,18 @@ export class UserContributionStudio {
     this.photoProcessing = true;
     this.uploadProgress = null;
     this.uploadStatus = this.copy().photoCompressing;
-    this.render();
+    input.disabled = true;
+    const progressRoot = this.host.querySelector<HTMLElement>("[data-user-upload-progress]");
+    const progressLabel = progressRoot?.querySelector<HTMLElement>("[data-user-upload-status]");
+    const submit = this.host.querySelector<HTMLButtonElement>(".user-contrib__submit");
+    if (progressRoot) progressRoot.hidden = false;
+    if (progressLabel) progressLabel.textContent = this.uploadStatus;
+    if (submit) submit.disabled = true;
     try {
       const prepared = await prepareAtlasImage(original, (stage) => {
         this.uploadStatus = stage === "complete" ? this.copy().photoCompressed : this.copy().photoCompressing;
-        const root = this.host.querySelector<HTMLElement>("[data-user-upload-progress]");
-        const label = root?.querySelector<HTMLElement>("[data-user-upload-status]");
-        if (root) root.hidden = false;
-        if (label) label.textContent = this.uploadStatus;
+        if (progressRoot) progressRoot.hidden = false;
+        if (progressLabel) progressLabel.textContent = this.uploadStatus;
       });
       this.pendingPhotoFile = prepared.file;
       this.photoCompressionInfo = prepared.compressed
@@ -1737,19 +1742,15 @@ export class UserContributionStudio {
         : formatFileSize(prepared.outputBytes);
       if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
       this.photoPreviewUrl = URL.createObjectURL(prepared.file);
-      this.uploadProgress = null;
-      this.uploadStatus = "";
-      this.render();
     } catch (error) {
-      input.value = "";
       this.clearPendingPhoto();
       this.message = atlasErrorMessage(error);
       this.messageKind = "error";
+    } finally {
       this.uploadProgress = null;
       this.uploadStatus = "";
-      this.render();
-    } finally {
       this.photoProcessing = false;
+      this.render();
     }
   }
 
