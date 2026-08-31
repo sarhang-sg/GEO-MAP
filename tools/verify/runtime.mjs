@@ -21,6 +21,7 @@ const layout = await readText("src/styles/layout-runtime.css");
 const loader = await readText("src/styles/components/loader.css");
 const base = await readText("src/styles/base.css");
 const userContribution = await readText("src/lib/user-contribution-studio.ts");
+const mobileDialogLayout = await readText("src/lib/mobile-dialog-layout.ts");
 const userContributionStyles = await readText("src/styles/user-contribution.css");
 const controlRail = await readText("src/styles/components/map-control-rail.css");
 const surfaceState = await readText("src/styles/components/map-surface-state.css");
@@ -66,7 +67,14 @@ assert(!shell.includes('map-loading__identity') && !shell.includes('map-loading_
 assert(loader.includes('.map-loading__slice:nth-child(9)') && loader.includes('.map-loading__equation') && loader.includes('nav-kurd-loading-wobble') && loader.includes('rgba(37, 0, 43, .95)') && loader.includes('rgba(0, 5, 56, .95)') && loader.includes('"Droid Logo"'), "New Loading component states are incomplete.");
 assert(base.includes('url("/fonts/DroidLogo-Bold.ttf")') && indexHtml.includes('%BASE_URL%fonts/DroidLogo-Bold.ttf') && offlineBuilder.includes('"fonts/DroidLogo-Bold.ttf"') && await fileExists("public/fonts/DroidLogo-Bold.ttf"), "The supplied loader equation font is not bundled for online and offline use.");
 assert(userContribution.includes('"name_ku", copy.nameKu') && userContribution.includes('ATLAS_TEXT_LIMITS.name, "kurdish"') && userContribution.includes('ATLAS_TEXT_LIMITS.description, "kurdish"') && userContribution.includes('ATLAS_TEXT_LIMITS.caption, "kurdish"'), "Kurdish contribution fields are not validated with the Kurdish policy.");
-assert(userContribution.includes("transient, near-zero visual viewport") && userContributionStyles.includes("height: min(92svh,850px)"), "Mobile gallery return can still collapse the contribution editor.");
+assert(
+  userContribution.includes("waitForUsableVisualViewport")
+    && userContribution.includes("restoreClampedScroll")
+    && mobileDialogLayout.includes("near-zero visual viewport")
+    && mobileDialogLayout.includes("minimumUsableHeight")
+    && userContributionStyles.includes("height: min(92svh,850px)"),
+  "Mobile gallery return can still collapse the contribution editor."
+);
 assert(loader.includes('transform: translateX(-90%)') && loader.includes('@media (prefers-reduced-motion: reduce)'), "Loader animation is not transform-based or reduced-motion safe.");
 assert(!loader.includes('.map-loading__identity') && !loader.includes('.map-loading__ambient') && !loader.includes('.map-loading__spinner') && !loader.includes('.map-loading__signal') && !loader.includes('.map-loading__orbit'), "Legacy loader CSS remains in the canonical loader owner.");
 assert(!(offline.assets ?? []).some((entry) => /nav-kurd-loader(?:-offline|-restored)?\.(?:gif|webp)$/u.test(entry.path ?? "")), "Offline runtime still catalogs obsolete loader media.");

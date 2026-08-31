@@ -79,6 +79,33 @@ branch="codex/nav-kurd-web-v9-$(date -u +%Y%m%d-%H%M%S)-$$"
 git -C "$repo_dir" switch -c "$branch"
 
 echo "4/8 — Overlaying the complete, secret-safe v9 source..."
+preserved_android_release=false
+android_release_backup="$temp_dir/preserved-android-release"
+if node - "$repo_dir" <<'NODE'
+const crypto = require("node:crypto");
+const fs = require("node:fs");
+const path = require("node:path");
+const root = process.argv[2];
+const apk = path.join(root, "public/downloads/NAV-KURD-9.0.0.apk");
+const releaseFile = path.join(root, "public/releases/latest.json");
+if (!fs.existsSync(apk) || !fs.existsSync(releaseFile)) process.exit(1);
+const release = JSON.parse(fs.readFileSync(releaseFile, "utf8"));
+const body = fs.readFileSync(apk);
+const digest = crypto.createHash("sha256").update(body).digest("hex");
+if (release.directApkAvailable !== true
+  || release.directApkUrl !== "/downloads/NAV-KURD-9.0.0.apk"
+  || Number(release.apkBytes) !== body.length
+  || release.apkSha256 !== digest) process.exit(1);
+NODE
+then
+  mkdir -p "$android_release_backup/public/downloads" "$android_release_backup/public/releases"
+  cp -p "$repo_dir/public/downloads/NAV-KURD-9.0.0.apk" \
+    "$android_release_backup/public/downloads/NAV-KURD-9.0.0.apk"
+  cp -p "$repo_dir/public/releases/latest.json" \
+    "$android_release_backup/public/releases/latest.json"
+  preserved_android_release=true
+  echo "Preserving the current checksum-verified signed Android download."
+fi
 rsync -a \
   --exclude='.git/' \
   --exclude='.env' \
@@ -91,9 +118,24 @@ git -C "$repo_dir" rm -f --ignore-unmatch \
   NAV-KURD-v9.0.0-PUBLISH-RUNTIME-FIXES.sh \
   public/assets/android-brand.png \
   src/styles/ambient-weather.css
+if [[ "$preserved_android_release" == true ]]; then
+  mkdir -p "$repo_dir/public/downloads" "$repo_dir/public/releases"
+  cp -p "$android_release_backup/public/downloads/NAV-KURD-9.0.0.apk" \
+    "$repo_dir/public/downloads/NAV-KURD-9.0.0.apk"
+  cp -p "$android_release_backup/public/releases/latest.json" \
+    "$repo_dir/public/releases/latest.json"
+else
+  # A binary without matching signed-release metadata is never publishable.
+  git -C "$repo_dir" rm -f --ignore-unmatch public/downloads/NAV-KURD-9.0.0.apk
+  rm -f -- "$repo_dir/public/downloads/NAV-KURD-9.0.0.apk"
+fi
+# Keep the repository's reusable publisher aligned with this repaired runner,
+# even when the already-downloaded source ZIP contains the earlier copy.
+install -m 0755 "$0" "$repo_dir/NAV-KURD-V9-WEB-FIRST.sh"
 (
   cd "$repo_dir"
   git diff --check
+  node tools/release/generate-release-manifest.mjs
   node tools/verify/source.mjs
   node tools/verify/runtime.mjs
   node tools/verify/security.mjs

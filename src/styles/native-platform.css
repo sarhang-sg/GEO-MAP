@@ -71,6 +71,15 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
   font-size: 1.65rem;
 }
 
+.native-ios-panel__icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+}
+
 .native-ios-panel__status {
   margin: 13px 0;
 }
