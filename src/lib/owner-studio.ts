@@ -58,6 +58,7 @@ import { captureOwnerFormFields, clearOwnerEditorDraft, loadOwnerEditorDraft, lo
 import { ownerName } from "./geo-format";
 import { atlasMarkerAssetUrl } from "./atlas-marker-catalog";
 import { prepareAtlasImage } from "./atlas-image-processor";
+import { restoreClampedScroll } from "./mobile-dialog-layout";
 
 
 type StudioOptions = {
@@ -208,6 +209,7 @@ export class OwnerStudio {
     this.chosenCoordinate = createBlankCoordinate();
     this.pendingConfirmation = null;
     this.view = "editor";
+    this.choiceKind = "group";
     this.setMessage("");
     this.render();
   }
@@ -335,12 +337,10 @@ export class OwnerStudio {
     this.attachEvents();
     // Re-rendering form choices must not throw the user back to the top.
     // Restore both possible scroll owners after the new DOM has been laid out.
-    requestAnimationFrame(() => {
-      const scroll = this.host.querySelector<HTMLElement>(".owner-studio__scroll");
-      const content = this.host.querySelector<HTMLElement>(".owner-studio__content");
-      if (scroll) scroll.scrollTop = previousScrollTop;
-      if (content) content.scrollTop = previousContentScroll;
-    });
+    restoreClampedScroll(this.host, [
+      { selector: ".owner-studio__scroll", value: previousScrollTop },
+      { selector: ".owner-studio__content", value: previousContentScroll }
+    ]);
   }
 
   private renderChoiceDialog(copy: StudioCopy, language: StudioLanguage): string {
@@ -701,7 +701,7 @@ export class OwnerStudio {
       return;
     }
     if (action === "list") { this.captureEditorDraft(); this.choiceKind = null; this.editing = null; this.view = "list"; this.setMessage(""); this.render(); return; }
-    if (action === "add") { this.choiceKind = null; this.editing = null; this.chosenCoordinate = createBlankCoordinate(); this.view = "editor"; this.setMessage(""); this.render(); return; }
+    if (action === "add") { this.choiceKind = "group"; this.editing = null; this.chosenCoordinate = createBlankCoordinate(); this.view = "editor"; this.setMessage(""); this.render(); return; }
     if ((action === "review-approve" || action === "review-reject") && id) {
       const place = this.places.find((item) => item.id === id);
       if (!place || place.submission_source !== "user") return;

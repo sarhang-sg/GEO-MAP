@@ -58,6 +58,7 @@ import { atlasMarkerAssetUrl } from "./atlas-marker-catalog";
 import { prepareAtlasImage } from "./atlas-image-processor";
 import { escapeText, languageDirection, type StudioCoordinate, type StudioLanguage } from "./owner-studio-copy";
 import { ownerName } from "./geo-format";
+import { restoreClampedScroll, waitForUsableVisualViewport } from "./mobile-dialog-layout";
 
 type UserStudioView = "signin" | "dashboard" | "editor" | "admin-blocked" | "unavailable";
 type UserDashboardTab = "places" | "messages" | "notifications" | "account";
@@ -879,6 +880,7 @@ export class UserContributionStudio {
     this.selectedCategory = (atlasTaxonomyEntry(this.editorDraft?.category)?.id ?? ATLAS_TAXONOMY[0]?.id ?? "village") as AtlasCategory;
     this.selectedGroup = atlasPlaceTypeGroup(this.selectedCategory) || ATLAS_TAXONOMY_GROUPS[0].id;
     this.view = "editor";
+    this.choice = "group";
     this.message = "";
     this.render();
   }
@@ -1029,12 +1031,10 @@ export class UserContributionStudio {
     this.attachEvents();
     // Re-rendering form choices must not throw the user back to the top.
     // Restore both possible scroll owners after the new DOM has been laid out.
-    requestAnimationFrame(() => {
-      const panel = this.host.querySelector<HTMLElement>(".user-contrib__panel");
-      const content = this.host.querySelector<HTMLElement>(".user-contrib__content");
-      if (panel) panel.scrollTop = previousPanelScroll;
-      if (content) content.scrollTop = previousContentScroll;
-    });
+    restoreClampedScroll(this.host, [
+      { selector: ".user-contrib__panel", value: previousPanelScroll },
+      { selector: ".user-contrib__content", value: previousContentScroll }
+    ]);
   }
 
   private renderConfirmation(copy: Copy, language: StudioLanguage): string {
@@ -1805,23 +1805,16 @@ export class UserContributionStudio {
     this.photoProcessing = true;
     this.uploadProgress = null;
     this.uploadStatus = this.copy().photoCompressing;
+    input.disabled = true;
+    const submit = this.host.querySelector<HTMLButtonElement>(".user-contrib__submit");
+    if (submit) submit.disabled = true;
+    this.updateUploadProgress(null, this.uploadStatus);
 
-    // Android Chrome can report a transient, near-zero visual viewport while
-    // returning from its native gallery. Let that picker task and two layout
-    // frames finish before replacing the form DOM.
-    await new Promise<void>((resolve) => {
-      window.setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())), 0);
-    });
-    if (selectionEpoch !== this.photoSelectionEpoch) return;
-    this.render();
     try {
       const prepared = await prepareAtlasImage(original, (stage) => {
         if (selectionEpoch !== this.photoSelectionEpoch) return;
         this.uploadStatus = stage === "complete" ? this.copy().photoCompressed : this.copy().photoCompressing;
-        const progressRoot = this.host.querySelector<HTMLElement>("[data-user-upload-progress]");
-        const progressLabel = progressRoot?.querySelector<HTMLElement>("[data-user-upload-status]");
-        if (progressRoot) progressRoot.hidden = false;
-        if (progressLabel) progressLabel.textContent = this.uploadStatus;
+        this.updateUploadProgress(null, this.uploadStatus);
       });
       if (selectionEpoch !== this.photoSelectionEpoch) return;
       this.pendingPhotoFile = prepared.file;
@@ -1834,17 +1827,21 @@ export class UserContributionStudio {
       }
     } catch (error) {
       if (selectionEpoch !== this.photoSelectionEpoch) return;
-      this.clearPendingPhoto();
+      this.pendingPhotoFile = null;
+      this.photoCompressionInfo = "";
+      if (this.photoPreviewUrl) URL.revokeObjectURL(this.photoPreviewUrl);
+      this.photoPreviewUrl = null;
       this.message = atlasErrorMessage(error);
       this.messageKind = "error";
-      this.render();
-    } finally {
-      if (selectionEpoch !== this.photoSelectionEpoch) return;
-      this.uploadProgress = null;
-      this.uploadStatus = "";
-      this.photoProcessing = false;
-      this.render();
     }
+
+    if (selectionEpoch !== this.photoSelectionEpoch) return;
+    this.uploadProgress = null;
+    this.uploadStatus = "";
+    this.photoProcessing = false;
+    await waitForUsableVisualViewport();
+    if (selectionEpoch !== this.photoSelectionEpoch) return;
+    this.render();
   }
 
   private clearPendingPhoto(): void {

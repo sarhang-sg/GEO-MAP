@@ -136,6 +136,8 @@ assert(zFailures.length === 0, `Non-central or unused z-index values:\n${zFailur
 const finalUi = await readText("src/styles/final-ui-fixes.css");
 const appShell = await readText("src/lib/app-shell.ts");
 const ownerStudio = await readText("src/lib/owner-studio.ts");
+const userStudio = await readText("src/lib/user-contribution-studio.ts");
+const mobileDialogLayout = await readText("src/lib/mobile-dialog-layout.ts");
 const feedbackStudio = await readText("src/lib/feedback-studio.ts");
 assert(appShell.includes('class="about-dialog__scroll"'), "About/Offline dialog is missing its masked inner scroll viewport.");
 assert(ownerStudio.includes('class="owner-studio__scroll"'), "Owner studio is missing its masked inner scroll viewport.");
@@ -144,6 +146,27 @@ assert(finalUi.includes('.owner-studio__scroll') && finalUi.includes('.feedback-
 assert(finalUi.includes('.map-sheet::-webkit-scrollbar') && finalUi.includes('scrollbar-width: none !important'), "Main map card scrollbar suppression is missing.");
 assert(finalUi.includes('.map-shell.is-about-open .feedback-quick-button'), "Feedback quick control is not hidden behind the About/Offline modal.");
 assert(finalUi.includes('filter: none !important') && finalUi.includes('.map-left-control-rail__extras .map-3d-button'), "3D/Hide control filter normalization is missing.");
+assert(
+  appShell.includes('assets/native/info.svg')
+    && appShell.includes('assets/native/clear.svg')
+    && appShell.includes('assets/native/settings.svg')
+    && await fileExists("public/assets/native/info.svg")
+    && await fileExists("public/assets/native/clear.svg")
+    && await fileExists("public/assets/native/settings.svg"),
+  "Native app panel does not use the approved info/clear/settings icon assets."
+);
+assert(
+  userStudio.includes('this.choice = "group"')
+    && ownerStudio.includes('this.choiceKind = "group"'),
+  "New-place flows do not open the place-group list for both user and owner studios."
+);
+assert(
+  userStudio.includes("waitForUsableVisualViewport")
+    && userStudio.includes("this.updateUploadProgress(null, this.uploadStatus)")
+    && mobileDialogLayout.includes("restoreClampedScroll")
+    && mobileDialogLayout.includes("minimumUsableHeight"),
+  "Mobile gallery return/scroll stabilization is incomplete."
+);
 const zValue = (token) => zDefinitions.find((entry) => entry.token === token)?.value ?? -1;
 assert(zValue("--z-route-prompt") > zValue("--z-sheet") && zValue("--z-route-prompt") > zValue("--z-controls-raised"), "Destination/add-place prompt must stack above map cards and controls.");
 
