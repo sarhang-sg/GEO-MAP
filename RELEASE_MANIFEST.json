@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.12",
   "generatedForDate": "2026-08-30",
   "secretSafe": true,
-  "fileCount": 1221,
-  "totalBytes": 282215233,
+  "fileCount": 1222,
+  "totalBytes": 330636303,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -3790,6 +3790,10 @@
       "bytes": 12409,
       "sha256": "fe130ed173a46a124bc62533b42514df21315627d19a69f5bf386289f3369df3"
     },
+    "public/downloads/NAV-KURD-9.0.0.apk": {
+      "bytes": 48420937,
+      "sha256": "aeae47a3a731d26390cc1009349a762b101f610ad889e31847ef6dcb6a98bc4d"
+    },
     "public/fonts/DroidLogo-Bold.ttf": {
       "bytes": 116996,
       "sha256": "4893663ecbb19de5b27f81c1e69fcde1cbc5bd8be8374f3ab51465bad0508a96"
@@ -3891,8 +3895,8 @@
       "sha256": "6fdfcd78bc5c4f6134b564d2cd15f479a878ebb4a9debb09d4505d029b1448cb"
     },
     "public/releases/latest.json": {
-      "bytes": 307,
-      "sha256": "b35eedece6c56f002974a5b7dffe082a2b55ddf876d10f13d36cf116564027c0"
+      "bytes": 440,
+      "sha256": "a02945ec44c67c046987d7990e1238756bc3192e3b7d31cc69bf826582829a7a"
     },
     "public/robots.txt": {
       "bytes": 78,
