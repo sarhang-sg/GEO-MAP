@@ -8,7 +8,7 @@
   "generatedForDate": "2026-08-30",
   "secretSafe": true,
   "fileCount": 1222,
-  "totalBytes": 330636303,
+  "totalBytes": 330636316,
   "files": {
     ".env.example": {
       "bytes": 3113,
@@ -3791,8 +3791,8 @@
       "sha256": "fe130ed173a46a124bc62533b42514df21315627d19a69f5bf386289f3369df3"
     },
     "public/downloads/NAV-KURD-9.0.0.apk": {
-      "bytes": 48420937,
-      "sha256": "aeae47a3a731d26390cc1009349a762b101f610ad889e31847ef6dcb6a98bc4d"
+      "bytes": 48420950,
+      "sha256": "e4d349133b35a328c058d627d826563b300566f9111786e782f645f72cd9e1cb"
     },
     "public/fonts/DroidLogo-Bold.ttf": {
       "bytes": 116996,
@@ -3896,7 +3896,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 440,
-      "sha256": "a02945ec44c67c046987d7990e1238756bc3192e3b7d31cc69bf826582829a7a"
+      "sha256": "397394956fbb98cff5ef04b4deff4530ae02593981a3d458be3f475262266907"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -4060,7 +4060,7 @@
     },
     "src/lib/app-shell.ts": {
       "bytes": 29899,
-      "sha256": "06ed3c1112d5aa9cbf0c90e7e2e09ebd5f18cdd0d2b64b0dc48ecd3fa4b6e455"
+      "sha256": "91e813e04867286ad331e9717525bf5e4e5b69a0142c7b7d962a0a734f9c8587"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -4864,7 +4864,7 @@
     },
     "tools/verify/runtime.mjs": {
       "bytes": 13260,
-      "sha256": "edfabc9ec9816d14fb4100368ba40a69708b1aae4dd3c500b5217807a7af45de"
+      "sha256": "cf41918fb8fcb519daa833fc5fe0f35ed4d0c32d9c410a625a60dbc58a310145"
     },
     "tools/verify/security.mjs": {
       "bytes": 4436,
