@@ -1,0 +1,671 @@
+{
+  "schema": "nav-kurd-kirkuk-verified-names-v1",
+  "release": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "policy": "Apply a Kurdish name only when it is corroborated by a Kurdish or multilingual source. If no corroborated Kurdish form is available, preserve the original source name rather than inventing or deleting a place.",
+  "sources": [
+    {
+      "id": "ckb-kirkuk-admin-template",
+      "title": "پارێزگای کەرکووک — administrative divisions and settlements",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/داڕێژە:پارێزگای_کەرکووک",
+      "role": "Kurdish governorate, district, subdistrict and town spellings"
+    },
+    {
+      "id": "ckb-kirkuk-places-category",
+      "title": "شوێنەکانی پارێزگای کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/پۆل:شوێنەکانی_پارێزگای_کەرکووک",
+      "role": "Kurdish settlement and landmark name corpus"
+    },
+    {
+      "id": "ckb-kirkuk-city",
+      "title": "کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/کەرکووک",
+      "role": "City, historic neighbourhood and landmark spellings"
+    },
+    {
+      "id": "osm-geofabrik-iraq-2026-07-13",
+      "title": "OpenStreetMap Iraq extract",
+      "publisher": "Geofabrik / OpenStreetMap contributors",
+      "url": "https://download.geofabrik.de/asia/iraq.html",
+      "role": "Coordinates, source names, categories and aliases"
+    },
+    {
+      "id": "geonames-iq-2026-07-13",
+      "title": "GeoNames Iraq and alternate names",
+      "publisher": "GeoNames",
+      "url": "https://download.geonames.org/export/dump/",
+      "role": "Multilingual alternate-name corroboration"
+    },
+    {
+      "id": "google-maps-manual-cross-check",
+      "title": "Google Maps manual place cross-check",
+      "publisher": "Google Maps",
+      "url": "https://maps.google.com/",
+      "role": "Manual existence, category and commonly displayed-name cross-check; not used for bulk extraction"
+    }
+  ],
+  "corrections": [
+    {
+      "name_ku": "کەرکووک",
+      "name_ar": "كركوك",
+      "name_en": "Kirkuk",
+      "variants": [
+        "كركوك",
+        "کەرکووک",
+        "كركوك محافظة",
+        "Kirkuk",
+        "Kirkuk Governorate"
+      ]
+    },
+    {
+      "name_ku": "حەویجە",
+      "name_ar": "الحويجة",
+      "name_en": "Hawija",
+      "variants": [
+        "الحويجة",
+        "حويجة",
+        "Hawija",
+        "Al-Hawija",
+        "Al-Hawiga"
+      ]
+    },
+    {
+      "name_ku": "دووبز",
+      "name_ar": "الدبس",
+      "name_en": "Dibis",
+      "variants": [
+        "الدبس",
+        "دبس",
+        "Dibis",
+        "Dubis",
+        "Dibs",
+        "Dubz"
+      ]
+    },
+    {
+      "name_ku": "داقووق",
+      "name_ar": "داقوق",
+      "name_en": "Daquq",
+      "variants": [
+        "داقوق",
+        "داقووق",
+        "Daquq",
+        "Daqouq",
+        "Tawuq",
+        "Taza Khurmatu District"
+      ]
+    },
+    {
+      "name_ku": "تازەخورماتوو",
+      "name_ar": "تازة خورماتو",
+      "name_en": "Taza Khurmatu",
+      "variants": [
+        "تازة خورماتو",
+        "تازه خورماتو",
+        "تازەخورماتوو",
+        "Taza Khurmatu",
+        "Taza Khormatu"
+      ]
+    },
+    {
+      "name_ku": "پردێ",
+      "name_ar": "التون كوبري",
+      "name_en": "Altun Kupri",
+      "variants": [
+        "التون كوبري",
+        "آلتون كوبري",
+        "Altun Kupri",
+        "Altun Kopru",
+        "Pirde",
+        "Prde",
+        "پردێ"
+      ]
+    },
+    {
+      "name_ku": "لەیلان",
+      "name_ar": "ليلان",
+      "name_en": "Laylan",
+      "variants": [
+        "ليلان",
+        "ليلاّن",
+        "Laylan",
+        "Lailan",
+        "Leylan",
+        "لەیلان"
+      ]
+    },
+    {
+      "name_ku": "یایچی",
+      "name_ar": "يايجي",
+      "name_en": "Yaychi",
+      "variants": [
+        "يايجي",
+        "يايچى",
+        "Yaychi",
+        "Yayji",
+        "Yayci",
+        "یایچی"
+      ]
+    },
+    {
+      "name_ku": "قەرەھەنجیر",
+      "name_ar": "قرة هنجير",
+      "name_en": "Qarah Anjir",
+      "variants": [
+        "قرة هنجير",
+        "قره هنجير",
+        "Qarah Anjir",
+        "Qara Hanjir",
+        "Qarah Hanjir",
+        "قەرەھەنجیر"
+      ]
+    },
+    {
+      "name_ku": "مەلا عەبدوڵڵا",
+      "name_ar": "ملا عبد الله",
+      "name_en": "Mulla Abdullah",
+      "variants": [
+        "ملا عبد الله",
+        "ملا عبدالله",
+        "Mulla Abdullah",
+        "Mala Abdulla",
+        "مەلا عەبدوڵڵا"
+      ]
+    },
+    {
+      "name_ku": "شوان",
+      "name_ar": "شوان",
+      "name_en": "Shwan",
+      "variants": [
+        "شوان",
+        "Shwan"
+      ]
+    },
+    {
+      "name_ku": "ڕێدار",
+      "name_ar": "ريدار",
+      "name_en": "Ridar",
+      "variants": [
+        "ريدار",
+        "ريدارة",
+        "Ridar",
+        "Redar",
+        "ڕێدار"
+      ]
+    },
+    {
+      "name_ku": "سەرگەڕان",
+      "name_ar": "سركران",
+      "name_en": "Sargaran",
+      "variants": [
+        "سركران",
+        "سرگران",
+        "Sargaran",
+        "Sergaran",
+        "Sarkaran",
+        "سەرگەڕان"
+      ]
+    },
+    {
+      "name_ku": "ڕەشاد",
+      "name_ar": "الرشاد",
+      "name_en": "Rashad",
+      "variants": [
+        "الرشاد",
+        "رشاد",
+        "Rashad",
+        "Al-Rashad",
+        "ڕەشاد"
+      ]
+    },
+    {
+      "name_ku": "ڕیاز",
+      "name_ar": "الرياض",
+      "name_en": "Riyadh",
+      "variants": [
+        "الرياض",
+        "رياض",
+        "Riyadh",
+        "Al-Riyadh",
+        "Riyaz",
+        "ڕیاز"
+      ]
+    },
+    {
+      "name_ku": "عەباسی",
+      "name_ar": "العباسي",
+      "name_en": "Abbasi",
+      "variants": [
+        "العباسي",
+        "العباسية",
+        "عباسي",
+        "Abbasi",
+        "Al-Abbasi",
+        "عەباسی"
+      ]
+    },
+    {
+      "name_ku": "زاب",
+      "name_ar": "الزاب",
+      "name_en": "Zab",
+      "variants": [
+        "الزاب",
+        "زاب",
+        "Zab",
+        "Al-Zab"
+      ]
+    },
+    {
+      "name_ku": "بەشیر",
+      "name_ar": "بشير",
+      "name_en": "Bashir",
+      "variants": [
+        "بشير",
+        "Bashir",
+        "بەشیر"
+      ]
+    },
+    {
+      "name_ku": "تۆپزاوا",
+      "name_ar": "توبزاوة",
+      "name_en": "Topzawa",
+      "variants": [
+        "توبزاوة",
+        "توبزاوا",
+        "Topzawa",
+        "Top Zawa",
+        "تۆپزاوا"
+      ]
+    },
+    {
+      "name_ku": "بای حەسەن",
+      "name_ar": "باي حسن",
+      "name_en": "Bai Hassan",
+      "variants": [
+        "باي حسن",
+        "باي حسان",
+        "Bai Hassan",
+        "Bay Hasan",
+        "بای حەسەن"
+      ]
+    },
+    {
+      "name_ku": "مولتەقا",
+      "name_ar": "الملتقى",
+      "name_en": "Multaqa",
+      "variants": [
+        "الملتقى",
+        "ملتقى",
+        "Multaqa",
+        "Al-Multaqa",
+        "مولتەقا"
+      ]
+    },
+    {
+      "name_ku": "پەلکانە",
+      "name_ar": "بلكانة",
+      "name_en": "Palkana",
+      "variants": [
+        "بلكانة",
+        "بلكانه",
+        "Palkana",
+        "Pelkana",
+        "پەلکانە"
+      ]
+    },
+    {
+      "name_ku": "تازەدێ",
+      "name_ar": "تازة دي",
+      "name_en": "Tazade",
+      "variants": [
+        "تازة دي",
+        "تازةدي",
+        "Tazade",
+        "Taza De",
+        "تازەدێ"
+      ]
+    },
+    {
+      "name_ku": "دووزخورماتوو",
+      "name_ar": "دوز خورماتو",
+      "name_en": "Duz Khurmatu",
+      "variants": [
+        "دوز خورماتو",
+        "طوز خورماتو",
+        "Duz Khurmatu",
+        "Tuz Khurmatu",
+        "دووزخورماتوو"
+      ]
+    },
+    {
+      "name_ku": "سەقزلی",
+      "name_ar": "سقزلي",
+      "name_en": "Saqizli",
+      "variants": [
+        "سقزلي",
+        "سقزلى",
+        "Saqizli",
+        "Saqizly",
+        "سەقزلی"
+      ]
+    },
+    {
+      "name_ku": "گۆگجە",
+      "name_ar": "كوكجة",
+      "name_en": "Gokja",
+      "variants": [
+        "كوكجة",
+        "كوكجا",
+        "Gokja",
+        "Gokcha",
+        "گۆگجە"
+      ]
+    },
+    {
+      "name_ku": "یاروەلی",
+      "name_ar": "يارولي",
+      "name_en": "Yarwali",
+      "variants": [
+        "يارولي",
+        "يارولى",
+        "Yarwali",
+        "Yarweli",
+        "یاروەلی"
+      ]
+    },
+    {
+      "name_ku": "کوێخا جومعە",
+      "name_ar": "كوخة جمعة",
+      "name_en": "Kwekha Juma",
+      "variants": [
+        "كوخة جمعة",
+        "كوخا جمعة",
+        "Kwekha Juma",
+        "Kokha Juma",
+        "کوێخا جومعە"
+      ]
+    },
+    {
+      "name_ku": "کۆچەکی بچووک",
+      "name_ar": "كوجك الصغير",
+      "name_en": "Little Kuchek",
+      "variants": [
+        "كوجك الصغير",
+        "كوجوك الصغير",
+        "Little Kuchek",
+        "Kucheki Bchuk",
+        "کۆچەکی بچووک"
+      ]
+    },
+    {
+      "name_ku": "کۆچەکی گەورە",
+      "name_ar": "كوجك الكبير",
+      "name_en": "Great Kuchek",
+      "variants": [
+        "كوجك الكبير",
+        "كوجوك الكبير",
+        "Great Kuchek",
+        "Kucheki Gawra",
+        "کۆچەکی گەورە"
+      ]
+    },
+    {
+      "name_ku": "ئیمام ئەحمەد خەلیفە",
+      "name_ar": "إمام أحمد خليفة",
+      "name_en": "Imam Ahmad Khalifa",
+      "variants": [
+        "إمام أحمد خليفة",
+        "امام احمد خليفة",
+        "Imam Ahmad Khalifa",
+        "ئیمام ئەحمەد خەلیفە"
+      ]
+    },
+    {
+      "name_ku": "تۆپزاوای سدیق بەگ",
+      "name_ar": "توبزاوة صديق بك",
+      "name_en": "Topzawa Sadiq Beg",
+      "variants": [
+        "توبزاوة صديق بك",
+        "توبزاوا صديق بيك",
+        "Topzawa Sadiq Beg",
+        "تۆپزاوای سدیق بەگ"
+      ]
+    },
+    {
+      "name_ku": "حەساری ئەحمەد نازم",
+      "name_ar": "حصار أحمد ناظم",
+      "name_en": "Hisari Ahmad Nazim",
+      "variants": [
+        "حصار أحمد ناظم",
+        "حصار احمد ناظم",
+        "Hisari Ahmad Nazim",
+        "حەساری ئەحمەد نازم"
+      ]
+    },
+    {
+      "name_ku": "دووحێلە",
+      "name_ar": "دوحيلة",
+      "name_en": "Duhaila",
+      "variants": [
+        "دوحيلة",
+        "دوحيله",
+        "Duhaila",
+        "Duhayla",
+        "دووحێلە"
+      ]
+    },
+    {
+      "name_ku": "سێکانیان",
+      "name_ar": "سيكانيان",
+      "name_en": "Sekanian",
+      "variants": [
+        "سيكانيان",
+        "سيكانیان",
+        "Sekanian",
+        "Sikanyan",
+        "سێکانیان"
+      ]
+    },
+    {
+      "name_ku": "بان لەیلان",
+      "name_ar": "بان ليلان",
+      "name_en": "Ban Laylan",
+      "variants": [
+        "بان ليلان",
+        "Ban Laylan",
+        "بان لەیلان"
+      ]
+    },
+    {
+      "name_ku": "باشبڵاخی خواروو",
+      "name_ar": "باشبلاغ السفلى",
+      "name_en": "Lower Bashbulakh",
+      "variants": [
+        "باشبلاغ السفلى",
+        "باشبلاغ السفلي",
+        "Lower Bashbulakh",
+        "باشبڵاخی خواروو"
+      ]
+    },
+    {
+      "name_ku": "باشبڵاخی سەروو",
+      "name_ar": "باشبلاغ العليا",
+      "name_en": "Upper Bashbulakh",
+      "variants": [
+        "باشبلاغ العليا",
+        "Upper Bashbulakh",
+        "باشبڵاخی سەروو"
+      ]
+    },
+    {
+      "name_ku": "نەبی ئاوا",
+      "name_ar": "نبي آوا",
+      "name_en": "Nabi Awa",
+      "variants": [
+        "نبي آوا",
+        "نبي اوا",
+        "Nabi Awa",
+        "نەبی ئاوا"
+      ]
+    },
+    {
+      "name_ku": "شۆرجە",
+      "name_ar": "شورجة",
+      "name_en": "Shorja",
+      "variants": [
+        "شورجة",
+        "شورجا",
+        "Shorja",
+        "Shorija",
+        "شۆرجە"
+      ]
+    },
+    {
+      "name_ku": "ڕەحیماوا",
+      "name_ar": "رحيم آوا",
+      "name_en": "Rahimawa",
+      "variants": [
+        "رحيم آوا",
+        "رحيم اوا",
+        "Rahimawa",
+        "Rahim Awa",
+        "ڕەحیماوا"
+      ]
+    },
+    {
+      "name_ku": "پەنجا عەلی",
+      "name_ar": "بنجا علي",
+      "name_en": "Panja Ali",
+      "variants": [
+        "بنجا علي",
+        "پنجا علي",
+        "Panja Ali",
+        "Panja Aly",
+        "پەنجا عەلی"
+      ]
+    },
+    {
+      "name_ku": "عەرەفە",
+      "name_ar": "عرفة",
+      "name_en": "Arafa",
+      "variants": [
+        "عرفة",
+        "Arafa",
+        "Arafa Quarter",
+        "عەرەفە"
+      ]
+    },
+    {
+      "name_ku": "تەسعین",
+      "name_ar": "تسعين",
+      "name_en": "Tisin",
+      "variants": [
+        "تسعين",
+        "Tisin",
+        "Tas'in",
+        "تەسعین"
+      ]
+    },
+    {
+      "name_ku": "بابە گوڕگوڕ",
+      "name_ar": "بابا كركر",
+      "name_en": "Baba Gurgur",
+      "variants": [
+        "بابا كركر",
+        "بابا كوركور",
+        "Baba Gurgur",
+        "Baba Gur Gur",
+        "بابە گوڕگوڕ"
+      ]
+    },
+    {
+      "name_ku": "ڕووباری خاسە",
+      "name_ar": "نهر خاصة",
+      "name_en": "Khasa River",
+      "variants": [
+        "نهر خاصة",
+        "نهر الخاسه",
+        "خاصة صو",
+        "Khasa River",
+        "Khasa Su",
+        "ڕووباری خاسە"
+      ]
+    },
+    {
+      "name_ku": "قەڵای کەرکووک",
+      "name_ar": "قلعة كركوك",
+      "name_en": "Kirkuk Citadel",
+      "variants": [
+        "قلعة كركوك",
+        "قلعة القلعة",
+        "Kirkuk Citadel",
+        "Kirkuk Castle",
+        "قەڵای کەرکووک"
+      ]
+    },
+    {
+      "name_ku": "قەیسەری کەرکووک",
+      "name_ar": "قيصرية كركوك",
+      "name_en": "Kirkuk Qaysari",
+      "variants": [
+        "قيصرية كركوك",
+        "القيصرية",
+        "Kirkuk Qaysari",
+        "Kirkuk Qaysari Bazaar",
+        "قەیسەری کەرکووک"
+      ]
+    },
+    {
+      "name_ku": "قشڵەی کەرکووک",
+      "name_ar": "قشلة كركوك",
+      "name_en": "Kirkuk Qishla",
+      "variants": [
+        "قشلة كركوك",
+        "القشلة",
+        "Kirkuk Qishla",
+        "Qishla of Kirkuk",
+        "قشڵەی کەرکووک"
+      ]
+    },
+    {
+      "name_ku": "بەنداوی دووبز",
+      "name_ar": "سد دبس",
+      "name_en": "Dibis Dam",
+      "variants": [
+        "سد دبس",
+        "سد الدبس",
+        "Dibis Dam",
+        "Dibs Dam",
+        "بەنداوی دووبز"
+      ]
+    },
+    {
+      "name_ku": "زێی بچووک",
+      "name_ar": "الزاب الصغير",
+      "name_en": "Little Zab",
+      "variants": [
+        "الزاب الصغير",
+        "الزاب الاسفل",
+        "Little Zab",
+        "Lesser Zab",
+        "زێی بچووک"
+      ]
+    },
+    {
+      "name_ku": "ڕۆخانە",
+      "name_ar": "نهر داقوق",
+      "name_en": "Daquq River",
+      "variants": [
+        "نهر داقوق",
+        "داقوق جاي",
+        "Daquq River",
+        "Daquq Chay",
+        "ڕۆخانە"
+      ]
+    }
+  ],
+  "source_register_release": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "last_reviewed": "2026-09-06"
+}

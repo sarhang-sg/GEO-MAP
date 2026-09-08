@@ -1,0 +1,172 @@
+html.is-native-app,
+html.is-native-app body,
+html.is-native-app #app {
+  min-height: 100%;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+  background: #090d19;
+}
+
+
+html.is-native-app .search-card {
+  margin-top: max(var(--native-safe-top), env(safe-area-inset-top, 0px));
+}
+
+html.is-native-app .map-sheet,
+html.is-native-app .about-dialog__panel,
+html.is-native-app .place-detail__panel {
+  padding-bottom: max(var(--native-safe-bottom), env(safe-area-inset-bottom, 0px));
+}
+
+html.is-native-app .map-actions {
+  right: max(12px, calc(var(--native-safe-right) + 8px));
+}
+
+html.is-native-app .maplibregl-ctrl-bottom-left {
+  left: max(0px, var(--native-safe-left));
+  bottom: max(0px, var(--native-safe-bottom));
+}
+
+html.is-native-app .maplibregl-ctrl-bottom-right {
+  right: max(0px, var(--native-safe-right));
+  bottom: max(0px, var(--native-safe-bottom));
+}
+
+.native-app-panel {
+  margin: 14px 0;
+  padding: 15px;
+  border: 1px solid rgba(177, 91, 214, 0.38);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(24, 15, 38, 0.96), rgba(10, 14, 27, 0.96));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.native-app-panel[hidden] {
+  display: none !important;
+}
+
+.native-app-panel__header,
+.native-app-panel__status,
+.native-app-panel__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.native-app-panel__header p {
+  margin: 0 0 3px;
+  color: #cf9be5;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.native-app-panel__header h3 {
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.native-app-panel__header > span {
+  font-size: 1.65rem;
+}
+
+.native-app-panel__icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+}
+
+.native-app-panel__status {
+  margin: 13px 0;
+}
+
+.native-app-panel__status > div {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.native-app-panel__status dt {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.68rem;
+}
+
+.native-app-panel__status dd {
+  margin: 3px 0 0;
+  font-weight: 750;
+}
+
+.native-app-panel__actions button,
+.place-detail__share,
+.place-popup__share {
+  appearance: none;
+  border: 1px solid rgba(193, 106, 225, 0.48);
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(112, 39, 139, 0.55);
+  font: inherit;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.native-app-panel__actions button {
+  flex: 1;
+  padding: 10px 8px;
+}
+
+.native-app-panel > p {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.72rem;
+  line-height: 1.65;
+}
+
+.place-popup__share {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 10px;
+}
+
+.place-detail__share {
+  width: 100%;
+  margin: 12px 0 2px;
+  padding: 11px 14px;
+}
+
+.action-card--native-share {
+  grid-column: 1 / -1;
+}
+
+html:not(.is-native-app) .native-share-location {
+  display: none;
+}
+
+@media (display-mode: standalone) {
+  html:not(.is-native-app) .native-share-location {
+    display: inline-grid;
+  }
+}
+
+/* Keep the map controls clear of the desktop title-bar buttons when the PWA
+   runs with Window Controls Overlay. Unsupported browsers resolve the env()
+   fallback to zero and retain the ordinary standalone layout. */
+@media (display-mode: window-controls-overlay) {
+  html {
+    --native-safe-top: max(env(safe-area-inset-top, 0px), env(titlebar-area-height, 0px));
+  }
+
+  html, body, #app {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+html.is-native-android { --native-platform-accent: #8acb66; }
+html.is-native-android .native-app-panel { border-color: rgba(138, 203, 102, 0.42); }

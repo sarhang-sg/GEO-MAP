@@ -1,0 +1,124 @@
+.device-qa-toggle {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: var(--z-qa);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(11, 17, 34, 0.82);
+  color: #fff;
+  box-shadow: 0 16px 40px rgba(3, 8, 20, 0.28);
+  padding: 0.64rem 0.78rem;
+  font: 800 0.76rem/1 var(--font-ui, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+}
+
+.device-qa-toggle.is-active {
+  background: #1e62d0;
+}
+
+.device-qa-panel {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: calc(max(14px, env(safe-area-inset-bottom)) + 3.35rem);
+  z-index: var(--z-qa-panel);
+  width: min(420px, calc(100vw - 28px));
+  max-height: min(72vh, 620px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  background: rgba(8, 14, 30, 0.92);
+  color: #fff;
+  box-shadow: 0 24px 70px rgba(2, 8, 20, 0.42);
+  padding: 1rem;
+}
+
+.device-qa-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.device-qa-panel__header strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.device-qa-panel__header span,
+.device-qa-panel__message {
+  display: block;
+  margin-top: 0.22rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.device-qa-panel button {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 0.55rem 0.7rem;
+  font-weight: 800;
+}
+
+.device-qa-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+  margin: 0.85rem 0;
+}
+
+.device-qa-panel__rows {
+  display: grid;
+  gap: 0.52rem;
+}
+
+.device-qa-panel__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.24rem 0.65rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.68rem 0.72rem;
+}
+
+.device-qa-panel__row span {
+  font-weight: 800;
+}
+
+.device-qa-panel__row strong {
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.68rem;
+}
+
+.device-qa-panel__row small {
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.45;
+}
+
+.device-qa-panel__row[data-level="pass"] strong {
+  color: #bfffd4;
+}
+
+.device-qa-panel__row[data-level="warn"] strong {
+  color: #ffe19a;
+}
+
+.device-qa-panel__row[data-level="info"] strong {
+  color: #b8d6ff;
+}
+
+@media (max-width: 700px) {
+  .device-qa-panel {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    width: auto;
+    max-height: min(62vh, 560px);
+    border-radius: 22px;
+  }
+}

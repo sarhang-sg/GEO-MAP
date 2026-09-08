@@ -1,0 +1,51 @@
+{
+  "schema": "NAV KURD exact-language locality runtime v1",
+  "version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "runtime_policy": "Load the compact canonical geometry once, then apply exact-language property diffs by stable locality id.",
+  "files": {
+    "ku": {
+      "file": "kri-localities-render-ku.geojson",
+      "records": 12125,
+      "named_records": 6949,
+      "bytes": 6543585,
+      "sha256": "4665935007fc5728276dfe99b90535ca278548f74793366414dffc4cc6565323",
+      "properties_file": "kri-localities-properties-ku.json",
+      "properties_bytes": 1206059,
+      "properties_sha256": "d4cde588209cb3c6d052da567251bff3a8a4a9adcdeac605e609f6729558affd"
+    },
+    "ar": {
+      "file": "kri-localities-render-ar.geojson",
+      "records": 12125,
+      "named_records": 12125,
+      "bytes": 7033973,
+      "sha256": "04d592b614a41117cd0e8ad795870be340e46ccedb4be34360088858205838cd",
+      "properties_file": "kri-localities-properties-ar.json",
+      "properties_bytes": 1301212,
+      "properties_sha256": "11fd39d47fd1c2c7400ab6d242ad4269ac8c7309e74e348b48b4bccfb607ab32"
+    },
+    "en": {
+      "file": "kri-localities-render-en.geojson",
+      "records": 12125,
+      "named_records": 12125,
+      "bytes": 6742770,
+      "sha256": "17abb79301e92a3e1416c896c4c87a5f6058b3d88b33688a628bea7f2b29de31",
+      "properties_file": "kri-localities-properties-en.json",
+      "properties_bytes": 1183417,
+      "properties_sha256": "c9f41c0d8c2310ade972597dbc01dec5fde8e624511923334649ac94e5296a19"
+    }
+  },
+  "geometry_file": "kri-localities-runtime-base.geojson",
+  "geometry_records": 12125,
+  "geometry_bytes": 2186736,
+  "geometry_sha256": "1e93119cd52f25f64d7dcd0dd54de18b2f3929a09276717e38d412c7c4cd465a",
+  "major_file": "kri-localities-major-runtime.geojson",
+  "major_records": 226,
+  "major_bytes": 40306,
+  "major_sha256": "525fe3a68130270dd01fe0804e281c5ed73e346d154d1c219ea5df9408f2ad12",
+  "minor_records": 11899,
+  "cluster_file": "kri-localities-cluster-runtime.geojson",
+  "cluster_records": 473,
+  "cluster_source_records": 11899,
+  "cluster_bytes": 127745,
+  "cluster_sha256": "80cf9227367a964b4ae67115fa72046c341fb54e1a593f7afe5812701372a990"
+}

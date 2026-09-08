@@ -1,0 +1,99 @@
+{
+  "schema": "nav-kurd-data-quality-v1",
+  "release": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "generated_at": "2026-09-06",
+  "coverage_labels": {
+    "ku": "هەرێمی کوردستانی باشوور",
+    "ar": "إقليم كردستان الجنوبي",
+    "en": "Southern Kurdistan Region"
+  },
+  "policy": "verified-kurdish-or-source-original",
+  "curated_kirkuk_corrections_available": 52,
+  "source_register": [
+    {
+      "id": "ckb-kirkuk-admin-template",
+      "title": "پارێزگای کەرکووک — administrative divisions and settlements",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/داڕێژە:پارێزگای_کەرکووک",
+      "role": "Kurdish governorate, district, subdistrict and town spellings"
+    },
+    {
+      "id": "ckb-kirkuk-places-category",
+      "title": "شوێنەکانی پارێزگای کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/پۆل:شوێنەکانی_پارێزگای_کەرکووک",
+      "role": "Kurdish settlement and landmark name corpus"
+    },
+    {
+      "id": "ckb-kirkuk-city",
+      "title": "کەرکووک",
+      "publisher": "Kurdish Wikipedia",
+      "url": "https://ckb.wikipedia.org/wiki/کەرکووک",
+      "role": "City, historic neighbourhood and landmark spellings"
+    },
+    {
+      "id": "osm-geofabrik-iraq-2026-07-13",
+      "title": "OpenStreetMap Iraq extract",
+      "publisher": "Geofabrik / OpenStreetMap contributors",
+      "url": "https://download.geofabrik.de/asia/iraq.html",
+      "role": "Coordinates, source names, categories and aliases"
+    },
+    {
+      "id": "geonames-iq-2026-07-13",
+      "title": "GeoNames Iraq and alternate names",
+      "publisher": "GeoNames",
+      "url": "https://download.geonames.org/export/dump/",
+      "role": "Multilingual alternate-name corroboration"
+    },
+    {
+      "id": "google-maps-manual-cross-check",
+      "title": "Google Maps manual place cross-check",
+      "publisher": "Google Maps",
+      "url": "https://maps.google.com/",
+      "role": "Manual existence, category and commonly displayed-name cross-check; not used for bulk extraction"
+    }
+  ],
+  "statistics": {
+    "search_items_published": 69329
+  },
+  "quality": {
+    "kri-localities.geojson": {
+      "features": 12125,
+      "kirkuk_features": 1534,
+      "missing_names": {},
+      "kurdish_name_status": {
+        "source-original-fallback": 5176,
+        "verified-reviewed": 81
+      }
+    },
+    "kri-pois.geojson": {
+      "features": 33055,
+      "kirkuk_features": 4324,
+      "missing_names": {},
+      "kurdish_name_status": {
+        "source-alias": 1,
+        "source-original-fallback": 6847,
+        "verified-reviewed": 30
+      }
+    },
+    "kri-natural-features.geojson": {
+      "features": 5210,
+      "kirkuk_features": 393,
+      "missing_names": {},
+      "kurdish_name_status": {
+        "source-original-fallback": 5080,
+        "verified-reviewed": 23
+      }
+    },
+    "kri-security-features.geojson": {
+      "features": 35,
+      "kirkuk_features": 5,
+      "missing_names": {},
+      "kurdish_name_status": {
+        "source-original-fallback": 12
+      }
+    }
+  },
+  "geometry_policy": "No geometry or feature id was removed or synthesized by this finalizer.",
+  "unnamed_policy": "A descriptive non-proper label is used only when every source name field is empty; it is explicitly marked generated_descriptive_label=true."
+}

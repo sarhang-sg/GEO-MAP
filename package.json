@@ -1,0 +1,67 @@
+{
+  "name": "nav-kurd",
+  "version": "9.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Mobile-first Kurdistan map with multilingual search, GPS navigation, satellite context, local PMTiles data and owner-managed places.",
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
+  },
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck",
+    "data:prepare": "node tools/data/with-source-data.mjs npm run data:prepare:core",
+    "data:prepare:core": "node tools/build/generate-pwa-manifest.mjs && node tools/release/prepare-android-download.mjs && python3 tools/data/align-data-release.py && python3 tools/data/build-compact-runtime.py && python3 tools/data/build-language-runtime.py && node tools/data/build-locality-language-deltas.mjs && node tools/data/optimize-search-runtime.mjs && node tools/data/build-compact-search-runtime.mjs && node tools/data/generate-atlas-marker-assets.mjs && node tools/data/generate-atlas-icon-bundle.mjs && python3 tools/data/build-viewport-poi-shards.py && node tools/data/update-release-metadata.mjs && node tools/data/update-runtime-sprite-release.mjs && node tools/data/generate-source-integrity-manifest.mjs && node tools/release/generate-release-manifest.mjs",
+    "release:prepare-android": "node tools/release/prepare-android-download.mjs",
+    "data:sync": "node tools/data/with-source-data.mjs --sync npm run data:prepare:core && node tools/release/generate-release-manifest.mjs",
+    "data:dedupe": "node tools/data/with-source-data.mjs --sync python3 tools/data/dedupe-canonical-data.py",
+    "data:rebuild": "node tools/data/with-source-data.mjs --sync python3 tools/data/rebuild-canonical-data.py",
+    "data:sprite": "python3 tools/data/build-poi-runtime-sprite.py",
+    "build:web": "vite build && node tools/build/prune-production-dist.mjs",
+    "build:offline": "node tools/build/build-offline-runtime.mjs",
+    "build": "npm run typecheck && npm run data:prepare && npm run build:web && npm run build:offline && npm run verify:production",
+    "build:vercel": "NAV_KURD_DEPLOYMENT_BUILD=1 npm run build",
+    "preview": "vite preview",
+    "verify:toolchain": "node tools/verify/toolchain.mjs --require-npm",
+    "verify:source": "node tools/verify/source.mjs",
+    "verify:styles": "python3 tools/verify/styles.py",
+    "verify:syntax": "python3 tools/verify/syntax.py",
+    "verify:data": "python3 tools/verify/data.py",
+    "verify:runtime": "node tools/verify/runtime.mjs",
+    "verify:mobile": "node --disable-warning=ExperimentalWarning tools/verify/mobile-regressions.mjs",
+    "verify:security": "node tools/verify/security.mjs",
+    "verify:pmtiles": "python3 tools/verify/pmtiles.py",
+    "verify:release": "node tools/verify/release.mjs",
+    "verify:static": "npm run verify:syntax && npm run verify:source && npm run verify:styles && npm run verify:data && npm run verify:runtime && npm run verify:mobile && npm run verify:security && npm run verify:pmtiles",
+    "verify:production": "npm run verify:static && npm run verify:dependencies && npm run verify:release",
+    "verify": "npm run data:prepare && npm run verify:production",
+    "verify:browser": "python3 tools/verify/browser-smoke.py",
+    "verify:final": "npm run build && npm run verify:browser && npm audit --omit=dev",
+    "package": "npm run build && python3 tools/release/package-release.py",
+    "verify:dependencies": "node tools/verify/dependency-security.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.112.4",
+    "maplibre-gl": "6.6.0",
+    "pmtiles": "4.5.0"
+  },
+  "devDependencies": {
+    "@mapbox/vector-tile": "3.0.0",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "24.10.13",
+    "pbf": "5.1.2",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "packageManager": "npm@11",
+  "allowScripts": {
+    "esbuild": true
+  },
+  "overrides": {
+    "nanoid": "3.3.18",
+    "postcss": "8.5.26"
+  }
+}

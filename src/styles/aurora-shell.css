@@ -1,0 +1,349 @@
+/* NAV KURD — Aurora Glass visual system.
+ * Inspired by modern community UI patterns, rebuilt locally with zero runtime
+ * dependencies and transform/opacity-only motion for MapLibre compatibility.
+ */
+
+
+.map-shell[data-ui-theme="luxe-ocean"] {
+  --premium-gradient: var(--nk-aurora-gradient);
+  --premium-purple: var(--nk-aurora-violet);
+  --premium-blue: var(--nk-aurora-blue);
+  --premium-cyan: var(--nk-aurora-cyan);
+  --premium-success: var(--nk-aurora-success);
+}
+
+/* Search: compact glass capsule that expands without changing document flow. */
+.search-card {
+  isolation: isolate;
+  border-color: rgba(183, 195, 255, .22);
+  border-radius: 21px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(76, 125, 255, .12), transparent 42%) padding-box,
+    linear-gradient(145deg, rgba(12, 16, 43, .90), rgba(6, 9, 27, .88)) padding-box,
+    linear-gradient(120deg, rgba(79, 174, 255, .58), rgba(157, 96, 255, .63), rgba(220, 92, 255, .32)) border-box;
+  box-shadow: var(--nk-aurora-glow);
+  transition:
+    width var(--nk-aurora-normal) var(--nk-aurora-ease),
+    border-color var(--nk-aurora-fast) ease,
+    box-shadow var(--nk-aurora-fast) ease,
+    background-color var(--nk-aurora-fast) ease;
+}
+
+.search-card.is-search-open,
+.search-card:focus-within,
+.search-card.has-search-value {
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(153, 106, 255, .33), 0 20px 52px rgba(0, 0, 0, .44), 0 0 30px rgba(101, 77, 255, .17);
+}
+
+.search-card__icon {
+  color: #cfbaff;
+  transition: color var(--nk-aurora-fast) ease, transform var(--nk-aurora-fast) var(--nk-aurora-ease);
+}
+.search-card:focus-within .search-card__icon { color: var(--nk-aurora-cyan); transform: scale(1.06); }
+
+.search-card input {
+  color: #f8f7ff;
+  caret-color: #b781ff;
+  font-weight: 760;
+}
+.search-card input::placeholder { color: #929cbd; }
+
+.search-card__clear {
+  border: 1px solid transparent;
+  transition: transform var(--nk-aurora-fast) var(--nk-aurora-ease), color var(--nk-aurora-fast) ease, background var(--nk-aurora-fast) ease, border-color var(--nk-aurora-fast) ease;
+}
+.search-card__clear:hover,
+.search-card__clear:focus-visible {
+  color: #fff;
+  border-color: rgba(173, 139, 255, .22);
+  background: rgba(143, 82, 255, .15);
+}
+.search-card__clear:active { transform: scale(.90) rotate(7deg); }
+
+.search-results {
+  padding: 8px;
+  border-color: rgba(178, 188, 255, .20);
+  border-radius: 22px;
+  background:
+    linear-gradient(155deg, rgba(10, 13, 38, .98), rgba(5, 8, 24, .98)) padding-box,
+    linear-gradient(125deg, rgba(77, 160, 255, .35), rgba(158, 93, 255, .42), rgba(214, 95, 255, .22)) border-box;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, .56), 0 0 0 1px rgba(255, 255, 255, .025) inset;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(146, 99, 255, .48) transparent;
+  transform-origin: top center;
+  animation: nk-aurora-result-open 180ms var(--nk-aurora-ease) both;
+}
+
+.search-result {
+  min-height: 48px;
+  gap: 10px;
+  margin-block: 2px;
+  padding: 9px 11px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .018);
+  transition: transform var(--nk-aurora-fast) var(--nk-aurora-ease), border-color var(--nk-aurora-fast) ease, background var(--nk-aurora-fast) ease;
+}
+
+.search-result:hover,
+.search-result:focus-visible,
+.search-result[aria-selected="true"],
+.search-result.is-keyboard-active {
+  border-color: rgba(156, 116, 255, .25);
+  background: linear-gradient(135deg, rgba(68, 126, 255, .10), rgba(151, 78, 255, .14));
+  transform: translateY(-1px);
+}
+
+.search-result__mark {
+  width: 9px;
+  height: 9px;
+  box-shadow: 0 0 0 4px rgba(155, 77, 255, .12), 0 0 12px rgba(155, 77, 255, .52);
+}
+.search-result strong { color: #fbf9ff; font-size: 11.5px; }
+.search-result small { color: #aeb8d8; }
+
+.search-empty {
+  min-height: 76px;
+  padding: 20px 14px;
+  border-radius: 15px;
+  color: #b9c3df;
+  background: rgba(255, 255, 255, .025);
+  text-align: center;
+}
+
+.search-empty--loading {
+  position: relative;
+  overflow: hidden;
+  color: transparent;
+}
+.search-empty--loading::before {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  border-width: 3px;
+  border-color: rgba(255, 255, 255, .10);
+  border-top-color: var(--nk-aurora-cyan);
+  border-right-color: var(--nk-aurora-violet);
+  box-shadow: 0 0 16px rgba(105, 91, 255, .16);
+  vertical-align: middle;
+}
+.search-empty--loading::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  left: 16px;
+  height: 5px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, transparent, rgba(130, 101, 255, .48), transparent);
+  transform: translateX(-80%);
+  animation: nk-aurora-skeleton 1.25s ease-in-out infinite;
+}
+
+@keyframes nk-aurora-result-open {
+  from { opacity: 0; transform: translateY(-7px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes nk-aurora-skeleton { to { transform: translateX(80%); } }
+
+/* Map controls: unified shape, feedback and active state. */
+.round-button,
+.map-button,
+.map-3d-button,
+.style-picker,
+.action-card,
+.segmented,
+.language-tabs {
+  border-color: var(--nk-aurora-stroke);
+  background: linear-gradient(150deg, rgba(15, 20, 52, .90), rgba(6, 9, 27, .91));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .31), inset 0 1px 0 rgba(255, 255, 255, .055);
+}
+
+.round-button,
+.map-button,
+.map-3d-button,
+.style-choice,
+.action-card,
+.segmented button,
+.language-tabs button,
+.offline-map-pack__actions button {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--nk-aurora-fast) var(--nk-aurora-ease),
+    border-color var(--nk-aurora-fast) ease,
+    color var(--nk-aurora-fast) ease,
+    background var(--nk-aurora-fast) ease,
+    box-shadow var(--nk-aurora-fast) ease,
+    opacity var(--nk-aurora-fast) ease;
+}
+
+.round-button:hover,
+.map-button:hover,
+.map-3d-button:hover,
+.round-button:focus-visible,
+.map-button:focus-visible,
+.map-3d-button:focus-visible {
+  color: #fff;
+  border-color: rgba(142, 127, 255, .46);
+  background: linear-gradient(145deg, rgba(31, 40, 86, .95), rgba(13, 16, 43, .94));
+  box-shadow: var(--nk-aurora-glow);
+  transform: translateY(-1px);
+}
+
+.round-button:active,
+.map-button:active,
+.map-3d-button:active,
+.style-choice:active,
+.action-card:active,
+.segmented button:active,
+.language-tabs button:active,
+.offline-map-pack__actions button:active {
+  transform: scale(.955);
+}
+
+.round-button.is-active,
+.map-button.is-active,
+.map-3d-button.is-active,
+.round-button.is-tracking {
+  color: #fff;
+  border-color: rgba(139, 124, 255, .58);
+  background: var(--nk-aurora-gradient);
+  box-shadow: 0 13px 32px rgba(83, 75, 232, .30), 0 0 24px rgba(155, 77, 255, .23), inset 0 1px 0 rgba(255, 255, 255, .16);
+}
+
+.round-button.is-active svg,
+.map-button.is-active svg,
+.map-3d-button.is-active svg { filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .24)); }
+
+.style-picker {
+  padding: 5px;
+  border-radius: 19px;
+}
+.style-choice { min-height: 32px; border: 1px solid transparent; border-radius: 13px; }
+.style-choice.is-active {
+  color: #fff;
+  border-color: rgba(255, 255, 255, .10);
+  background: var(--nk-aurora-gradient);
+  box-shadow: 0 8px 20px rgba(82, 71, 222, .24), inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+/* Shared cards and sheets. */
+.map-sheet,
+.route-panel,
+.place-detail__panel,
+.about-dialog__panel,
+.owner-panel,
+.user-contrib__panel,
+.feedback-studio__panel,
+.support-hub__panel,
+.tutorial-card,
+.offline-map-pack {
+  border-color: rgba(178, 188, 255, .20);
+  background:
+    linear-gradient(150deg, rgba(14, 18, 48, .91), rgba(6, 9, 27, .93)) padding-box,
+    linear-gradient(125deg, rgba(75, 155, 255, .35), rgba(154, 91, 255, .44), rgba(221, 96, 255, .20)) border-box;
+  box-shadow: var(--nk-aurora-shadow);
+}
+
+/* Offline pack: semantic color progression and polished actions. */
+.offline-map-pack__track {
+  height: 8px;
+  padding: 1px;
+  border: 1px solid rgba(255, 255, 255, .055);
+  background: rgba(0, 0, 0, .25);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .35);
+}
+.offline-map-pack__track > span {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d8344e, #ef4444);
+  box-shadow: 0 0 13px rgba(239, 68, 68, .35);
+}
+.offline-map-pack[data-progress-phase="middle"] .offline-map-pack__track > span {
+  background: linear-gradient(90deg, #d99a24, var(--nk-aurora-warning));
+  box-shadow: 0 0 13px rgba(242, 184, 75, .34);
+}
+.offline-map-pack[data-progress-phase="complete"] .offline-map-pack__track > span {
+  background: linear-gradient(90deg, #159d70, var(--nk-aurora-success));
+  box-shadow: 0 0 14px rgba(34, 201, 138, .36);
+}
+
+.offline-map-pack__actions button {
+  min-height: 38px;
+  border-radius: 13px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .055);
+}
+.offline-map-pack__actions #offlinePackDownload,
+.offline-map-pack__actions #offlinePackResume {
+  border-color: rgba(125, 160, 255, .34);
+  background: var(--nk-aurora-gradient);
+  box-shadow: 0 10px 24px rgba(87, 74, 228, .24);
+}
+.offline-map-pack__actions #offlinePackDelete {
+  color: #ffd8df;
+  border-color: rgba(239, 68, 68, .25);
+  background: linear-gradient(145deg, rgba(151, 39, 64, .22), rgba(71, 24, 51, .20));
+}
+
+/* Confirmation dialogs share one premium visual language. */
+.offline-pack-confirm__backdrop,
+.owner-confirm__backdrop { background: rgba(2, 4, 14, .90); }
+
+.offline-pack-confirm__panel,
+.owner-confirm__panel {
+  border-color: rgba(184, 150, 255, .28);
+  border-radius: 25px;
+  background:
+    linear-gradient(155deg, rgba(24, 30, 70, .985), rgba(7, 10, 29, .99)) padding-box,
+    linear-gradient(120deg, rgba(83, 161, 255, .44), rgba(157, 91, 255, .54), rgba(240, 91, 149, .31)) border-box;
+  box-shadow: 0 34px 96px rgba(0, 0, 0, .68), 0 0 34px rgba(104, 78, 255, .14);
+  animation: nk-aurora-dialog-in 200ms var(--nk-aurora-ease) both;
+}
+
+.offline-pack-confirm__cancel,
+.owner-confirm__cancel {
+  color: #d3dbef;
+  border-color: rgba(170, 182, 232, .16);
+  background: rgba(255, 255, 255, .045);
+}
+.offline-pack-confirm__delete,
+.owner-confirm__delete {
+  color: #fff;
+  border-color: rgba(255, 139, 165, .22);
+  background: linear-gradient(135deg, #a8325b, #7941d2);
+  box-shadow: 0 11px 28px rgba(146, 43, 83, .26);
+}
+
+@keyframes nk-aurora-dialog-in {
+  from { opacity: 0; transform: translateY(12px) scale(.975); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Consistent keyboard focus without changing layout. */
+:where(button, [role="button"], input, select, textarea):focus-visible {
+  outline: 2px solid rgba(104, 211, 255, .92);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .search-card { border-radius: 19px; }
+  .search-results { border-radius: 19px; }
+  .search-result { min-height: 50px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-empty--loading::after { animation: none !important; }
+  .search-results,
+  .offline-pack-confirm__panel,
+  .owner-confirm__panel { animation: none !important; }
+  .round-button,
+  .map-button,
+  .map-3d-button,
+  .style-choice,
+  .search-card,
+  .search-card__icon,
+  .search-card__clear,
+  .search-result,
+  .offline-map-pack__actions button { transition: none !important; }
+}

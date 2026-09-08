@@ -1,0 +1,145 @@
+/* Interaction, dashboard and confirmation quality rules. */
+
+/* Keep confirmation choices readable and reachable on narrow phones. */
+.route-destination-prompt {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.route-destination-prompt__copy strong,
+.route-destination-prompt__copy span { overflow-wrap: anywhere; }
+.route-destination-prompt__actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+.route-destination-prompt__actions button {
+  min-width: 0;
+  min-height: 44px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.route-destination-prompt__actions button.is-muted { grid-column: auto; }
+
+/* Dashboard cards retain their hierarchy without appearing rigid or clipped. */
+.user-contrib__dashboard,
+.owner-studio__dashboard {
+  container-type: inline-size;
+}
+.user-account-card,
+.user-account-private,
+.user-private-section__header,
+.user-private-message,
+.user-submission,
+.user-notification {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 10px 28px rgba(2,6,24,.13);
+}
+.user-private-tabs button,
+.user-contrib__privacy-actions a,
+.user-contrib__privacy-actions button {
+  transition: transform .16s ease, border-color .16s ease, background-color .16s ease, color .16s ease;
+}
+.user-private-tabs button:active,
+.user-contrib__privacy-actions a:active,
+.user-contrib__privacy-actions button:active { transform: scale(.98); }
+
+/* Avoid accidental clipping in all modal/dashboard scroll surfaces. */
+.user-contrib__content,
+.owner-studio__content,
+.feedback-studio__content,
+.about-dialog__panel {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * Android WebView may drop a momentum-scrolling compositor layer after the
+ * system document picker closes. The contribution editor is already an inset
+ * overflow surface, so regular scrolling is safer here and remains smooth.
+ */
+.user-contrib__content {
+  -webkit-overflow-scrolling: auto;
+}
+
+@media (max-width: 700px) {
+  .route-destination-prompt {
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    max-height: min(54dvh, 390px);
+    padding: 13px !important;
+  }
+  .route-destination-prompt__pin { inline-size: 40px; block-size: 40px; }
+  .route-destination-prompt__copy strong { font-size: .92rem; }
+  .route-destination-prompt__copy span { font-size: .72rem; }
+}
+
+@media (max-width: 370px) {
+  .route-destination-prompt { grid-template-columns: 36px minmax(0, 1fr); gap: 9px; }
+  .route-destination-prompt__pin { inline-size: 36px; block-size: 36px; border-radius: 12px; }
+  .route-destination-prompt__actions { grid-template-columns: 1fr; }
+  .user-contrib__privacy-actions { grid-template-columns: 1fr; }
+  .user-contrib__privacy-actions [data-legal-kind="guidelines"],
+  .user-contrib__privacy-actions [data-account-action="delete"] { grid-column: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-private-tabs button,
+  .user-contrib__privacy-actions a,
+  .user-contrib__privacy-actions button { transition: none; }
+}
+
+.user-account-card,
+.user-account-private,
+.user-private-tabs,
+.user-contrib__privacy-actions { inline-size: 100%; min-inline-size: 0; }
+.user-private-tabs { gap: 7px; padding: 7px; border-radius: 18px; }
+.user-private-tabs button { min-height: 62px; border-radius: 13px; }
+.user-private-tabs button span { line-height: 1.45; }
+.user-account-private { padding: 16px; border-radius: 17px; }
+.user-contrib__privacy-actions { gap: 10px; }
+.user-contrib__privacy-actions a,
+.user-contrib__privacy-actions button { min-height: 50px; border-radius: 14px; }
+.user-contrib__privacy-actions [data-account-action="signout"],
+.user-contrib__privacy-actions [data-account-action="delete"] { grid-column: 1 / -1; }
+.user-contrib__privacy-actions [data-account-action="signout"] { justify-self: stretch; }
+
+.map-actions,
+.map-left-controls { gap: 10px; }
+.map-actions .round-button,
+.map-left-controls .round-button { flex: 0 0 auto; }
+
+@media (max-width: 420px) {
+  .user-contrib__content { padding-inline: 15px; }
+  .user-account-card { gap: 10px; border-radius: 18px; }
+  .user-private-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .user-private-tabs button { min-height: 60px; padding-inline: 3px; }
+}
+@media (max-width: 350px) {
+  .user-private-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .user-contrib__privacy-actions { grid-template-columns: 1fr; }
+  .user-contrib__privacy-actions > * { grid-column: auto !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .user-private-tabs button,
+  .user-contrib__privacy-actions a,
+  .user-contrib__privacy-actions button { scroll-behavior: auto; transition: none; }
+}
+
+/* Explicit, localized confirmation before deleting the offline map pack. */
+.offline-pack-confirm[hidden] { display: none !important; }
+.offline-pack-confirm { position: fixed; z-index: var(--z-confirmation); inset: 0; display: grid; place-items: center; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); }
+.offline-pack-confirm__backdrop { position: absolute; inset: 0; background: rgba(2, 5, 16, .94); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+.offline-pack-confirm__panel { position: relative; width: min(420px, 100%); padding: 21px; overflow: hidden; border: 1px solid rgba(244, 110, 137, .24); border-radius: 22px; color: #eff4ff; background: linear-gradient(155deg, rgba(24, 31, 67, .995), rgba(7, 12, 29, .995)); box-shadow: 0 30px 90px rgba(0, 0, 0, .64), 0 0 0 1px rgba(255, 255, 255, .025) inset; text-align: center; }
+.offline-pack-confirm__icon { display: grid; width: 58px; height: 58px; margin: 0 auto 12px; place-items: center; border: 1px solid rgba(244, 102, 132, .25); border-radius: 18px; color: #ffadbd; background: linear-gradient(145deg, rgba(195, 55, 87, .18), rgba(108, 67, 222, .12)); box-shadow: 0 12px 30px rgba(150, 40, 72, .18); }
+.offline-pack-confirm__icon svg { width: 27px; height: 27px; }
+.offline-pack-confirm__eyebrow { margin: 0 0 5px; color: #b7a8ff; font: 900 8px/1 var(--font-latin); letter-spacing: .14em; }
+.offline-pack-confirm__panel h3 { margin: 0; color: #fff; font-size: 17px; line-height: 1.5; }
+.offline-pack-confirm__panel > p:not(.offline-pack-confirm__eyebrow) { margin: 8px 0 0; color: #aebbd3; font-size: 10px; line-height: 1.9; }
+.offline-pack-confirm__panel > p[data-state="error"] { color: #ffc2cf; }
+.offline-pack-confirm__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 18px; }
+.offline-pack-confirm__actions button { min-height: 45px; padding: 0 13px; border-radius: 13px; font: 900 9px/1.45 var(--font-ui); }
+.offline-pack-confirm__cancel { color: #c5d0e6; border: 1px solid rgba(158, 139, 255, .14); background: rgba(255, 255, 255, .035); }
+.offline-pack-confirm__delete { color: #fff; border: 1px solid rgba(255, 135, 158, .18); background: linear-gradient(135deg, #a9345b, #6c45c7); box-shadow: 0 10px 28px rgba(147, 42, 76, .24); }
+.offline-pack-confirm__actions button:disabled { cursor: wait; opacity: .55; filter: saturate(.6); }
+.offline-pack-confirm__actions button:focus-visible { outline: 2px solid rgba(150, 128, 255, .95); outline-offset: 3px; }
+@media (max-width: 390px) {
+  .offline-pack-confirm__panel { padding: 19px 15px; border-radius: 20px; }
+  .offline-pack-confirm__actions { grid-template-columns: 1fr; }
+}

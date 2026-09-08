@@ -1,0 +1,288 @@
+/* NAV KURD 9.1.0 — shared Web + Android visual refresh.
+   The red support/payment section intentionally remains under its own files. */
+
+.map-shell {
+  --nk-ink: #f7f9ff;
+  --nk-muted: #aebbd2;
+  --nk-line: rgba(150, 171, 216, .17);
+  --nk-line-strong: rgba(127, 164, 237, .30);
+  --nk-panel: rgba(8, 14, 31, .94);
+  --nk-panel-soft: rgba(15, 25, 47, .88);
+  --nk-blue: #6397ff;
+  --nk-cyan: #63ddff;
+  --nk-violet: #9168ff;
+  --nk-radius-sm: 13px;
+  --nk-radius-md: 18px;
+  --nk-radius-lg: 25px;
+  color: var(--nk-ink);
+}
+
+.map-shell :where(button, input, textarea, select) {
+  font-family: var(--font-ui);
+}
+
+.map-shell :where(button, a, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Compact, readable type rhythm across shared native/web surfaces. */
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) {
+  color: var(--nk-ink, #f7f9ff);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) :where(h2, h3, p) {
+  text-wrap: pretty;
+}
+
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) h2 {
+  font-size: clamp(18px, 4.8vw, 24px);
+  line-height: 1.35;
+}
+
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) h3 {
+  font-size: clamp(15px, 4vw, 19px);
+  line-height: 1.4;
+}
+
+/* Fast glass: opaque enough to avoid costly full-panel blur on lower-end GPUs. */
+:where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel, .route-panel) {
+  border-color: var(--nk-line, rgba(150, 171, 216, .17));
+  background:
+    radial-gradient(circle at 92% 0, rgba(94, 108, 255, .12), transparent 34%),
+    linear-gradient(155deg, rgba(13, 23, 44, .97), rgba(5, 9, 23, .97) 64%, rgba(18, 10, 37, .96));
+  box-shadow: 0 24px 64px rgba(0, 4, 18, .48), inset 0 1px 0 rgba(255, 255, 255, .055);
+}
+
+/* Search belongs directly beneath the top controls in the Android shell. */
+html.is-native-app .search-card {
+  top: max(66px, calc(var(--native-safe-top, 0px) + 51px));
+  margin-top: 0;
+}
+
+.search-card {
+  min-height: 50px;
+  border-color: rgba(129, 169, 255, .27) !important;
+  border-radius: 17px !important;
+  background: linear-gradient(145deg, rgba(13, 23, 45, .96), rgba(7, 11, 27, .94)) !important;
+  box-shadow: 0 16px 40px rgba(0, 5, 22, .38), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+}
+
+.search-card:focus-within,
+.search-card.is-search-open {
+  border-color: rgba(103, 190, 255, .56) !important;
+  box-shadow: 0 18px 48px rgba(0, 5, 22, .46), 0 0 0 3px rgba(84, 135, 255, .10) !important;
+}
+
+.search-card__icon { color: #c9d5ef; }
+.search-card:focus-within .search-card__icon { color: var(--nk-cyan); }
+.search-results {
+  border: 1px solid rgba(127, 164, 237, .20);
+  border-radius: 0 0 18px 18px;
+  background: rgba(7, 12, 27, .98);
+  box-shadow: 0 20px 44px rgba(0, 3, 15, .50);
+}
+
+/* Consistent control family: no decorative shape soup, one radius and stroke. */
+:where(.round-button, .map-button, .map-3d-button, .controls-visibility-button, .feedback-quick-button) {
+  border-color: rgba(138, 165, 220, .20) !important;
+  border-radius: 15px !important;
+  color: #dce6fb;
+  background: linear-gradient(145deg, rgba(18, 30, 55, .94), rgba(8, 13, 29, .94)) !important;
+  box-shadow: 0 12px 28px rgba(0, 4, 19, .34), inset 0 1px 0 rgba(255, 255, 255, .055) !important;
+  transition: transform .18s cubic-bezier(.2, .8, .2, 1), border-color .18s ease, color .18s ease, filter .18s ease;
+}
+
+:where(.round-button, .map-button, .map-3d-button, .controls-visibility-button, .feedback-quick-button).is-active,
+:where(.round-button, .map-button)[aria-pressed="true"] {
+  border-color: rgba(112, 151, 255, .42) !important;
+  color: #fff;
+  background: linear-gradient(145deg, rgba(53, 84, 171, .78), rgba(76, 43, 151, .74)) !important;
+}
+
+.style-picker {
+  border: 1px solid rgba(138, 165, 220, .17) !important;
+  border-radius: 16px !important;
+  background: rgba(8, 13, 29, .94) !important;
+  box-shadow: 0 12px 28px rgba(0, 4, 19, .32), inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+
+.style-choice {
+  border-radius: 11px !important;
+  color: #aebbd2 !important;
+}
+
+.style-choice.is-active {
+  color: #fff !important;
+  background: linear-gradient(135deg, #426fd0, #7548d6) !important;
+  box-shadow: 0 6px 16px rgba(76, 74, 204, .27);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(.round-button, .map-button, .map-3d-button, .controls-visibility-button, .feedback-quick-button):hover,
+  .native-app-panel__actions button:hover,
+  .android-download__actions a:hover,
+  .nav-tutorial__actions button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(107, 195, 255, .48) !important;
+    filter: brightness(1.08);
+  }
+}
+
+:where(.round-button, .map-button, .map-3d-button, .controls-visibility-button, .feedback-quick-button):active,
+.native-app-panel__actions button:active,
+.android-download__actions a:active,
+.nav-tutorial__actions button:active {
+  transform: scale(.96);
+}
+
+/* Native Android settings: two status chips and two icon actions only. */
+.native-app-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid rgba(105, 157, 241, .23);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(15, 27, 49, .96), rgba(7, 12, 26, .96));
+  box-shadow: 0 14px 32px rgba(0, 4, 18, .24), inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.native-app-panel__header { width: 38px; min-width: 38px; justify-content: flex-start; }
+.native-app-panel__header > div {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+.native-app-panel__header p { margin: 0 0 3px; color: #8dcfff; font-size: 8px; letter-spacing: .12em; }
+.native-app-panel__header h3 { overflow: hidden; margin: 0; color: #f7f9ff; font-size: 13px; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.native-app-panel__header > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(111, 177, 255, .20);
+  border-radius: 12px;
+  color: #8fd9ff;
+  background: rgba(67, 115, 200, .12);
+}
+.native-app-panel__header > span svg,
+.native-app-panel__header > span .native-app-panel__icon { width: 20px; height: 20px; }
+
+.native-app-panel__status {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.native-app-panel__status > div { padding: 8px 10px; border: 1px solid rgba(137, 162, 210, .10); border-radius: 12px; background: rgba(255,255,255,.028); }
+.native-app-panel__status dt { color: #8e9bb4; font-size: 9px; }
+.native-app-panel__status dd { margin: 1px 0 0; color: #f4f7ff; font: 800 12px/1.3 var(--font-ui); }
+
+.native-app-panel__actions {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  gap: 7px;
+}
+.native-app-panel__actions button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(124, 164, 235, .19);
+  border-radius: 12px;
+  color: #dbe7fb;
+  background: rgba(50, 76, 125, .14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+  transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.native-app-panel__actions button svg,
+.native-app-panel__actions button .native-app-panel__icon { width: 18px; height: 18px; }
+.native-app-panel__action-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+.native-app-panel > p { display: none; }
+
+/* Android release card: use the supplied Android art and direct-download action. */
+.android-download {
+  border-color: rgba(104, 160, 244, .22);
+  border-radius: 21px;
+  background:
+    radial-gradient(circle at 10% 0, rgba(50, 190, 220, .13), transparent 34%),
+    linear-gradient(145deg, rgba(13, 29, 52, .96), rgba(10, 12, 31, .96));
+  box-shadow: 0 18px 42px rgba(0, 5, 22, .30), inset 0 1px 0 rgba(255,255,255,.055);
+}
+.android-download__sky { opacity: .45; }
+.android-download__mark {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(113, 170, 255, .25);
+  border-radius: 15px;
+  color: inherit;
+  background: #020304;
+}
+.android-download__mark img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.android-download__heading { gap: 11px; }
+.android-download__heading h3 { font-size: 15px; }
+.android-download__heading small { color: #aab8d0; font-size: 10px; line-height: 1.55; }
+.android-download__actions a { min-height: 52px; border-radius: 14px; transition: transform .18s ease, filter .18s ease, border-color .18s ease; }
+.android-download__primary { background: linear-gradient(135deg, rgba(46, 137, 213, .72), rgba(80, 80, 205, .76)); }
+.android-download__store { background: linear-gradient(135deg, rgba(24, 132, 98, .34), rgba(12, 61, 62, .56)); }
+
+/* Guided tutorial: one coherent line-icon set, no orbit or floating artwork. */
+.nav-tutorial__card {
+  padding: 14px;
+  border-color: rgba(125, 165, 236, .24);
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgba(14, 27, 51, .99), rgba(7, 11, 27, .99) 66%, rgba(24, 13, 45, .99));
+}
+.nav-tutorial__content { grid-template-columns: 46px minmax(0, 1fr); gap: 11px; }
+.nav-tutorial__visual {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(115, 171, 246, .23);
+  border-radius: 14px;
+  color: #cce8ff;
+  background: linear-gradient(145deg, rgba(49, 92, 164, .22), rgba(77, 55, 150, .20));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+.nav-tutorial__visual svg { width: 24px; height: 24px; filter: none; animation: none; }
+.nav-tutorial__visual-orbit { display: none; }
+.nav-tutorial__card h3 { margin-bottom: 4px; font-size: 15px; }
+.nav-tutorial__card p { color: #aebbd2; font-size: 10px; line-height: 1.7; }
+.nav-tutorial__actions button { min-height: 38px; border-radius: 11px; font-size: 10px; transition: transform .18s ease, border-color .18s ease, filter .18s ease; }
+.nav-tutorial__actions button.is-primary { background: linear-gradient(135deg, #3d71d4, #7649d8); }
+
+@media (max-width: 420px) {
+  :where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) { font-size: 12px; }
+  .android-download__heading small { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-shell *, .map-shell *::before, .map-shell *::after {
+    scroll-behavior: auto !important;
+  }
+  :where(.round-button, .map-button, .map-3d-button, .controls-visibility-button, .feedback-quick-button),
+  .native-app-panel__actions button,
+  .android-download__actions a,
+  .nav-tutorial__actions button { transition-duration: .01ms !important; }
+}

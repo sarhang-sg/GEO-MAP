@@ -1,0 +1,32 @@
+{
+  "appVersion": "9.1.0",
+  "androidVersionCode": 90100,
+  "releaseId": "2026-09-06-nav-kurd-v9.1.0",
+  "releaseDate": "2026-09-06",
+  "mapEdition": "2027",
+  "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "cacheSchemaVersion": 91,
+  "offlinePackVersion": "2027.13",
+  "serviceWorkerRelease": "9.1.0",
+  "offlineMapFiles": [
+    {
+      "id": "base",
+      "path": "data/kri/kri-base.pmtiles",
+      "fileName": "kri-base.pmtiles",
+      "bytes": 15198962,
+      "sha256": "d169633076785cb361abcc5c3c9ef27a63ed5efd98669c2285d7e4fb30b7a0ea"
+    },
+    {
+      "id": "roads",
+      "path": "data/kri/kri-roads.pmtiles",
+      "fileName": "kri-roads.pmtiles",
+      "bytes": 4352351,
+      "sha256": "d5e18d6bce28cd8b5d161eff12fa2026976fd7a0d2ae0f3bd2c46d8463c685dd"
+    }
+  ],
+  "offlineRuntimeBytes": 53011521,
+  "releaseLabel": "NAV KURD 9.1.0 professional Web and Android release with unified themes, supplied icons and preview-first navigation",
+  "uiTheme": "midnight-kurd",
+  "hardeningDate": "2026-09-06",
+  "hardeningRelease": "9.1.0"
+}

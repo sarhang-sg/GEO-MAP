@@ -1,0 +1,48 @@
+/* Typography, label surfaces and reduced-motion behavior. */
+/* Typography, labels, mobile layout and rendering performance. */
+
+html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body[data-language="ku"],
+body[data-language="ar"] { font-family: var(--font-arabic); font-feature-settings: "kern" 1, "liga" 1, "calt" 1; font-kerning: normal; font-optical-sizing: auto; }
+body[data-language="en"] { font-family: var(--font-ui); }
+.brand-card strong, .owner-studio__eyebrow, .sheet-handle__text { font-family: var(--font-ui); }
+
+.map-shell[data-map-mode="street"] { --label-bg: rgba(246, 250, 255, .87); --label-border: rgba(51, 77, 119, .34); --label-text: #16233f; --label-subtle: #334d75; --label-shadow: rgba(13, 29, 62, .22); }
+.map-shell[data-map-mode="night"] { --label-bg: rgba(7, 18, 38, .88); --label-border: rgba(157, 197, 241, .30); --label-text: #f2f8ff; --label-subtle: #d1e7ff; --label-shadow: rgba(0, 0, 0, .70); }
+.map-shell[data-map-mode="satellite"] { --label-bg: rgba(7, 14, 27, .86); --label-border: rgba(255, 237, 190, .38); --label-text: #fffaf0; --label-subtle: #ffe6a8; --label-shadow: rgba(0, 0, 0, .76); }
+
+/* Every selected locality, road and administrative label receives a consistent glass surface. */
+.locality-label, .road-label, .administrative-label {
+  display: inline-block; max-width: 240px; overflow: hidden; padding: 3px 7px; border: 1px solid var(--label-border); border-radius: 9px; color: var(--label-text); white-space: nowrap; text-overflow: ellipsis; background: var(--label-bg); box-shadow: 0 4px 13px var(--label-shadow), inset 0 1px 0 rgba(255,255,255,.12); text-shadow: 0 1px 1px rgba(0,0,0,.30); font-family: var(--font-map-label); font-weight: 600; font-feature-settings: "kern" 1, "liga" 1, "calt" 1; font-kerning: normal; line-height: 1.6; letter-spacing: 0; opacity: 1;
+}
+.locality-label { cursor: pointer; font-size: 11px; }
+.locality-label[data-kind="city"] { color: var(--label-text); font-size: 15px; font-weight: 700; }
+.locality-label[data-kind="town"] { color: var(--label-text); font-size: 13px; font-weight: 650; }
+.road-label { max-width: 258px; color: var(--label-subtle); font-size: 10px; font-weight: 600; }
+.road-label[data-class="motorway"], .road-label[data-class="trunk"] { color: var(--label-text); font-size: 11px; font-weight: 700; }
+.road-label[data-class="primary"], .road-label[data-class="tertiary"] { color: var(--label-subtle); }
+.administrative-label { max-width: 260px; padding: 4px 9px; color: var(--label-subtle); font-size: 11px; font-weight: 650; text-align: center; }
+.administrative-label[data-level="region"] { padding: 6px 12px; color: var(--label-text); font-size: 15px; font-weight: 700; letter-spacing: 0; }
+.map-shell[data-map-mode="satellite"] .locality-label, .map-shell[data-map-mode="satellite"] .road-label, .map-shell[data-map-mode="satellite"] .administrative-label { border-color: var(--label-border); background: var(--label-bg); box-shadow: 0 4px 13px var(--label-shadow), inset 0 1px 0 rgba(255,255,255,.12); text-shadow: 0 1px 1px rgba(0,0,0,.30); }
+.maplibregl-canvas { transform: translateZ(0); }
+
+@media (max-width: 700px) {
+  .map-status { grid-column: 3; justify-self: end; max-width: 104px; min-height: 32px; font-size: 8px; }
+  .map-actions { width: calc(var(--nav-kurd-mobile-control-size, 44px) + 8px); gap: 6px; }
+  .map-actions > * { flex: 0 0 auto; }
+  .round-button, .map-button { width: 44px; min-width: 44px; min-height: 44px; border-radius: 14px; }
+  .map-actions__toggle { display: inline-flex; }
+  .map-actions > #baseMapButton, .map-actions > #layersButton, .map-actions > #placesButton, .map-actions > #ownerStudioButton { display: none; }
+  .map-shell.map-actions-expanded .map-actions > #baseMapButton, .map-shell.map-actions-expanded .map-actions > #layersButton, .map-shell.map-actions-expanded .map-actions > #placesButton, .map-shell.map-actions-expanded .map-actions > #ownerStudioButton { display: inline-flex; }
+  .map-shell.map-actions-expanded .map-actions__toggle { color: #ffda8b; background: rgba(25, 33, 64, .94); filter: drop-shadow(0 0 8px rgba(145, 111, 255, .34)); }
+  .locality-label { max-width: 158px; padding: 3px 6px; font-size: 9px; line-height: 1.55; }
+  .locality-label[data-kind="city"] { font-size: 12px; }
+  .locality-label[data-kind="town"] { font-size: 10px; }
+  .road-label { max-width: 175px; padding: 2px 5px; font-size: 8.5px; }
+  .road-label[data-class="motorway"], .road-label[data-class="trunk"] { font-size: 9px; }
+  .administrative-label { max-width: 182px; padding: 3px 7px; font-size: 9px; }
+  .administrative-label[data-level="region"] { font-size: 12px; }
+}
+@media (min-width: 701px) { .map-actions__toggle { display: none; } }
+@media (prefers-reduced-motion: reduce) { *:not([data-essential-animation="true"]), *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

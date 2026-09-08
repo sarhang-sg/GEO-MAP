@@ -1,0 +1,3647 @@
+{
+  "schema": "NAV KURD Atlas Marker Assets v2",
+  "count": 455,
+  "generatedAt": "2026-09-06T00:00:00.000Z",
+  "items": [
+    {
+      "id": "city",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/city.svg"
+    },
+    {
+      "id": "town",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/town.svg"
+    },
+    {
+      "id": "village",
+      "group": "settlement_admin",
+      "glyph": "home",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/village.svg"
+    },
+    {
+      "id": "hamlet",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/hamlet.svg"
+    },
+    {
+      "id": "locality",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/locality.svg"
+    },
+    {
+      "id": "neighbourhood",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/neighbourhood.svg"
+    },
+    {
+      "id": "suburb",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/suburb.svg"
+    },
+    {
+      "id": "district",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/district.svg"
+    },
+    {
+      "id": "subdistrict",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/subdistrict.svg"
+    },
+    {
+      "id": "governorate",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/governorate.svg"
+    },
+    {
+      "id": "region",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/region.svg"
+    },
+    {
+      "id": "municipality",
+      "group": "settlement_admin",
+      "glyph": "government",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/municipality.svg"
+    },
+    {
+      "id": "ward",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/ward.svg"
+    },
+    {
+      "id": "quarter",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/quarter.svg"
+    },
+    {
+      "id": "administrative_center",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/administrative_center.svg"
+    },
+    {
+      "id": "refugee_camp",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/refugee_camp.svg"
+    },
+    {
+      "id": "idp_camp",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/idp_camp.svg"
+    },
+    {
+      "id": "settlement",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/settlement.svg"
+    },
+    {
+      "id": "industrial_town",
+      "group": "settlement_admin",
+      "glyph": "factory",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/industrial_town.svg"
+    },
+    {
+      "id": "new_town",
+      "group": "settlement_admin",
+      "glyph": "settlement",
+      "color": "#62B5FF",
+      "accent": "#6A5CFF",
+      "asset": "assets/icons/atlas/new_town.svg"
+    },
+    {
+      "id": "ministry",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/ministry.svg"
+    },
+    {
+      "id": "government_directorate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/government_directorate.svg"
+    },
+    {
+      "id": "general_directorate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/general_directorate.svg"
+    },
+    {
+      "id": "government_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/government_office.svg"
+    },
+    {
+      "id": "governor_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/governor_office.svg"
+    },
+    {
+      "id": "mayor_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/mayor_office.svg"
+    },
+    {
+      "id": "district_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/district_office.svg"
+    },
+    {
+      "id": "subdistrict_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/subdistrict_office.svg"
+    },
+    {
+      "id": "parliament",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/parliament.svg"
+    },
+    {
+      "id": "court",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/court.svg"
+    },
+    {
+      "id": "prosecutor_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/prosecutor_office.svg"
+    },
+    {
+      "id": "notary",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/notary.svg"
+    },
+    {
+      "id": "civil_registry",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/civil_registry.svg"
+    },
+    {
+      "id": "passport_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/passport_office.svg"
+    },
+    {
+      "id": "identity_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/identity_office.svg"
+    },
+    {
+      "id": "land_registry",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/land_registry.svg"
+    },
+    {
+      "id": "tax_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/tax_office.svg"
+    },
+    {
+      "id": "customs_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/customs_office.svg"
+    },
+    {
+      "id": "social_security_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/social_security_office.svg"
+    },
+    {
+      "id": "pension_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/pension_office.svg"
+    },
+    {
+      "id": "public_service_center",
+      "group": "government_public",
+      "glyph": "cafe",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/public_service_center.svg"
+    },
+    {
+      "id": "election_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/election_office.svg"
+    },
+    {
+      "id": "statistics_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/statistics_office.svg"
+    },
+    {
+      "id": "planning_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/planning_office.svg"
+    },
+    {
+      "id": "environment_office",
+      "group": "government_public",
+      "glyph": "briefcase",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/environment_office.svg"
+    },
+    {
+      "id": "agriculture_directorate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/agriculture_directorate.svg"
+    },
+    {
+      "id": "water_directorate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/water_directorate.svg"
+    },
+    {
+      "id": "electricity_directorate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/electricity_directorate.svg"
+    },
+    {
+      "id": "education_directorate",
+      "group": "government_public",
+      "glyph": "school",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/education_directorate.svg"
+    },
+    {
+      "id": "health_directorate",
+      "group": "government_public",
+      "glyph": "medical",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/health_directorate.svg"
+    },
+    {
+      "id": "police_station",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/police_station.svg"
+    },
+    {
+      "id": "traffic_police",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/traffic_police.svg"
+    },
+    {
+      "id": "security_office",
+      "group": "emergency_security",
+      "glyph": "briefcase",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/security_office.svg"
+    },
+    {
+      "id": "fire_station",
+      "group": "emergency_security",
+      "glyph": "fire",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/fire_station.svg"
+    },
+    {
+      "id": "civil_defence",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/civil_defence.svg"
+    },
+    {
+      "id": "emergency_center",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/emergency_center.svg"
+    },
+    {
+      "id": "ambulance_station",
+      "group": "emergency_security",
+      "glyph": "medical",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/ambulance_station.svg"
+    },
+    {
+      "id": "rescue_station",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/rescue_station.svg"
+    },
+    {
+      "id": "prison",
+      "group": "emergency_security",
+      "glyph": "prison",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/prison.svg"
+    },
+    {
+      "id": "detention_center",
+      "group": "emergency_security",
+      "glyph": "prison",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/detention_center.svg"
+    },
+    {
+      "id": "military_base",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/military_base.svg"
+    },
+    {
+      "id": "military_checkpoint",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/military_checkpoint.svg"
+    },
+    {
+      "id": "police_checkpoint",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/police_checkpoint.svg"
+    },
+    {
+      "id": "checkpoint",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/checkpoint.svg"
+    },
+    {
+      "id": "border_guard",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/border_guard.svg"
+    },
+    {
+      "id": "security_checkpoint",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/security_checkpoint.svg"
+    },
+    {
+      "id": "emergency_phone",
+      "group": "emergency_security",
+      "glyph": "phone",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/emergency_phone.svg"
+    },
+    {
+      "id": "shelter",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/shelter.svg"
+    },
+    {
+      "id": "disaster_response_center",
+      "group": "emergency_security",
+      "glyph": "shield",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/disaster_response_center.svg"
+    },
+    {
+      "id": "physiotherapy_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/physiotherapy_center.svg"
+    },
+    {
+      "id": "sports_medicine_clinic",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/sports_medicine_clinic.svg"
+    },
+    {
+      "id": "urgent_care",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/urgent_care.svg"
+    },
+    {
+      "id": "hospital",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/hospital.svg"
+    },
+    {
+      "id": "private_hospital",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/private_hospital.svg"
+    },
+    {
+      "id": "health_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/health_center.svg"
+    },
+    {
+      "id": "primary_health_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/primary_health_center.svg"
+    },
+    {
+      "id": "clinic",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/clinic.svg"
+    },
+    {
+      "id": "medical_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/medical_center.svg"
+    },
+    {
+      "id": "dentist",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/dentist.svg"
+    },
+    {
+      "id": "eye_clinic",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/eye_clinic.svg"
+    },
+    {
+      "id": "maternity_clinic",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/maternity_clinic.svg"
+    },
+    {
+      "id": "laboratory",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/laboratory.svg"
+    },
+    {
+      "id": "radiology_center",
+      "group": "health",
+      "glyph": "media",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/radiology_center.svg"
+    },
+    {
+      "id": "pharmacy",
+      "group": "health",
+      "glyph": "pharmacy",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/pharmacy.svg"
+    },
+    {
+      "id": "blood_bank",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/blood_bank.svg"
+    },
+    {
+      "id": "dialysis_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/dialysis_center.svg"
+    },
+    {
+      "id": "rehabilitation_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/rehabilitation_center.svg"
+    },
+    {
+      "id": "mental_health_center",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/mental_health_center.svg"
+    },
+    {
+      "id": "veterinary_clinic",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/veterinary_clinic.svg"
+    },
+    {
+      "id": "nursing_home",
+      "group": "health",
+      "glyph": "home",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/nursing_home.svg"
+    },
+    {
+      "id": "medical_supply",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/medical_supply.svg"
+    },
+    {
+      "id": "public_health_office",
+      "group": "health",
+      "glyph": "medical",
+      "color": "#4ED9B5",
+      "accent": "#2A9E91",
+      "asset": "assets/icons/atlas/public_health_office.svg"
+    },
+    {
+      "id": "driving_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/driving_school.svg"
+    },
+    {
+      "id": "music_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/music_school.svg"
+    },
+    {
+      "id": "special_education_center",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/special_education_center.svg"
+    },
+    {
+      "id": "kindergarten",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/kindergarten.svg"
+    },
+    {
+      "id": "primary_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/primary_school.svg"
+    },
+    {
+      "id": "secondary_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/secondary_school.svg"
+    },
+    {
+      "id": "high_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/high_school.svg"
+    },
+    {
+      "id": "school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/school.svg"
+    },
+    {
+      "id": "vocational_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/vocational_school.svg"
+    },
+    {
+      "id": "institute",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/institute.svg"
+    },
+    {
+      "id": "college",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/college.svg"
+    },
+    {
+      "id": "university",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/university.svg"
+    },
+    {
+      "id": "research_center",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/research_center.svg"
+    },
+    {
+      "id": "training_center",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/training_center.svg"
+    },
+    {
+      "id": "language_school",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/language_school.svg"
+    },
+    {
+      "id": "library",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/library.svg"
+    },
+    {
+      "id": "student_dormitory",
+      "group": "education_research",
+      "glyph": "home",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/student_dormitory.svg"
+    },
+    {
+      "id": "science_center",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/science_center.svg"
+    },
+    {
+      "id": "academy",
+      "group": "education_research",
+      "glyph": "school",
+      "color": "#68A8FF",
+      "accent": "#5166E8",
+      "asset": "assets/icons/atlas/academy.svg"
+    },
+    {
+      "id": "street",
+      "group": "transport_logistics",
+      "glyph": "road",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/street.svg"
+    },
+    {
+      "id": "bicycle_parking",
+      "group": "transport_logistics",
+      "glyph": "park",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/bicycle_parking.svg"
+    },
+    {
+      "id": "motorcycle_parking",
+      "group": "transport_logistics",
+      "glyph": "park",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/motorcycle_parking.svg"
+    },
+    {
+      "id": "parcel_locker",
+      "group": "transport_logistics",
+      "glyph": "parcel",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/parcel_locker.svg"
+    },
+    {
+      "id": "vehicle_inspection_center",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/vehicle_inspection_center.svg"
+    },
+    {
+      "id": "airport",
+      "group": "transport_logistics",
+      "glyph": "plane",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/airport.svg"
+    },
+    {
+      "id": "heliport",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/heliport.svg"
+    },
+    {
+      "id": "bus_station",
+      "group": "transport_logistics",
+      "glyph": "bus",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/bus_station.svg"
+    },
+    {
+      "id": "bus_stop",
+      "group": "transport_logistics",
+      "glyph": "bus",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/bus_stop.svg"
+    },
+    {
+      "id": "taxi_station",
+      "group": "transport_logistics",
+      "glyph": "bus",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/taxi_station.svg"
+    },
+    {
+      "id": "garage",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/garage.svg"
+    },
+    {
+      "id": "parking",
+      "group": "transport_logistics",
+      "glyph": "park",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/parking.svg"
+    },
+    {
+      "id": "parking_garage",
+      "group": "transport_logistics",
+      "glyph": "park",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/parking_garage.svg"
+    },
+    {
+      "id": "fuel_station",
+      "group": "transport_logistics",
+      "glyph": "fuel",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/fuel_station.svg"
+    },
+    {
+      "id": "ev_charging",
+      "group": "transport_logistics",
+      "glyph": "fuel",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/ev_charging.svg"
+    },
+    {
+      "id": "car_rental",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/car_rental.svg"
+    },
+    {
+      "id": "vehicle_inspection",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/vehicle_inspection.svg"
+    },
+    {
+      "id": "car_wash",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/car_wash.svg"
+    },
+    {
+      "id": "truck_stop",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/truck_stop.svg"
+    },
+    {
+      "id": "logistics_center",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/logistics_center.svg"
+    },
+    {
+      "id": "warehouse",
+      "group": "transport_logistics",
+      "glyph": "factory",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/warehouse.svg"
+    },
+    {
+      "id": "cargo_terminal",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/cargo_terminal.svg"
+    },
+    {
+      "id": "post_office",
+      "group": "transport_logistics",
+      "glyph": "briefcase",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/post_office.svg"
+    },
+    {
+      "id": "courier_service",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/courier_service.svg"
+    },
+    {
+      "id": "delivery_hub",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/delivery_hub.svg"
+    },
+    {
+      "id": "railway_station",
+      "group": "transport_logistics",
+      "glyph": "train",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/railway_station.svg"
+    },
+    {
+      "id": "bridge",
+      "group": "transport_logistics",
+      "glyph": "bridge",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/bridge.svg"
+    },
+    {
+      "id": "tunnel",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/tunnel.svg"
+    },
+    {
+      "id": "ferry_terminal",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/ferry_terminal.svg"
+    },
+    {
+      "id": "restaurant",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/restaurant.svg"
+    },
+    {
+      "id": "kebab_restaurant",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/kebab_restaurant.svg"
+    },
+    {
+      "id": "fast_food",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/fast_food.svg"
+    },
+    {
+      "id": "cafe",
+      "group": "food_hospitality",
+      "glyph": "cafe",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/cafe.svg"
+    },
+    {
+      "id": "tea_house",
+      "group": "food_hospitality",
+      "glyph": "cafe",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/tea_house.svg"
+    },
+    {
+      "id": "bakery",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/bakery.svg"
+    },
+    {
+      "id": "pastry_shop",
+      "group": "food_hospitality",
+      "glyph": "shop",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/pastry_shop.svg"
+    },
+    {
+      "id": "juice_shop",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/juice_shop.svg"
+    },
+    {
+      "id": "ice_cream_shop",
+      "group": "food_hospitality",
+      "glyph": "shop",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/ice_cream_shop.svg"
+    },
+    {
+      "id": "food_court",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/food_court.svg"
+    },
+    {
+      "id": "hotel",
+      "group": "food_hospitality",
+      "glyph": "hotel",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/hotel.svg"
+    },
+    {
+      "id": "motel",
+      "group": "food_hospitality",
+      "glyph": "hotel",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/motel.svg"
+    },
+    {
+      "id": "guest_house",
+      "group": "food_hospitality",
+      "glyph": "home",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/guest_house.svg"
+    },
+    {
+      "id": "hostel",
+      "group": "food_hospitality",
+      "glyph": "hotel",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/hostel.svg"
+    },
+    {
+      "id": "resort",
+      "group": "food_hospitality",
+      "glyph": "hotel",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/resort.svg"
+    },
+    {
+      "id": "wedding_hall",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/wedding_hall.svg"
+    },
+    {
+      "id": "banquet_hall",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/banquet_hall.svg"
+    },
+    {
+      "id": "catering_service",
+      "group": "food_hospitality",
+      "glyph": "food",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/catering_service.svg"
+    },
+    {
+      "id": "market",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/market.svg"
+    },
+    {
+      "id": "supermarket",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/supermarket.svg"
+    },
+    {
+      "id": "minimarket",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/minimarket.svg"
+    },
+    {
+      "id": "mall",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/mall.svg"
+    },
+    {
+      "id": "department_store",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/department_store.svg"
+    },
+    {
+      "id": "shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/shop.svg"
+    },
+    {
+      "id": "convenience_store",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/convenience_store.svg"
+    },
+    {
+      "id": "mobile_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/mobile_shop.svg"
+    },
+    {
+      "id": "electronics_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/electronics_shop.svg"
+    },
+    {
+      "id": "computer_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/computer_shop.svg"
+    },
+    {
+      "id": "clothes_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/clothes_shop.svg"
+    },
+    {
+      "id": "shoes_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/shoes_shop.svg"
+    },
+    {
+      "id": "jewelry_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/jewelry_shop.svg"
+    },
+    {
+      "id": "cosmetics_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/cosmetics_shop.svg"
+    },
+    {
+      "id": "furniture_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/furniture_shop.svg"
+    },
+    {
+      "id": "hardware_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/hardware_shop.svg"
+    },
+    {
+      "id": "building_materials",
+      "group": "retail_commerce",
+      "glyph": "home",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/building_materials.svg"
+    },
+    {
+      "id": "bookshop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/bookshop.svg"
+    },
+    {
+      "id": "stationery_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/stationery_shop.svg"
+    },
+    {
+      "id": "toy_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/toy_shop.svg"
+    },
+    {
+      "id": "butcher",
+      "group": "retail_commerce",
+      "glyph": "food",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/butcher.svg"
+    },
+    {
+      "id": "greengrocer",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/greengrocer.svg"
+    },
+    {
+      "id": "dairy_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/dairy_shop.svg"
+    },
+    {
+      "id": "car_showroom",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/car_showroom.svg"
+    },
+    {
+      "id": "auto_parts",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/auto_parts.svg"
+    },
+    {
+      "id": "tyre_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/tyre_shop.svg"
+    },
+    {
+      "id": "motorcycle_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/motorcycle_shop.svg"
+    },
+    {
+      "id": "bicycle_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/bicycle_shop.svg"
+    },
+    {
+      "id": "pet_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/pet_shop.svg"
+    },
+    {
+      "id": "florist",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/florist.svg"
+    },
+    {
+      "id": "gift_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/gift_shop.svg"
+    },
+    {
+      "id": "farm_supply_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/farm_supply_shop.svg"
+    },
+    {
+      "id": "appliance_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/appliance_shop.svg"
+    },
+    {
+      "id": "carpet_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/carpet_shop.svg"
+    },
+    {
+      "id": "optician",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/optician.svg"
+    },
+    {
+      "id": "bank",
+      "group": "finance_professional",
+      "glyph": "bank",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/bank.svg"
+    },
+    {
+      "id": "atm",
+      "group": "finance_professional",
+      "glyph": "bank",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/atm.svg"
+    },
+    {
+      "id": "payment_agent",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/payment_agent.svg"
+    },
+    {
+      "id": "fastpay_agent",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/fastpay_agent.svg"
+    },
+    {
+      "id": "money_transfer",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/money_transfer.svg"
+    },
+    {
+      "id": "currency_exchange",
+      "group": "finance_professional",
+      "glyph": "bank",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/currency_exchange.svg"
+    },
+    {
+      "id": "insurance_office",
+      "group": "finance_professional",
+      "glyph": "bank",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/insurance_office.svg"
+    },
+    {
+      "id": "microfinance",
+      "group": "finance_professional",
+      "glyph": "bank",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/microfinance.svg"
+    },
+    {
+      "id": "real_estate",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/real_estate.svg"
+    },
+    {
+      "id": "law_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/law_office.svg"
+    },
+    {
+      "id": "accounting_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/accounting_office.svg"
+    },
+    {
+      "id": "consulting_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/consulting_office.svg"
+    },
+    {
+      "id": "engineering_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/engineering_office.svg"
+    },
+    {
+      "id": "architecture_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/architecture_office.svg"
+    },
+    {
+      "id": "travel_agency",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/travel_agency.svg"
+    },
+    {
+      "id": "employment_agency",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/employment_agency.svg"
+    },
+    {
+      "id": "translation_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/translation_office.svg"
+    },
+    {
+      "id": "advertising_agency",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/advertising_agency.svg"
+    },
+    {
+      "id": "photography_studio",
+      "group": "finance_professional",
+      "glyph": "camera",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/photography_studio.svg"
+    },
+    {
+      "id": "printing_service",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/printing_service.svg"
+    },
+    {
+      "id": "coworking_space",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/coworking_space.svg"
+    },
+    {
+      "id": "company_headquarters",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/company_headquarters.svg"
+    },
+    {
+      "id": "branch_office",
+      "group": "finance_professional",
+      "glyph": "briefcase",
+      "color": "#67D7E7",
+      "accent": "#277E9B",
+      "asset": "assets/icons/atlas/branch_office.svg"
+    },
+    {
+      "id": "mosque",
+      "group": "culture_religion_media",
+      "glyph": "mosque",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/mosque.svg"
+    },
+    {
+      "id": "church",
+      "group": "culture_religion_media",
+      "glyph": "church",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/church.svg"
+    },
+    {
+      "id": "synagogue",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/synagogue.svg"
+    },
+    {
+      "id": "temple",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/temple.svg"
+    },
+    {
+      "id": "religious_site",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/religious_site.svg"
+    },
+    {
+      "id": "shrine",
+      "group": "culture_religion_media",
+      "glyph": "mosque",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/shrine.svg"
+    },
+    {
+      "id": "cemetery",
+      "group": "culture_religion_media",
+      "glyph": "cemetery",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/cemetery.svg"
+    },
+    {
+      "id": "museum",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/museum.svg"
+    },
+    {
+      "id": "art_gallery",
+      "group": "culture_religion_media",
+      "glyph": "camera",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/art_gallery.svg"
+    },
+    {
+      "id": "cultural_center",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/cultural_center.svg"
+    },
+    {
+      "id": "theatre",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/theatre.svg"
+    },
+    {
+      "id": "cinema",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/cinema.svg"
+    },
+    {
+      "id": "festival_ground",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/festival_ground.svg"
+    },
+    {
+      "id": "monument",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/monument.svg"
+    },
+    {
+      "id": "memorial",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/memorial.svg"
+    },
+    {
+      "id": "archaeological_site",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/archaeological_site.svg"
+    },
+    {
+      "id": "castle",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/castle.svg"
+    },
+    {
+      "id": "heritage_house",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/heritage_house.svg"
+    },
+    {
+      "id": "television_station",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/television_station.svg"
+    },
+    {
+      "id": "radio_station",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/radio_station.svg"
+    },
+    {
+      "id": "newspaper_office",
+      "group": "culture_religion_media",
+      "glyph": "briefcase",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/newspaper_office.svg"
+    },
+    {
+      "id": "media_center",
+      "group": "culture_religion_media",
+      "glyph": "media",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/media_center.svg"
+    },
+    {
+      "id": "community_center",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/community_center.svg"
+    },
+    {
+      "id": "event_venue",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/event_venue.svg"
+    },
+    {
+      "id": "tourist_attraction",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/tourist_attraction.svg"
+    },
+    {
+      "id": "tourist_information",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/tourist_information.svg"
+    },
+    {
+      "id": "viewpoint",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/viewpoint.svg"
+    },
+    {
+      "id": "hiking_trailhead",
+      "group": "tourism_nature_heritage",
+      "glyph": "train",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/hiking_trailhead.svg"
+    },
+    {
+      "id": "climbing_area",
+      "group": "tourism_nature_heritage",
+      "glyph": "climbing",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/climbing_area.svg"
+    },
+    {
+      "id": "mountain",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/mountain.svg"
+    },
+    {
+      "id": "peak",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/peak.svg"
+    },
+    {
+      "id": "hill",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/hill.svg"
+    },
+    {
+      "id": "valley",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/valley.svg"
+    },
+    {
+      "id": "canyon",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/canyon.svg"
+    },
+    {
+      "id": "river",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/river.svg"
+    },
+    {
+      "id": "stream",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/stream.svg"
+    },
+    {
+      "id": "lake",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/lake.svg"
+    },
+    {
+      "id": "reservoir",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/reservoir.svg"
+    },
+    {
+      "id": "waterfall",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/waterfall.svg"
+    },
+    {
+      "id": "spring",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/spring.svg"
+    },
+    {
+      "id": "cave",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/cave.svg"
+    },
+    {
+      "id": "forest",
+      "group": "tourism_nature_heritage",
+      "glyph": "tree",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/forest.svg"
+    },
+    {
+      "id": "woodland",
+      "group": "tourism_nature_heritage",
+      "glyph": "tree",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/woodland.svg"
+    },
+    {
+      "id": "nature_reserve",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/nature_reserve.svg"
+    },
+    {
+      "id": "island",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/island.svg"
+    },
+    {
+      "id": "national_park",
+      "group": "tourism_nature_heritage",
+      "glyph": "park",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/national_park.svg"
+    },
+    {
+      "id": "botanical_garden",
+      "group": "tourism_nature_heritage",
+      "glyph": "tree",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/botanical_garden.svg"
+    },
+    {
+      "id": "zoo",
+      "group": "tourism_nature_heritage",
+      "glyph": "park",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/zoo.svg"
+    },
+    {
+      "id": "picnic_site",
+      "group": "tourism_nature_heritage",
+      "glyph": "park",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/picnic_site.svg"
+    },
+    {
+      "id": "camp_site",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/camp_site.svg"
+    },
+    {
+      "id": "caravan_site",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/caravan_site.svg"
+    },
+    {
+      "id": "cable_car",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/cable_car.svg"
+    },
+    {
+      "id": "dam",
+      "group": "tourism_nature_heritage",
+      "glyph": "dam",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/dam.svg"
+    },
+    {
+      "id": "beach",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/beach.svg"
+    },
+    {
+      "id": "wetland",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/wetland.svg"
+    },
+    {
+      "id": "hot_spring",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/hot_spring.svg"
+    },
+    {
+      "id": "scenic_route",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/scenic_route.svg"
+    },
+    {
+      "id": "martial_arts_center",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/martial_arts_center.svg"
+    },
+    {
+      "id": "kung_fu",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/kung_fu.svg"
+    },
+    {
+      "id": "taekwondo",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/taekwondo.svg"
+    },
+    {
+      "id": "karate",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/karate.svg"
+    },
+    {
+      "id": "jeet_kune_do",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/jeet_kune_do.svg"
+    },
+    {
+      "id": "wushu",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/wushu.svg"
+    },
+    {
+      "id": "shaolin_martial_arts",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/shaolin_martial_arts.svg"
+    },
+    {
+      "id": "parkour",
+      "group": "sports_leisure",
+      "glyph": "park",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/parkour.svg"
+    },
+    {
+      "id": "mma_gym",
+      "group": "sports_leisure",
+      "glyph": "boxing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/mma_gym.svg"
+    },
+    {
+      "id": "boxing_club",
+      "group": "sports_leisure",
+      "glyph": "boxing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/boxing_club.svg"
+    },
+    {
+      "id": "kickboxing",
+      "group": "sports_leisure",
+      "glyph": "boxing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/kickboxing.svg"
+    },
+    {
+      "id": "muay_thai",
+      "group": "sports_leisure",
+      "glyph": "boxing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/muay_thai.svg"
+    },
+    {
+      "id": "judo",
+      "group": "sports_leisure",
+      "glyph": "martial",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/judo.svg"
+    },
+    {
+      "id": "wrestling_club",
+      "group": "sports_leisure",
+      "glyph": "boxing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/wrestling_club.svg"
+    },
+    {
+      "id": "yoga_studio",
+      "group": "sports_leisure",
+      "glyph": "camera",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/yoga_studio.svg"
+    },
+    {
+      "id": "climbing_gym",
+      "group": "sports_leisure",
+      "glyph": "climbing",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/climbing_gym.svg"
+    },
+    {
+      "id": "dance_studio",
+      "group": "sports_leisure",
+      "glyph": "camera",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/dance_studio.svg"
+    },
+    {
+      "id": "cycling_club",
+      "group": "sports_leisure",
+      "glyph": "bicycle",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/cycling_club.svg"
+    },
+    {
+      "id": "stadium",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/stadium.svg"
+    },
+    {
+      "id": "sports_center",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/sports_center.svg"
+    },
+    {
+      "id": "football_field",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/football_field.svg"
+    },
+    {
+      "id": "basketball_court",
+      "group": "sports_leisure",
+      "glyph": "government",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/basketball_court.svg"
+    },
+    {
+      "id": "volleyball_court",
+      "group": "sports_leisure",
+      "glyph": "government",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/volleyball_court.svg"
+    },
+    {
+      "id": "tennis_court",
+      "group": "sports_leisure",
+      "glyph": "government",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/tennis_court.svg"
+    },
+    {
+      "id": "gym",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/gym.svg"
+    },
+    {
+      "id": "swimming_pool",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/swimming_pool.svg"
+    },
+    {
+      "id": "playground",
+      "group": "sports_leisure",
+      "glyph": "park",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/playground.svg"
+    },
+    {
+      "id": "park",
+      "group": "sports_leisure",
+      "glyph": "park",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/park.svg"
+    },
+    {
+      "id": "amusement_park",
+      "group": "sports_leisure",
+      "glyph": "park",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/amusement_park.svg"
+    },
+    {
+      "id": "water_park",
+      "group": "sports_leisure",
+      "glyph": "water",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/water_park.svg"
+    },
+    {
+      "id": "gaming_center",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/gaming_center.svg"
+    },
+    {
+      "id": "esports_center",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/esports_center.svg"
+    },
+    {
+      "id": "bowling",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/bowling.svg"
+    },
+    {
+      "id": "billiards_hall",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/billiards_hall.svg"
+    },
+    {
+      "id": "horse_club",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/horse_club.svg"
+    },
+    {
+      "id": "shooting_club",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/shooting_club.svg"
+    },
+    {
+      "id": "spa",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/spa.svg"
+    },
+    {
+      "id": "sauna",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/sauna.svg"
+    },
+    {
+      "id": "fitness_trail",
+      "group": "sports_leisure",
+      "glyph": "train",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/fitness_trail.svg"
+    },
+    {
+      "id": "race_track",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/race_track.svg"
+    },
+    {
+      "id": "power_station",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/power_station.svg"
+    },
+    {
+      "id": "substation",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/substation.svg"
+    },
+    {
+      "id": "power_plant",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/power_plant.svg"
+    },
+    {
+      "id": "oil_field",
+      "group": "utilities_infrastructure",
+      "glyph": "stadium",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/oil_field.svg"
+    },
+    {
+      "id": "oil_facility",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/oil_facility.svg"
+    },
+    {
+      "id": "gas_station_facility",
+      "group": "utilities_infrastructure",
+      "glyph": "fuel",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/gas_station_facility.svg"
+    },
+    {
+      "id": "water_treatment",
+      "group": "utilities_infrastructure",
+      "glyph": "bank",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/water_treatment.svg"
+    },
+    {
+      "id": "wastewater_treatment",
+      "group": "utilities_infrastructure",
+      "glyph": "bank",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/wastewater_treatment.svg"
+    },
+    {
+      "id": "water_tower",
+      "group": "utilities_infrastructure",
+      "glyph": "water",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/water_tower.svg"
+    },
+    {
+      "id": "reservoir_covered",
+      "group": "utilities_infrastructure",
+      "glyph": "water",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/reservoir_covered.svg"
+    },
+    {
+      "id": "telecom_tower",
+      "group": "utilities_infrastructure",
+      "glyph": "home",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/telecom_tower.svg"
+    },
+    {
+      "id": "communication_mast",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/communication_mast.svg"
+    },
+    {
+      "id": "data_center",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/data_center.svg"
+    },
+    {
+      "id": "recycling_center",
+      "group": "utilities_infrastructure",
+      "glyph": "bicycle",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/recycling_center.svg"
+    },
+    {
+      "id": "waste_transfer_station",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/waste_transfer_station.svg"
+    },
+    {
+      "id": "landfill",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/landfill.svg"
+    },
+    {
+      "id": "water_pumping_station",
+      "group": "utilities_infrastructure",
+      "glyph": "water",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/water_pumping_station.svg"
+    },
+    {
+      "id": "sewage_pumping_station",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/sewage_pumping_station.svg"
+    },
+    {
+      "id": "road_maintenance_yard",
+      "group": "utilities_infrastructure",
+      "glyph": "road",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/road_maintenance_yard.svg"
+    },
+    {
+      "id": "street_lighting_station",
+      "group": "utilities_infrastructure",
+      "glyph": "road",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/street_lighting_station.svg"
+    },
+    {
+      "id": "solar_farm",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/solar_farm.svg"
+    },
+    {
+      "id": "wind_farm",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/wind_farm.svg"
+    },
+    {
+      "id": "transformer",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/transformer.svg"
+    },
+    {
+      "id": "water_well",
+      "group": "utilities_infrastructure",
+      "glyph": "water",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/water_well.svg"
+    },
+    {
+      "id": "factory",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/factory.svg"
+    },
+    {
+      "id": "workshop",
+      "group": "industry_agriculture",
+      "glyph": "shop",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/workshop.svg"
+    },
+    {
+      "id": "industrial_zone",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/industrial_zone.svg"
+    },
+    {
+      "id": "quarry",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/quarry.svg"
+    },
+    {
+      "id": "mine",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/mine.svg"
+    },
+    {
+      "id": "cement_factory",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/cement_factory.svg"
+    },
+    {
+      "id": "brick_factory",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/brick_factory.svg"
+    },
+    {
+      "id": "food_factory",
+      "group": "industry_agriculture",
+      "glyph": "food",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/food_factory.svg"
+    },
+    {
+      "id": "textile_factory",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/textile_factory.svg"
+    },
+    {
+      "id": "cold_storage",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/cold_storage.svg"
+    },
+    {
+      "id": "farm",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/farm.svg"
+    },
+    {
+      "id": "farmland",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/farmland.svg"
+    },
+    {
+      "id": "orchard",
+      "group": "industry_agriculture",
+      "glyph": "tree",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/orchard.svg"
+    },
+    {
+      "id": "greenhouse",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/greenhouse.svg"
+    },
+    {
+      "id": "livestock_farm",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/livestock_farm.svg"
+    },
+    {
+      "id": "poultry_farm",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/poultry_farm.svg"
+    },
+    {
+      "id": "fish_farm",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/fish_farm.svg"
+    },
+    {
+      "id": "dairy_farm",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/dairy_farm.svg"
+    },
+    {
+      "id": "grain_silo",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/grain_silo.svg"
+    },
+    {
+      "id": "slaughterhouse",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/slaughterhouse.svg"
+    },
+    {
+      "id": "agricultural_cooperative",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/agricultural_cooperative.svg"
+    },
+    {
+      "id": "irrigation_station",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/irrigation_station.svg"
+    },
+    {
+      "id": "beekeeping",
+      "group": "industry_agriculture",
+      "glyph": "agriculture",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/beekeeping.svg"
+    },
+    {
+      "id": "nursery",
+      "group": "industry_agriculture",
+      "glyph": "tree",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/nursery.svg"
+    },
+    {
+      "id": "sawmill",
+      "group": "industry_agriculture",
+      "glyph": "factory",
+      "color": "#8BCB68",
+      "accent": "#4C8A57",
+      "asset": "assets/icons/atlas/sawmill.svg"
+    },
+    {
+      "id": "house",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/house.svg"
+    },
+    {
+      "id": "home",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/home.svg"
+    },
+    {
+      "id": "apartment",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/apartment.svg"
+    },
+    {
+      "id": "apartment_building",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/apartment_building.svg"
+    },
+    {
+      "id": "residential_compound",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/residential_compound.svg"
+    },
+    {
+      "id": "tower",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/tower.svg"
+    },
+    {
+      "id": "office_building",
+      "group": "residential_buildings",
+      "glyph": "briefcase",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/office_building.svg"
+    },
+    {
+      "id": "commercial_building",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/commercial_building.svg"
+    },
+    {
+      "id": "mixed_use_building",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/mixed_use_building.svg"
+    },
+    {
+      "id": "villa",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/villa.svg"
+    },
+    {
+      "id": "farmhouse",
+      "group": "residential_buildings",
+      "glyph": "agriculture",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/farmhouse.svg"
+    },
+    {
+      "id": "dormitory",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/dormitory.svg"
+    },
+    {
+      "id": "barracks",
+      "group": "residential_buildings",
+      "glyph": "cafe",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/barracks.svg"
+    },
+    {
+      "id": "cabin",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/cabin.svg"
+    },
+    {
+      "id": "construction_site",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/construction_site.svg"
+    },
+    {
+      "id": "private_property",
+      "group": "residential_buildings",
+      "glyph": "home",
+      "color": "#B6A6FF",
+      "accent": "#7763C4",
+      "asset": "assets/icons/atlas/private_property.svg"
+    },
+    {
+      "id": "internet_provider",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/internet_provider.svg"
+    },
+    {
+      "id": "telecom_office",
+      "group": "communications_technology",
+      "glyph": "briefcase",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/telecom_office.svg"
+    },
+    {
+      "id": "mobile_operator",
+      "group": "communications_technology",
+      "glyph": "phone",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/mobile_operator.svg"
+    },
+    {
+      "id": "korek_center",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/korek_center.svg"
+    },
+    {
+      "id": "asiacell_center",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/asiacell_center.svg"
+    },
+    {
+      "id": "zain_center",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/zain_center.svg"
+    },
+    {
+      "id": "korek_tower",
+      "group": "communications_technology",
+      "glyph": "home",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/korek_tower.svg"
+    },
+    {
+      "id": "asiacell_tower",
+      "group": "communications_technology",
+      "glyph": "home",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/asiacell_tower.svg"
+    },
+    {
+      "id": "zain_tower",
+      "group": "communications_technology",
+      "glyph": "home",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/zain_tower.svg"
+    },
+    {
+      "id": "internet_cafe",
+      "group": "communications_technology",
+      "glyph": "cafe",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/internet_cafe.svg"
+    },
+    {
+      "id": "computer_service",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/computer_service.svg"
+    },
+    {
+      "id": "phone_repair",
+      "group": "communications_technology",
+      "glyph": "phone",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/phone_repair.svg"
+    },
+    {
+      "id": "software_company",
+      "group": "communications_technology",
+      "glyph": "briefcase",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/software_company.svg"
+    },
+    {
+      "id": "technology_company",
+      "group": "communications_technology",
+      "glyph": "briefcase",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/technology_company.svg"
+    },
+    {
+      "id": "startup_hub",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/startup_hub.svg"
+    },
+    {
+      "id": "broadcast_tower",
+      "group": "communications_technology",
+      "glyph": "road",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/broadcast_tower.svg"
+    },
+    {
+      "id": "satellite_station",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/satellite_station.svg"
+    },
+    {
+      "id": "postal_centre",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/postal_centre.svg"
+    },
+    {
+      "id": "call_center",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/call_center.svg"
+    },
+    {
+      "id": "maker_space",
+      "group": "communications_technology",
+      "glyph": "wifi",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/maker_space.svg"
+    },
+    {
+      "id": "border_crossing",
+      "group": "border_route",
+      "glyph": "border",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/border_crossing.svg"
+    },
+    {
+      "id": "international_border_crossing",
+      "group": "border_route",
+      "glyph": "border",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/international_border_crossing.svg"
+    },
+    {
+      "id": "internal_checkpoint",
+      "group": "border_route",
+      "glyph": "shield",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/internal_checkpoint.svg"
+    },
+    {
+      "id": "customs_checkpoint",
+      "group": "border_route",
+      "glyph": "government",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/customs_checkpoint.svg"
+    },
+    {
+      "id": "toll_booth",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/toll_booth.svg"
+    },
+    {
+      "id": "weigh_station",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/weigh_station.svg"
+    },
+    {
+      "id": "mountain_pass",
+      "group": "border_route",
+      "glyph": "mountain",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/mountain_pass.svg"
+    },
+    {
+      "id": "route_junction",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/route_junction.svg"
+    },
+    {
+      "id": "highway_service_area",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/highway_service_area.svg"
+    },
+    {
+      "id": "rest_area",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/rest_area.svg"
+    },
+    {
+      "id": "bench",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/bench.svg"
+    },
+    {
+      "id": "public_art",
+      "group": "culture_religion_media",
+      "glyph": "cafe",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/public_art.svg"
+    },
+    {
+      "id": "hair_salon",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/hair_salon.svg"
+    },
+    {
+      "id": "beauty_salon",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/beauty_salon.svg"
+    },
+    {
+      "id": "sports_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/sports_shop.svg"
+    },
+    {
+      "id": "waste_bin",
+      "group": "utilities_infrastructure",
+      "glyph": "bolt",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/waste_bin.svg"
+    },
+    {
+      "id": "fountain",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/fountain.svg"
+    },
+    {
+      "id": "observation_tower",
+      "group": "tourism_nature_heritage",
+      "glyph": "home",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/observation_tower.svg"
+    },
+    {
+      "id": "surveillance_camera",
+      "group": "emergency_security",
+      "glyph": "camera",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/surveillance_camera.svg"
+    },
+    {
+      "id": "bar",
+      "group": "food_hospitality",
+      "glyph": "cafe",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/bar.svg"
+    },
+    {
+      "id": "public_toilet",
+      "group": "government_public",
+      "glyph": "cafe",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/public_toilet.svg"
+    },
+    {
+      "id": "beverages_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/beverages_shop.svg"
+    },
+    {
+      "id": "kiosk",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/kiosk.svg"
+    },
+    {
+      "id": "pub",
+      "group": "food_hospitality",
+      "glyph": "cafe",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/pub.svg"
+    },
+    {
+      "id": "laundry_service",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/laundry_service.svg"
+    },
+    {
+      "id": "public_telephone",
+      "group": "communications_technology",
+      "glyph": "cafe",
+      "color": "#5FE0FF",
+      "accent": "#5C61E6",
+      "asset": "assets/icons/atlas/public_telephone.svg"
+    },
+    {
+      "id": "drinking_water",
+      "group": "utilities_infrastructure",
+      "glyph": "water",
+      "color": "#7DC8E8",
+      "accent": "#5265A7",
+      "asset": "assets/icons/atlas/drinking_water.svg"
+    },
+    {
+      "id": "outdoor_shop",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/outdoor_shop.svg"
+    },
+    {
+      "id": "consulate",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/consulate.svg"
+    },
+    {
+      "id": "windmill",
+      "group": "tourism_nature_heritage",
+      "glyph": "bolt",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/windmill.svg"
+    },
+    {
+      "id": "general_store",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/general_store.svg"
+    },
+    {
+      "id": "nightclub",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/nightclub.svg"
+    },
+    {
+      "id": "vending_machine",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/vending_machine.svg"
+    },
+    {
+      "id": "water_mill",
+      "group": "tourism_nature_heritage",
+      "glyph": "water",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/water_mill.svg"
+    },
+    {
+      "id": "post_box",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/post_box.svg"
+    },
+    {
+      "id": "hunting_stand",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/hunting_stand.svg"
+    },
+    {
+      "id": "lighthouse",
+      "group": "transport_logistics",
+      "glyph": "home",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/lighthouse.svg"
+    },
+    {
+      "id": "beer_garden",
+      "group": "food_hospitality",
+      "glyph": "tree",
+      "color": "#FF8F7A",
+      "accent": "#D85A66",
+      "asset": "assets/icons/atlas/beer_garden.svg"
+    },
+    {
+      "id": "battlefield",
+      "group": "tourism_nature_heritage",
+      "glyph": "stadium",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/battlefield.svg"
+    },
+    {
+      "id": "newsagent",
+      "group": "retail_commerce",
+      "glyph": "shop",
+      "color": "#D98BFF",
+      "accent": "#914BD1",
+      "asset": "assets/icons/atlas/newsagent.svg"
+    },
+    {
+      "id": "bicycle_rental",
+      "group": "transport_logistics",
+      "glyph": "bicycle",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/bicycle_rental.svg"
+    },
+    {
+      "id": "embassy",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/embassy.svg"
+    },
+    {
+      "id": "car_sharing",
+      "group": "transport_logistics",
+      "glyph": "car",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/car_sharing.svg"
+    },
+    {
+      "id": "ice_rink",
+      "group": "sports_leisure",
+      "glyph": "stadium",
+      "color": "#72B9FF",
+      "accent": "#7C5CE6",
+      "asset": "assets/icons/atlas/ice_rink.svg"
+    },
+    {
+      "id": "historic",
+      "group": "tourism_nature_heritage",
+      "glyph": "museum",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/historic.svg"
+    },
+    {
+      "id": "nature",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/nature.svg"
+    },
+    {
+      "id": "tourism",
+      "group": "tourism_nature_heritage",
+      "glyph": "mountain",
+      "color": "#73D083",
+      "accent": "#2F8E74",
+      "asset": "assets/icons/atlas/tourism.svg"
+    },
+    {
+      "id": "religious",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/religious.svg"
+    },
+    {
+      "id": "cultural",
+      "group": "culture_religion_media",
+      "glyph": "museum",
+      "color": "#F7C76B",
+      "accent": "#A96DB6",
+      "asset": "assets/icons/atlas/cultural.svg"
+    },
+    {
+      "id": "airport_apron",
+      "group": "transport_logistics",
+      "glyph": "plane",
+      "color": "#FFB85C",
+      "accent": "#D97B2E",
+      "asset": "assets/icons/atlas/airport_apron.svg"
+    },
+    {
+      "id": "speed_camera",
+      "group": "emergency_security",
+      "glyph": "camera",
+      "color": "#FF6D91",
+      "accent": "#C84468",
+      "asset": "assets/icons/atlas/speed_camera.svg"
+    },
+    {
+      "id": "traffic_signal",
+      "group": "border_route",
+      "glyph": "border",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/traffic_signal.svg"
+    },
+    {
+      "id": "pedestrian_crossing",
+      "group": "border_route",
+      "glyph": "border",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/pedestrian_crossing.svg"
+    },
+    {
+      "id": "turning_circle",
+      "group": "border_route",
+      "glyph": "border",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/turning_circle.svg"
+    },
+    {
+      "id": "motorway_junction",
+      "group": "border_route",
+      "glyph": "road",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/motorway_junction.svg"
+    },
+    {
+      "id": "railway_crossing",
+      "group": "border_route",
+      "glyph": "train",
+      "color": "#FFD27A",
+      "accent": "#9C744B",
+      "asset": "assets/icons/atlas/railway_crossing.svg"
+    },
+    {
+      "id": "other",
+      "group": "government_public",
+      "glyph": "government",
+      "color": "#9A7CFF",
+      "accent": "#6553D8",
+      "asset": "assets/icons/atlas/other.svg"
+    }
+  ]
+}

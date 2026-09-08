@@ -1,0 +1,178 @@
+/* NAV KURD 9.1.0 boot loader, adapted from the user-supplied Uiverse loader. */
+.map-loading {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loading);
+  display: grid;
+  box-sizing: border-box;
+  place-items: center;
+  padding: max(24px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(37, 0, 43, .95) 0%, rgba(0, 5, 56, .95) 100%);
+  -webkit-backdrop-filter: saturate(.78) blur(.7px);
+  backdrop-filter: saturate(.78) blur(.7px);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: contain;
+  transition: opacity .28s cubic-bezier(.22, .68, .22, 1), visibility .28s linear;
+}
+
+.map-shell[data-load-state="loading"] > :not(#map):not(.map-loading):not(.map-focus-vignette):not(.map-edge-frame) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.map-loading[hidden],
+.map-loading[data-phase="exiting"],
+.map-shell[data-load-state="ready"] .map-loading {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.map-loading__content {
+  position: relative;
+  z-index: var(--z-local-content);
+  display: grid;
+  width: min(500px, calc(100vw - 36px));
+  justify-items: center;
+  gap: clamp(14px, 2.2vh, 22px);
+}
+
+.map-loading__word {
+  --main-size: 4.4em;
+  --text-color: #fff;
+  --shine-color: #ffffff40;
+  --shadow-color: #aaa;
+  position: relative;
+  display: flex;
+  width: min(7.3em, calc(100vw - 36px));
+  height: 1em;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--text-color);
+  filter: drop-shadow(0 0 .05em var(--shine-color));
+  font: 900 var(--main-size)/1 var(--font-latin);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.map-loading__slice {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.map-loading__slice b {
+  display: block;
+  font: inherit;
+  animation: nav-kurd-loading-scroll 2s cubic-bezier(.1, .6, .9, .4) infinite, nav-kurd-loading-shadow 2s cubic-bezier(.1, .6, .9, .4) infinite;
+}
+
+.map-loading__slice:nth-child(1) { clip-path: polygon(0 0,11.11% 0,11.11% 100%,0 100%); font-size:calc(var(--main-size)/20); margin-left:-2.1em; opacity:.6; }
+.map-loading__slice:nth-child(2) { clip-path: polygon(11.11% 0,22.22% 0,22.22% 100%,11.11% 100%); font-size:calc(var(--main-size)/16); margin-left:-.98em; opacity:.7; }
+.map-loading__slice:nth-child(3) { clip-path: polygon(22.22% 0,33.33% 0,33.33% 100%,22.22% 100%); font-size:calc(var(--main-size)/13); margin-left:-.33em; opacity:.8; }
+.map-loading__slice:nth-child(4) { clip-path: polygon(33.33% 0,44.44% 0,44.44% 100%,33.33% 100%); font-size:calc(var(--main-size)/11); margin-left:-.05em; opacity:.9; }
+.map-loading__slice:nth-child(5) { clip-path: polygon(44.44% 0,55.55% 0,55.55% 100%,44.44% 100%); font-size:calc(var(--main-size)/10); opacity:1; }
+.map-loading__slice:nth-child(6) { clip-path: polygon(55.55% 0,66.66% 0,66.66% 100%,55.55% 100%); font-size:calc(var(--main-size)/11); margin-left:.05em; opacity:.9; }
+.map-loading__slice:nth-child(7) { clip-path: polygon(66.66% 0,77.77% 0,77.77% 100%,66.66% 100%); font-size:calc(var(--main-size)/13); margin-left:.33em; opacity:.8; }
+.map-loading__slice:nth-child(8) { clip-path: polygon(77.77% 0,88.88% 0,88.88% 100%,77.77% 100%); font-size:calc(var(--main-size)/16); margin-left:.98em; opacity:.7; }
+.map-loading__slice:nth-child(9) { clip-path: polygon(88.88% 0,100% 0,100% 100%,88.88% 100%); font-size:calc(var(--main-size)/20); margin-left:2.1em; opacity:.6; }
+
+.map-loading__slice:nth-child(-n+4) b,
+.map-loading__slice:nth-child(n+6) b {
+  color: transparent;
+  background: linear-gradient(90deg, var(--text-color), var(--shadow-color), var(--text-color));
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.map-loading__line {
+  position: absolute;
+  display: flex;
+  width: calc(var(--main-size) / 2);
+  height: .05em;
+  align-items: center;
+  justify-content: center;
+  margin-top: .9em;
+  overflow: hidden;
+  border-radius: .05em;
+}
+
+.map-loading__line::before,
+.map-loading__line::after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--text-color);
+  content: "";
+}
+
+.map-loading__line::before { opacity: .24; }
+.map-loading__line::after {
+  background: var(--text-color);
+  transform: translateX(-90%);
+  animation: nav-kurd-loading-wobble 2s cubic-bezier(.5, .8, .5, .2) infinite;
+}
+
+.map-loading__equation {
+  margin: 0;
+  color: #fff;
+  direction: ltr;
+  font: 700 clamp(18px, 2.2vw, 25px)/1 "Droid Logo", var(--font-latin);
+  letter-spacing: .08em;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .22);
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+.map-loading__retry {
+  min-height: 40px;
+  padding: 0 17px;
+  border: 1px solid rgba(119, 181, 255, .34);
+  border-radius: 13px;
+  color: #f8fbff;
+  background: linear-gradient(135deg, rgba(35, 105, 255, .28), rgba(46, 193, 255, .20));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 10px 28px rgba(0,44,122,.22);
+  font: 800 10px/1 var(--font-ui);
+  cursor: pointer;
+}
+
+.map-loading__retry[hidden] { display: none !important; }
+.map-loading__retry:focus-visible { outline: 2px solid #75d7ff; outline-offset: 3px; }
+.map-loading__retry:disabled { cursor: wait; opacity: .58; }
+.map-loading[data-phase="retry"] .map-loading__word { --shadow-color: #ff7b98; }
+.map-loading[data-phase="retry"] .map-loading__line::after { background: #ff7b98; animation: none; transform: none; }
+
+@keyframes nav-kurd-loading-wobble { 0%,100% { transform: translateX(-90%); } 50% { transform: translateX(90%); } }
+@keyframes nav-kurd-loading-scroll { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes nav-kurd-loading-shadow { from { background-position: -98% 0; } to { background-position: 102% 0; } }
+
+@media (max-width: 520px) {
+  .map-loading__word { --main-size: 4em; }
+  .map-loading__equation { font-size: clamp(18px, 5.4vw, 22px); }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .map-loading__word { --main-size: 3.65em; }
+  .map-loading__content { gap: 12px; transform: translateY(-1vh); }
+  .map-loading__equation { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-loading__slice b,
+  .map-loading__line::after { animation-duration: 4s; }
+}

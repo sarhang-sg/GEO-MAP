@@ -1,0 +1,39 @@
+
+.search-results {
+  contain: layout paint style;
+  overflow-anchor: none;
+}
+
+.search-result {
+  contain: layout paint style;
+}
+
+/* Animating width recalculates layout on every frame and also forces the map
+   canvas/overlay stack to participate. Keep the same compact/open geometry,
+   but switch between the two stable states without a width animation. */
+.search-card {
+  transition-property: box-shadow, background-color !important;
+  transition-duration: 120ms !important;
+}
+
+.search-card input {
+  transition-property: opacity, transform !important;
+  transition-duration: 100ms, 120ms !important;
+}
+
+.map-shell.is-search-active .maplibregl-canvas {
+  will-change: auto !important;
+}
+
+@media (any-pointer: coarse), (hover: none) {
+  .search-result { transition-property: border-color, background-color !important; }
+  .search-result:hover { transform: none !important; }
+}
+
+
+.locality-label,
+.road-label,
+.administrative-label,
+.search-empty {
+  contain: layout paint style;
+}

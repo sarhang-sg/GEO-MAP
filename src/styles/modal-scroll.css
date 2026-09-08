@@ -1,0 +1,49 @@
+/* Canonical inset scroll surfaces. Scroll rails remain inside rounded cards. */
+.map-sheet { overflow-x: clip !important; overflow-y: auto !important; overscroll-behavior: contain; scrollbar-width: none !important; scrollbar-color: transparent transparent !important; -ms-overflow-style: none; }
+.map-sheet::-webkit-scrollbar,.map-sheet::-webkit-scrollbar-track,.map-sheet::-webkit-scrollbar-thumb,.map-sheet::-webkit-scrollbar-corner { display:none !important; width:0 !important; height:0 !important; background:transparent !important; box-shadow:none !important; }
+.about-dialog__panel,.feedback-studio__panel,.owner-studio__panel { overflow:hidden !important; padding:0 !important; isolation:isolate; }
+.feedback-studio__panel,.owner-studio__panel { display:flex !important; flex-direction:column; }
+.about-dialog__scroll,.feedback-studio__scroll,.owner-studio__scroll { box-sizing:border-box; width:calc(100% - 8px); min-width:0; min-height:0; margin:4px; overflow-x:clip; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; border-radius:max(18px,calc(30px - 6px)); -webkit-overflow-scrolling:touch; }
+.about-dialog__scroll { max-height:calc(100vh - 28px); max-height:calc(100dvh - 28px); padding:22px 18px max(18px,env(safe-area-inset-bottom)); scroll-padding-block:22px 24px; }
+.feedback-studio__scroll,.owner-studio__scroll { flex:1 1 auto; max-height:100%; }
+.feedback-studio__scroll { padding:22px clamp(18px,4vw,30px) calc(24px + env(safe-area-inset-bottom)); }
+.owner-studio__scroll { padding:0; }
+.user-contrib__panel,.user-choice__panel,.owner-choice__panel { overflow:hidden !important; isolation:isolate; }
+.user-contrib__content { margin:0 4px 4px; border-radius:0 0 20px 20px; }
+.owner-choice__list,.user-choice__list,.search-results { clip-path:inset(0 round 14px); }
+.place-detail__panel,.nav-tutorial__card { clip-path:inset(0 round 20px); }
+.about-dialog__scroll,.feedback-studio__scroll,.owner-studio__scroll,.user-contrib__content,.owner-choice__list,.user-choice__list,.search-results,.place-detail__panel,.nav-tutorial__card { scrollbar-width:thin; scrollbar-color:rgba(151,102,255,.88) rgba(18,14,42,.34); }
+.about-dialog__scroll::-webkit-scrollbar,.feedback-studio__scroll::-webkit-scrollbar,.owner-studio__scroll::-webkit-scrollbar,.user-contrib__content::-webkit-scrollbar,.owner-choice__list::-webkit-scrollbar,.user-choice__list::-webkit-scrollbar,.search-results::-webkit-scrollbar,.place-detail__panel::-webkit-scrollbar,.nav-tutorial__card::-webkit-scrollbar { width:8px; height:8px; }
+.about-dialog__scroll::-webkit-scrollbar-track,.feedback-studio__scroll::-webkit-scrollbar-track,.owner-studio__scroll::-webkit-scrollbar-track,.user-contrib__content::-webkit-scrollbar-track,.owner-choice__list::-webkit-scrollbar-track,.user-choice__list::-webkit-scrollbar-track,.search-results::-webkit-scrollbar-track,.place-detail__panel::-webkit-scrollbar-track,.nav-tutorial__card::-webkit-scrollbar-track { margin-block:20px; border:3px solid transparent; border-radius:999px; background:rgba(21,16,48,.58) content-box; box-shadow:inset 0 0 0 1px rgba(134,98,255,.08); }
+.about-dialog__scroll::-webkit-scrollbar-thumb,.feedback-studio__scroll::-webkit-scrollbar-thumb,.owner-studio__scroll::-webkit-scrollbar-thumb,.user-contrib__content::-webkit-scrollbar-thumb,.owner-choice__list::-webkit-scrollbar-thumb,.user-choice__list::-webkit-scrollbar-thumb,.search-results::-webkit-scrollbar-thumb,.place-detail__panel::-webkit-scrollbar-thumb,.nav-tutorial__card::-webkit-scrollbar-thumb { border:2px solid transparent; border-radius:999px; background:linear-gradient(180deg,rgba(83,94,232,.98),rgba(151,73,231,.98)) padding-box; box-shadow:0 0 14px rgba(123,80,255,.20); }
+.about-dialog__scroll::-webkit-scrollbar-corner,.feedback-studio__scroll::-webkit-scrollbar-corner,.owner-studio__scroll::-webkit-scrollbar-corner,.user-contrib__content::-webkit-scrollbar-corner,.owner-choice__list::-webkit-scrollbar-corner,.user-choice__list::-webkit-scrollbar-corner,.search-results::-webkit-scrollbar-corner,.place-detail__panel::-webkit-scrollbar-corner,.nav-tutorial__card::-webkit-scrollbar-corner { background:transparent; }
+.map-shell.is-about-open .topbar,.map-shell.is-about-open .search-card,.map-shell.is-about-open .map-actions,.map-shell.is-about-open .maplibregl-ctrl-top-left,.map-shell.is-about-open .maplibregl-ctrl-bottom-left,.map-shell.is-about-open .map-sheet,.map-shell.is-about-open .feedback-quick-button { opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
+.route-destination-prompt { isolation:isolate; }
+.map-left-control-rail__extras,.map-left-control-rail__extras .map-3d-button,.map-left-control-rail__extras .controls-visibility-button { filter: none !important; -webkit-filter: none !important; }
+.offline-map-pack { isolation:isolate; margin-bottom:24px; }
+.about-dialog__utility-actions,.support-section,.about-dialog__footer { position:relative; z-index:var(--z-local-content); }
+.topbar>.map-online-indicator { margin-top:2px; }
+@media (max-width:700px) { .about-dialog__scroll,.feedback-studio__scroll,.owner-studio__scroll { width:calc(100% - 6px); margin:3px; border-radius:max(17px,calc(25px - 5px)); } .about-dialog__scroll { max-height:calc(100vh - 26px); max-height:calc(100dvh - 26px); padding:20px 15px max(16px,env(safe-area-inset-bottom)); } .feedback-studio__scroll { padding:20px 16px calc(22px + env(safe-area-inset-bottom)); } .owner-studio__scroll { border-radius:21px 21px 0 0; } .user-contrib__content { margin:0 3px 3px; } .map-sheet { padding-bottom:calc(16px + env(safe-area-inset-bottom)); } }
+@media (max-width:380px) { .about-dialog__scroll { padding-inline:12px; } }
+
+/* R6: one scroll owner on touch layouts. The native file input stays inside
+   its visible label; no clipped off-screen focus target or nested grid scroll
+   layer survives a Photo Picker round-trip. Desktop keeps its existing grid. */
+@media (max-width:700px), (pointer:coarse) {
+  .user-contrib__panel {
+    display: block;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    isolation: auto;
+    -webkit-overflow-scrolling: auto;
+    scroll-padding-block: 100px 24px;
+    overflow-anchor: none;
+  }
+  .user-contrib__content {
+    overflow: visible;
+    min-height: auto;
+    border-radius: 0;
+    scrollbar-gutter: auto;
+  }
+  .user-contrib__header { position: sticky; top: 0; }
+}

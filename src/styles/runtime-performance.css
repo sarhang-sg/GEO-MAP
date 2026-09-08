@@ -1,0 +1,77 @@
+
+.language-transition,
+.language-transition[data-mode="switch"],
+.language-transition[data-mode="download"] {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  pointer-events: none !important;
+}
+
+.language-transition__panel {
+  position: relative;
+  overflow: hidden;
+  width: min(330px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border-radius: 17px;
+  border-color: rgba(151, 130, 255, .34) !important;
+  background:
+    linear-gradient(145deg, rgba(19, 27, 64, .985), rgba(7, 12, 31, .99)) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255,255,255,.07) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  contain: layout paint;
+}
+
+.language-transition__panel::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  width: 42%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #5da8ff, #8b67ff, #d158ff);
+  animation: nav-kurd-language-progress 1.05s cubic-bezier(.4,0,.2,1) infinite alternate;
+}
+
+.language-transition__spinner {
+  width: 26px;
+  height: 26px;
+  border-width: 3px;
+  box-shadow: 0 0 0 1px rgba(155,135,255,.06);
+}
+
+@keyframes nav-kurd-language-progress {
+  from { transform: translateX(-35%); opacity: .65; }
+  to { transform: translateX(175%); opacity: 1; }
+}
+
+[dir="rtl"] .language-transition__panel::after {
+  animation-name: nav-kurd-language-progress-rtl;
+}
+
+@keyframes nav-kurd-language-progress-rtl {
+  from { transform: translateX(35%); opacity: .65; }
+  to { transform: translateX(-175%); opacity: 1; }
+}
+
+/* Language updates no longer repaint the language-independent cluster source. */
+.map-shell.is-language-switching .maplibregl-canvas {
+  transition: opacity .12s ease;
+}
+
+@media (max-width: 700px) {
+  .language-transition {
+    place-items: center;
+    padding: 16px;
+  }
+  .language-transition__panel {
+    width: min(310px, calc(100vw - 28px));
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language-transition__panel::after { animation: none; width: 100%; opacity: .75; }
+}

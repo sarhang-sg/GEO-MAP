@@ -1,0 +1,63 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), camera=(), microphone=(), payment=()
+  X-Frame-Options: DENY
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Origin-Agent-Cluster: ?1
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'self'; script-src-elem 'self'; script-src-attr 'none'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://api.maptiler.com https://*.supabase.co https://lh3.googleusercontent.com; connect-src 'self' https://api.maptiler.com https://api.mapbox.com https://events.mapbox.com https://router.project-osrm.org https://api.open-meteo.com https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; child-src 'self' blob:; manifest-src 'self'; media-src 'self' blob: https://*.supabase.co; report-uri /api/csp-report; upgrade-insecure-requests
+
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Type: application/javascript; charset=utf-8
+  Service-Worker-Allowed: /
+
+/downloads/NAV-KURD-9.1.0.apk
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment; filename="NAV-KURD-9.1.0.apk"
+  Cache-Control: public, max-age=86400, s-maxage=604800, immutable
+  X-Content-Type-Options: nosniff
+
+/releases/latest.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/offline-manifest.json
+  Cache-Control: no-cache, must-revalidate
+
+/manifest.webmanifest
+  Cache-Control: no-cache, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/data/kri/kri-base.pmtiles
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/octet-stream
+
+/data/kri/kri-roads.pmtiles
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/octet-stream
+
+/data/kri/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/icons/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/.well-known/security.txt
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: text/plain; charset=utf-8

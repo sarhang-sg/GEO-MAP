@@ -1,0 +1,4562 @@
+{
+  "schema": "NAV KURD production source manifest v1",
+  "release": "2026-09-06-nav-kurd-v9.1.0",
+  "version": "9.1.0",
+  "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "cacheSchemaVersion": 91,
+  "offlinePackVersion": "2027.13",
+  "generatedForDate": "2026-09-06",
+  "secretSafe": true,
+  "fileCount": 1137,
+  "totalBytes": 332368902,
+  "files": {
+    ".env.example": {
+      "bytes": 2920,
+      "sha256": "1f82033041debf4fd343af562548c82f9dca2f2f61143f7490ac4865148a7272"
+    },
+    ".gitattributes": {
+      "bytes": 743,
+      "sha256": "980e74fa45d3bcf9ff2c90bbfa853dcd5c8d3ab94b7f940b92a72ad0f6946eeb"
+    },
+    ".github/dependabot.yml": {
+      "bytes": 490,
+      "sha256": "4b86f08f9c3788403a5774330aa08650add4c93f1aca7f9e6e7d46bff6a2c38f"
+    },
+    ".github/images/nav-kurd-v9-cover.jpg": {
+      "bytes": 198010,
+      "sha256": "4b812aff257abd1d3aa9a5083a08a5e4ee99920cfb268c95929336bc044bd904"
+    },
+    ".github/images/nav-kurd-v9-screen-1.jpg": {
+      "bytes": 152593,
+      "sha256": "68a630638a0c3f89387a058bca6f346a154ab5040dd27b0a27732eb68db95c74"
+    },
+    ".github/images/nav-kurd-v9-screen-2.jpg": {
+      "bytes": 137587,
+      "sha256": "d3dbe049ad6a1fa39eb19d38853b378ae034f4f0be058bfdbd685096a2ec16be"
+    },
+    ".github/images/nav-kurd-v9-screen-3.jpg": {
+      "bytes": 115102,
+      "sha256": "35473a1a8a4983881dca3679282ee107f34e8a7cae6a1453de8bb7b89bce64e7"
+    },
+    ".github/SECURITY.md": {
+      "bytes": 376,
+      "sha256": "431eccf43ce3f3b9adecbe6c90d9851933d923c2fd7cf300723dd54ee844f687"
+    },
+    ".github/workflows/release.yml": {
+      "bytes": 4874,
+      "sha256": "adf5c42668adf76f71861e18acb8daf0284345373bed1ff932a2b82827acd01a"
+    },
+    ".gitignore": {
+      "bytes": 139,
+      "sha256": "78e87d56d458ca75856cce81fa6c844425b945e2b2aac8adaca3214a576dfc4a"
+    },
+    ".npmrc": {
+      "bytes": 218,
+      "sha256": "1b3c05de1cb1e9b75038019cc1e6010c4165651f5072a617ba9282b8f0ca8fb0"
+    },
+    ".nvmrc": {
+      "bytes": 3,
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    "api/assetlinks.js": {
+      "bytes": 1380,
+      "sha256": "abc6282bd6c48b96b34b7bb8fd141878a4d353109ab9adca6dc8151795b56cc1"
+    },
+    "api/csp-report.js": {
+      "bytes": 1933,
+      "sha256": "ad721be4181c6b187b882406097110dfaa7c92381c1e00d8b1b4c10fa3ad77d1"
+    },
+    "api/sentinel2.js": {
+      "bytes": 18151,
+      "sha256": "8c1f3af3faad7e6f460e83804e0af3da09d1d017b8303b3cf187c9a5c2926a44"
+    },
+    "api/weather.js": {
+      "bytes": 8173,
+      "sha256": "c72c84fb1cb1f43287f719a81ff0bb742f9af453a6301c3367842003461a3025"
+    },
+    "contracts/gps-visual-contract.json": {
+      "bytes": 1119,
+      "sha256": "7c9a50a99c03762d59ddb19139dcc535acde420d29293a088ecbb8317cb15b21"
+    },
+    "data-src/canonical/kri-localities.geojson": {
+      "bytes": 21048782,
+      "sha256": "2825c2d39efffadc5c1c01575ef611e0a0a0038e23edb543a7c5f27a01d21060"
+    },
+    "data-src/canonical/kri-pois.geojson.gz": {
+      "bytes": 3642331,
+      "sha256": "d2592c9c86b813c6e990203763ff037235dbd0a1f89577de26a65af0d3de2ffa"
+    },
+    "data-src/canonical/verified-kurdish-settlement-orthography.json": {
+      "bytes": 1093,
+      "sha256": "b460253bc923b4b5e3dc111e2ebc0e4abf802a95ace7297e26c9eb12723ef703"
+    },
+    "data-src/generated/kri-localities-render.geojson": {
+      "bytes": 10625912,
+      "sha256": "2ebab0f9919a8539be2366dbc69e34e38c12ca6848979332e8f34917aeb01afe"
+    },
+    "data-src/generated/kri-pois-runtime.geojson": {
+      "bytes": 28725937,
+      "sha256": "8e222f4d0166911671beff44190b77ebd54654dc5a4a8ae043ad137369cfff85"
+    },
+    "data-src/generated/search/kri-search-index-ar.json": {
+      "bytes": 20695897,
+      "sha256": "4dc6e4ad1299e316a5e7ce2c6bdb94f9cd5f8f8ed512cc691d95fb9d65de3634"
+    },
+    "data-src/generated/search/kri-search-index-en.json": {
+      "bytes": 19787837,
+      "sha256": "bb4145c24822902155a7b811798f7257f7c71e8478f23fe84526814813f1e182"
+    },
+    "data-src/generated/search/kri-search-index-ku.json": {
+      "bytes": 22106776,
+      "sha256": "590cd1a8954f011b74a4a823007f99b71afac468258d22e578e373ca72897863"
+    },
+    "data-src/generated/search/kri-search-index-manifest.json": {
+      "bytes": 1332,
+      "sha256": "3bf098acebe1e005a5c6ff49ab0ee5971213070916e51137232e43c72eaed72c"
+    },
+    "data-src/generated/search/kri-search-index.json.gz": {
+      "bytes": 4916743,
+      "sha256": "5b26fad4fa2bd5a67f9cd6573190ddb9d0c0e3d192d76edf89dca820e66ac164"
+    },
+    "data-src/quarantine/kri-data-quality-quarantine.json": {
+      "bytes": 2565091,
+      "sha256": "1b1b33e160796a7abaf917d483d68bee179d240695d9675dfc43f0084a693a42"
+    },
+    "data-src/quarantine/kri-dedupe-ledger.json": {
+      "bytes": 16949,
+      "sha256": "644dbbb9625c5ccffbf5e507cae3e7694e20444b4cc6f33440e7d61d138f4650"
+    },
+    "data-src/quarantine/kri-poi-quarantine.json": {
+      "bytes": 852546,
+      "sha256": "667e8d60016693bcf34998e015747d31bf3571483e8f517d7f9e121ed02bab0a"
+    },
+    "data-src/source-data-manifest.json": {
+      "bytes": 3422,
+      "sha256": "7b32814bc975f710d3ecc11d67081f20b3f6b585b28b06d4fe0dd903c08a4e03"
+    },
+    "docs/ARCHITECTURE.md": {
+      "bytes": 1964,
+      "sha256": "a0e31fcf97f37e30fd64487461ab1dc81e9a1fcc232ff417836bfb3ef4132da3"
+    },
+    "docs/DATA.md": {
+      "bytes": 699,
+      "sha256": "85233cb50b385ce88961c28371ccafde5d14ab3e361755e8fc92e8db66c7af69"
+    },
+    "docs/DEPLOYMENT.md": {
+      "bytes": 1273,
+      "sha256": "16cd01a85cc4cd3fb3a5d8393593d7e67822fd578cf21b328e4a93971d9f4357"
+    },
+    "docs/OFFLINE.md": {
+      "bytes": 649,
+      "sha256": "7cd8868a0c76f8fe9035e786fc1da1630a5373d453af2f55b61ee4ba20b4ce7e"
+    },
+    "docs/public/DATA_PROVENANCE.md": {
+      "bytes": 350,
+      "sha256": "c651b569bb8b478247af066683661024255d95e63f2558213d2fd09b919eae7f"
+    },
+    "docs/RELEASE_9.1.0.md": {
+      "bytes": 3459,
+      "sha256": "dff1fc7a6199a5632ac196db6082b5d6e1f4bff2c6731ee80949866b4509f341"
+    },
+    "docs/SECURITY.md": {
+      "bytes": 613,
+      "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
+    },
+    "index.html": {
+      "bytes": 4325,
+      "sha256": "80f125909621b2c30df49f1b97b3049e500f025c361e38eeb7a7251dd1c669dc"
+    },
+    "LICENSE": {
+      "bytes": 1940,
+      "sha256": "a96ea0e7adbaa74254cf7f6fb0d681477ea4ecdffaf822dc24a00b540466f577"
+    },
+    "package-lock.json": {
+      "bytes": 32621,
+      "sha256": "2acb94cdb2ea451bfccd47c3c13a7a0aee4d3ee0ff3ec5ab1ee2b51fb0fcb81a"
+    },
+    "package.json": {
+      "bytes": 3960,
+      "sha256": "a1784cff870bd38d13dbbca2da51f2a4aa153516229143dd28f99a5538acd423"
+    },
+    "public/_headers": {
+      "bytes": 2601,
+      "sha256": "e8e8d31228d8aabc7e2f4da28a26e8fbf32575776df727fd19e6fd96886bb752"
+    },
+    "public/.well-known/security.txt": {
+      "bytes": 230,
+      "sha256": "eeb51c395191380b4d2050f99d14f924931607abbb12a52e06c9dc2006f88d99"
+    },
+    "public/.well-known/web-app-origin-association": {
+      "bytes": 127,
+      "sha256": "4ee161492a8b6c60030851051229823b6ccc423d2f68ea3189a195afe75313fe"
+    },
+    "public/assets/android-app-icon.png": {
+      "bytes": 347232,
+      "sha256": "bacc220ac47f0ade5c79efbd35228c61fcea70c304922564218474e245903f63"
+    },
+    "public/assets/android-brand.jpg": {
+      "bytes": 224703,
+      "sha256": "55739ca3da820b85db6d51d307041ee7fa7e701609cd6e63910b1f92dd4805eb"
+    },
+    "public/assets/fonts/README.md": {
+      "bytes": 267,
+      "sha256": "d41ab58d3b704b22478ac4d3640dbee6891494622a2b7ee20a4f71bd413b37ee"
+    },
+    "public/assets/icons/actions/close.svg": {
+      "bytes": 199,
+      "sha256": "cafde0156e90ad862779b971e4127381fb46fcdc19027c87bcf6aaa304504720"
+    },
+    "public/assets/icons/actions/fit-region.svg": {
+      "bytes": 239,
+      "sha256": "989d34c8d81490f540c1a0c61d3f2829dca22e167b5c89c6d16afbf27afbf2d5"
+    },
+    "public/assets/icons/actions/layers.svg": {
+      "bytes": 245,
+      "sha256": "66c50fc147a2c47a31e250d7841f638efbeb71e805d9379196499e26c3e528e5"
+    },
+    "public/assets/icons/actions/locate.svg": {
+      "bytes": 282,
+      "sha256": "585927a1b485378af188c6c6e877965275fa8cf4005b2751e265e4a48d88fb5f"
+    },
+    "public/assets/icons/actions/map-data.svg": {
+      "bytes": 261,
+      "sha256": "d309f8f3f7c53fbce26d2b78924cacced1fae2194a8e41260666c93046c467f7"
+    },
+    "public/assets/icons/actions/more.svg": {
+      "bytes": 328,
+      "sha256": "bd52cb2e570548715e0e76e7aa0644c255a2f9d4af0f418a092ca2987ed9614d"
+    },
+    "public/assets/icons/actions/owner-studio.svg": {
+      "bytes": 284,
+      "sha256": "217f15a63f2b8c7d89910b9ba560bfc633bf823c1c196208d7994552046d4bc8"
+    },
+    "public/assets/icons/actions/places.svg": {
+      "bytes": 263,
+      "sha256": "31f69e3e3a900f7e27f7fde92a537ab7456fd5efbc6ad7f4db1d65ff25511918"
+    },
+    "public/assets/icons/actions/README.md": {
+      "bytes": 150,
+      "sha256": "4b04961f48a62f603dfad857f3a90bbf7fb661593495e3024f935a0b23122bb6"
+    },
+    "public/assets/icons/actions/search.svg": {
+      "bytes": 230,
+      "sha256": "89e19de42f67af9ccfbdc49e802206c3bd3538e98a1a0d1be8e3b38bd4d2d87a"
+    },
+    "public/assets/icons/atlas/academy.svg": {
+      "bytes": 1266,
+      "sha256": "8c3bcd9da9c68e38f1e0fa6223c2d8b177c7e987e138d52365ac18fc4586ff9f"
+    },
+    "public/assets/icons/atlas/accounting_office.svg": {
+      "bytes": 1360,
+      "sha256": "bb6dfc0e2f2288d8f2f12235b1d7cf7bcbc42625c070c3ef774a5fc76d67513d"
+    },
+    "public/assets/icons/atlas/administrative_center.svg": {
+      "bytes": 1320,
+      "sha256": "e7d698a8b9606d69041e0505df0404f28f261e764056b27a0a547607436fe763"
+    },
+    "public/assets/icons/atlas/advertising_agency.svg": {
+      "bytes": 1297,
+      "sha256": "b15992681af86eeb061569245923f248bdd0ca3c4b64cd7d4f25fd61f8cd1315"
+    },
+    "public/assets/icons/atlas/agricultural_cooperative.svg": {
+      "bytes": 1292,
+      "sha256": "bb16eb24ccdf106f0b78d6e8c73acf4f3a76f7e444fe4e478bdf397c2c05e004"
+    },
+    "public/assets/icons/atlas/agriculture_directorate.svg": {
+      "bytes": 1279,
+      "sha256": "2d25204c7209beb1e39304bc27b9d3c39a6149dbb52290d6422d4a679f755a06"
+    },
+    "public/assets/icons/atlas/airport_apron.svg": {
+      "bytes": 1305,
+      "sha256": "90278f5f982c4903c235c086436051d21a0901d9f079f924d7c232289348bb2d"
+    },
+    "public/assets/icons/atlas/airport.svg": {
+      "bytes": 1300,
+      "sha256": "f974469808facb8b522f5b8671e11e9c0910203aade36d84f1036dd5319aed6b"
+    },
+    "public/assets/icons/atlas/ambulance_station.svg": {
+      "bytes": 1186,
+      "sha256": "f829bd91348115783e150faf95565aba15f01a5cbe04a7256f4c77c2c45b7e67"
+    },
+    "public/assets/icons/atlas/amusement_park.svg": {
+      "bytes": 1336,
+      "sha256": "f084d4f5f9337075283b134a28a741cdf1878c4a6725d913e3ef267050a8f7a4"
+    },
+    "public/assets/icons/atlas/apartment_building.svg": {
+      "bytes": 1335,
+      "sha256": "6c9bcc7808f2399550d434fde1c29909b4d2026e77fea2e139133b5adfa5dbb9"
+    },
+    "public/assets/icons/atlas/apartment.svg": {
+      "bytes": 1198,
+      "sha256": "49ea7d3218a36d4302b5b410c8472a9cde91171cac631cc2f32b78f352660bfc"
+    },
+    "public/assets/icons/atlas/appliance_shop.svg": {
+      "bytes": 1197,
+      "sha256": "96fd8497dcd528eae4b742df75ab8fe21b518d608dba660dec50917f12ed9c12"
+    },
+    "public/assets/icons/atlas/archaeological_site.svg": {
+      "bytes": 1365,
+      "sha256": "e2a38359eb9bdc784532392e7f59a90b714b9ce41af16563af8df346ff9b9ad1"
+    },
+    "public/assets/icons/atlas/architecture_office.svg": {
+      "bytes": 1358,
+      "sha256": "a8104feaa2f030d2c7fc4e86366d3f28e6c5864eda836d32c012341032943e34"
+    },
+    "public/assets/icons/atlas/art_gallery.svg": {
+      "bytes": 1264,
+      "sha256": "84e6bf5b277c926e474e1429c80f63075e41b9f62ea0ffccec3f32d30660ae1a"
+    },
+    "public/assets/icons/atlas/asiacell_center.svg": {
+      "bytes": 1308,
+      "sha256": "8290209db617ad791d58fd046eef3904223c17646d77bdd5d4c9d9d027f4c6d5"
+    },
+    "public/assets/icons/atlas/asiacell_tower.svg": {
+      "bytes": 1332,
+      "sha256": "28f17a04e45e335deec28965b510d621919c7982af884b39062effe3d7c1bdb9"
+    },
+    "public/assets/icons/atlas/atm.svg": {
+      "bytes": 1251,
+      "sha256": "43b82f61922d67a5682207c94f8068262ab99c3a67041fdcb32f8f7e3620faae"
+    },
+    "public/assets/icons/atlas/auto_parts.svg": {
+      "bytes": 1257,
+      "sha256": "0538c5d1de5ed175b941c237fbb81c516de893a10e798364eb1e577451936670"
+    },
+    "public/assets/icons/atlas/bakery.svg": {
+      "bytes": 1276,
+      "sha256": "0679f30b548b8f0a2a6fca6d4e576cde3a14465c7c4cb22f077edf73a80747e4"
+    },
+    "public/assets/icons/atlas/bank.svg": {
+      "bytes": 1316,
+      "sha256": "3098174093a97c4a8e7a246d3ca031026a839124ee1e7cafe19b36ff466d1b33"
+    },
+    "public/assets/icons/atlas/banquet_hall.svg": {
+      "bytes": 1282,
+      "sha256": "e378498d96327290f4154798cf4a1029636ca8b7295b680d54f7e1e4685c9ea9"
+    },
+    "public/assets/icons/atlas/bar.svg": {
+      "bytes": 1214,
+      "sha256": "ed57b9a67f04df33f76e559c1416156d420f49b80bddf865d5edf4012b387ad6"
+    },
+    "public/assets/icons/atlas/barracks.svg": {
+      "bytes": 1283,
+      "sha256": "6412670dca3965c7443705437e0dbb1115c925dbb84d63892c845f813cb057a5"
+    },
+    "public/assets/icons/atlas/basketball_court.svg": {
+      "bytes": 1274,
+      "sha256": "1a7b379646e1c3744c3d6779a683cb24a61c51120b512530f43372e887ebe521"
+    },
+    "public/assets/icons/atlas/battlefield.svg": {
+      "bytes": 1368,
+      "sha256": "19afdabd90d1b60735fc2e6306bf89b5b7beb9094e2db8914fddf79ef5378078"
+    },
+    "public/assets/icons/atlas/beach.svg": {
+      "bytes": 1266,
+      "sha256": "668a401184734ec8ee975c4f97b355a63917102e67357e95abbf651615105ff5"
+    },
+    "public/assets/icons/atlas/beauty_salon.svg": {
+      "bytes": 1317,
+      "sha256": "629770531feb8a38ad011ee22b18da7d4ddcca827a8c4a677eb3e40b0d941783"
+    },
+    "public/assets/icons/atlas/beekeeping.svg": {
+      "bytes": 1278,
+      "sha256": "561ffb10749350af57acd94a8a12cf5b734cdba5fecc8126868ef4f528557a74"
+    },
+    "public/assets/icons/atlas/beer_garden.svg": {
+      "bytes": 1314,
+      "sha256": "ba690f54e8bb0cd7a416f00ed45e3365c537deb505d387cc373f397603658336"
+    },
+    "public/assets/icons/atlas/bench.svg": {
+      "bytes": 1238,
+      "sha256": "64c3a2ce3ad6ef4042fe0c633dd8d62529d948143e47a1da8be0fdf6380bede0"
+    },
+    "public/assets/icons/atlas/beverages_shop.svg": {
+      "bytes": 1257,
+      "sha256": "09afb402ccbe057a5e2cb972ec5c7223009cf0917749c1a0e37d8cc9fd87b808"
+    },
+    "public/assets/icons/atlas/bicycle_parking.svg": {
+      "bytes": 1275,
+      "sha256": "85ef05164e9cb7cfa573f7e698cda342e53d9b175a1f281d4aa6e51b0bcd013a"
+    },
+    "public/assets/icons/atlas/bicycle_rental.svg": {
+      "bytes": 1245,
+      "sha256": "238a2dcbe3b1b19627561e5d0ec6bf2d3db6681d8676d45325cb21863f30c30d"
+    },
+    "public/assets/icons/atlas/bicycle_shop.svg": {
+      "bytes": 1196,
+      "sha256": "ee024526046164fb2a457cd85750a4949caa242258928560abd7c93d41ea69ff"
+    },
+    "public/assets/icons/atlas/billiards_hall.svg": {
+      "bytes": 1370,
+      "sha256": "5882cf52256aed22f00506b2451b311f2d29e8c40b1b5dfc8e2f5edec6703a71"
+    },
+    "public/assets/icons/atlas/blood_bank.svg": {
+      "bytes": 1302,
+      "sha256": "4cd0168534954dc3290405a1b16a25da1647f0753600e050b1828caea832c732"
+    },
+    "public/assets/icons/atlas/bookshop.svg": {
+      "bytes": 1188,
+      "sha256": "60dd792f48a0e8426d57edf23bc11626c86376a12611caad49a92a6db961a5d1"
+    },
+    "public/assets/icons/atlas/border_crossing.svg": {
+      "bytes": 1322,
+      "sha256": "5dc528fa2ae7e8cee0145148e2e67e566bc22ea6e75d4af022651a385995f7bd"
+    },
+    "public/assets/icons/atlas/border_guard.svg": {
+      "bytes": 1300,
+      "sha256": "0feffb09a1b56717012f38aba9b0e7d526ccb4c62c5eaf30d39065b2099dfdba"
+    },
+    "public/assets/icons/atlas/botanical_garden.svg": {
+      "bytes": 1194,
+      "sha256": "b6fd1296ae126126ed5ab1f171d675125467627182abe91c27c08e4eebab93f7"
+    },
+    "public/assets/icons/atlas/bowling.svg": {
+      "bytes": 1302,
+      "sha256": "f19cce044a00f5b5000d453a7826fc2c5d6ed004160acbeee485b2fbae58e969"
+    },
+    "public/assets/icons/atlas/boxing_club.svg": {
+      "bytes": 1322,
+      "sha256": "a2b6e06200867b7ad3f5dab4ea443442cfa11b5fe7ff2a3f9779e6191332af1d"
+    },
+    "public/assets/icons/atlas/branch_office.svg": {
+      "bytes": 1354,
+      "sha256": "837ee18f4d646a51372560d577c4ec269e5957a6ac533482fff01e842720b54a"
+    },
+    "public/assets/icons/atlas/brick_factory.svg": {
+      "bytes": 1287,
+      "sha256": "107bbb8fce179d9557538d6c18123343ad4097c3aad18e163aac423ac6f34ad1"
+    },
+    "public/assets/icons/atlas/bridge.svg": {
+      "bytes": 1318,
+      "sha256": "da903ec658c91ddc8be2e20b83eea5d560421328991813db5c2a7dc5df3ee849"
+    },
+    "public/assets/icons/atlas/broadcast_tower.svg": {
+      "bytes": 1194,
+      "sha256": "40210076ccbd41e835285b54d7e2a9fe41673a074f1d0ab33fcab1ee272c9867"
+    },
+    "public/assets/icons/atlas/building_materials.svg": {
+      "bytes": 1272,
+      "sha256": "6559b3bb2701363ebfed5d42620ebddd1167c54fad00fd847e16418eea0cbea8"
+    },
+    "public/assets/icons/atlas/bundle.json": {
+      "bytes": 663131,
+      "sha256": "3c0a73904c41b41c2086b87b679d276743438cd67efb9561ad1416fe868aa6df"
+    },
+    "public/assets/icons/atlas/bus_station.svg": {
+      "bytes": 1335,
+      "sha256": "b971f1389f43e423c59d25a54984f103f0efd26e25ded1712b2bafec55753ff7"
+    },
+    "public/assets/icons/atlas/bus_stop.svg": {
+      "bytes": 1330,
+      "sha256": "b437389e3b8b57fb3fdd149d70664b9b72cf7091fbbe7821dcec2db8584a5b2a"
+    },
+    "public/assets/icons/atlas/butcher.svg": {
+      "bytes": 1278,
+      "sha256": "af3243f811b80a75ad9f3ef8497cdc39c34aacf0ef1188566ecd897c3973abc5"
+    },
+    "public/assets/icons/atlas/cabin.svg": {
+      "bytes": 1320,
+      "sha256": "a717684e1d2ca8632874da282aca7ce4bad958e6948f8d9641769e6cb74c12e3"
+    },
+    "public/assets/icons/atlas/cable_car.svg": {
+      "bytes": 1206,
+      "sha256": "9df389b0282f541c17c9cd0b2758bb0536c446daff9128726ea65bf261dfb011"
+    },
+    "public/assets/icons/atlas/cafe.svg": {
+      "bytes": 1281,
+      "sha256": "268472fa46c5576cd2749c2822d9b86a557e6613a22582ba2c1456842853ce53"
+    },
+    "public/assets/icons/atlas/call_center.svg": {
+      "bytes": 1365,
+      "sha256": "e3326f226e46312aee54126b16ec4b3ff114b3a1e52b6a466c0fac5e14a99dba"
+    },
+    "public/assets/icons/atlas/camp_site.svg": {
+      "bytes": 1328,
+      "sha256": "5d5a418da6a85b934a64588de9e6fa0585b31d9a7b2dfc6c7f8ab24fc81be744"
+    },
+    "public/assets/icons/atlas/canyon.svg": {
+      "bytes": 1328,
+      "sha256": "6022336cfa901dc6c695a9a5b369403309102e8d57b3ce4c8e84614581f74256"
+    },
+    "public/assets/icons/atlas/car_rental.svg": {
+      "bytes": 1241,
+      "sha256": "f531a51e1daa25cafb1b84bae9d99dedff1cf7bacb7ac463a67454c01524730f"
+    },
+    "public/assets/icons/atlas/car_sharing.svg": {
+      "bytes": 1305,
+      "sha256": "291736a532936694708f5df63b9e478e1a4025a4c24247cf17a4f38d435d092e"
+    },
+    "public/assets/icons/atlas/car_showroom.svg": {
+      "bytes": 1195,
+      "sha256": "1bdc230f9f12b58f6d08bb7934a535624007434dd406514dccb332ea8a84d000"
+    },
+    "public/assets/icons/atlas/car_wash.svg": {
+      "bytes": 1365,
+      "sha256": "e9f579650f5ceb37f775bd806dbc61268ff189961d6e9356e0d027ac9569a36b"
+    },
+    "public/assets/icons/atlas/caravan_site.svg": {
+      "bytes": 1336,
+      "sha256": "16069dd7241bf387fd05a348e1cd8a70a1af099afd57406458ace3904a269741"
+    },
+    "public/assets/icons/atlas/cargo_terminal.svg": {
+      "bytes": 1371,
+      "sha256": "ad1108d6d309fc8113030f2f46048b05f9465717c4278059e1dd141a0f77d554"
+    },
+    "public/assets/icons/atlas/carpet_shop.svg": {
+      "bytes": 1257,
+      "sha256": "f5345f7d0cd39ea9e54e05d402c24faa3bc0dfadfebd31315f357b005f7343cb"
+    },
+    "public/assets/icons/atlas/castle.svg": {
+      "bytes": 1226,
+      "sha256": "e340f0bd6d99b12302cca477453494853bf20196607fa23b8a097378e869a6ac"
+    },
+    "public/assets/icons/atlas/catering_service.svg": {
+      "bytes": 1283,
+      "sha256": "078fa89789d01b73d1dcf29027a7e23c246f1b1fa54cdad5db217714b6a09a62"
+    },
+    "public/assets/icons/atlas/cave.svg": {
+      "bytes": 1262,
+      "sha256": "6427faf000c78441c7919f9b2c3008aed08abdfcfeaa23eb49ed5d4704712213"
+    },
+    "public/assets/icons/atlas/cement_factory.svg": {
+      "bytes": 1354,
+      "sha256": "58e2642b31a35edf2eeb35aa554bc2b49132e9eae045ecf9ab56658d8d860f59"
+    },
+    "public/assets/icons/atlas/cemetery.svg": {
+      "bytes": 1251,
+      "sha256": "eb971fca05548b1ecd47ce4b577fb1e358caa366d0704505778cbb7ce1e84413"
+    },
+    "public/assets/icons/atlas/checkpoint.svg": {
+      "bytes": 1358,
+      "sha256": "dd2c03578ab7cf7d0d7b64225248e10a237d2828d06e435df6ee2e1e5cb0bc81"
+    },
+    "public/assets/icons/atlas/church.svg": {
+      "bytes": 1317,
+      "sha256": "ed6499ccb062fb66b6e684d27f002f768f5006fb9c25dd8cb03e65a73c4f88e4"
+    },
+    "public/assets/icons/atlas/cinema.svg": {
+      "bytes": 1207,
+      "sha256": "6678d55de1470f0e86f4d08edb3a9b2e411fcc6d9088553fbb7b6038078cf02e"
+    },
+    "public/assets/icons/atlas/city.svg": {
+      "bytes": 1178,
+      "sha256": "1bf74e3d7b1b2e38c9446ea80dbd21855a617ca64c2f4bbd5ede6354e4a6db19"
+    },
+    "public/assets/icons/atlas/civil_defence.svg": {
+      "bytes": 1239,
+      "sha256": "d99aedede93ed18961c69218663e51d9fceb5c7af3bc2ad057ac95087d19e4c6"
+    },
+    "public/assets/icons/atlas/civil_registry.svg": {
+      "bytes": 1272,
+      "sha256": "95e61c2da92e5be8fc290f644146f2eae80e47780a9019fed4d083074b5e9306"
+    },
+    "public/assets/icons/atlas/climbing_area.svg": {
+      "bytes": 1324,
+      "sha256": "ca3b102957b292a7db58867fbf6d203da6a10d6c219a45475b4c2b1155eade99"
+    },
+    "public/assets/icons/atlas/climbing_gym.svg": {
+      "bytes": 1386,
+      "sha256": "39b6ce4a335535cc01bfce0cb3f44d6bc7a44b7a310321b883ce9a20ebe0cef8"
+    },
+    "public/assets/icons/atlas/clinic.svg": {
+      "bytes": 1172,
+      "sha256": "a7566ec0ebb91f9942173deebcaa3da2f896438fe9fdf5a043dddd786e7aac33"
+    },
+    "public/assets/icons/atlas/clothes_shop.svg": {
+      "bytes": 1321,
+      "sha256": "bb4b926c7576298f8b2ecc829d66b75f93c367e21676ddaaa3af5678ece979b5"
+    },
+    "public/assets/icons/atlas/cold_storage.svg": {
+      "bytes": 1289,
+      "sha256": "d52388050c8f8614b109b16eb5d284c2dd9962a1f8861fb7b6467912d68c1332"
+    },
+    "public/assets/icons/atlas/college.svg": {
+      "bytes": 1208,
+      "sha256": "83c1cba7d56c5dec6af3fa5aae56a3d7c25b62baf05c2248937d945a794d8eb9"
+    },
+    "public/assets/icons/atlas/commercial_building.svg": {
+      "bytes": 1210,
+      "sha256": "c3849ea8cc3779962c7f3db3a2132bba5976faf4d9e1aac3e0931f2bab059adf"
+    },
+    "public/assets/icons/atlas/communication_mast.svg": {
+      "bytes": 1308,
+      "sha256": "a820ce3a11135fb88b25f86585c85f97c4a3ec92592dc98e14bfb04871385509"
+    },
+    "public/assets/icons/atlas/community_center.svg": {
+      "bytes": 1299,
+      "sha256": "cab357efe95a858589943d9d12af70ba784faf8896048449dc39840e5974b62e"
+    },
+    "public/assets/icons/atlas/company_headquarters.svg": {
+      "bytes": 1359,
+      "sha256": "59ef4cdf418dbc467fa48da73afcb1f6ff420c23b4a40f7cf86efcac1d0ff4d5"
+    },
+    "public/assets/icons/atlas/computer_service.svg": {
+      "bytes": 1370,
+      "sha256": "cea003c4525dad24fa9d15634007918ed037245a643ee3fc284ebe633b1d9ee6"
+    },
+    "public/assets/icons/atlas/computer_shop.svg": {
+      "bytes": 1257,
+      "sha256": "a63293f7c799322a8154ca1a3023027fd3d19aafc03baf9aaa2798715c3c9091"
+    },
+    "public/assets/icons/atlas/construction_site.svg": {
+      "bytes": 1334,
+      "sha256": "1a3d7892de87f740b078177564e15366c97299b61052810f24efd17a0532af4b"
+    },
+    "public/assets/icons/atlas/consulate.svg": {
+      "bytes": 1266,
+      "sha256": "9003521a6133a8887197bdeb1dcae2364bccdcb48a10d7180b93d6af4811761a"
+    },
+    "public/assets/icons/atlas/consulting_office.svg": {
+      "bytes": 1231,
+      "sha256": "423b3bce3af378a11f6320a2fc6941e5d821a8abcf7def9d507d4bf69fbb2c96"
+    },
+    "public/assets/icons/atlas/convenience_store.svg": {
+      "bytes": 1263,
+      "sha256": "657cb7340c6c39c0f0218383f96c95aaaee1a1c0498b63da0482b564dbe20bd6"
+    },
+    "public/assets/icons/atlas/cosmetics_shop.svg": {
+      "bytes": 1260,
+      "sha256": "8e42c180cff18aae602609df99bef946919d5b83df423cb739ec638c80a866fd"
+    },
+    "public/assets/icons/atlas/courier_service.svg": {
+      "bytes": 1371,
+      "sha256": "8568e9e2bc933cea4a2949cede6539e2cf337340651a9b1524bc66dc9e800d0a"
+    },
+    "public/assets/icons/atlas/court.svg": {
+      "bytes": 1200,
+      "sha256": "cc75e973f726f42a117e591c7bbd95b11fc407f989f7577a5b8b365bd6400034"
+    },
+    "public/assets/icons/atlas/coworking_space.svg": {
+      "bytes": 1355,
+      "sha256": "21a2bd0956dc1fdc53089fb48fcf920f8f0a8f5b00b7aca57b8c0840d8fabbfb"
+    },
+    "public/assets/icons/atlas/cultural_center.svg": {
+      "bytes": 1358,
+      "sha256": "f4b448895f969203ae0ad2209aef49b4f7d45252684eaf67f0b7d3ec90a04ad8"
+    },
+    "public/assets/icons/atlas/cultural.svg": {
+      "bytes": 1357,
+      "sha256": "fcae823002276915f8fbdf059a354d7c505276bb082874b039ad0114b15acc61"
+    },
+    "public/assets/icons/atlas/currency_exchange.svg": {
+      "bytes": 1330,
+      "sha256": "c29a5dbd89eb5fe5e5a5abc146fe3ed9fe7921c7694cc22514052d690470e922"
+    },
+    "public/assets/icons/atlas/customs_checkpoint.svg": {
+      "bytes": 1337,
+      "sha256": "7a6d0ed54b11736591d4fb10ecf61e6c7c184beac727aa5676381970e31058c3"
+    },
+    "public/assets/icons/atlas/customs_office.svg": {
+      "bytes": 1356,
+      "sha256": "58a11c1e1ffe4cc0dc14a4b5dd7becf982b98912e7c8edd668e4f1179c44a775"
+    },
+    "public/assets/icons/atlas/cycling_club.svg": {
+      "bytes": 1367,
+      "sha256": "0f7aba9f88393a37e6db1e4a27f2f8ce0a5b3454319495c59f37229a10c81a3b"
+    },
+    "public/assets/icons/atlas/dairy_farm.svg": {
+      "bytes": 1215,
+      "sha256": "2f16e9b3d4edff38579b753d6f0d070d7bdc591acb921a2d7256a61bebf9fb91"
+    },
+    "public/assets/icons/atlas/dairy_shop.svg": {
+      "bytes": 1192,
+      "sha256": "162191b46d229b8c67c2f58ca8a69286704dda7b59e6b0aa915f80a06a998ac2"
+    },
+    "public/assets/icons/atlas/dam.svg": {
+      "bytes": 1353,
+      "sha256": "c9585f005bca2a5b25e237913b3fbf194349cebb5af15f1ebbf141a8abc817a7"
+    },
+    "public/assets/icons/atlas/dance_studio.svg": {
+      "bytes": 1265,
+      "sha256": "8c689f49f1d7312546fc3c5880d74fe3ecab634c794169842232ecfb7ebb6e81"
+    },
+    "public/assets/icons/atlas/data_center.svg": {
+      "bytes": 1303,
+      "sha256": "c88fb25fb9970d662b33197813597a6698effe2c54d077550d0367bb82a6465d"
+    },
+    "public/assets/icons/atlas/delivery_hub.svg": {
+      "bytes": 1241,
+      "sha256": "2a3fdf45d0448a4ab722d32b7dbbea730b71ec445440661cf824fe250b6727c9"
+    },
+    "public/assets/icons/atlas/dentist.svg": {
+      "bytes": 1239,
+      "sha256": "84e657f7f932f89b894b07b6d65bf5132ce1b67ae60a9ba255fa4829011ca34a"
+    },
+    "public/assets/icons/atlas/department_store.svg": {
+      "bytes": 1260,
+      "sha256": "7d4189b9b9a79d254c810d8e36cee2db089df573d6d8017104d515d922bf518e"
+    },
+    "public/assets/icons/atlas/detention_center.svg": {
+      "bytes": 1356,
+      "sha256": "d3ab69ea74e39edccffce0c9057a6c2377f78829fbc682b0028fdf63bca441da"
+    },
+    "public/assets/icons/atlas/dialysis_center.svg": {
+      "bytes": 1308,
+      "sha256": "934deff2174394b58be49d3d446c446e95e54ac1b818281d843c94407ac38019"
+    },
+    "public/assets/icons/atlas/disaster_response_center.svg": {
+      "bytes": 1372,
+      "sha256": "952e49e94e3e454a3381e270cf60c7e79dabfd94b4026117cbd0e5bf9216347e"
+    },
+    "public/assets/icons/atlas/district_office.svg": {
+      "bytes": 1239,
+      "sha256": "93a3363059171db97fbd2ea7c9f515a97210eccb40b819dd1d522fa0ac22b626"
+    },
+    "public/assets/icons/atlas/district.svg": {
+      "bytes": 1184,
+      "sha256": "3e7c6385d04033cfb07400a41caefb97724e090d1e9fac8c41fc185e6268d7fd"
+    },
+    "public/assets/icons/atlas/dormitory.svg": {
+      "bytes": 1263,
+      "sha256": "55ad6da669c6096f6155a0e010134dbf614c206494793eb63aded432b9b8ca8a"
+    },
+    "public/assets/icons/atlas/drinking_water.svg": {
+      "bytes": 1358,
+      "sha256": "9d4652e628ab45f679f2d0cbc481d9f945582ddb4a976c9d837a22fa19eaa13e"
+    },
+    "public/assets/icons/atlas/driving_school.svg": {
+      "bytes": 1339,
+      "sha256": "b6c5d7b17ab75704f709616031f7193acf97cb226f25c9a50728e3a23f7e5367"
+    },
+    "public/assets/icons/atlas/education_directorate.svg": {
+      "bytes": 1284,
+      "sha256": "8edabce7433ea15119c151bc1a9346cd4b42ad85fa7cfd94937545f0bf6f6c05"
+    },
+    "public/assets/icons/atlas/election_office.svg": {
+      "bytes": 1295,
+      "sha256": "7d3bc8be08d584f4b790756f6df1fd399558b71b07af26af5fc0a46c0eeff1f0"
+    },
+    "public/assets/icons/atlas/electricity_directorate.svg": {
+      "bytes": 1342,
+      "sha256": "46036c46dfb436f916767af7c8086803f52082b30e50d7f0a5163454d46ad91d"
+    },
+    "public/assets/icons/atlas/electronics_shop.svg": {
+      "bytes": 1199,
+      "sha256": "cd9634f4b17dab7c7c4e5c2a2250adee15b6a7adaa15a68e7f6c414f770fa9c7"
+    },
+    "public/assets/icons/atlas/embassy.svg": {
+      "bytes": 1201,
+      "sha256": "4595e44922b1fbe61d2a9e92394271e1a24bd7e6a7daadd7650a87866279c9a0"
+    },
+    "public/assets/icons/atlas/emergency_center.svg": {
+      "bytes": 1242,
+      "sha256": "f6ffd100d95470efc4c526200f43b777f3a81dba97fd5e37c0f5046ecb2cb49e"
+    },
+    "public/assets/icons/atlas/emergency_phone.svg": {
+      "bytes": 1279,
+      "sha256": "396109b79b6b997595e6c17d52d7ef430a87a8ebfa43a04d8d55d32f716c180b"
+    },
+    "public/assets/icons/atlas/employment_agency.svg": {
+      "bytes": 1296,
+      "sha256": "3d35e686b5f7ac0c4c36e1e776e4f0d7c0dea6bcbf72c1db32995240a8941f18"
+    },
+    "public/assets/icons/atlas/engineering_office.svg": {
+      "bytes": 1234,
+      "sha256": "60530f45ae00a6cb7aa18e609290cc15af86d538e2605ba7ef2934de884bd40e"
+    },
+    "public/assets/icons/atlas/environment_office.svg": {
+      "bytes": 1299,
+      "sha256": "59b2f7c4ee77db9bb61c2a56fe55ec8a46f0936cdad98255543a1d0f910f1284"
+    },
+    "public/assets/icons/atlas/esports_center.svg": {
+      "bytes": 1247,
+      "sha256": "889bda4a5ffd81b45c200a8cc16866c13ff3b7e118c470bd7039396f0d0f7d71"
+    },
+    "public/assets/icons/atlas/ev_charging.svg": {
+      "bytes": 1326,
+      "sha256": "561553942c10249096bc12feada964f7b4ffb9541fcce83cd4078db5254c09e6"
+    },
+    "public/assets/icons/atlas/event_venue.svg": {
+      "bytes": 1293,
+      "sha256": "3d1d0906b00f800da26013b1862f45bb622e828a6fa7e7d05a8f26e25243f69b"
+    },
+    "public/assets/icons/atlas/eye_clinic.svg": {
+      "bytes": 1303,
+      "sha256": "86f22285ba7be11db5947a2aa64489839b3078448978e5d9bc3e09c53b4f4960"
+    },
+    "public/assets/icons/atlas/factory.svg": {
+      "bytes": 1222,
+      "sha256": "a8d9975316fd25b732261e82ec0bd270f0dc3ac5171a03fcb92a8739933c8979"
+    },
+    "public/assets/icons/atlas/farm_supply_shop.svg": {
+      "bytes": 1260,
+      "sha256": "bd091b368344b9af2ce104a30a72d49cc9612ae47c7eaf94b8aa67daa6b2e29e"
+    },
+    "public/assets/icons/atlas/farm.svg": {
+      "bytes": 1273,
+      "sha256": "47eace5b4c58e4820879b7d2458785120962827615bfa8a42d0d2741243747cf"
+    },
+    "public/assets/icons/atlas/farmhouse.svg": {
+      "bytes": 1275,
+      "sha256": "edb3577502058bd146196e723135e19b8a9f2206337746ea191085935e838065"
+    },
+    "public/assets/icons/atlas/farmland.svg": {
+      "bytes": 1274,
+      "sha256": "0e41e221583e4ea5346457eda6c18819ac3d60ba5615e7c06420ca4848dd59ba"
+    },
+    "public/assets/icons/atlas/fast_food.svg": {
+      "bytes": 1341,
+      "sha256": "7d6ce5622b5354570f6f18869f5dd9dbada8f520e0a63796eaa2c593a2b68d1e"
+    },
+    "public/assets/icons/atlas/fastpay_agent.svg": {
+      "bytes": 1355,
+      "sha256": "1b8bbd9cdc5764e7a71823505e911acc506c12ceea6f3614b324d066c06e65b9"
+    },
+    "public/assets/icons/atlas/ferry_terminal.svg": {
+      "bytes": 1245,
+      "sha256": "dd779f8a7113a8f56aca6e6e00878763c0ef36c74bb9d571200b0de44d7d0a93"
+    },
+    "public/assets/icons/atlas/festival_ground.svg": {
+      "bytes": 1276,
+      "sha256": "887faa1c887591a7612417904b8731180209a29b494b33d91d0362059eb9803b"
+    },
+    "public/assets/icons/atlas/fire_station.svg": {
+      "bytes": 1470,
+      "sha256": "092d03914faadc2c30dfd69b7064cd144f9765cd183d45f10b8cebac5bbabd46"
+    },
+    "public/assets/icons/atlas/fish_farm.svg": {
+      "bytes": 1339,
+      "sha256": "a798ac3abca5f8dc9bb74ebc8245a157cbb0b32724ca12762a6c55abed354a62"
+    },
+    "public/assets/icons/atlas/fitness_trail.svg": {
+      "bytes": 1415,
+      "sha256": "1b5df0dacf165a5c5502db1688cfd9120b60003c2e409ee1d1b27e9a56f1b41a"
+    },
+    "public/assets/icons/atlas/florist.svg": {
+      "bytes": 1187,
+      "sha256": "b746d44bcfc4f05378f9ba38d8a53a95fb63905029ae8e994efcef24e2812099"
+    },
+    "public/assets/icons/atlas/food_court.svg": {
+      "bytes": 1216,
+      "sha256": "90b762335b99768e15931171953691ca3f6c75590d8cc65ff099547567a96a80"
+    },
+    "public/assets/icons/atlas/food_factory.svg": {
+      "bytes": 1282,
+      "sha256": "4af54f9a31eac9ed7ec813a3649d68cd753f869ed32d54fae5d45ca3a7c3b24a"
+    },
+    "public/assets/icons/atlas/football_field.svg": {
+      "bytes": 1373,
+      "sha256": "35b6e2419b51d610d28e36e8d6dc879c9b637f777c95376f71769f0a0f852046"
+    },
+    "public/assets/icons/atlas/forest.svg": {
+      "bytes": 1184,
+      "sha256": "2737a1715438d7537cb8888144b1ef6d5ccabf4df3f6f33213c1259eaf5b86ff"
+    },
+    "public/assets/icons/atlas/fountain.svg": {
+      "bytes": 1203,
+      "sha256": "6f816dc513d2ad9af00664dffeb3d39255e74f25560cb2e2ad17045306f04e63"
+    },
+    "public/assets/icons/atlas/fuel_station.svg": {
+      "bytes": 1322,
+      "sha256": "3f8ff92b29f3ccc6fd4b3521185b4d2423f96aa44593dd3015c8a47d5dfc0aa1"
+    },
+    "public/assets/icons/atlas/furniture_shop.svg": {
+      "bytes": 1322,
+      "sha256": "0c40594f4373263f2a790052a26105d4fda996c5be885f51115803433b4f1d05"
+    },
+    "public/assets/icons/atlas/gaming_center.svg": {
+      "bytes": 1243,
+      "sha256": "e348c9a91091e1b2c99624381a970e7551d5e0b00c2c3fd11e05dde82dfcc3a6"
+    },
+    "public/assets/icons/atlas/garage.svg": {
+      "bytes": 1299,
+      "sha256": "0168b9157ec3cd3047a8228e64e45a1cf4e309c62daf753e642f6775f88cebd9"
+    },
+    "public/assets/icons/atlas/gas_station_facility.svg": {
+      "bytes": 1322,
+      "sha256": "4e3366ef5a432bd94e958564b8b048a727084927d56490bddeae26681d618e63"
+    },
+    "public/assets/icons/atlas/general_directorate.svg": {
+      "bytes": 1274,
+      "sha256": "6c9c44717bc324cc3cace25e9ae6edcc00a3f751f7d45c16331062db174a0a58"
+    },
+    "public/assets/icons/atlas/general_store.svg": {
+      "bytes": 1258,
+      "sha256": "59e96f09fe3dd999cf4042d6ffe36f7e278bac449e2c6e0a2fb05ead6e0cac58"
+    },
+    "public/assets/icons/atlas/gift_shop.svg": {
+      "bytes": 1254,
+      "sha256": "650737a2aba66fea2a089149c092426f9547306383fa99343993a16a106ed3f7"
+    },
+    "public/assets/icons/atlas/government_directorate.svg": {
+      "bytes": 1344,
+      "sha256": "e791ee3a5fb5c7e68be3537bc4f908e1b4675913abb7123a927799c9651e95f9"
+    },
+    "public/assets/icons/atlas/government_office.svg": {
+      "bytes": 1232,
+      "sha256": "1afff722a4de91c3f197bad828d3128cbd4ab1cd0a207de15ffa6c961d958a29"
+    },
+    "public/assets/icons/atlas/governor_office.svg": {
+      "bytes": 1356,
+      "sha256": "86024bd7e53bc12217d6c891b5b472aa7068bef95293d739d3663fbd188f8bb2"
+    },
+    "public/assets/icons/atlas/governorate.svg": {
+      "bytes": 1249,
+      "sha256": "87ce0b8ef79a637ca1594df848445b4071b54912ff649e890253dde50210e733"
+    },
+    "public/assets/icons/atlas/grain_silo.svg": {
+      "bytes": 1350,
+      "sha256": "d166548534bd55d6172522ea0622fcbe474e3a9336e570f4051a1c140c6f51a7"
+    },
+    "public/assets/icons/atlas/greengrocer.svg": {
+      "bytes": 1194,
+      "sha256": "ace7843e8350f8a774277db566d25c01b809e7f212dad624c99456d568b1db01"
+    },
+    "public/assets/icons/atlas/greenhouse.svg": {
+      "bytes": 1216,
+      "sha256": "946898313f1d11e894c1a9dd8fe5b5ec79d5d385eb20800d11ad408a63802ef7"
+    },
+    "public/assets/icons/atlas/groups-manifest.json": {
+      "bytes": 19604,
+      "sha256": "42aa06c760885a8ba9db8ac59d7d75031f9a15c92e3c91f932751a840d715613"
+    },
+    "public/assets/icons/atlas/groups/border_route.json": {
+      "bytes": 22161,
+      "sha256": "a9a0455104e54fef2280ac85620f36d07ecf559e39a8f25fb124b73d0fa1eaaa"
+    },
+    "public/assets/icons/atlas/groups/communications_technology.json": {
+      "bytes": 31300,
+      "sha256": "589acc4aa4bb8e2dfe512332ddaf290557c7f09f64063ec8afde62b5ad4c2dd5"
+    },
+    "public/assets/icons/atlas/groups/culture_religion_media.json": {
+      "bytes": 39910,
+      "sha256": "50038263c448952bb72d4c1efe7e7c9412d4bbc00ee5a0b1ecb1b4eabb292f28"
+    },
+    "public/assets/icons/atlas/groups/education_research.json": {
+      "bytes": 27856,
+      "sha256": "8f82e68fab03ffe9f88127ef26bdce9cc76225f3193c21b589b8f683b4cd414c"
+    },
+    "public/assets/icons/atlas/groups/emergency_security.json": {
+      "bytes": 31134,
+      "sha256": "a97008589bf40ef913042b0538cb9978d6043a399c0e19e560399c81fa4606ee"
+    },
+    "public/assets/icons/atlas/groups/finance_professional.json": {
+      "bytes": 34467,
+      "sha256": "860bbc5a007e1401776565de474aa692eaa45dcbce6e09385d6e3e3056264109"
+    },
+    "public/assets/icons/atlas/groups/food_hospitality.json": {
+      "bytes": 30668,
+      "sha256": "e5a1e7038ea726be6e833c1a3741641c7afbfb79a74ef5be2681e34f1dbfb390"
+    },
+    "public/assets/icons/atlas/groups/government_public.json": {
+      "bytes": 49695,
+      "sha256": "5ff7a64994b7002ae837ad8fd4b965a11338490a6c44dba76646eb14b0a8c13b"
+    },
+    "public/assets/icons/atlas/groups/health.json": {
+      "bytes": 33280,
+      "sha256": "863aa38ef62f69113901ee6cf7e645345ead22447502e0b72b5664153de7b03e"
+    },
+    "public/assets/icons/atlas/groups/industry_agriculture.json": {
+      "bytes": 36487,
+      "sha256": "eeb31193b5d7d610c17a9f987b0e73d501583ffd08d2b8ecc651d27a71a1736f"
+    },
+    "public/assets/icons/atlas/groups/residential_buildings.json": {
+      "bytes": 22884,
+      "sha256": "d9e43244b0a00852e66dad4a623024c0f0e0577198ef2792fbe6f0a9a5c0d8c0"
+    },
+    "public/assets/icons/atlas/groups/retail_commerce.json": {
+      "bytes": 64343,
+      "sha256": "02f87f8db9fcf66a38e888dcf38ec2ca8099da890ce7e464b95d4ed811019de5"
+    },
+    "public/assets/icons/atlas/groups/settlement_admin.json": {
+      "bytes": 28715,
+      "sha256": "9578dc3a64d8d573dd634ffed1afd4005a795197ad1d9b879ca55a4fe372c469"
+    },
+    "public/assets/icons/atlas/groups/sports_leisure.json": {
+      "bytes": 63897,
+      "sha256": "cb004b458b1e3d5421f309f30865d9b53ee2e5a980794a81a583b46345513195"
+    },
+    "public/assets/icons/atlas/groups/tourism_nature_heritage.json": {
+      "bytes": 60833,
+      "sha256": "2bc74ddf7f13e1ad7833e12539dc43adf2026dde80ad6e227d1b7f1dd57b5691"
+    },
+    "public/assets/icons/atlas/groups/transport_logistics.json": {
+      "bytes": 50281,
+      "sha256": "fbf2f89ed9bf944eb63139c67c9e566a93b5b0543329372633373d464b686b56"
+    },
+    "public/assets/icons/atlas/groups/utilities_infrastructure.json": {
+      "bytes": 38013,
+      "sha256": "7d6292eed09dc622b33d5e355b8946f7d4fa7399fc6d25818ac0f485a2367770"
+    },
+    "public/assets/icons/atlas/guest_house.svg": {
+      "bytes": 1263,
+      "sha256": "19782de9ba65deff7d113d7bd0fac55feba30cd81de2d9ec2f015f1193263704"
+    },
+    "public/assets/icons/atlas/gym.svg": {
+      "bytes": 1234,
+      "sha256": "09b6a46402e80c0601fac03bc9df4a77768f7ece448bf5109f19b77ed9063eb5"
+    },
+    "public/assets/icons/atlas/hair_salon.svg": {
+      "bytes": 1193,
+      "sha256": "efa0af7ef613175ebb1761667d4445ab094c96cbbd51cde85fba5b296088a496"
+    },
+    "public/assets/icons/atlas/hamlet.svg": {
+      "bytes": 1305,
+      "sha256": "4c82ce4b50031e8a1a03219d7340d7b63bd7c44feb5a76bbdd51aa745382c95f"
+    },
+    "public/assets/icons/atlas/hardware_shop.svg": {
+      "bytes": 1195,
+      "sha256": "c496f5e27903b848d7a0f2ca95224835c30905d1de16e5fd8a4431231786b40a"
+    },
+    "public/assets/icons/atlas/health_center.svg": {
+      "bytes": 1242,
+      "sha256": "df7a96facb23ee29445ff237774619cb33c28252b5f1de6d7070e9fef78a6d09"
+    },
+    "public/assets/icons/atlas/health_directorate.svg": {
+      "bytes": 1312,
+      "sha256": "b0d30681cf4208b55dc154a1b9dec6d557583e38e020c2bb19af8a7711aa1c58"
+    },
+    "public/assets/icons/atlas/heliport.svg": {
+      "bytes": 1239,
+      "sha256": "29af5bbaa4b81891e531a43c08fa7cef7e115d4c2946c3d40474766e58198f89"
+    },
+    "public/assets/icons/atlas/heritage_house.svg": {
+      "bytes": 1292,
+      "sha256": "cb9171279b0e5c688518fc99864c0f4321631d9b5b8cbdc6b8e169106341f216"
+    },
+    "public/assets/icons/atlas/high_school.svg": {
+      "bytes": 1334,
+      "sha256": "67e6529b1d134a4970c51f9916aa6a15ec690a3702f84650d4d03e4b9f9a413b"
+    },
+    "public/assets/icons/atlas/highway_service_area.svg": {
+      "bytes": 1198,
+      "sha256": "1ca04a10a57706bb238121adafaa3a80775a5499d1de989a026ce4f09a78bd1b"
+    },
+    "public/assets/icons/atlas/hiking_trailhead.svg": {
+      "bytes": 1421,
+      "sha256": "649d1c846c5a92ded28539a07d311843ec1b5a9b2582f9771ed04c98d2e9799d"
+    },
+    "public/assets/icons/atlas/hill.svg": {
+      "bytes": 1263,
+      "sha256": "881856d7f9c8242e152d41c84e442aba20a1e8646b5d93dad5f19515861d0594"
+    },
+    "public/assets/icons/atlas/historic.svg": {
+      "bytes": 1293,
+      "sha256": "3c52e482b7176b8e2e9e17ef2e2d101b8e57c0a76fe1d7aa30ec8b8c6561b3b8"
+    },
+    "public/assets/icons/atlas/home.svg": {
+      "bytes": 1196,
+      "sha256": "582c7d2cd58de684cf5364f5171734af7a47548244ce5b8b407b464f5d256d94"
+    },
+    "public/assets/icons/atlas/horse_club.svg": {
+      "bytes": 1368,
+      "sha256": "47851e8720c3fa798c3657a967924b1ab0e52262c52839791844146e337a7c2a"
+    },
+    "public/assets/icons/atlas/hospital.svg": {
+      "bytes": 1299,
+      "sha256": "39691fd73270eedc95618f34a71c69a6baf625262f6ca1ab211b2322654a1ee6"
+    },
+    "public/assets/icons/atlas/hostel.svg": {
+      "bytes": 1196,
+      "sha256": "1be250bcd5791435fe9440ebf70c5f5825d967cd829c9a675131b0871c04bbde"
+    },
+    "public/assets/icons/atlas/hot_spring.svg": {
+      "bytes": 1351,
+      "sha256": "955f4b3fa7dacedc9848334d7f4f859b76c5f584d61bc487a0e6546e6dfc2751"
+    },
+    "public/assets/icons/atlas/hotel.svg": {
+      "bytes": 1321,
+      "sha256": "91df67d95cf47da42e02500696acfc5b037cc459e464ae79c8062206590207ec"
+    },
+    "public/assets/icons/atlas/house.svg": {
+      "bytes": 1195,
+      "sha256": "c63b9e05fec8a689e5c27f80dd53848068c3f9870e123542c6acd659ae091a2f"
+    },
+    "public/assets/icons/atlas/hunting_stand.svg": {
+      "bytes": 1273,
+      "sha256": "9b8d54c7c85d868027718141ebc81077490bb8c40092213ba34c22723a21e79f"
+    },
+    "public/assets/icons/atlas/ice_cream_shop.svg": {
+      "bytes": 1196,
+      "sha256": "b4df4336fdfa9ba43a8fd103be2becf27d0dee0f5f850b080a32e1069ad63a8f"
+    },
+    "public/assets/icons/atlas/ice_rink.svg": {
+      "bytes": 1240,
+      "sha256": "0655ca9be43e8a21002f8a1188bf2665ffee3f60905cbe7504c5e7a6fc96eecc"
+    },
+    "public/assets/icons/atlas/identity_office.svg": {
+      "bytes": 1294,
+      "sha256": "d69d25a9eafb156d4708063220d6d5e311636341b55450fead5986057a81c7a8"
+    },
+    "public/assets/icons/atlas/idp_camp.svg": {
+      "bytes": 1180,
+      "sha256": "3ccf1baecfaa1f5ca85ae18e192657e7f99ad02df5719f222facbfb6c3a48134"
+    },
+    "public/assets/icons/atlas/industrial_town.svg": {
+      "bytes": 1229,
+      "sha256": "6c615afc278701958db071ccde30c53e672af4a16880999ddf43912bc2b822d3"
+    },
+    "public/assets/icons/atlas/industrial_zone.svg": {
+      "bytes": 1229,
+      "sha256": "b1ba94b1a8f55e127433b6d855bb78978f1598eb79494ab65324a0bf1737ded3"
+    },
+    "public/assets/icons/atlas/institute.svg": {
+      "bytes": 1335,
+      "sha256": "ab9df68628edcc97371c3cceb2a5f6f977d687812d15f0e092320dfdda9fcd85"
+    },
+    "public/assets/icons/atlas/insurance_office.svg": {
+      "bytes": 1329,
+      "sha256": "7e4a5e84184b4d7dea92687638b48cbb36b2c0acb46fa6f1cae721a9df25848a"
+    },
+    "public/assets/icons/atlas/internal_checkpoint.svg": {
+      "bytes": 1307,
+      "sha256": "a71582200a4ea46f24abe3dc31dd63be5e7b19d56089b7e86a098e56e694c664"
+    },
+    "public/assets/icons/atlas/international_border_crossing.svg": {
+      "bytes": 1335,
+      "sha256": "ef41e51d21137f10da094fe3a9cae6a3a4d9d6e1b3d06497f9478429371d7e49"
+    },
+    "public/assets/icons/atlas/internet_cafe.svg": {
+      "bytes": 1349,
+      "sha256": "7e45922ad34c036de2b2a3fd699e1d7865fb0d6a5c2604bec5072fa63322f849"
+    },
+    "public/assets/icons/atlas/internet_provider.svg": {
+      "bytes": 1373,
+      "sha256": "8606e87553d8dc63da0b3b7c1dc70c7f89ce063c96ca545a598a0d058f389120"
+    },
+    "public/assets/icons/atlas/irrigation_station.svg": {
+      "bytes": 1351,
+      "sha256": "7a5dff2d45dbed07e306b3654a74127d263894ba4d71e4e48fc92f9623fac65b"
+    },
+    "public/assets/icons/atlas/island.svg": {
+      "bytes": 1204,
+      "sha256": "2eda610f28ff2e415294b4bd00523f929435f03be6a6ed4dff21ce61409e9384"
+    },
+    "public/assets/icons/atlas/jeet_kune_do.svg": {
+      "bytes": 1237,
+      "sha256": "75f455970ce16748057c0b518d34f9ee3eab4934496cf15a4ab653e0451747b6"
+    },
+    "public/assets/icons/atlas/jewelry_shop.svg": {
+      "bytes": 1195,
+      "sha256": "85b4b6f5575f2dd5f92a6a66e39883b9b95099ac76e325ec81fe39cb8b1b4c1a"
+    },
+    "public/assets/icons/atlas/judo.svg": {
+      "bytes": 1227,
+      "sha256": "fe66e628ac582068db420c1513c6f704dc5552246957d4b697bf57ca2d58d86e"
+    },
+    "public/assets/icons/atlas/juice_shop.svg": {
+      "bytes": 1342,
+      "sha256": "5a77c2a77b7de8f132735981b39a1dc6c54d34e17a0d9311eb0c766adc615036"
+    },
+    "public/assets/icons/atlas/karate.svg": {
+      "bytes": 1294,
+      "sha256": "871b0fc63ca833dc8057050f6bfda8d780c1f1f9f0a930730455a8fe1767ece1"
+    },
+    "public/assets/icons/atlas/kebab_restaurant.svg": {
+      "bytes": 1344,
+      "sha256": "bd861d701bb9750e293caf2285ccc39efe6c48b635557e825d997734e749d0b1"
+    },
+    "public/assets/icons/atlas/kickboxing.svg": {
+      "bytes": 1257,
+      "sha256": "5608d5a0e7836bb366a89c4bd237d443a9381c33c0aa5156f1669cc5fdfa8f51"
+    },
+    "public/assets/icons/atlas/kindergarten.svg": {
+      "bytes": 1213,
+      "sha256": "975f1ea63d7088be987ab202c3a2dd20fd5f7ca13b93ee2424a49d2cf8b27cf0"
+    },
+    "public/assets/icons/atlas/kiosk.svg": {
+      "bytes": 1187,
+      "sha256": "404711f1df79a746f7e530d372ac2411a9bbbf65d72da84a80c2f7a73bcfbec3"
+    },
+    "public/assets/icons/atlas/korek_center.svg": {
+      "bytes": 1367,
+      "sha256": "54f1e707d0f8815d7077e067c4424a7f1f8a363563f6e15fea0cf6910c3d8d4b"
+    },
+    "public/assets/icons/atlas/korek_tower.svg": {
+      "bytes": 1200,
+      "sha256": "cba7d905cf12cb8ee65f95e5d584ecf86b47183dcd9d4e6423ff7c61eb41de88"
+    },
+    "public/assets/icons/atlas/kung_fu.svg": {
+      "bytes": 1357,
+      "sha256": "d7050fb1de10c7b6c1baa1ba02eea22912eb8c0890342f08f5553858dae3c6b6"
+    },
+    "public/assets/icons/atlas/laboratory.svg": {
+      "bytes": 1303,
+      "sha256": "d699787acc8f0ed7fc910b3d5c9a3dce5b07c28d3f66bee4b7ac1f6a2714febd"
+    },
+    "public/assets/icons/atlas/lake.svg": {
+      "bytes": 1345,
+      "sha256": "3aff8ea201f5532c8ab249824fd3c4ea8f156fdc3d2cab4477569b3ef657fe38"
+    },
+    "public/assets/icons/atlas/land_registry.svg": {
+      "bytes": 1333,
+      "sha256": "7c913cee2e8b5f5fcc50f363df960959fa1aa4bbd1d2f31824f2a1712006ee12"
+    },
+    "public/assets/icons/atlas/landfill.svg": {
+      "bytes": 1235,
+      "sha256": "31b1954e1088c2828d7edf4bd2c337f4d510e5f64b9a53e8e361f93bdc150083"
+    },
+    "public/assets/icons/atlas/language_school.svg": {
+      "bytes": 1340,
+      "sha256": "38be1ce29beee67fa189290fe961ed206b9bce7d6a5bd5c487405a4c8233258e"
+    },
+    "public/assets/icons/atlas/laundry_service.svg": {
+      "bytes": 1322,
+      "sha256": "ae0780efab7f5956fb9812949d1585df2429f19d0a6211b5c33be1730e0d13ae"
+    },
+    "public/assets/icons/atlas/law_office.svg": {
+      "bytes": 1291,
+      "sha256": "28bb10b933183acfab24ee78ff6f9632706d1d726c05b35d8e1f97e95b1108bc"
+    },
+    "public/assets/icons/atlas/library.svg": {
+      "bytes": 1268,
+      "sha256": "1dfc0e4b564488007da5b1717d39703569ebbc938f7dd4f18d66d6d8549060bd"
+    },
+    "public/assets/icons/atlas/lighthouse.svg": {
+      "bytes": 1200,
+      "sha256": "885a334b87a929e28a859ccbe57ee4b05f7dc2e25d83002fc947277730179563"
+    },
+    "public/assets/icons/atlas/livestock_farm.svg": {
+      "bytes": 1220,
+      "sha256": "6bdb2243c6a2923def7fe69586a20828169b620e9523bd765981c23a1b8ed3c2"
+    },
+    "public/assets/icons/atlas/locality.svg": {
+      "bytes": 1245,
+      "sha256": "8c8545a08f2bd35cf6280181baf10ff777e061826e77196e55d84c5a4ae0b6d2"
+    },
+    "public/assets/icons/atlas/logistics_center.svg": {
+      "bytes": 1246,
+      "sha256": "ff52410a33143fb2a593bf7235c2f9f78b04e546012c85683f61b82df76c650b"
+    },
+    "public/assets/icons/atlas/maker_space.svg": {
+      "bytes": 1241,
+      "sha256": "ecc18f097eb8ffb53614c318cb7d0782394ffa72c293c91838d613fa84615d90"
+    },
+    "public/assets/icons/atlas/mall.svg": {
+      "bytes": 1250,
+      "sha256": "57509c4b90f3c847f2b1c525c45fe01edca074b8ae983fb59499ae50f1cd96cf"
+    },
+    "public/assets/icons/atlas/manifest.json": {
+      "bytes": 95228,
+      "sha256": "bf197348770a5d2ae4e274f60fd873b71c9a978d74144557f5b39176c57c74a2"
+    },
+    "public/assets/icons/atlas/market.svg": {
+      "bytes": 1313,
+      "sha256": "c976d2467811e7d711d60b34fb7e2b8086040ca5fa9ae7dd9b9921c987995a35"
+    },
+    "public/assets/icons/atlas/martial_arts_center.svg": {
+      "bytes": 1244,
+      "sha256": "09cb064e3e502b346525a5956c8d933884c4b7c06646c211e22bd315ad6c7de8"
+    },
+    "public/assets/icons/atlas/maternity_clinic.svg": {
+      "bytes": 1185,
+      "sha256": "5d169bb739d5bf5448c73a6f96ffe9de73180e83c532efd77fc33bb5533e7150"
+    },
+    "public/assets/icons/atlas/mayor_office.svg": {
+      "bytes": 1230,
+      "sha256": "b6674ea7b556eb80a4cfec4c43ab0800cd6df365b0a4498d0ca19b0b751191fe"
+    },
+    "public/assets/icons/atlas/media_center.svg": {
+      "bytes": 1340,
+      "sha256": "86c4a0ffe7bcd3344bdf99354a4a9c4f2950941226d46e6d19e70fb9f68b5730"
+    },
+    "public/assets/icons/atlas/medical_center.svg": {
+      "bytes": 1245,
+      "sha256": "34d8f414ba1f0c2b85fa9071eaa4d00590b5c66c1ea919a1c1a5b03efcbf0b7a"
+    },
+    "public/assets/icons/atlas/medical_supply.svg": {
+      "bytes": 1307,
+      "sha256": "cbb4ea0d16f633ba0cb3e132e32051697f2c0546a9a50b086d38ffa20dd68f47"
+    },
+    "public/assets/icons/atlas/memorial.svg": {
+      "bytes": 1290,
+      "sha256": "dd934ef74bcf06578fd090fa91ca54912f8b750011eb0fc19dc5d38839f49438"
+    },
+    "public/assets/icons/atlas/mental_health_center.svg": {
+      "bytes": 1188,
+      "sha256": "5134c0dd05b38d9ff11d91cae0b5b19364e5b02613cf424fcc1a452077883b03"
+    },
+    "public/assets/icons/atlas/microfinance.svg": {
+      "bytes": 1199,
+      "sha256": "2cf0a240d1c720736e926be050bcad2786b2be915533918c1f2ceeb2adf93692"
+    },
+    "public/assets/icons/atlas/military_base.svg": {
+      "bytes": 1299,
+      "sha256": "9fccadd239b4595fd35f51bebce194a3422bd04fe0a789a88adfe0c799107597"
+    },
+    "public/assets/icons/atlas/military_checkpoint.svg": {
+      "bytes": 1370,
+      "sha256": "58978d9b116dd389461a5a9539e3bee2fd0d6b41c94958516cec8e645c6da411"
+    },
+    "public/assets/icons/atlas/mine.svg": {
+      "bytes": 1215,
+      "sha256": "ad85fa6272f8f7cf7d6d3bc298a838e57fd7a9581d3fef240b5276d05196b2fe"
+    },
+    "public/assets/icons/atlas/minimarket.svg": {
+      "bytes": 1315,
+      "sha256": "9eb79c0966fc6735ff31c7a0948e316474aed061b8645fc3293331ee8cf40864"
+    },
+    "public/assets/icons/atlas/ministry.svg": {
+      "bytes": 1200,
+      "sha256": "88b32bb83a76b609f55db0789a63882b83622a775ee519624abf36545dc08a5f"
+    },
+    "public/assets/icons/atlas/mixed_use_building.svg": {
+      "bytes": 1209,
+      "sha256": "b36af67661a5fff9e05d695340067b9cfa5db2a0e7c6d42b39b0bf71b3aa1426"
+    },
+    "public/assets/icons/atlas/mma_gym.svg": {
+      "bytes": 1381,
+      "sha256": "fcc0cfbbf8dafc0e53242d4db1254a471da93a5c2cf86b25a0dcb3f0fa9cdd7b"
+    },
+    "public/assets/icons/atlas/mobile_operator.svg": {
+      "bytes": 1339,
+      "sha256": "7e0c53f78d630d913a88de2954df8fd03b75056c85941e0f867d80955d21065b"
+    },
+    "public/assets/icons/atlas/mobile_shop.svg": {
+      "bytes": 1200,
+      "sha256": "77fb051660ea771410ea4f46c78da67a744c4ed05ce0d9bf0e6c3e9ab410787d"
+    },
+    "public/assets/icons/atlas/money_transfer.svg": {
+      "bytes": 1232,
+      "sha256": "3350775743881ce8f396dbebefbcc34f49401ffd48175bfe17b4abe44ac2f9d3"
+    },
+    "public/assets/icons/atlas/monument.svg": {
+      "bytes": 1354,
+      "sha256": "68301e5873b0a07f6ef4925819506d51dbdf8e7c67103b1a3a703f6c45758a39"
+    },
+    "public/assets/icons/atlas/mosque.svg": {
+      "bytes": 1265,
+      "sha256": "2dbbe73acbd5fb18435d8c78d92bf4b9e1de55648ab26659f71d73a8dd653367"
+    },
+    "public/assets/icons/atlas/motel.svg": {
+      "bytes": 1321,
+      "sha256": "b70a837b7650683dcadb500590a71500d215d526e4c8238ec7dacf4766c690cc"
+    },
+    "public/assets/icons/atlas/motorcycle_parking.svg": {
+      "bytes": 1279,
+      "sha256": "9f94523fd0580f4751c16ff729dc41aff9bceedfc72500dc989acc70e5b13855"
+    },
+    "public/assets/icons/atlas/motorcycle_shop.svg": {
+      "bytes": 1260,
+      "sha256": "b700f21a2217683c3851c34dd11377e5a2b84270df1a0118e48714db3dd9010f"
+    },
+    "public/assets/icons/atlas/motorway_junction.svg": {
+      "bytes": 1195,
+      "sha256": "5bc732a3996bf4e28185bcfad739456e2171a8d843fcaed86ab12fd1e4004b02"
+    },
+    "public/assets/icons/atlas/mountain_pass.svg": {
+      "bytes": 1212,
+      "sha256": "b6a76ee484263408e8e5267946382a28f13a7ec863f75d90b2fa70516c26eb24"
+    },
+    "public/assets/icons/atlas/mountain.svg": {
+      "bytes": 1204,
+      "sha256": "d112d8da4bc3a83182f916e1be236165925eea16687c8c41e07023eff3b67dd5"
+    },
+    "public/assets/icons/atlas/muay_thai.svg": {
+      "bytes": 1258,
+      "sha256": "930ea02116cd67db6c7a9fdcb2f239dd7e76430aa3a99e1539d75c4290d89c37"
+    },
+    "public/assets/icons/atlas/municipality.svg": {
+      "bytes": 1266,
+      "sha256": "bf22bff51035afbc5b3bff27f34d9193590d6bd04c12e85384dffa05d1a23712"
+    },
+    "public/assets/icons/atlas/museum.svg": {
+      "bytes": 1226,
+      "sha256": "fb69d8392ea41e1932ff202e310efae17c210b85bba120d24e4f246cb2a5db03"
+    },
+    "public/assets/icons/atlas/music_school.svg": {
+      "bytes": 1275,
+      "sha256": "a223f4ece6febecef6706a830de3e0f07b3c43d1851e781399420f84d6cb7b70"
+    },
+    "public/assets/icons/atlas/national_park.svg": {
+      "bytes": 1210,
+      "sha256": "e411ee5c627593d142b2ceab54219bacd56c44e19d0667b0a0af8431f090cd35"
+    },
+    "public/assets/icons/atlas/nature_reserve.svg": {
+      "bytes": 1335,
+      "sha256": "38e650ea7f7b6c40e455157421dbc0b4e0385388762e088adee063fc6943f6b5"
+    },
+    "public/assets/icons/atlas/nature.svg": {
+      "bytes": 1326,
+      "sha256": "68fd86bf5212da11f945f3f2ea3a226fc04a5490af101cd9c228be4d0cba2176"
+    },
+    "public/assets/icons/atlas/neighbourhood.svg": {
+      "bytes": 1251,
+      "sha256": "8eb1508f179b41c574b1e93b7e2e68dcf3d69a9dbb389ad161af8d06d2e3fd3b"
+    },
+    "public/assets/icons/atlas/new_town.svg": {
+      "bytes": 1308,
+      "sha256": "8256bd9cec2fbfeb55f027dc126ab10e42519fe0c351c1f27a4515b6881adaa9"
+    },
+    "public/assets/icons/atlas/newsagent.svg": {
+      "bytes": 1252,
+      "sha256": "c1ab857412184e51b282c7dae7897f32c1d1abefc7c37016f73226b602ee432d"
+    },
+    "public/assets/icons/atlas/newspaper_office.svg": {
+      "bytes": 1359,
+      "sha256": "81630468708fb8f69b781658e462a88e704101960eed21227eb19a7015a946b3"
+    },
+    "public/assets/icons/atlas/nightclub.svg": {
+      "bytes": 1304,
+      "sha256": "394be10058f834930636ce5af0201f8c5a579e97f6d0867a52d87b12fd59d939"
+    },
+    "public/assets/icons/atlas/notary.svg": {
+      "bytes": 1200,
+      "sha256": "b27565338bcde4ab7500c5d6725e76676d4405b4ae00e675f98b6f952f790f8b"
+    },
+    "public/assets/icons/atlas/nursery.svg": {
+      "bytes": 1191,
+      "sha256": "84636c67c65aa193abf5f771b01ed73ca115334bf1cb7dc301b788606e03f616"
+    },
+    "public/assets/icons/atlas/nursing_home.svg": {
+      "bytes": 1328,
+      "sha256": "b2b132ab0a281aac41935d934ae41b5ef4ede795e65c1bda3fabd80919c2eb67"
+    },
+    "public/assets/icons/atlas/observation_tower.svg": {
+      "bytes": 1207,
+      "sha256": "3c53a965bde5bb71602788b45c9776c7323063e1335fb54d45eebd18ffeb5699"
+    },
+    "public/assets/icons/atlas/office_building.svg": {
+      "bytes": 1232,
+      "sha256": "009ca355276de69fac24982e5750b381d56b2e063d8163e3686403c5124d4707"
+    },
+    "public/assets/icons/atlas/oil_facility.svg": {
+      "bytes": 1177,
+      "sha256": "f7f3c06daf2fbaf713b0af635be61f422a57121d13837813a4d32c1fa026c052"
+    },
+    "public/assets/icons/atlas/oil_field.svg": {
+      "bytes": 1242,
+      "sha256": "1157ebef01385d313c17115c03f77236a59fd527ba23cbd87a4a5e970c7007d5"
+    },
+    "public/assets/icons/atlas/optician.svg": {
+      "bytes": 1192,
+      "sha256": "6e1934871825a06495a609676bbacda6b78dafc7b57f55944254e674058971e8"
+    },
+    "public/assets/icons/atlas/orchard.svg": {
+      "bytes": 1247,
+      "sha256": "814ef98e4b548841e3e0cefdeefaa239b7756b1df059e9edfb70bdef2c93faca"
+    },
+    "public/assets/icons/atlas/other.svg": {
+      "bytes": 1206,
+      "sha256": "f2b4a8f48ec954856a2381bae57c49e481aa117efd3be184ad6554607a978375"
+    },
+    "public/assets/icons/atlas/outdoor_shop.svg": {
+      "bytes": 1321,
+      "sha256": "4af3c42fd09f903f58e3ace4fe03cc351ddf3a02af14cf46285d247083bb1864"
+    },
+    "public/assets/icons/atlas/parcel_locker.svg": {
+      "bytes": 1288,
+      "sha256": "ac6c3c3fcf81c5736cd11e21015d916403c8c0b7189894fae646e1671b51fa30"
+    },
+    "public/assets/icons/atlas/park.svg": {
+      "bytes": 1202,
+      "sha256": "50afae609fac22334855087526d0d28d4b86d1bc639fdc747ae7b8124c7340d0"
+    },
+    "public/assets/icons/atlas/parking_garage.svg": {
+      "bytes": 1273,
+      "sha256": "bbfb0fe73d2de353fbead5e9db9ff445b9b2f9b83ff5f9d7302393eb0fb50a59"
+    },
+    "public/assets/icons/atlas/parking.svg": {
+      "bytes": 1206,
+      "sha256": "74ccd34eda42820a9f8a331b9ee894b2940029e1fb22944d121e899a39e6a018"
+    },
+    "public/assets/icons/atlas/parkour.svg": {
+      "bytes": 1331,
+      "sha256": "f7f41bd13df4c85c30e7ba78df5a81524e3f760736ad837228f23da9974ea247"
+    },
+    "public/assets/icons/atlas/parliament.svg": {
+      "bytes": 1330,
+      "sha256": "ad5445a6ae7c3ff69a367b792a116a028d9b4dd073dedec1aed23ee0f10dd7de"
+    },
+    "public/assets/icons/atlas/passport_office.svg": {
+      "bytes": 1233,
+      "sha256": "cde90c2b48a2d39bbeb1550336e55f1f77f8d1a8908867b7d551c4a808b08c83"
+    },
+    "public/assets/icons/atlas/pastry_shop.svg": {
+      "bytes": 1319,
+      "sha256": "65b8e1bf2e4c62c20df57b20c579f03ce646eff4ddb7e028ac291463fb7eff61"
+    },
+    "public/assets/icons/atlas/payment_agent.svg": {
+      "bytes": 1355,
+      "sha256": "b4599fc4a6642919452185c6cba6bb5a9bbb83fe1e3d26e644953c041b8cdeb5"
+    },
+    "public/assets/icons/atlas/peak.svg": {
+      "bytes": 1199,
+      "sha256": "a931ddab45e1aad8b30cd1eaf3fab4251fd167bab0dc4fdae02bb21b774296ae"
+    },
+    "public/assets/icons/atlas/pedestrian_crossing.svg": {
+      "bytes": 1324,
+      "sha256": "17d3815ebe35b9cfd32ef8e8ccaf6b8df18ca4f1943e9389e05430e2ea7c8fdf"
+    },
+    "public/assets/icons/atlas/pension_office.svg": {
+      "bytes": 1292,
+      "sha256": "a3dcb54b1a3f1f1311679c030f553e7a4d3ecb666bfd50c899c7c7b062ce6ce2"
+    },
+    "public/assets/icons/atlas/pet_shop.svg": {
+      "bytes": 1253,
+      "sha256": "3a819e0f2d788147a7f6bc9dc0e51c9f2abdd4602d36aeb7c6ff9c73a5d7b96e"
+    },
+    "public/assets/icons/atlas/pharmacy.svg": {
+      "bytes": 1213,
+      "sha256": "96b30f7838351dc588fcd3a0eab5e6b28100f78a5277af4dc758e948df6710a1"
+    },
+    "public/assets/icons/atlas/phone_repair.svg": {
+      "bytes": 1210,
+      "sha256": "57ad66ed37a524906eb57ee735ec3ceaaf8101e5ff0647a987cbc3d6c84bce6b"
+    },
+    "public/assets/icons/atlas/photography_studio.svg": {
+      "bytes": 1275,
+      "sha256": "6b7b395be12587c4dc9c2215b5d8513570804109ffce9632815939d633fa7ef7"
+    },
+    "public/assets/icons/atlas/physiotherapy_center.svg": {
+      "bytes": 1250,
+      "sha256": "8a3e2f8b2e46acf27fd23340ca915408c4aa5ea139f9270416abb96edfdd3a8d"
+    },
+    "public/assets/icons/atlas/picnic_site.svg": {
+      "bytes": 1209,
+      "sha256": "ee6f0287554844783df6fe6b0450847548af9cfde58df816d795ac1f88392558"
+    },
+    "public/assets/icons/atlas/planning_office.svg": {
+      "bytes": 1357,
+      "sha256": "13dd3b66f4547dc95e62f1c68c51588946832ec63f560e5ccb140747001a69bf"
+    },
+    "public/assets/icons/atlas/playground.svg": {
+      "bytes": 1205,
+      "sha256": "db8bc907d9496780f106d38b646e727f502d69e0258760cbd2677de323fe4197"
+    },
+    "public/assets/icons/atlas/police_checkpoint.svg": {
+      "bytes": 1306,
+      "sha256": "4aa7d1f5aee0ade0808ead6f531cc68f2a0aa7357846ee7a3c650098416eed5b"
+    },
+    "public/assets/icons/atlas/police_station.svg": {
+      "bytes": 1302,
+      "sha256": "26dbda5cc775f2f793747becd54e2a3bc0767caa09cfe053e7592bb5f0c05dda"
+    },
+    "public/assets/icons/atlas/post_box.svg": {
+      "bytes": 1236,
+      "sha256": "81fe750e4630c58a6816bee72667c737b8db772288d7e5de6ad34128a46c703a"
+    },
+    "public/assets/icons/atlas/post_office.svg": {
+      "bytes": 1227,
+      "sha256": "116127a8e419669e26516a82f966c3c42b19b66ae0d1384ae751478966bc5142"
+    },
+    "public/assets/icons/atlas/postal_centre.svg": {
+      "bytes": 1242,
+      "sha256": "463d22bb9623c98facfffe3c6c03337198de517be3a72c0a47b4402b170f04a4"
+    },
+    "public/assets/icons/atlas/poultry_farm.svg": {
+      "bytes": 1341,
+      "sha256": "e338eddca851d012d2ce07bfdfd8b01e85da1845a36548f2de4901e6da6d6d74"
+    },
+    "public/assets/icons/atlas/power_plant.svg": {
+      "bytes": 1176,
+      "sha256": "0eceefbeca094d2fe2517f3be7fff1fbe72a36d4d14c62e504666d01e1a2e4fe"
+    },
+    "public/assets/icons/atlas/power_station.svg": {
+      "bytes": 1240,
+      "sha256": "82652396f611e9d9a12e5f0063fb2b1a9302b3ec620dc340f03b96c2abf7c142"
+    },
+    "public/assets/icons/atlas/primary_health_center.svg": {
+      "bytes": 1253,
+      "sha256": "db4c6a3f4bfa91e7db30328752f009abe5e2a588590600e7bd8869be1c5ce3f0"
+    },
+    "public/assets/icons/atlas/primary_school.svg": {
+      "bytes": 1340,
+      "sha256": "19d6fcff7fbaaffcc3f3d7290be201e4a15593ae7de951d52f1dcd735b7735c6"
+    },
+    "public/assets/icons/atlas/printing_service.svg": {
+      "bytes": 1296,
+      "sha256": "ab970cce616acc1499b64a5a736c5b0fbf25a25f3aa2307de02da3abee8d506a"
+    },
+    "public/assets/icons/atlas/prison.svg": {
+      "bytes": 1346,
+      "sha256": "03e6e24f8dcaf366e76469ac062fb473c9ca424534a60b79979c2c0e522baed5"
+    },
+    "public/assets/icons/atlas/private_hospital.svg": {
+      "bytes": 1185,
+      "sha256": "abdb8e9c388ffa6ea877a89c09e4e1db53359e9af80d71aef8d160fc044b674b"
+    },
+    "public/assets/icons/atlas/private_property.svg": {
+      "bytes": 1206,
+      "sha256": "4df366bbe596019f8c669ad09e836c73cfb260bcc7cbb898ed13900eaef336cd"
+    },
+    "public/assets/icons/atlas/prosecutor_office.svg": {
+      "bytes": 1233,
+      "sha256": "687228f98a204dda36188ae2b3defaaec73bd0145dadb5e4e71a54afd6f2e062"
+    },
+    "public/assets/icons/atlas/pub.svg": {
+      "bytes": 1278,
+      "sha256": "409ac26549db0c0e536c7f3219c8f5eba540c8c8abc914a38d013a6f7a026718"
+    },
+    "public/assets/icons/atlas/public_art.svg": {
+      "bytes": 1223,
+      "sha256": "89653cc316cd2cfa10c112d6d95d8047f58a7fac53c24c90c13bb9f87cde871c"
+    },
+    "public/assets/icons/atlas/public_health_office.svg": {
+      "bytes": 1251,
+      "sha256": "72d385e38b3835a81827ec9862a990b6d184414b62e500bad91efcbd503de549"
+    },
+    "public/assets/icons/atlas/public_service_center.svg": {
+      "bytes": 1297,
+      "sha256": "b111e6039dbe63e2a744e987d60aa5d3f4db8211da6c45fa2e1bb14c4a149b9e"
+    },
+    "public/assets/icons/atlas/public_telephone.svg": {
+      "bytes": 1292,
+      "sha256": "fc78b75539e81a08820c0875ad18a8555be112367f618a1ca3fdc6219cc214eb"
+    },
+    "public/assets/icons/atlas/public_toilet.svg": {
+      "bytes": 1226,
+      "sha256": "19771f371d5230c4e8d04b8219bd39aff37f4909ed7f52c2ebccc8b1aa02d730"
+    },
+    "public/assets/icons/atlas/quarry.svg": {
+      "bytes": 1345,
+      "sha256": "04ccaecd3649b2b9198525eef9679256e40334305d5a5ec54aed76cd25c7cf19"
+    },
+    "public/assets/icons/atlas/quarter.svg": {
+      "bytes": 1308,
+      "sha256": "bc0e47697c5739bf576cbef59fe9a4dab88ecaa8ee22bf3c341e2f4a8ced6b49"
+    },
+    "public/assets/icons/atlas/race_track.svg": {
+      "bytes": 1370,
+      "sha256": "0dd42a8796cacae1fa9d91bc2e5b8de178c5dd7d4afe05101de1d9cd10dbecb4"
+    },
+    "public/assets/icons/atlas/radio_station.svg": {
+      "bytes": 1277,
+      "sha256": "0dcae695854346ae0310573378687e4c193fafa906ec84f8c8b23fe46d348e74"
+    },
+    "public/assets/icons/atlas/radiology_center.svg": {
+      "bytes": 1280,
+      "sha256": "78d7a2da7033d1af6f565eb4136726ede000d0152488e4623b14faf4730fc688"
+    },
+    "public/assets/icons/atlas/railway_crossing.svg": {
+      "bytes": 1297,
+      "sha256": "71dadd7638e0e64e966a40fc36f6c7a6f51e858822c81e5077b2f2640ec0e979"
+    },
+    "public/assets/icons/atlas/railway_station.svg": {
+      "bytes": 1418,
+      "sha256": "0a6c117f5321ed91e6cb1a117278f23f2a725efcc91309d5bc414ca01a18e1a2"
+    },
+    "public/assets/icons/atlas/real_estate.svg": {
+      "bytes": 1228,
+      "sha256": "1841282a8ad996268bf1c04d37179ffe4680ee63f0e2c05781d1c6f0c440e68d"
+    },
+    "public/assets/icons/atlas/recycling_center.svg": {
+      "bytes": 1372,
+      "sha256": "b6a8521da591d5542aee1fe7c9c08b16501f1763456faac826f3ea2c251bace6"
+    },
+    "public/assets/icons/atlas/refugee_camp.svg": {
+      "bytes": 1250,
+      "sha256": "67243a7186adeaabd7cebb0c602753cdf4c4b74e583c6017ba33e1da43338464"
+    },
+    "public/assets/icons/atlas/region.svg": {
+      "bytes": 1305,
+      "sha256": "eac580772f1c7ab4209d9083740df693bfd87d47f532a57c14d6e36c9a3dd801"
+    },
+    "public/assets/icons/atlas/rehabilitation_center.svg": {
+      "bytes": 1313,
+      "sha256": "1c95f43a9f340f3a8ecf590d13e11b2173df00755bcba934231e8db88bfd1fa9"
+    },
+    "public/assets/icons/atlas/religious_site.svg": {
+      "bytes": 1358,
+      "sha256": "2cd42a5a42107adad7be6edc6cc7ecbdc6cdc25acaa308cd47c02684b6fbbe09"
+    },
+    "public/assets/icons/atlas/religious.svg": {
+      "bytes": 1235,
+      "sha256": "bfddf6c328a4acf11effc0222041ed8ec89b33e21cf0c3eeaabecb0076aac6df"
+    },
+    "public/assets/icons/atlas/rescue_station.svg": {
+      "bytes": 1240,
+      "sha256": "6bef94aea622dc55820a9b96c1fe46fd1a259c86e3f029e9df7a6fe77c84476d"
+    },
+    "public/assets/icons/atlas/research_center.svg": {
+      "bytes": 1216,
+      "sha256": "3096ee52b617488bb2a91341676dd3425a1f41ffac581e74164bdb9de81f5780"
+    },
+    "public/assets/icons/atlas/reservoir_covered.svg": {
+      "bytes": 1354,
+      "sha256": "f7ba53856be8ac12e583e3420968b6bf6357971295191deeeb467333506dd24d"
+    },
+    "public/assets/icons/atlas/reservoir.svg": {
+      "bytes": 1227,
+      "sha256": "ac0c2a6253725d1f30dc53efa20602615072a69b25c09e42d0712184c369890f"
+    },
+    "public/assets/icons/atlas/residential_compound.svg": {
+      "bytes": 1210,
+      "sha256": "c822a6768c9f9b47b388bf761c71e8f9fa3c864d5bd408ce8f4ad96dbe244036"
+    },
+    "public/assets/icons/atlas/resort.svg": {
+      "bytes": 1259,
+      "sha256": "ee16b0acb0128e8bb071ff763f0574bfd5352f8ba4b99e3afc96b7eae82b6dce"
+    },
+    "public/assets/icons/atlas/rest_area.svg": {
+      "bytes": 1250,
+      "sha256": "c098ec1822a7ddd32a4672420ba5d33e7e571413c4ac4fe8df4b8b0c0360317a"
+    },
+    "public/assets/icons/atlas/restaurant.svg": {
+      "bytes": 1218,
+      "sha256": "7588fe2281fe177633a30a964308dde6ceee9bf672970085a4cb946367ec0002"
+    },
+    "public/assets/icons/atlas/river.svg": {
+      "bytes": 1221,
+      "sha256": "c7ff39760b8e965db3b20bef0aa77bdc5829705f96e0afed315d84848d44d93c"
+    },
+    "public/assets/icons/atlas/road_maintenance_yard.svg": {
+      "bytes": 1259,
+      "sha256": "8b345c82fa243f4327c79437c692e1bbee39411e0c1effe0d275600df05cea29"
+    },
+    "public/assets/icons/atlas/route_junction.svg": {
+      "bytes": 1316,
+      "sha256": "b9a8731da4ffb3295dba04aab06b016bf3f151512273e7cb7690691386e22e01"
+    },
+    "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime-2x.png": {
+      "bytes": 551503,
+      "sha256": "36d751058d7b351a93eaf489f087db9bbfe42f6b1c1d3b60391ca5dbc1ef0d94"
+    },
+    "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime-3x.png": {
+      "bytes": 683756,
+      "sha256": "14b67e02a293187ba4199696689d462efc39fabf0681f2c92252d95f2634bdd6"
+    },
+    "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
+      "bytes": 34321,
+      "sha256": "ddf068d7b3894295a9dc7b7ff76f0da79d20add36b4a3ed848d813f5d45eecf7"
+    },
+    "public/assets/icons/atlas/satellite_station.svg": {
+      "bytes": 1311,
+      "sha256": "43c82052e54703bdc1aa085953995950046ccfe75178b1fe36017f2611ef92c4"
+    },
+    "public/assets/icons/atlas/sauna.svg": {
+      "bytes": 1363,
+      "sha256": "c605d4cc28374c4c4d2e005256e20d9d65e5aedfad52a642cff6c4f7e3c2421a"
+    },
+    "public/assets/icons/atlas/sawmill.svg": {
+      "bytes": 1221,
+      "sha256": "050f8a6e67ae3919d52875fbe64509718ea85b5708dc197faea824f6d1803897"
+    },
+    "public/assets/icons/atlas/scenic_route.svg": {
+      "bytes": 1211,
+      "sha256": "77156101849d2873160bf0aa6dca778b0fcf5db4af317b960f01cf04ea82894e"
+    },
+    "public/assets/icons/atlas/school.svg": {
+      "bytes": 1204,
+      "sha256": "4d23313f9154c769c013e02f3fbdddc7bf867066ab31737572aaf0468756f43b"
+    },
+    "public/assets/icons/atlas/science_center.svg": {
+      "bytes": 1275,
+      "sha256": "1f6db0089ccc59ce9c75ceb670800883661739092e862053484ba80e5a53d523"
+    },
+    "public/assets/icons/atlas/secondary_school.svg": {
+      "bytes": 1216,
+      "sha256": "2c37c875ef1d128ad5752d90ce784f036b330f50334dbe29669e291958406ec4"
+    },
+    "public/assets/icons/atlas/security_checkpoint.svg": {
+      "bytes": 1244,
+      "sha256": "4db8ead48f4c427e235d0d26119d929e0e351b78936412d2bf31e0069c96d018"
+    },
+    "public/assets/icons/atlas/security_office.svg": {
+      "bytes": 1230,
+      "sha256": "ba85f6156ef2064149bf53bb55da6094334c7c05c2b33da61672f5abd1cf0ae7"
+    },
+    "public/assets/icons/atlas/settlement.svg": {
+      "bytes": 1309,
+      "sha256": "6b112d27437cb172487257c4034b088b0935cc992560a55bde4a13bcfbbf1d1a"
+    },
+    "public/assets/icons/atlas/sewage_pumping_station.svg": {
+      "bytes": 1311,
+      "sha256": "5f8d42fef001a7f8efac2257afd2d6f32d9a2898a7433ba832e878d40fea4a83"
+    },
+    "public/assets/icons/atlas/shaolin_martial_arts.svg": {
+      "bytes": 1246,
+      "sha256": "b971cce77dff794246457ed673ad21ac64941cf9ccc6f6d36d91a061b43d1ce8"
+    },
+    "public/assets/icons/atlas/shelter.svg": {
+      "bytes": 1295,
+      "sha256": "04eeaa5de2123c3f56f6198b18908c7995069e194af1e6b16e0d038391dd57bd"
+    },
+    "public/assets/icons/atlas/shoes_shop.svg": {
+      "bytes": 1255,
+      "sha256": "f4dd36f06fa69fc827aa75216329df9f9b49f863f42bb0412f4031defccca9fc"
+    },
+    "public/assets/icons/atlas/shooting_club.svg": {
+      "bytes": 1309,
+      "sha256": "14bb0f6159a9cb768f516e50c7aa541eadfc9b016a5fcc48eb87976ec220012e"
+    },
+    "public/assets/icons/atlas/shop.svg": {
+      "bytes": 1248,
+      "sha256": "c0b987cfd28d46dd5f20ddb2c288c0a5a40c12ff41993a0f3b1ec6875f60f305"
+    },
+    "public/assets/icons/atlas/shrine.svg": {
+      "bytes": 1329,
+      "sha256": "644b565cdf3b79c73451c0173722cddba4cee16883ad757ff281d793b739671a"
+    },
+    "public/assets/icons/atlas/slaughterhouse.svg": {
+      "bytes": 1290,
+      "sha256": "6f0177d8523c9c3e4fd92163b4a9602c41f846cb0325edf1d6340631dd4f5671"
+    },
+    "public/assets/icons/atlas/social_security_office.svg": {
+      "bytes": 1239,
+      "sha256": "f9976b5cb389400fa2eada5f46a6ac17823150edced0f7b4d09777d6eb424412"
+    },
+    "public/assets/icons/atlas/software_company.svg": {
+      "bytes": 1295,
+      "sha256": "af9354ec5768a8953f588843d4db98d8c6e2142e17777825dbdf0c5288dbc36f"
+    },
+    "public/assets/icons/atlas/solar_farm.svg": {
+      "bytes": 1300,
+      "sha256": "c1066dce66cae506987de86ab8471d6c6c6159b4b11fbf31a7d9f9c10210107a"
+    },
+    "public/assets/icons/atlas/spa.svg": {
+      "bytes": 1358,
+      "sha256": "2e42de184cccd70152b9f7819baf55a28de67d1603ac507ee1941c298d7e8916"
+    },
+    "public/assets/icons/atlas/special_education_center.svg": {
+      "bytes": 1348,
+      "sha256": "c37a8c0570471d064ebe4eb2490e955a2e98a3f0850e12f946456be82bf7f9da"
+    },
+    "public/assets/icons/atlas/speed_camera.svg": {
+      "bytes": 1268,
+      "sha256": "50c3f4bfc245c6f5317b475ce1a2c25fbb25037d548848ed8956af96e38a1e8d"
+    },
+    "public/assets/icons/atlas/sports_center.svg": {
+      "bytes": 1309,
+      "sha256": "452e213ceabd66dfb5bc72f486b3727fd8fb513f0dd90d9eadc6d878f051bc8f"
+    },
+    "public/assets/icons/atlas/sports_medicine_clinic.svg": {
+      "bytes": 1313,
+      "sha256": "cab61cd30c2796d708b36a0d2e14de325b9691f9b880721fca3e519e79d37bd5"
+    },
+    "public/assets/icons/atlas/sports_shop.svg": {
+      "bytes": 1319,
+      "sha256": "77c7e54842c772c6d8d651e66797ab1471cde6800dd32a23d8ab5c3ecc8ae225"
+    },
+    "public/assets/icons/atlas/spring.svg": {
+      "bytes": 1347,
+      "sha256": "2d2434e4b9a34851f8d4056badd57f9c911412cc8b1b36e58afab69000f39898"
+    },
+    "public/assets/icons/atlas/stadium.svg": {
+      "bytes": 1302,
+      "sha256": "c871d452c378b9df10dfe71b8d9099bd59068ca960e23b8d90fb059b481ddf4c"
+    },
+    "public/assets/icons/atlas/startup_hub.svg": {
+      "bytes": 1304,
+      "sha256": "8f8aa5b986b101b2cfc4bf5bdae72da94ed0ce0642c95cfe4a948eda7aa3d613"
+    },
+    "public/assets/icons/atlas/stationery_shop.svg": {
+      "bytes": 1261,
+      "sha256": "1b8f3f8c70b6f1c2a2e256397e2bbc6307d9b6d7dd44fe07ab5076f1346696f0"
+    },
+    "public/assets/icons/atlas/statistics_office.svg": {
+      "bytes": 1297,
+      "sha256": "25987c31c4f7faba130d9531454bd892d469a7d43d88664ba3023008dd7fc5cd"
+    },
+    "public/assets/icons/atlas/stream.svg": {
+      "bytes": 1204,
+      "sha256": "ff9755ec9b34e6f691726cb2562493b5a13953ff853be6f596f9bb4ee4ffe0c5"
+    },
+    "public/assets/icons/atlas/street_lighting_station.svg": {
+      "bytes": 1263,
+      "sha256": "b1ed8efc038b1e4506f5aa6693b72e3cbfb8917d22c15d830e26e5ff0eb0c54a"
+    },
+    "public/assets/icons/atlas/street.svg": {
+      "bytes": 1186,
+      "sha256": "ca58259d1e61af4b85a03c0244b2744b902163abf27ef993d460dc10d31d6520"
+    },
+    "public/assets/icons/atlas/student_dormitory.svg": {
+      "bytes": 1268,
+      "sha256": "51a3646219ca0bf65c876f897fd0f150af2efe1f05e6775f704c484e7611a747"
+    },
+    "public/assets/icons/atlas/subdistrict_office.svg": {
+      "bytes": 1368,
+      "sha256": "0374b5594588832da1ef65b004e11eb4e192a8b0955e207f566de878c1ca03bf"
+    },
+    "public/assets/icons/atlas/subdistrict.svg": {
+      "bytes": 1312,
+      "sha256": "dc2de799767f33501339379430f03ede41587fac7ad11d4c6975c81f49820eb6"
+    },
+    "public/assets/icons/atlas/substation.svg": {
+      "bytes": 1247,
+      "sha256": "f30c9e7573c56fb1da098f3f6b77ae1214b44835f72b99e197b425ce4633826d"
+    },
+    "public/assets/icons/atlas/suburb.svg": {
+      "bytes": 1306,
+      "sha256": "37b795f7ebb5848f46842fedcbe5ccde5804f31cea96851abe8b0cf7b04a7da8"
+    },
+    "public/assets/icons/atlas/supermarket.svg": {
+      "bytes": 1320,
+      "sha256": "280cf462c9299d86c22d86e39c210393564de678e2bb55cd2722a06430922e77"
+    },
+    "public/assets/icons/atlas/surveillance_camera.svg": {
+      "bytes": 1210,
+      "sha256": "e6b515ffa37567b5b1e553c0e562a7b6e0598cbd1b9120c78ca283aa11bce0a4"
+    },
+    "public/assets/icons/atlas/swimming_pool.svg": {
+      "bytes": 1309,
+      "sha256": "99efe35bf0f125110b8bec7bfefdadbaf03fa0a2b03abeb6ee645507bba0c622"
+    },
+    "public/assets/icons/atlas/synagogue.svg": {
+      "bytes": 1290,
+      "sha256": "1449c3f25d2acb4fb09f86ea0ce91364cd8641e7be5cd6b7d46a828138f4fc13"
+    },
+    "public/assets/icons/atlas/taekwondo.svg": {
+      "bytes": 1234,
+      "sha256": "c7416f3b627b50b595dc0d1d6a51a4a1b5b67d8a01141420dd582312262fef6c"
+    },
+    "public/assets/icons/atlas/tax_office.svg": {
+      "bytes": 1227,
+      "sha256": "74c0602085561ddb707a4c8742992d0b26eae45cf970108f83f024a57687e89e"
+    },
+    "public/assets/icons/atlas/taxi_station.svg": {
+      "bytes": 1335,
+      "sha256": "0ee4bf56c96076cee4b6e69539124ecfc5bb02011b443f54c3be26fbf4517fd5"
+    },
+    "public/assets/icons/atlas/tea_house.svg": {
+      "bytes": 1286,
+      "sha256": "1ddf0df9a47150a5596c4050cfa8827a17d462718376339f5d46a274e8d725a3"
+    },
+    "public/assets/icons/atlas/technology_company.svg": {
+      "bytes": 1360,
+      "sha256": "79e51d227aa508b8d500bb32ec14879cb31a17a67d27a820cab92712bf87b710"
+    },
+    "public/assets/icons/atlas/telecom_office.svg": {
+      "bytes": 1228,
+      "sha256": "29ffcdf3220e29b53995453e7158b7966fcf977f41fd93ee03d9e11c4b9a43b5"
+    },
+    "public/assets/icons/atlas/telecom_tower.svg": {
+      "bytes": 1329,
+      "sha256": "b68d30f9504f377cdb9f8f60744686904b9159b34bc5c24494f8131f2740b133"
+    },
+    "public/assets/icons/atlas/television_station.svg": {
+      "bytes": 1342,
+      "sha256": "d0f7f604b5c1247b932903ae6f18e2441bd3d414fe5e8beced6905c595b87563"
+    },
+    "public/assets/icons/atlas/temple.svg": {
+      "bytes": 1226,
+      "sha256": "8f86967d41f92777f36dc8ef7b50646bccb8da66fecf408798701ab1d7ed59ac"
+    },
+    "public/assets/icons/atlas/tennis_court.svg": {
+      "bytes": 1270,
+      "sha256": "d21fad30f5c91e89ac3fa3f506b5224f09d8ebd1965ba297af14efd040d5ae3e"
+    },
+    "public/assets/icons/atlas/textile_factory.svg": {
+      "bytes": 1353,
+      "sha256": "1814f2b38ba7b4f589d3ac7c0ea80bd6b5ef1a8d4f6997a0d993366d90106804"
+    },
+    "public/assets/icons/atlas/theatre.svg": {
+      "bytes": 1209,
+      "sha256": "d9e8f316bc71b6f6c2f1068ed460f01f93b87ee1d685f2320a0cdd3254dd9344"
+    },
+    "public/assets/icons/atlas/toll_booth.svg": {
+      "bytes": 1310,
+      "sha256": "142dbedb4684ce39110c4f2f06aaf94a6f0c37c8e6f0f8e902bd3d4af71bc553"
+    },
+    "public/assets/icons/atlas/tourism.svg": {
+      "bytes": 1269,
+      "sha256": "13ad61c0fd694f22d3d890d13e7754c4bc4abaeea605996d9b750e9a87bd72ef"
+    },
+    "public/assets/icons/atlas/tourist_attraction.svg": {
+      "bytes": 1214,
+      "sha256": "91787f67743462e4111f46150d993caae6c45ad020ab0fcc71f3efc794c8b582"
+    },
+    "public/assets/icons/atlas/tourist_information.svg": {
+      "bytes": 1342,
+      "sha256": "5316aa83ec282eabed910ef64c628a2c4146c02272cc2de8a6c1de04491d582c"
+    },
+    "public/assets/icons/atlas/tower.svg": {
+      "bytes": 1196,
+      "sha256": "bf355df91eea782f1ccbc351a8b69b862b29c59359c537943d610df725f676eb"
+    },
+    "public/assets/icons/atlas/town.svg": {
+      "bytes": 1178,
+      "sha256": "d5e214a986525e3c125e32a27b9c64830864b832e8e482fd9fff9b8f4bde90c2"
+    },
+    "public/assets/icons/atlas/toy_shop.svg": {
+      "bytes": 1317,
+      "sha256": "0491a3a022be969386d5118c3d1e4e1915124fba6b5591f08f0dd4ab7f01ad92"
+    },
+    "public/assets/icons/atlas/traffic_police.svg": {
+      "bytes": 1241,
+      "sha256": "eb617a80629f6ddd985d9c28ea80b3c897e91d52ed5d25986b8b0f38b3330955"
+    },
+    "public/assets/icons/atlas/traffic_signal.svg": {
+      "bytes": 1257,
+      "sha256": "3692686b8e5501354afc80651b668cb5282fe62bb9f7e86ed7d23b8a6ab78f89"
+    },
+    "public/assets/icons/atlas/training_center.svg": {
+      "bytes": 1215,
+      "sha256": "56e7930ff3e012cae629a88dcfe602e3c63c97ff99b4c72cfd5856988631f9e6"
+    },
+    "public/assets/icons/atlas/transformer.svg": {
+      "bytes": 1298,
+      "sha256": "20b55a6d8cd7201566209f4f228cca88c679ee23027fc58cab7ce334712ccb69"
+    },
+    "public/assets/icons/atlas/translation_office.svg": {
+      "bytes": 1357,
+      "sha256": "91186f51e6a2b2a51c493c7770815f3bd27be5b6bd16078c57ebf334234cfe4b"
+    },
+    "public/assets/icons/atlas/travel_agency.svg": {
+      "bytes": 1292,
+      "sha256": "3516a5389f73c52eb496d3c57e89f07e84a211f381978cc005ca59a4f1116776"
+    },
+    "public/assets/icons/atlas/truck_stop.svg": {
+      "bytes": 1303,
+      "sha256": "f3da232c86ed8a81631e34def242e98982fa794c4aa11f630b6b33e09dab418e"
+    },
+    "public/assets/icons/atlas/tunnel.svg": {
+      "bytes": 1300,
+      "sha256": "183ac7a83eda5957ed250fb9e148820bf8603dfe9d8e815445664e0e989fcc32"
+    },
+    "public/assets/icons/atlas/turning_circle.svg": {
+      "bytes": 1258,
+      "sha256": "5869a099e0a386ae8adb568d1376ce7ce19931b19ab71dd54e74bc1f43060683"
+    },
+    "public/assets/icons/atlas/tyre_shop.svg": {
+      "bytes": 1192,
+      "sha256": "3dd48ba95a6e8c49a08a608495e03af9e0940e25d9e98380ff53e13b97f0573c"
+    },
+    "public/assets/icons/atlas/university.svg": {
+      "bytes": 1273,
+      "sha256": "a5915794c3ad0b12d3bf03b461dc649976b2fc13c4437538d4ac87e8d7e7e229"
+    },
+    "public/assets/icons/atlas/urgent_care.svg": {
+      "bytes": 1176,
+      "sha256": "de9daad11ceff8d8c2648a8b0d64da9dd80a7197833ed5aed397f3a986321b58"
+    },
+    "public/assets/icons/atlas/valley.svg": {
+      "bytes": 1329,
+      "sha256": "af9d1b0f80f040dec50a7dd76c79d57dce76481aaabaa0227a1b51f2a69909c7"
+    },
+    "public/assets/icons/atlas/vehicle_inspection_center.svg": {
+      "bytes": 1254,
+      "sha256": "6376aa8586608b9da63fe8687999db1693d687f061512d77f39915ff46425da6"
+    },
+    "public/assets/icons/atlas/vehicle_inspection.svg": {
+      "bytes": 1375,
+      "sha256": "8d6bd62861fea9b222dc55443c85d87ff5672313cd998632bf07e79cb18653a1"
+    },
+    "public/assets/icons/atlas/vending_machine.svg": {
+      "bytes": 1321,
+      "sha256": "4988e83624f3af3aec7c85d7d5b2f682848bdc0833dacc80d863a1957c4869c2"
+    },
+    "public/assets/icons/atlas/veterinary_clinic.svg": {
+      "bytes": 1311,
+      "sha256": "5afbe22d6932410ea3366471dc386aa466bbf7e29709537a55816fdfe4796454"
+    },
+    "public/assets/icons/atlas/viewpoint.svg": {
+      "bytes": 1206,
+      "sha256": "0c0b4eb4a6c97e575d0c3f43cab94b2c31c64fabec5b169e6e46a1904f6feee7"
+    },
+    "public/assets/icons/atlas/villa.svg": {
+      "bytes": 1260,
+      "sha256": "0cdba06bbc3db99fa4af032b51e060c561687e755ac4fb4f4e2da9998cf305f7"
+    },
+    "public/assets/icons/atlas/village.svg": {
+      "bytes": 1196,
+      "sha256": "c8e013a4bebe2e1f406b7c6c97a73f22832184010f4b4b7884f7d0fc4a53930e"
+    },
+    "public/assets/icons/atlas/vocational_school.svg": {
+      "bytes": 1342,
+      "sha256": "0b206d9f225f18de6a97e6e6bdb5603b0f84dc44ced1d93f357063b13ff3253d"
+    },
+    "public/assets/icons/atlas/volleyball_court.svg": {
+      "bytes": 1209,
+      "sha256": "ff566da11cb7ccf9cf5f64c0164b203f4a50c4f152e3f79e6b48476f1c35d9c8"
+    },
+    "public/assets/icons/atlas/ward.svg": {
+      "bytes": 1188,
+      "sha256": "72e93aa1c0593d1d99588f9a85c4e1513b76f6fdf809b9cee4c97f488e156934"
+    },
+    "public/assets/icons/atlas/warehouse.svg": {
+      "bytes": 1285,
+      "sha256": "f530c9a45ef709483f31354dce6bcccae784ef88e62978fca45888f368987934"
+    },
+    "public/assets/icons/atlas/waste_bin.svg": {
+      "bytes": 1173,
+      "sha256": "d4369a7261c4fb8809aaed9503306318c5d044ad1c7436c6a5d820a44ca13bdf"
+    },
+    "public/assets/icons/atlas/waste_transfer_station.svg": {
+      "bytes": 1187,
+      "sha256": "27edce4ee46c32cc33497c49d359eaa887b5d80a70af391bf2de4c98b4a988af"
+    },
+    "public/assets/icons/atlas/wastewater_treatment.svg": {
+      "bytes": 1270,
+      "sha256": "ae4f532a7fe0670574ad1809c27721b7f6f8bc596571d5030b4c27298ee20def"
+    },
+    "public/assets/icons/atlas/water_directorate.svg": {
+      "bytes": 1213,
+      "sha256": "268c37977c2c7a7d92a99edfb2bd260fb8eb9f762a2b4d5b9f7dc78a39cad06e"
+    },
+    "public/assets/icons/atlas/water_mill.svg": {
+      "bytes": 1352,
+      "sha256": "b266cd0df17cafc92edb6822eeb278b68242898651fa560ec4fc5aa9b09a92c9"
+    },
+    "public/assets/icons/atlas/water_park.svg": {
+      "bytes": 1349,
+      "sha256": "277a48119a7a5fd1082cf1a6a67b8ed06e50550a38df44dbb3de345003bbbe84"
+    },
+    "public/assets/icons/atlas/water_pumping_station.svg": {
+      "bytes": 1235,
+      "sha256": "5b34742edb6f72edcfaea0e44d118ade8366718ac5790fbeb39ce28fc89c6551"
+    },
+    "public/assets/icons/atlas/water_tower.svg": {
+      "bytes": 1291,
+      "sha256": "5ff9e2869315951b940edf3c78619e2d57cd8ebca635c83a64c54b4812ee61cc"
+    },
+    "public/assets/icons/atlas/water_treatment.svg": {
+      "bytes": 1264,
+      "sha256": "6326d42d679ee664b068eec52c148abcc1419428f99ca8b814b4b2f09891f1ae"
+    },
+    "public/assets/icons/atlas/water_well.svg": {
+      "bytes": 1351,
+      "sha256": "3b14c820151e94adb5373d72f9e29d7790b50780ca537bf0e36138c627f775e3"
+    },
+    "public/assets/icons/atlas/waterfall.svg": {
+      "bytes": 1226,
+      "sha256": "551a218a172e42822f59eeeeb96f0b6fb1180d597e4ecf4dc3ad43a4c5c115b0"
+    },
+    "public/assets/icons/atlas/wedding_hall.svg": {
+      "bytes": 1282,
+      "sha256": "ab5c4b9deed912aba499963f82ff7e0dad6a079d366eb4b18b8ac77c6264b6f3"
+    },
+    "public/assets/icons/atlas/weigh_station.svg": {
+      "bytes": 1318,
+      "sha256": "2d232df1290c6bbd4f78e335496f9d737fa1a4b9b6141b9b69e3016600321a10"
+    },
+    "public/assets/icons/atlas/wetland.svg": {
+      "bytes": 1346,
+      "sha256": "0d03b91fc38eef818bf8454ca8adc471e09a9ff1ee42a796c6f4f69eafc73c94"
+    },
+    "public/assets/icons/atlas/wind_farm.svg": {
+      "bytes": 1237,
+      "sha256": "6f836e2aa1eeb3ca491bbe93683a7399734134c73b6ae74e140bc081abdc75ad"
+    },
+    "public/assets/icons/atlas/windmill.svg": {
+      "bytes": 1172,
+      "sha256": "fda09094a6ec5a3a8558f0c36b56ccb40125b89afa46d07456aa07fb31b53e8e"
+    },
+    "public/assets/icons/atlas/woodland.svg": {
+      "bytes": 1185,
+      "sha256": "d6a0467b588a37bdab351064d018a3aa3eaf0fe4d78456ca33cbef2b5eca7d06"
+    },
+    "public/assets/icons/atlas/workshop.svg": {
+      "bytes": 1254,
+      "sha256": "25f48246f476e24bcfff08dcbaaad484b6e2c0b070f69fa0b8c1cf4ab405487a"
+    },
+    "public/assets/icons/atlas/wrestling_club.svg": {
+      "bytes": 1322,
+      "sha256": "ff79f9a2333c64d2e2d21cf3169659e8c4a1dbf552bb6edf881069f3f333bffc"
+    },
+    "public/assets/icons/atlas/wushu.svg": {
+      "bytes": 1293,
+      "sha256": "c504dd2fd03f1b1d74f190507756a1bd4991bbb55d73dc268159362b3cff9772"
+    },
+    "public/assets/icons/atlas/yoga_studio.svg": {
+      "bytes": 1327,
+      "sha256": "ee7bb8aa878abb538ff38172d2f9070bbe4dccbfd69838eb472490431014ed2e"
+    },
+    "public/assets/icons/atlas/zain_center.svg": {
+      "bytes": 1241,
+      "sha256": "ea691eb6da706e0e9ed18123df0dabd17124bc85710528c6d907517a4dfb90c9"
+    },
+    "public/assets/icons/atlas/zain_tower.svg": {
+      "bytes": 1325,
+      "sha256": "c24e69e6c5968d60892aa4560b5f2260cc60b3e3fad2da8576c2bd31d9a7af7b"
+    },
+    "public/assets/icons/atlas/zoo.svg": {
+      "bytes": 1264,
+      "sha256": "acb2acb74695f628b2abf953483acc6af143f8ee49223611b72db384f9aa47c3"
+    },
+    "public/assets/icons/nav-kurd/01.svg": {
+      "bytes": 448109,
+      "sha256": "74ddfc601a193991bc48a9bc1ab553086d28ab1106719de147ad9c1af1b9b9fc"
+    },
+    "public/assets/icons/nav-kurd/02.svg": {
+      "bytes": 472801,
+      "sha256": "0acb049f42b159308c9f86343d1a40525e23d3c46c78ef5ff5753dfe30410b1e"
+    },
+    "public/assets/icons/nav-kurd/03.svg": {
+      "bytes": 452237,
+      "sha256": "44356d2a3235f22d9a50209595a3e713da965ac831ad578582cef52d49c67b19"
+    },
+    "public/assets/icons/nav-kurd/04.svg": {
+      "bytes": 532245,
+      "sha256": "f84b4638a2cdf9b602c675511daf3a7a86d9311541a62c318cd8cf392f55c315"
+    },
+    "public/assets/icons/nav-kurd/05.svg": {
+      "bytes": 418025,
+      "sha256": "0e388cf45efd0157ddf7704a37ea72fd7946b7d54bb61d74ba9a7337e4524b4e"
+    },
+    "public/assets/icons/nav-kurd/06.svg": {
+      "bytes": 510593,
+      "sha256": "b14cc8eedf4f8a31d2e01f8af4e907f9d6e31666c04e8a9723aec2fd45d7ec90"
+    },
+    "public/assets/icons/nav-kurd/07.svg": {
+      "bytes": 454465,
+      "sha256": "46509fc1e841693d69141cec09fc56e5b34dfe12d0872f5fd13c02287557dce1"
+    },
+    "public/assets/icons/nav-kurd/08.svg": {
+      "bytes": 612221,
+      "sha256": "1f0d1924be93c039d2b9d8eaa254fcd1114f6680f902bfaef07725ec98ed3f20"
+    },
+    "public/assets/icons/nav-kurd/09.svg": {
+      "bytes": 408793,
+      "sha256": "4454586fd3f7e53269bb7454de9b3609b19be76e81786bc1efa88cf513cdf5e3"
+    },
+    "public/assets/icons/nav-kurd/10.svg": {
+      "bytes": 363389,
+      "sha256": "1ac6201f57442f9ca6c047f76e4b910f885287657ba48128f57c4dd4804ce1d8"
+    },
+    "public/assets/icons/nav-kurd/11.svg": {
+      "bytes": 457453,
+      "sha256": "78e19d9dbba64dd920f864e495338132b6a58a1f79329cb6c3e7cda24777120d"
+    },
+    "public/assets/icons/nav-kurd/12.svg": {
+      "bytes": 567697,
+      "sha256": "9dbb9358493f4ec6265755b27d2acf7a664e491a6b8ff7d256dfcc13b104b7cd"
+    },
+    "public/assets/icons/nav-kurd/13.svg": {
+      "bytes": 590629,
+      "sha256": "63f736aa4cb4450780658337b71c9a0d1524b9e623539f42d97cc856e0505d86"
+    },
+    "public/assets/icons/nav-kurd/14.svg": {
+      "bytes": 612653,
+      "sha256": "2f4cc62b2b7ca40198c6d1d7c046c6019d2e8c53cf0d2a70bc193869429462e3"
+    },
+    "public/assets/icons/nav-kurd/15.svg": {
+      "bytes": 386041,
+      "sha256": "bc4ef7b7e46328c210372a631cbebbd3290f90a8a07b89d38c0efff956ec1bb0"
+    },
+    "public/assets/icons/nav-kurd/a1.svg": {
+      "bytes": 399,
+      "sha256": "bc38deb5bfcddefc41f685a13d94b60565924053a4ea92ae15e5d167ea638437"
+    },
+    "public/assets/icons/nav-kurd/a2.svg": {
+      "bytes": 602,
+      "sha256": "b6e3524bd8a9ea807f8e9eae85b17b51e3a16a5faee54f818a85c4aa4e1da9c4"
+    },
+    "public/assets/icons/nav-kurd/delete.svg": {
+      "bytes": 364289,
+      "sha256": "80d716a92294ed7331a3d4803f1c2688aab41b020df157ecb6fb55d3fe235987"
+    },
+    "public/assets/icons/nav-kurd/manifest.json": {
+      "bytes": 4803,
+      "sha256": "5f3bffe89d260c611785e18b941076d38b4ef60add17fb1d845bbc24173c2417"
+    },
+    "public/assets/icons/nav-kurd/profile.svg": {
+      "bytes": 288769,
+      "sha256": "b9e6b2336a9648df5d333503828ff4477a2ca529d3a1a6fcc4d669f9e9bc79b0"
+    },
+    "public/assets/icons/nav-kurd/speed-time.svg": {
+      "bytes": 582405,
+      "sha256": "ddfc3539b928f6d3d6bf2c56c2ae9de7817bb55d404cd104453748c12bab8d9b"
+    },
+    "public/assets/icons/nav-kurd/steps.svg": {
+      "bytes": 727601,
+      "sha256": "1a703495d371159153d13ad725b011a995aab701b713fbac2e0ce64a38bc9969"
+    },
+    "public/assets/icons/social/instagram.svg": {
+      "bytes": 299,
+      "sha256": "e6d4162f82bd4cac9fd45dcd951fe66220a38c1e260c6974ecc2cb55f5463700"
+    },
+    "public/assets/native/clear.svg": {
+      "bytes": 298,
+      "sha256": "ea73da23ab621ad2a3aba9b4868dbbad965c00aa804d0d4fec8db5fb4bb40225"
+    },
+    "public/assets/native/info.svg": {
+      "bytes": 378,
+      "sha256": "7dfb051e04195f41a8308d537d785739de825e60c573a036364ff030c2275d62"
+    },
+    "public/assets/native/settings.svg": {
+      "bytes": 617,
+      "sha256": "854f05fb67ccec325f4b43cb243b49c8aa59f5aee0c73a18db7398f6b6d7055a"
+    },
+    "public/assets/nav-kurd-logo.png": {
+      "bytes": 478173,
+      "sha256": "2593e295c84c9fa8b76ff8313372a57fcded471985edbd158afdf87462dc224c"
+    },
+    "public/assets/promo/nav-kurd-v9-cover.jpg": {
+      "bytes": 198010,
+      "sha256": "4b812aff257abd1d3aa9a5083a08a5e4ee99920cfb268c95929336bc044bd904"
+    },
+    "public/assets/promo/nav-kurd-v9-screen-1.jpg": {
+      "bytes": 152593,
+      "sha256": "68a630638a0c3f89387a058bca6f346a154ab5040dd27b0a27732eb68db95c74"
+    },
+    "public/assets/promo/nav-kurd-v9-screen-2.jpg": {
+      "bytes": 137587,
+      "sha256": "d3dbe049ad6a1fa39eb19d38853b378ae034f4f0be058bfdbd685096a2ec16be"
+    },
+    "public/assets/promo/nav-kurd-v9-screen-3.jpg": {
+      "bytes": 115102,
+      "sha256": "35473a1a8a4983881dca3679282ee107f34e8a7cae6a1453de8bb7b89bce64e7"
+    },
+    "public/assets/support/copy-asmr.wav": {
+      "bytes": 81188,
+      "sha256": "174f24d4653682162a4e3824c433a5f34f631e8b8afe585cbc99fe59da875e2f"
+    },
+    "public/assets/support/fastpay.webp": {
+      "bytes": 6964,
+      "sha256": "1b48710a58d9aa82496624c88538b77e83a40b13b89bafcfe87dcb4518e81aeb"
+    },
+    "public/assets/support/fib.webp": {
+      "bytes": 4274,
+      "sha256": "2aa8e70c363cd23fbb1ceddea11d950d2909e6af2eab9784c3c07542cd65f40a"
+    },
+    "public/assets/support/my-cv-preview.jpg": {
+      "bytes": 171279,
+      "sha256": "c1ef1a76400d02053e03138f469d1b22972c2ebf51550e49ae68c749510e0f16"
+    },
+    "public/assets/support/superqi.webp": {
+      "bytes": 6272,
+      "sha256": "0802d56f5e8578931c29a0b601e53450904544817a155b15ca6e8f1a1335f292"
+    },
+    "public/assets/weather/clear-day.svg": {
+      "bytes": 553,
+      "sha256": "424ea2aed67db17f527ec0ae8ab0c62e171078c97d61e46e275d3c2de98aeb07"
+    },
+    "public/assets/weather/clear-night.svg": {
+      "bytes": 444,
+      "sha256": "900d729b9b38fe1342939fea922d4976341367f60f3ab43f2576277ea184a258"
+    },
+    "public/assets/weather/cloudy.svg": {
+      "bytes": 399,
+      "sha256": "e137872ed00c1497110d23dee2b26a7bb858562e4c457358c8653a6252ddc984"
+    },
+    "public/assets/weather/cold.svg": {
+      "bytes": 568,
+      "sha256": "cd67a37ee49e19660723c9bee978b3254a93761f8e9d3843c594ec432fbd5aa5"
+    },
+    "public/assets/weather/dust.svg": {
+      "bytes": 668,
+      "sha256": "9463992c8c5ff8349da7befd926bb0cc8e592fac5830b40a8d1bf11a1c574bbf"
+    },
+    "public/assets/weather/fog.svg": {
+      "bytes": 548,
+      "sha256": "d8762defc068c92ca21aac6f019d7f7c8177ebf5f3117451574e9b7d6a5b0698"
+    },
+    "public/assets/weather/freezing-rain.svg": {
+      "bytes": 760,
+      "sha256": "f41e2cdf97ae0082027ec2a4dd87e11c8d8ef23363508f7c663a5043fe05f4b5"
+    },
+    "public/assets/weather/hail.svg": {
+      "bytes": 819,
+      "sha256": "6917d1357e1041e7e1bd2f8478fa1c9a518f368c6a454d1336d5ac985e864392"
+    },
+    "public/assets/weather/hot.svg": {
+      "bytes": 763,
+      "sha256": "9108a7157857a7ccac67c2dd5d75e18804ea62ec12a1d4b7d8e2c83f96b775bb"
+    },
+    "public/assets/weather/partly-cloudy-day.svg": {
+      "bytes": 778,
+      "sha256": "ab392f1746aa219cca2f77347f7583c21530d861720336e6d0b1a84a8a9a794a"
+    },
+    "public/assets/weather/partly-cloudy-night.svg": {
+      "bytes": 470,
+      "sha256": "ee0b94f32f370ef65ac7e40a1f5262f92a64c529c5249728ceca584c84caba08"
+    },
+    "public/assets/weather/rain.svg": {
+      "bytes": 645,
+      "sha256": "be01e06a70ec0209ca0065c3bcf1ca2e604659e457653d001e9733e8cd23dab9"
+    },
+    "public/assets/weather/seasons/autumn.svg": {
+      "bytes": 591,
+      "sha256": "7e002e613e74cfa13024a27c55cf6efd70a8285122548b774c645955ab5beb19"
+    },
+    "public/assets/weather/seasons/spring.svg": {
+      "bytes": 502,
+      "sha256": "8dd151268efd7732bce3880a79c90b540bf9b5c156f1492d2bdfcd9454bfdd98"
+    },
+    "public/assets/weather/seasons/summer.svg": {
+      "bytes": 473,
+      "sha256": "53cf8ddb149d81431b7fb3da02cffc576027e74e56220f1547a8e33ff5ffc88f"
+    },
+    "public/assets/weather/seasons/winter.svg": {
+      "bytes": 472,
+      "sha256": "47c7d9e22133971edf6e0a4ee0ebff9d706745478ce3cadd4b6330b09ea084a4"
+    },
+    "public/assets/weather/snow.svg": {
+      "bytes": 633,
+      "sha256": "45ff8eff882ca154ec26eb9e704af56a82c32947935b738683f80e5a2cf4c371"
+    },
+    "public/assets/weather/thunderstorm.svg": {
+      "bytes": 424,
+      "sha256": "374a213f054705e82ef61038e8520f43120fed80c5a47c2015d7c06060ad5e47"
+    },
+    "public/assets/weather/tornado.svg": {
+      "bytes": 690,
+      "sha256": "e8f6a216da5abebb85ed217ec19b910264107336b4d86ef40fe3748007bcfb58"
+    },
+    "public/assets/weather/ui/clock.svg": {
+      "bytes": 509,
+      "sha256": "2ba7f613c4867b9bd873c1750d7153a423cecaa0debb300e5c7d7f673024ee81"
+    },
+    "public/assets/weather/ui/day.svg": {
+      "bytes": 507,
+      "sha256": "c66fa228512c55e2a775249ced157e8caf0f72fdcf6627c45513dc7711df775f"
+    },
+    "public/assets/weather/ui/dust.svg": {
+      "bytes": 495,
+      "sha256": "b8f0a97a75147e4414273350cd0d6fa81d377849351acea43837557c15372412"
+    },
+    "public/assets/weather/ui/humidity.svg": {
+      "bytes": 475,
+      "sha256": "461e1e2ecde77f2f8bcc05161de4f128e278249a81f0554566085ba4996cba91"
+    },
+    "public/assets/weather/ui/night.svg": {
+      "bytes": 365,
+      "sha256": "a20402ad3899ad31cdc159c0f29566ac2f5077ec7cc63a7a93a82df36982ca85"
+    },
+    "public/assets/weather/ui/temperature.svg": {
+      "bytes": 492,
+      "sha256": "93405f6f9b0da6f6bab12c604d98de910a9f242a64eafdcfbb6e05702e504433"
+    },
+    "public/assets/weather/ui/wind.svg": {
+      "bytes": 445,
+      "sha256": "394e0fc69bcd9189c2b7a9f0dc8936731593fce02e6c584630488e4c1ada2cd4"
+    },
+    "public/assets/weather/wind.svg": {
+      "bytes": 560,
+      "sha256": "67ac4573fdb8f7912bc17a587ed07a7fcccae05409555766df0130755319dbf8"
+    },
+    "public/data/kri/kirkuk-verified-name-corrections.json": {
+      "bytes": 16229,
+      "sha256": "60ca1dfc9cf3a92f4e6ecf6426c308503feafceba4eff0c31ccc8ee2415ef018"
+    },
+    "public/data/kri/kri-base-map-manifest.json": {
+      "bytes": 5285,
+      "sha256": "e1000398fff36bb0250915869065ed552696df240bc911a2f17f31fbc0178b02"
+    },
+    "public/data/kri/kri-base.pmtiles": {
+      "bytes": 15198962,
+      "sha256": "d169633076785cb361abcc5c3c9ef27a63ed5efd98669c2285d7e4fb30b7a0ea"
+    },
+    "public/data/kri/kri-boundary-line.geojson": {
+      "bytes": 73579,
+      "sha256": "c853ffdf618cf96f5b67013277c905f77b4b65515031a7e5bf532c7880ed3b0a"
+    },
+    "public/data/kri/kri-boundary.geojson": {
+      "bytes": 73546,
+      "sha256": "b8a1c8be18bf8d8bc42d085c43b0a8b4376ca1e4765bbaf5dab16165198633a2"
+    },
+    "public/data/kri/kri-canonical-data-quality-report.json": {
+      "bytes": 4217,
+      "sha256": "1e6e7454b4df5e9bdd930e94df6dace80d5067ac835887923d7656fbcfc07cb2"
+    },
+    "public/data/kri/kri-data-provenance.json": {
+      "bytes": 6224,
+      "sha256": "8945f1bc40bcf0346030fbc93e69fd82a2c11e2cacb7e3126d093fafa672b6c3"
+    },
+    "public/data/kri/kri-data-quality-report.json": {
+      "bytes": 3484,
+      "sha256": "b65956a21f005f7f0d0b21d702b7166eb1f6c551c35035b44beddd506663105e"
+    },
+    "public/data/kri/kri-districts.geojson": {
+      "bytes": 318663,
+      "sha256": "cc2d49abb4badd3a75c15693840fc0a0e32be4bd01a62c731e1a3ce8e1b5ba07"
+    },
+    "public/data/kri/kri-governorates.geojson": {
+      "bytes": 146379,
+      "sha256": "a65d1e260c93f78bd347d9649853c95109c85156361dc4f7ebad1b71d80691dc"
+    },
+    "public/data/kri/kri-labels.geojson": {
+      "bytes": 10506,
+      "sha256": "a5aacb1742e92060b1cef84e545ec116b16a87dfd817fb36be812c18f626d7f7"
+    },
+    "public/data/kri/kri-localities-cluster-runtime.geojson": {
+      "bytes": 127745,
+      "sha256": "80cf9227367a964b4ae67115fa72046c341fb54e1a593f7afe5812701372a990"
+    },
+    "public/data/kri/kri-localities-language-manifest.json": {
+      "bytes": 2189,
+      "sha256": "c48b0f2dbf050dda1cd5dd4a936c274eb3118efed3991f5f2d37dc076a5e2f22"
+    },
+    "public/data/kri/kri-localities-major-runtime.geojson": {
+      "bytes": 40306,
+      "sha256": "525fe3a68130270dd01fe0804e281c5ed73e346d154d1c219ea5df9408f2ad12"
+    },
+    "public/data/kri/kri-localities-properties-ar.json": {
+      "bytes": 1301212,
+      "sha256": "11fd39d47fd1c2c7400ab6d242ad4269ac8c7309e74e348b48b4bccfb607ab32"
+    },
+    "public/data/kri/kri-localities-properties-en.json": {
+      "bytes": 1183417,
+      "sha256": "c9f41c0d8c2310ade972597dbc01dec5fde8e624511923334649ac94e5296a19"
+    },
+    "public/data/kri/kri-localities-properties-ku.json": {
+      "bytes": 1206059,
+      "sha256": "d4cde588209cb3c6d052da567251bff3a8a4a9adcdeac605e609f6729558affd"
+    },
+    "public/data/kri/kri-localities-render-ar.geojson": {
+      "bytes": 7033973,
+      "sha256": "04d592b614a41117cd0e8ad795870be340e46ccedb4be34360088858205838cd"
+    },
+    "public/data/kri/kri-localities-render-en.geojson": {
+      "bytes": 6742770,
+      "sha256": "17abb79301e92a3e1416c896c4c87a5f6058b3d88b33688a628bea7f2b29de31"
+    },
+    "public/data/kri/kri-localities-render-ku.geojson": {
+      "bytes": 6543585,
+      "sha256": "4665935007fc5728276dfe99b90535ca278548f74793366414dffc4cc6565323"
+    },
+    "public/data/kri/kri-localities-runtime-base.geojson": {
+      "bytes": 2186736,
+      "sha256": "1e93119cd52f25f64d7dcd0dd54de18b2f3929a09276717e38d412c7c4cd465a"
+    },
+    "public/data/kri/kri-natural-features.geojson": {
+      "bytes": 7963043,
+      "sha256": "904c43e3d43f443630ffe8ca7237fc91324e673a34df820f6198c42650cd5211"
+    },
+    "public/data/kri/kri-outside-mask.geojson": {
+      "bytes": 71688,
+      "sha256": "4425ac305a5ac5c76d5234c0424dbb84551b069a0d761e34e7ea8963c64dceb1"
+    },
+    "public/data/kri/kri-poi-catalog-report.json": {
+      "bytes": 6247,
+      "sha256": "c963e466d02d6332585f57f2b95ab6e9713cc6ad46dc34b95ea1afde46e5b3ed"
+    },
+    "public/data/kri/kri-pois-render.geojson": {
+      "bytes": 22430544,
+      "sha256": "7c2b3200c22c0ccfe8563dab16baacf019a24230d40c6d3a61e4d163f153f8ed"
+    },
+    "public/data/kri/kri-reviewed-poi-corrections.geojson": {
+      "bytes": 2338,
+      "sha256": "ce2217c1da8d0b24922c9c73b0352a785e4e860dec2e0e2b7277ab36a8a15d8b"
+    },
+    "public/data/kri/kri-road-labels.geojson": {
+      "bytes": 2588748,
+      "sha256": "ccb1f76f1eec92f0d6359384e771ef8146a7d25c6c2fa1033bb9deeee1955918"
+    },
+    "public/data/kri/kri-roads.pmtiles": {
+      "bytes": 4352351,
+      "sha256": "d5e18d6bce28cd8b5d161eff12fa2026976fd7a0d2ae0f3bd2c46d8463c685dd"
+    },
+    "public/data/kri/kri-search-runtime-ar.json": {
+      "bytes": 5735568,
+      "sha256": "5cb05b8c3796642344f3708b1ba428262a969abfbbbcab86c513a2abb9320053"
+    },
+    "public/data/kri/kri-search-runtime-en.json": {
+      "bytes": 5661846,
+      "sha256": "16437b06e54bd45a20d6fe5cc441dc60a3eea2899586eeedb890b69530f22935"
+    },
+    "public/data/kri/kri-search-runtime-ku.json": {
+      "bytes": 6219438,
+      "sha256": "2b2a5b354dac3ecf2881b21d7ad2c40f5457b862700da36f73653817b377c463"
+    },
+    "public/data/kri/kri-search-shards-manifest.json": {
+      "bytes": 1152,
+      "sha256": "7e4defcb1d87b11f40018ceafbf9a2aab4eaa48fd963b4daacc68ab3f13d9c4b"
+    },
+    "public/data/kri/kri-security-features.geojson": {
+      "bytes": 66137,
+      "sha256": "4b80578e2f40477f1d11d96bfef81ff91ac616412f83f16c35befe436577cbc5"
+    },
+    "public/data/kri/kri-viewport-poi-shards-manifest.json": {
+      "bytes": 317941,
+      "sha256": "e77d365aa5c1425e333ea7d775ad7af79240a987c2d570b61a91ec4245292d8e"
+    },
+    "public/data/kri/source-integrity-manifest.json": {
+      "bytes": 128473,
+      "sha256": "b39ea41e09801c2fc766ca376fb81d8500104adf91138d0f760470d17e1222bd"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
+      "bytes": 22951,
+      "sha256": "83bbc4c85ea464f86b9268c5ed6f99be27bc6d51de229c1a083beda25e577868"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/632/399.json": {
+      "bytes": 20999,
+      "sha256": "82e84efd2432c9d1eb1edf377c6cf9aec5dcfb73b916f58785d29f9c225b4e35"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/634/398.json": {
+      "bytes": 137325,
+      "sha256": "6153cf507386d83f19dfab276f7571012445877f54c5f97358ce5bf4ed3edc10"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/634/401.json": {
+      "bytes": 17521,
+      "sha256": "8c971f5277ddf0a9ffaf91b344b98c81d79541224ce0d007dd48350977bd848c"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/635/398.json": {
+      "bytes": 130096,
+      "sha256": "0cdc3468ab08e03b95199158e9b23e0069eae55a4b3328fc30df531c97a12edc"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/635/399.json": {
+      "bytes": 229438,
+      "sha256": "be953c14eff04d55aacc627a42fdafdfc2d74fe6432eb64e188f3291928f603a"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/635/400.json": {
+      "bytes": 355298,
+      "sha256": "d5a71a03a5cb2a4e9d7ebfe3a6a69599d6841a02644c382f25faccddeb57c321"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/635/401.json": {
+      "bytes": 195725,
+      "sha256": "b527b94f036daceea99a3f271f4bef0ef0f84714500f2db55f5c6ea959d7a188"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/398.json": {
+      "bytes": 128058,
+      "sha256": "c1433c94c4d51c4c7480ba77c5f880b5fa68715cace42961e7009cbe2ecaf951"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/399.json": {
+      "bytes": 304076,
+      "sha256": "54331a5b67c1ccf3fb001b19f12367975174c2ece66047f73b6117fe8505c1e9"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/400.json": {
+      "bytes": 138548,
+      "sha256": "0a8894130a177b59d61b40aead032a842af90488489ceedb6fb9b0305dca9e8f"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/401.json": {
+      "bytes": 280762,
+      "sha256": "9579e7df68724ad7863da2c453eca532f5758e12a250f4bb1ea5a45be6a59858"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/402.json": {
+      "bytes": 110125,
+      "sha256": "535b358099bea9132dd8a6b9ecf756d8bf136e6ece1fe45e8a4c3c0ab115b6ec"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/636/403.json": {
+      "bytes": 64984,
+      "sha256": "4d3a529651a656921dfebc7cb8477441a190be6d63ea7b425620afdba9b4f487"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/637/398.json": {
+      "bytes": 30608,
+      "sha256": "ab7d38dcce7d844e2a5ab66bea2d1a66b2f2ec4dd8f7df80422b2fbfd92429b4"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/637/399.json": {
+      "bytes": 104946,
+      "sha256": "c45d69f6f77fd98fe0de4a672d1adca08b4eb27995e2877d138b1f410fc841e0"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/637/400.json": {
+      "bytes": 261816,
+      "sha256": "827bc75a01525f8d9fd4ab9bec886a41bfba29c960537821f8936cd69a4db9eb"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/637/402.json": {
+      "bytes": 126817,
+      "sha256": "8dccd2bee72bcab33b1e4ee0360205dff443f9c6fbabb5264dfd27fe836fbc0e"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/637/403.json": {
+      "bytes": 155472,
+      "sha256": "2bbad07be7892a7cd698cf7bc8dfff49aa3245d15d582f38a144243d47458325"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/638/398.json": {
+      "bytes": 75227,
+      "sha256": "f1cdae80ca34ed89393fac0780c50b6f04fb5cb5158b5eaee13ad4b1617e6e73"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/638/401.json": {
+      "bytes": 221315,
+      "sha256": "7413bc88bd2f2052394fa435791dd688d0c5e5b5d24e84e454c63d6ebeaff2f9"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/638/402.json": {
+      "bytes": 120274,
+      "sha256": "2e1302b379ec005a0ea04879418c98391072b53d96da772297058de2c002641c"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/638/405.json": {
+      "bytes": 213090,
+      "sha256": "7b395836dfb5641b855bf5e38ee427a8a2fc56a79bf93cfb79d431db28ed26d6"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/398.json": {
+      "bytes": 34597,
+      "sha256": "585b7b911df87f3ceaf96d877be075e683c3fbfe08902d432cee0bdd9f073191"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/399.json": {
+      "bytes": 166533,
+      "sha256": "a170fc3b50ebc6106081f34112eee20bba7e1aca5e598e22859b8794bf581bfa"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/400.json": {
+      "bytes": 115278,
+      "sha256": "552206c61d40c37bd42137a9e55e633943b964c802944dfe81260ebe95bb3e1d"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/402.json": {
+      "bytes": 127543,
+      "sha256": "5ebaec4afbddf04afa1158c0767c81a64da0e3ec170091a20937124d8e1a7ec0"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/403.json": {
+      "bytes": 280590,
+      "sha256": "02fd29a0bb5209de4cf50ba1eb48a8149cd8f9e2774a0eca6011fdb61f153527"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/404.json": {
+      "bytes": 64950,
+      "sha256": "d09f2a9cda9daa91e11e8c6e138a0cec1c589169844d85d5e980314558be6ee2"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/639/405.json": {
+      "bytes": 31421,
+      "sha256": "67cf30a3528ce522e54ad32e90517f22b14c4428988f8366efa802f116ef6a5a"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/640/402.json": {
+      "bytes": 72797,
+      "sha256": "35fc75cfc9b39152dc63ddf42939c693816c3888fd357a9a39f67c4c6f13609f"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/640/404.json": {
+      "bytes": 78876,
+      "sha256": "af5136ec53964793a3c057081782f2935bc79c2ca1f9f0aa8c9b40f543520c10"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/640/405.json": {
+      "bytes": 63526,
+      "sha256": "817fa781a253b32c93189b01d26a45b09494dee951291626159a46f340fb4a10"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/640/407.json": {
+      "bytes": 56578,
+      "sha256": "b5091a58fe36d6870578f97b6b32bfc2436cb4f0f8c2ca6d4848a6940a0cbb81"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/641/402.json": {
+      "bytes": 104487,
+      "sha256": "35ab0522679e9948814879aeae3d7620c8a6092995db845a3ebb37fe5771fa93"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/641/404.json": {
+      "bytes": 307210,
+      "sha256": "027079c59868d501d21d4bd87b3faa6b89b2297fcb13f3555e38e38809ac2b97"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/641/405.json": {
+      "bytes": 167661,
+      "sha256": "4edec599da218912ff00901e4a79c6bb0b8369c3a4b02bc472effa6964762d5c"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/641/406.json": {
+      "bytes": 76428,
+      "sha256": "f561bf31396995cb2852fc3fe87da348a249801421b9a9b37db4569cb12adf70"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/641/407.json": {
+      "bytes": 99838,
+      "sha256": "e111c37d28290fd0bd7c847d46bd77c78213bbb2c06e0f8fcdb3cad96ed635e4"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/642/404.json": {
+      "bytes": 350321,
+      "sha256": "0606312a236bbbf9aed6fe5beb4ac307ec709bfe17c58872c67b2d7498ba0b9d"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/642/405.json": {
+      "bytes": 82622,
+      "sha256": "5cdf9597ae3f0518d24ce1b4f25f051fa9edf2146cad7cfe06871a572191e377"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/643/404.json": {
+      "bytes": 42794,
+      "sha256": "b76d7d59e8d461e4a7898a7e9cdd65f64b3e75532e88229c95e2b78cc39594d7"
+    },
+    "public/data/kri/viewport-poi-shards/base/10/643/405.json": {
+      "bytes": 11528,
+      "sha256": "7a7036ed98d63d9dd8e39b7a800e5bbd54630fe7af9fb0215584d16e1d738916"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1266/797.json": {
+      "bytes": 12922,
+      "sha256": "63a5fdd409c04f6f2e1ab8711ccb097905ca22a6a06e07facd2c8172b84e54b6"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1266/798.json": {
+      "bytes": 10962,
+      "sha256": "db2fa278ad4a4ff50102a0ecb54125e79d5191b034ba32554cae70e98b0717c7"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1266/799.json": {
+      "bytes": 101329,
+      "sha256": "2dbd685d1bc507ff3aed875656f192883cf48f6cd52fe199994d3c669c3e88b2"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1267/796.json": {
+      "bytes": 20654,
+      "sha256": "17ebc63ebdef70c1685af92a77dc31605f0e6b72738dd968fb8e6f73b9daba82"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1267/797.json": {
+      "bytes": 25654,
+      "sha256": "210cdd36adbd74ecfd810a2ddced6a3b6b03fa57e5eb277b5283ea9e9f5d8fc2"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1267/798.json": {
+      "bytes": 255662,
+      "sha256": "fb04844010a8b2c7da3bae542d7339cd510d59eedfefa6623fbe3bc2d89ad589"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1267/799.json": {
+      "bytes": 6860,
+      "sha256": "8d98fca76fc8f20c0f67f83ec6446d525dde57acfdace5e6684bdcdaf75cdd0a"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1268/799.json": {
+      "bytes": 31665,
+      "sha256": "5a76def9a4d084070a3778a960495fa5ef1974b7ad234d179665487801491303"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1268/800.json": {
+      "bytes": 20664,
+      "sha256": "aed8e4d2e814d5c8348c2cd35b688f137e7df682101e77f680410f6f2dd25909"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1268/801.json": {
+      "bytes": 30017,
+      "sha256": "c744ed9747261fe2dc35ce02800d03b3165d6a1b7b14204ff63148f92fd19684"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1269/798.json": {
+      "bytes": 40802,
+      "sha256": "d09490e5c085849ba54ef3d905050f825f7cdd2ee7c85abea1661722a7d54665"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1269/799.json": {
+      "bytes": 58565,
+      "sha256": "5b75a6cb3b7b8fe16d02b061cfa393ab183564e2e50ff9b9eb0ab40e4d090dd3"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1269/800.json": {
+      "bytes": 84006,
+      "sha256": "07eaf7861c8789cd052c9d70348dd9ba2cebd1de2d7dff253a3f65a07b424004"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1269/801.json": {
+      "bytes": 270776,
+      "sha256": "abe879d5c72da259dede4e34e5b2e5d2b7bbeb3c9f451e6f43cfc4b9e89ac48c"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1275/802.json": {
+      "bytes": 184071,
+      "sha256": "83dcd4a69f439da14aa25bc767fe26ad8530e2bc5d5d65b354825b0e0de5db28"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1275/803.json": {
+      "bytes": 55108,
+      "sha256": "145bc374cc1bc7a2db0dbc325ff1adb3e1b6b91b218b455921dda0d94a785cfa"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/798.json": {
+      "bytes": 23030,
+      "sha256": "86cfbd79c6fc82c4870727622b5c5d4d47497911fd4aedc490831526fd438880"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/799.json": {
+      "bytes": 87518,
+      "sha256": "177b3a868438fa3bf35e48cd3a133dca1f7cf905bf0353183109710381c1391d"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/800.json": {
+      "bytes": 155441,
+      "sha256": "ea22b5d16f9d1258b58570a0b5ec5c7d04689852da6bff455b42ce28e19dc404"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/801.json": {
+      "bytes": 163393,
+      "sha256": "b3f3bfdfd1c8bde4ddf3591036e553494b9e3836dc403c018a93ad32fea32114"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/806.json": {
+      "bytes": 31968,
+      "sha256": "444ff5ccda5b18a508eb1d34c4ce04529b017788c3398dd65b5f4545c52f476d"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1276/809.json": {
+      "bytes": 30773,
+      "sha256": "ec4e47ae0931833b398cd06ec533148509eea7a11b53259d8f90a21fc5dfe71b"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/798.json": {
+      "bytes": 48224,
+      "sha256": "02d2e8aace9fa9fc70c35fa91cd22eca592f6b3439b5c95d917173b12f282b4c"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/800.json": {
+      "bytes": 20268,
+      "sha256": "e0a1fc83507109e918ca3541e01adbfcbde2d79e575afd0bc896d27f9089f566"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/801.json": {
+      "bytes": 46805,
+      "sha256": "00e4a67c67217f69aa5b67edbeaaaeb5abe0435ae4470f5ca1c177c8f7eee81c"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/806.json": {
+      "bytes": 17923,
+      "sha256": "b3a99a35215866f5802c54a266072be725bc440f6d924b308574f91523044f55"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/807.json": {
+      "bytes": 20444,
+      "sha256": "d0baee2d009f78cd99d763bcca0a0913a97560ce3298b35a8329484988478884"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/808.json": {
+      "bytes": 18475,
+      "sha256": "fbb35911c68b7a53b8e09abbeb4fc7c7192052261c2f37a78c9810e3ac936e3f"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1277/809.json": {
+      "bytes": 17166,
+      "sha256": "61944d18d6cc46cad4f3521b8af63122a01e94034941ed8bd50067a221f71ace"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1278/802.json": {
+      "bytes": 162913,
+      "sha256": "ff77f61621bdabe82241597c2301d93afe80cbdb63cdd4bc1f06ba6d9c560617"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1278/803.json": {
+      "bytes": 123641,
+      "sha256": "73415cc75139d975af696f2ad28c3f2f05c8e1d6d7bfb08ff5f3c175a9cc017c"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1279/802.json": {
+      "bytes": 275364,
+      "sha256": "ce284a8cf87f66e6d567bc4004860dd0d074206b3f58a32785d3a5c606adbc08"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1279/803.json": {
+      "bytes": 11280,
+      "sha256": "37521bf499a4167d129a3df205d128068ee7e29104fecb0f73115e29e1b74bb5"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1280/806.json": {
+      "bytes": 69638,
+      "sha256": "346b912c43c2219a05b7ed325813af5264788711aed112d142a8753afd405688"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1280/807.json": {
+      "bytes": 51866,
+      "sha256": "69369b2581091a7570067de68352c9b858b1ffb4bf27dab3e7ac03ad44b54d88"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1280/812.json": {
+      "bytes": 14644,
+      "sha256": "5317b6a7dd228f29071fbf9a8ab95686826485e705ea7c2944b66a582f4538b3"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1280/813.json": {
+      "bytes": 14229,
+      "sha256": "838fc7e9b202628f15b23ac031a0715af4557a1629767c93cccbfd766f0b2cf8"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1281/806.json": {
+      "bytes": 34856,
+      "sha256": "65889668fa46294a787a3a516369275475cb2a53ac47d3b760d7685b79885bab"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1281/807.json": {
+      "bytes": 267026,
+      "sha256": "95e675baa2cee3d6fd7d376681e96036f72316324ab3234dc399bf06fab613ac"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1281/812.json": {
+      "bytes": 20841,
+      "sha256": "93f6f929bc7c387e98d62d4a75d5695f042d0f738db044bfe0b6c933ba428517"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1282/806.json": {
+      "bytes": 85127,
+      "sha256": "9ef6445cc0b41dd9d890e44934272b55254add21aa286cf0478cd6fe65c40c9d"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1283/806.json": {
+      "bytes": 43845,
+      "sha256": "7baf8398b3b5257bf07e24746a4e286613b58f9eaca8ebaed12caab3372467d0"
+    },
+    "public/data/kri/viewport-poi-shards/base/11/1283/807.json": {
+      "bytes": 24367,
+      "sha256": "b6bbb9efab2ea9ee7c54347d289f82b98b90c162a17ed53628a0b9a9f5705840"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2532/1592.json": {
+      "bytes": 17810,
+      "sha256": "1abacd774193f4283bf782cb4f22a4d4e80eb85ed827f59e7182cf33cfdd3626"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2532/1593.json": {
+      "bytes": 2045,
+      "sha256": "ba30ca906187c2069d9f6c1ea29e10db282dbf64d19b8cb43df1c8378aa3ee5b"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2533/1593.json": {
+      "bytes": 11435,
+      "sha256": "a011fffd3eca05fa3521974e49acc26adaacba0eed256b0da83086c2d9ec65aa"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2536/1597.json": {
+      "bytes": 62067,
+      "sha256": "b48fb66aac795add35aad837d49ef6974e8bcda3a49b4cdda8e9397be3324990"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2537/1597.json": {
+      "bytes": 9212,
+      "sha256": "c1e50878259ab074a65a2ab41630b078f14e2c91bf15724eef7a65a391a03bf8"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2548/1604.json": {
+      "bytes": 118849,
+      "sha256": "27dca7a62356da5572321016ced1ec4dde23851bedd85e047588795d8e9faa1d"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2548/1607.json": {
+      "bytes": 25738,
+      "sha256": "9c647fd1aad8e203e8cf02662693bab2c4308ff1579d7ba5ac7352f04ec40dfb"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2549/1604.json": {
+      "bytes": 201034,
+      "sha256": "7a5205dfdc1ac6516a5ebbb85a6ff2c2c0ab518f5efc624dc3214b215ca51537"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2549/1607.json": {
+      "bytes": 9699,
+      "sha256": "89c74ed8a5c8b3bf4a2c49c7e3794ce50ae26a5526b14c663f533963f8b8431f"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2552/1614.json": {
+      "bytes": 19639,
+      "sha256": "84b530f839c58ec17c0494ab305ab4bc946e60db46229b440e210bd9e220c5da"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2552/1615.json": {
+      "bytes": 289371,
+      "sha256": "d8aeed3f7da771e5a03a0fe3b82aae7d24291d3ded45bfaa8ce6ac30c5270af5"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2552/1617.json": {
+      "bytes": 35048,
+      "sha256": "077c1ce9b55cd1dc576b269bbf963dccfe72226eb47d9014486613babb695e43"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2553/1614.json": {
+      "bytes": 5600,
+      "sha256": "892efc24d3fadeb38d58bb92ec62305640a1cea6cda9013cd3084ead9406ccb6"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2553/1617.json": {
+      "bytes": 11701,
+      "sha256": "ad63e8ad1b59eea9a1c371ca97c03714a879036746e41f1d593578f325bf61ae"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2554/1598.json": {
+      "bytes": 60325,
+      "sha256": "c8461090a40313b8b6339f105645284aa69b3016cfa56c7b175d4860de6f7a35"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2554/1599.json": {
+      "bytes": 329185,
+      "sha256": "cb99c4f5c22f237bbd1295ef2842a0e08e57a0b6608f0116b35957ed2a97ae3f"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2555/1598.json": {
+      "bytes": 4916,
+      "sha256": "e0745b728a5752fb1276bb49ad6a6ae1d3ae3a18b302bb0ac40e880471b30391"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2555/1599.json": {
+      "bytes": 22276,
+      "sha256": "48759af14604ec0d1f97b5e000787e1d5db2ce9dbf4275342fce29aee6e241d6"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2562/1626.json": {
+      "bytes": 3020,
+      "sha256": "586ce16400ef113845c47d9203ba52e1e85fe74ea754a1839d9e5a881e96e12a"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2562/1627.json": {
+      "bytes": 44901,
+      "sha256": "e7f0020c781e509e2de1d3c149f850f2cca85c23d43b93da34d0054ada126bab"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2563/1626.json": {
+      "bytes": 6723,
+      "sha256": "595e7faea7a27d108bc240b5f73dc4c31659374e851a54c768955700b98c785c"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2563/1627.json": {
+      "bytes": 329580,
+      "sha256": "68cbf140e1b7aafd3e76bd976c22e0d0db55defb740e6445b69e3a29fa8e4060"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2564/1615.json": {
+      "bytes": 58557,
+      "sha256": "78e132f2d4a7572e2b1572262e58feff08706f9767690f0a22c6fbee548951a7"
+    },
+    "public/data/kri/viewport-poi-shards/base/12/2565/1615.json": {
+      "bytes": 115538,
+      "sha256": "2765c51ad7bcdd43c4f748fe0f791327206470c43456acd8abe9f31c55f5426f"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5066/3184.json": {
+      "bytes": 65394,
+      "sha256": "eeaa8367b5adfad65afa0cea3a6408bfa68d2a617a28c94218cf7afbc284ef29"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5066/3185.json": {
+      "bytes": 15584,
+      "sha256": "d3d7da7953f8a4bf6c32e918f8d64fcf2ea7df7539b39ebd303e71d3ae434fdc"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5067/3184.json": {
+      "bytes": 338563,
+      "sha256": "552fc185bf49f3b5d661cc0622b385215a2ffb7f2d5b8b4b181ce8c8b9380b81"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5067/3185.json": {
+      "bytes": 32082,
+      "sha256": "9c2e2cde80e38536d2ae6b50d574a585bc8a403b46afbb26f1843bc9b85894fe"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5072/3192.json": {
+      "bytes": 174033,
+      "sha256": "f6fbc1fa0e863b2361416a99640f82e63233f46135b0f442b81d0fce9fda61a8"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5072/3193.json": {
+      "bytes": 10331,
+      "sha256": "1bde85b6c8f3a54decc6a0b05416a6ec45d1aa75f13447f6c26fb8529bbec5b4"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5073/3193.json": {
+      "bytes": 16290,
+      "sha256": "12bb98ebe2927437674284ca6e7403cf12750ec322fccf7e84795126c1dcada0"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5074/3193.json": {
+      "bytes": 28997,
+      "sha256": "7af5dfe22fafec96b64888a6747800c39099329cfe03db4e77bd3c2bdd30c91c"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5075/3192.json": {
+      "bytes": 97919,
+      "sha256": "0a005c1e1780064290f5ba454974f6414ff1d7666429b1cccf809e69dbf16de8"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5075/3193.json": {
+      "bytes": 21408,
+      "sha256": "ddb62b87bb188439c54df9752bc2dc31c352995b051f6d8247750ab820207986"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5096/3210.json": {
+      "bytes": 155675,
+      "sha256": "3ad57bd236f379318a34e5e9f4019a92f78eba197d2499cda09aecf7a50af89e"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5096/3211.json": {
+      "bytes": 303686,
+      "sha256": "c7506a62f7c7835ac830ff6b1e8f08401c5cd220eea7cc1bcdccb4f6e3734ea4"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5096/3212.json": {
+      "bytes": 189638,
+      "sha256": "0924198b9b65399602c5a791b742963d1ef383d8d35bf032472bae7f5b859fa5"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5096/3213.json": {
+      "bytes": 51766,
+      "sha256": "78e12a5e490994fe08ffa79e9e6cd1dbfcd6da29576279d04b6458c16fc31e4e"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5097/3213.json": {
+      "bytes": 76933,
+      "sha256": "9bcfbe1123536b48dd6102561f2a9d41d894155975af982c7f767fb60a1a5595"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5098/3210.json": {
+      "bytes": 190522,
+      "sha256": "452ca19d0b87ca4d5ff8019f0cf6b13bd8e032bf2732b551223c5958f7eb7968"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5098/3212.json": {
+      "bytes": 271704,
+      "sha256": "c67f75a6005eef115db6807c741312b8f67e3ae0677c171be5b1ade02254be4c"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5098/3213.json": {
+      "bytes": 128477,
+      "sha256": "fb5af183be2319c77cc70b54bd6fb0d97998d319487951107bd3245fcd60881f"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5099/3210.json": {
+      "bytes": 98294,
+      "sha256": "26f448a0822b791a733556dce1bd70119bb9b326f6cd600095ac46719146764c"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5099/3211.json": {
+      "bytes": 140768,
+      "sha256": "73f7a061f489919f62bd439544142e1c671c8231662cfdb145373266de0b4f70"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5099/3212.json": {
+      "bytes": 112109,
+      "sha256": "1a356837fa2f9ea3af4afe3068b90a296aabc396f5141e082878f60b980a58fe"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5099/3213.json": {
+      "bytes": 7529,
+      "sha256": "138d6c7d99e98772af0b2a0769537ee7731e6ca49f8c5f6e1206b384ba8b4395"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5104/3232.json": {
+      "bytes": 6683,
+      "sha256": "cc5c1ca1d35b9516234dfac405e609c7cc99286b637da94687e7afe7e1fda663"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5104/3233.json": {
+      "bytes": 34328,
+      "sha256": "0af8a7a38c8ec14e5b7a84061af0a7bee7df10c5f3486c4af9a82aeb92683af5"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5105/3233.json": {
+      "bytes": 203333,
+      "sha256": "344852779b65c2ee84dc5ca207451130d04dd3bef2eb92787f50d79c19d05df6"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5106/3230.json": {
+      "bytes": 80656,
+      "sha256": "35580532a4cdfc5c2bcef2ef54a732139e38e0dcf9a19b7ca2dc2c2ad68858bd"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5106/3231.json": {
+      "bytes": 355021,
+      "sha256": "678f9f8783c6cd4f6e9f787bd6f5ca4a1bd3c64615c03bf2fa3ba42617e548c7"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5106/3232.json": {
+      "bytes": 317383,
+      "sha256": "2719d0c383908c12af0abe5548f5e5d9075e83a1caae8ed12b7a3db2c6796e8a"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5106/3233.json": {
+      "bytes": 205630,
+      "sha256": "2fb4126a70261ff204cedce4198cf8f2db0cc0320c92c782ec21b19abe374998"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5107/3230.json": {
+      "bytes": 3547,
+      "sha256": "a3f7d6edcfc110fd885c3d98b2ebbc75b72a6b091342249b11a569cacc644cc4"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5107/3231.json": {
+      "bytes": 23778,
+      "sha256": "ae027f6efc72a7539efbf7bd52fc38824f58adaf063f0d88c8cce44b0651eaad"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5107/3232.json": {
+      "bytes": 14038,
+      "sha256": "500521762fce878634552cbfa2099e3bb3c29aff02f98f6f7119f5237bf6e412"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5107/3233.json": {
+      "bytes": 17371,
+      "sha256": "14772ff65e634a7b20fbd42aeafec3d49e76a045f4193d6bf441bfc11e85d1f7"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5128/3228.json": {
+      "bytes": 208885,
+      "sha256": "98914aa2569535d1cdb2e2dbc74316d66987f9fbf0ef59a4901d979179ae7df7"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5128/3229.json": {
+      "bytes": 181396,
+      "sha256": "f9752464c425506600b449afed8554b03252c5c64d20064b709e77490091b94c"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5130/3228.json": {
+      "bytes": 177231,
+      "sha256": "bfe39fc2cf89f22ac2136f0f733cf5db8e681b2ff59c9eff106a45dcf52b7bf5"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5131/3228.json": {
+      "bytes": 1461,
+      "sha256": "7c5c102634e700334612bcd5eefbec27184afff04f6f1ad5f72e41ee9fc7b603"
+    },
+    "public/data/kri/viewport-poi-shards/base/13/5131/3229.json": {
+      "bytes": 18601,
+      "sha256": "74f5f22d4a34dbcb87de30a9e011382800f4ab433740f72d5048e838e94ec884"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10146/6384.json": {
+      "bytes": 90163,
+      "sha256": "4033bd74904374b759488769423fcf98188d3fa341bfc5604e4d0edec3d6c6ab"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10146/6385.json": {
+      "bytes": 67729,
+      "sha256": "bca4bd9272fa9b465a5fff7faa4757ef1bcf869d0169603a8650434902de1dbb"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10147/6384.json": {
+      "bytes": 114618,
+      "sha256": "223921acd017d369ec839c7501f5d2fa24b1eea76e418426bd04f4acde867f5a"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10147/6385.json": {
+      "bytes": 100022,
+      "sha256": "78fe43d75619c38a7229e77ef83a85a7e8ed396c3f1adb90801293eefc462dea"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10148/6384.json": {
+      "bytes": 160002,
+      "sha256": "97af6918d7aae01167bdc54c6e147f73ecad49c6c7ea14bc623e9132ac896808"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10148/6385.json": {
+      "bytes": 127405,
+      "sha256": "68619014d31f0e2b5fc88b1e1ef845f5c624b1620e77b9ec6ebb4109eb4e5078"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10149/6384.json": {
+      "bytes": 7027,
+      "sha256": "2ffd694aad879f0a58717b181220b2c3cc3850f2f7f9ff6576ea048653624cc4"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10149/6385.json": {
+      "bytes": 92788,
+      "sha256": "0b70cfbc24d685e7980723fbdc42b2b44f65e441d412f7373709a6e9a14342b5"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6420.json": {
+      "bytes": 192726,
+      "sha256": "dfd3580b1e6ef4468dc3f2b05b7274cd754981104a8103269b2a25f18af5b801"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6421.json": {
+      "bytes": 200824,
+      "sha256": "2f4968179053074ebf2c3c965899a3c71f49190cc041cf68f5e62c3e961c39e8"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6422.json": {
+      "bytes": 263328,
+      "sha256": "b4052894086759a645e7e91d9f1648e54c3ca31a70e541f1f5359aafea843da2"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6423.json": {
+      "bytes": 206226,
+      "sha256": "1c5b9ce807e706f6826e8fcb3554b8c24a9964b89e79676d64aa1fe357756071"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6424.json": {
+      "bytes": 201659,
+      "sha256": "25496c3c37c49bfd6adb5e24c001b63ee2ac04ec341cec14b8a29d813e99e6fe"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10194/6425.json": {
+      "bytes": 36266,
+      "sha256": "7abb1e72b5ca526200c3c4a8b3e8607281ab2761cf91b027184e3c0245d8c8d3"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6420.json": {
+      "bytes": 4366,
+      "sha256": "50887b94131477a60e0021cc85e62b093161a1225cfae6f576f67dc4b6e740ff"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6421.json": {
+      "bytes": 112719,
+      "sha256": "6efc000e999d4ba72d6d05d3fc22cbaa42af59476cc86a00882697cfab85ffe1"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6422.json": {
+      "bytes": 208723,
+      "sha256": "5f0a06c847e25f7b096aaf785bceff03f1982ed2244e369fe077bd5168490bde"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6423.json": {
+      "bytes": 239976,
+      "sha256": "5aaa44be0ae4a24a1e7faaf474df8929bdf975d4f41e3a864b476faac93e263f"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6424.json": {
+      "bytes": 222815,
+      "sha256": "f7fcef9744fb3e8323b7f1382b3c383cf8633bc91910720ceb55a70a8717fc33"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10195/6425.json": {
+      "bytes": 127330,
+      "sha256": "0bea9d868773fc457825ccf4c58dc63651ad8cb267120552439b6074e8533923"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10196/6422.json": {
+      "bytes": 193587,
+      "sha256": "d0c224d614bde16021fba966e2022965b4691f9f76c1f96e8320215006eb4118"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10196/6423.json": {
+      "bytes": 165868,
+      "sha256": "c9522d0335287071d6904b9e8f7bbf89c91c582d94183671b2ee7f311068a969"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10197/6422.json": {
+      "bytes": 75907,
+      "sha256": "a7af6e2a8049edc3fcbca94a1a1d03b61c4c8f1221714d9fcb4705080d1963f2"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10197/6423.json": {
+      "bytes": 50306,
+      "sha256": "32356054f002f1ac8b3875115ad406161b19ee512ead26167279787d73099ac8"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10210/6464.json": {
+      "bytes": 1539,
+      "sha256": "834d3e47eda2de0c9fd6f18714edc240b6d81d8b41e4fb8ea236d26bd3d41a28"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10210/6465.json": {
+      "bytes": 56158,
+      "sha256": "fc958e33293e24b9e5c505d2bf1d8208c880732ff2724222e507cac68fd37992"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10211/6464.json": {
+      "bytes": 174480,
+      "sha256": "17d5308c8343755a4a9eefbafdba15d78a68f0b4bb04bf60f08cb1140ac4e328"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10211/6465.json": {
+      "bytes": 209519,
+      "sha256": "17b4563f46be91d719326fe9fd6b46348db24261e8060d29e5880a8da9b60eee"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10258/6456.json": {
+      "bytes": 63497,
+      "sha256": "e5bb340088c0ec9a4e182dcc1f4340b908ee5e1b799cd9cda12e29bd4cefd1a1"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10258/6457.json": {
+      "bytes": 144403,
+      "sha256": "b2013be310afefe0107371ffcd2f8288112a24f04f48ac372d7dbd46087be16d"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10258/6458.json": {
+      "bytes": 169816,
+      "sha256": "edcabcd745f535258cdf236996b56b4181ea03820d28128f5f51554928e86bbc"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10258/6459.json": {
+      "bytes": 67051,
+      "sha256": "ff10d6707ca89872dd20f83a015e7a12963200ca27b9d5546f8ac47f0857c599"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10259/6456.json": {
+      "bytes": 43280,
+      "sha256": "4a1b6e8c65f3cc460b2ce5ad0feed82a2fa70de378e051e6001abf0ff243a34f"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10259/6457.json": {
+      "bytes": 172087,
+      "sha256": "16919d6f24aad5b376ad0b8dc9ec4eccb1fdf393f4a16773e4f184d00f2f62b5"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10259/6458.json": {
+      "bytes": 296397,
+      "sha256": "e811b807f255b4c1a2c062f05e1d9a450e7a9206fdf0e526d960151d246d1082"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10259/6459.json": {
+      "bytes": 68820,
+      "sha256": "a5379306f0b17d2b7ee356d1f879d231318e0add09ec9ad0d5ddadcc0fc0b3ba"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10260/6458.json": {
+      "bytes": 435846,
+      "sha256": "bcd2a3083a15eac690d5df39d4a77de33898815606e93100579338689a830b32"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10260/6459.json": {
+      "bytes": 122983,
+      "sha256": "fd65d22d706e44ad3fff6d1520015f79b348a859f2f97597512abff97d2a4923"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10261/6458.json": {
+      "bytes": 91969,
+      "sha256": "5e09f99c48a766f07b43bda01375312f5f9284703ce91b413f58e942dc2f08d0"
+    },
+    "public/data/kri/viewport-poi-shards/base/14/10261/6459.json": {
+      "bytes": 52486,
+      "sha256": "b54f6576c5e54450a615a819b6dfabe5b4d33b33185cba4d5d4ed20a70df4c74"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/157/100.json": {
+      "bytes": 129552,
+      "sha256": "8224c3adc5ece2bedf4d343a4b1cf9b8cbc568d7002f4a1f9cee7614a6324808"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/157/99.json": {
+      "bytes": 25789,
+      "sha256": "2bb23d71fc2f969343372611c9b444e2552a2b7a4100d4c3cc6190fa72231df9"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/158/101.json": {
+      "bytes": 38712,
+      "sha256": "f30c79bbc4f94b05100e18547defc07afbb628b227901855daff6e50a7d87662"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/159/102.json": {
+      "bytes": 3246,
+      "sha256": "2b51ec208f8f20808ed89c5322a23ea7b2ecf3ae677d3b2712658b45a89287f0"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/160/102.json": {
+      "bytes": 158537,
+      "sha256": "43989f136f8cc12635b029929f1392b3ee77f6d16b5cf197b78943695e9daabe"
+    },
+    "public/data/kri/viewport-poi-shards/base/8/160/99.json": {
+      "bytes": 12947,
+      "sha256": "b0799c0c46eafeaad5be529545e4a8bd6a4740510012ffa8986f86b82ae9db46"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/316/198.json": {
+      "bytes": 151102,
+      "sha256": "32a5db45beb64fb9febe1c66f89f37c56e9199b248395d751f142b23f10c9def"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/316/200.json": {
+      "bytes": 186928,
+      "sha256": "1d5732cf2416aa4b8bc684c427bd8d4a7d36b6e9c745711cc9b1bb6e72ca46b1"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/317/198.json": {
+      "bytes": 139943,
+      "sha256": "fac125b22cdeadc1fcaf5e27e56a959e7c557d8ea4e29e374cfeb2f65922a287"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/317/201.json": {
+      "bytes": 85129,
+      "sha256": "8b60c6a1709695357208dc875814d57a737a0a17ad9c40d62c7b0acbc1cc999b"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/318/198.json": {
+      "bytes": 16046,
+      "sha256": "a13b3270b68c5f4d4a954e90389c351dfefb286629990d61b2c3286d1d1e61ef"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/318/202.json": {
+      "bytes": 347987,
+      "sha256": "2eb55b8938d7ea24ffd3d5ac9564e664c8685b4b8db2375282d98741baa4dc74"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/318/203.json": {
+      "bytes": 6315,
+      "sha256": "96dd1026e91ddceb442c3b24a17fdbc626b051be9e877bea14fe62aabedf5d97"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/319/203.json": {
+      "bytes": 223158,
+      "sha256": "adf515938f7503597cb2c131fcae325794b3a58fd6431bf1cd1c31cb87a17217"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/320/200.json": {
+      "bytes": 319915,
+      "sha256": "aba89b25ff96b7fade8db9b22cc61c69c5b15b4bf4b616b284d37891a7a11659"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/321/201.json": {
+      "bytes": 130165,
+      "sha256": "79c907472265e6fece112723026e836e66fc467351de229a4e3bc1331073d3c4"
+    },
+    "public/data/kri/viewport-poi-shards/base/9/321/203.json": {
+      "bytes": 7838,
+      "sha256": "a18d9514e6889010ac7fe3b9da74f296dc396bc5c75dcd74f29d32c2012a661e"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/638/398.json": {
+      "bytes": 119597,
+      "sha256": "a7a9aba8788f934cb8934cadc094c64f0032ef7b8fcbe344d2eddbf54d6324ff"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/638/399.json": {
+      "bytes": 147017,
+      "sha256": "dde2be34b0fe8961bc87b84e214d8c2542a40204af71615f1d0940ee930646ae"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/638/400.json": {
+      "bytes": 302817,
+      "sha256": "403b8c98631c2fbb977c0575bda78fd07a55548ed5712f5eac0c4f80a63e4303"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/638/401.json": {
+      "bytes": 88990,
+      "sha256": "d17cbe40d11fb584253a816b4991035486aa5d1c3ee2577f4fd4d6fbf68c420c"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/639/398.json": {
+      "bytes": 244084,
+      "sha256": "f4368e13fa6116b8e6dab1ac4b6aa2b7b0a3a9c3c6b88924846874ff3d49de95"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/639/399.json": {
+      "bytes": 230344,
+      "sha256": "21aca40368d4749657873eb8708213e886f4055c66ec35f4d10b36d8a7d65260"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/639/400.json": {
+      "bytes": 201768,
+      "sha256": "244b63ff430f5624b5ae73750051d35c3e1aa75748f8967b95f061cf75e3e778"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/639/401.json": {
+      "bytes": 101428,
+      "sha256": "6cb8f8087e340000f61d89ef6cc6fb9b087f72b665594923bb239817cfcc4b57"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/640/402.json": {
+      "bytes": 325142,
+      "sha256": "9d89faff034a5d1179e9228936f49b65f1570f5f5aaf2a4e835bfabbacfddb66"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/640/403.json": {
+      "bytes": 221183,
+      "sha256": "59cbad9c6e1cac34b9b730172e85f520913c93c0bed7765737888db594f72708"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/640/404.json": {
+      "bytes": 308253,
+      "sha256": "6155f43a6199b2b893d7f4627f0098fc0be03a6f832634919f32763a5328b19f"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/640/405.json": {
+      "bytes": 211259,
+      "sha256": "88dcf042008adb642f20766e2f7210b24d839cd75f5df856ecc0b30640cfbe79"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/641/402.json": {
+      "bytes": 187638,
+      "sha256": "b0bc13133d4bcced384fed8ef9da00440ff9ee5638cda9905419cdb4491e4a8c"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/641/403.json": {
+      "bytes": 234229,
+      "sha256": "198915a4c64025bc308c14230583b8a7f31905914153f1672ad5528e519faf52"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/641/404.json": {
+      "bytes": 108798,
+      "sha256": "e6408745131b6c21c4255bee09ba318400066db8c7a89d6d1f706503bf1ec660"
+    },
+    "public/data/kri/viewport-poi-shards/natural/10/641/405.json": {
+      "bytes": 164140,
+      "sha256": "16bcfbf316300513804e67ecb128a65ab59674845932bc11d63037f744a85dc2"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/157/100.json": {
+      "bytes": 179485,
+      "sha256": "205538c745ec06c6df5f6c0086d71aa831f0568cb3b8a658359166c0e059ff6e"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/157/99.json": {
+      "bytes": 13612,
+      "sha256": "fe69fa699929e11181e1b7b8eb8d30874c71167b97c9cc966d82d3e4637f18e5"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/158/100.json": {
+      "bytes": 431072,
+      "sha256": "d3654414311d6375a25f939c908e37cee59406408b15cf0db13506ce23a4e36a"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/158/101.json": {
+      "bytes": 45385,
+      "sha256": "39bae6b8c61e925a629bcb4b3eebbf14d596dda585df614115d2035d1f4431fc"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/159/102.json": {
+      "bytes": 13734,
+      "sha256": "71ab0036ee750363bfb7d975a1ffed2e4f2837845a86df4cc81d59e80ee02eb1"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/160/102.json": {
+      "bytes": 96554,
+      "sha256": "f520b87f58b9c4bcb7cab0bb5cfaf3ea9626a24975d40461a062bff8bb4ab7e2"
+    },
+    "public/data/kri/viewport-poi-shards/natural/8/160/99.json": {
+      "bytes": 10624,
+      "sha256": "0162866249eff83d2d8bd4f8781e0c02b22ff33f16ae8e917c7fb31edbab8255"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/316/198.json": {
+      "bytes": 38273,
+      "sha256": "8c3659053175ab78e123f8d8e9b4520ddba4b7c0c4538af17ac667e17cdcf8e2"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/316/199.json": {
+      "bytes": 247981,
+      "sha256": "386b5d62be4e6be3379bf9c79c40fbb522eab1fae801755087c112a6434bb2ab"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/317/198.json": {
+      "bytes": 146115,
+      "sha256": "3670b99a8401e9f5de811f74b9508c7502efebc822666d0d21648a0f8d64ee13"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/317/199.json": {
+      "bytes": 309264,
+      "sha256": "98ec7dce619f0f1abbc463929aabb4fc537a49aee79dbf8a5eeabff22ccd8104"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/198.json": {
+      "bytes": 111279,
+      "sha256": "903b5cfa7041b30a9c2aeb4e8fe52b54b7db644444472bcfeacfa66437c6e3c3"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/199.json": {
+      "bytes": 403041,
+      "sha256": "8a17573c0d28e9f062f33a81a22697bff34bb9123b1af0079949c1ce4ff398d5"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/200.json": {
+      "bytes": 269130,
+      "sha256": "b7651834e70a8b50336ededee63f4153a3a81c5a2383a0d68bd68deb65603baa"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/201.json": {
+      "bytes": 253611,
+      "sha256": "750ce13ee5dcfd8a1e6bdb9aff94c15da3535fec9699c89208b964c5ba59c15a"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/202.json": {
+      "bytes": 202722,
+      "sha256": "c5c6a71e707e4a7c8873c5805cb55265277e7e2277f986ddfa31294da28ccffc"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/318/203.json": {
+      "bytes": 4674,
+      "sha256": "ee6f486dc19ec84dde34582c970a141422f572100e913417ce2cdbae0d73abfa"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/319/201.json": {
+      "bytes": 426087,
+      "sha256": "1dca5eb386d8ae7a2376f5c7458ded2d7bbe8bf1699a9fc6e8b5e686ce5a82b3"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/319/202.json": {
+      "bytes": 310365,
+      "sha256": "e0a2d2bd22d61f8b525ba57144a18dda65aa85d65e49e35fdffc9661438cb7ae"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/319/203.json": {
+      "bytes": 220852,
+      "sha256": "5e078467e68c9a2fb8addb27ed4c6b280a8c9c9541a16684dc59cfaca4926ed8"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/320/200.json": {
+      "bytes": 160961,
+      "sha256": "793cdea2ba3a77456c37cbd14465678e854769abd215d65b54558b449691ebd5"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/320/203.json": {
+      "bytes": 386816,
+      "sha256": "2359a463c36303498bc001ae22e04eb6bd31e89afbe395fe6f78f63526f794d2"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/321/201.json": {
+      "bytes": 205052,
+      "sha256": "c8add186ae6e667f9aaba43f94af3ed47a7da6af2179bb5123ca94403a3515a1"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/321/202.json": {
+      "bytes": 272907,
+      "sha256": "c56a1898cebc6fe37c65679cff33f9c3eafe0b920f4dae83e833883c0dcd298d"
+    },
+    "public/data/kri/viewport-poi-shards/natural/9/321/203.json": {
+      "bytes": 12409,
+      "sha256": "ba47cfd212f5be6e2018ea09be354516bc9097785ee35c4d449c64e3b08e4357"
+    },
+    "public/downloads/NAV-KURD-9.1.0.apk": {
+      "bytes": 48257669,
+      "sha256": "f11f3b20b95790e32003ebf6dcee9560381783044b60be86bcc7aba7dad317e2"
+    },
+    "public/fonts/DroidLogo-Bold.ttf": {
+      "bytes": 116996,
+      "sha256": "4893663ecbb19de5b27f81c1e69fcde1cbc5bd8be8374f3ab51465bad0508a96"
+    },
+    "public/fonts/README.md": {
+      "bytes": 214,
+      "sha256": "e31702f7bf3eba1072c87236583dd2a33c352ca19d9f1f7b06359d1102f4624c"
+    },
+    "public/fonts/RedHatDisplay-Variable.woff2": {
+      "bytes": 46656,
+      "sha256": "7355b16c9f0cc29f3b90be45723c0b0ec4506ee581753b9a8187d1b45b2fd9e2"
+    },
+    "public/fonts/UniQAIDAR-Money-Heist-002.ttf": {
+      "bytes": 48504,
+      "sha256": "8eb44ac578038db018c17f06807a5049fadbe9e4ad1abde21c4840b7232c9766"
+    },
+    "public/icons/apple-touch-icon.png": {
+      "bytes": 36922,
+      "sha256": "4013cab421bee46789070a1e1b0643cb5107a068101af85e75e8838123c225d8"
+    },
+    "public/icons/favicon-32x32.png": {
+      "bytes": 2307,
+      "sha256": "6648b3ca667402f98fe607cd8959e048e265f3313c85d15792c11ffd2d1189a7"
+    },
+    "public/icons/nav-kurd-icon-192-maskable.png": {
+      "bytes": 41203,
+      "sha256": "cabf56e519addd5a47f0e325e27a21f586567665bc653519315961851d01d692"
+    },
+    "public/icons/nav-kurd-icon-192.png": {
+      "bytes": 41203,
+      "sha256": "cabf56e519addd5a47f0e325e27a21f586567665bc653519315961851d01d692"
+    },
+    "public/icons/nav-kurd-icon-512-maskable.png": {
+      "bytes": 204386,
+      "sha256": "78947ec48e488318c081292e69fa0dd332ae0b64b9fe6e636277b53ebabadac8"
+    },
+    "public/icons/nav-kurd-icon-512.png": {
+      "bytes": 204386,
+      "sha256": "78947ec48e488318c081292e69fa0dd332ae0b64b9fe6e636277b53ebabadac8"
+    },
+    "public/icons/nav-kurd-logo-source.png": {
+      "bytes": 478173,
+      "sha256": "2593e295c84c9fa8b76ff8313372a57fcded471985edbd158afdf87462dc224c"
+    },
+    "public/icons/nav-kurd-logo.png": {
+      "bytes": 478173,
+      "sha256": "2593e295c84c9fa8b76ff8313372a57fcded471985edbd158afdf87462dc224c"
+    },
+    "public/legal/account-deletion.html": {
+      "bytes": 7896,
+      "sha256": "a7d12d2e65ef83acbffacf7039d8b5b948e8455d9e6208d84e51b6b0e8f907ab"
+    },
+    "public/legal/contribution-guidelines.html": {
+      "bytes": 9710,
+      "sha256": "b7894663276df108fe72a274e558e701d227dba481fa430c17b1531dac50b07a"
+    },
+    "public/legal/legal-i18n.js": {
+      "bytes": 1704,
+      "sha256": "31bdbd87a75dfe9ef348efc5b8e12d7b42c7642ecd8532fc4bbcbbc31b54ee23"
+    },
+    "public/legal/legal.css": {
+      "bytes": 3191,
+      "sha256": "ec399e301545efcb2479ae6ea744c5f72ac3d7c5db44284d52c3145752130fcb"
+    },
+    "public/legal/privacy.html": {
+      "bytes": 25119,
+      "sha256": "e5953855babb41a7ee7245ba4ed722ef48d5825a4b0432dfb1ee276973eadd3c"
+    },
+    "public/legal/security.html": {
+      "bytes": 2798,
+      "sha256": "60890363586a796d97cd77b1f779e23d17e3e4d9d4456b71ced0eec7110f998a"
+    },
+    "public/legal/terms.html": {
+      "bytes": 19749,
+      "sha256": "bf33bdf65cc84dfc2b8b0ce21a043e4ffa14203995bc469cfb3dcbed1f4831d5"
+    },
+    "public/manifest.webmanifest": {
+      "bytes": 3992,
+      "sha256": "98cb7e692ffed70675494ff30e9a3816f34d8f53132e37fb1be3b85b43c94a7f"
+    },
+    "public/offline-manifest.json": {
+      "bytes": 49703,
+      "sha256": "135b864abe9faa5333176b304beb91ac7bd166f0274a334f72efc1a8c21666a9"
+    },
+    "public/offline.css": {
+      "bytes": 2699,
+      "sha256": "51c85696c8b11267b557a0ebf1e368fb8f0254b338e667fa3d04001e9f62ecf8"
+    },
+    "public/offline.html": {
+      "bytes": 1897,
+      "sha256": "c4eab1e1e83da996275ab55f9f732df8d70418f3ed0e5fdc549b78ffb7d0eb43"
+    },
+    "public/offline.js": {
+      "bytes": 1517,
+      "sha256": "413b298bee13bba66333ba8bf184db83d0111b0f6607080ed081ef837831d528"
+    },
+    "public/pwa-init.js": {
+      "bytes": 1128,
+      "sha256": "1cd9ad24030feb9942fcde7041ceae1be30073e127b8bc68cc528e23aa82b5dc"
+    },
+    "public/releases/latest.json": {
+      "bytes": 440,
+      "sha256": "abc7a0e1f2d0d9d517c51a3f6711164039602dbc87a40dfe603d21ef21095768"
+    },
+    "public/robots.txt": {
+      "bytes": 78,
+      "sha256": "ac6ec8630a51b1b2fcf148190d2b5f6cfeb447cb15bd8bce4725d4a80e21c8f9"
+    },
+    "public/screenshots/nav-kurd-narrow.png": {
+      "bytes": 634689,
+      "sha256": "9e6fe12e47df95ef7084fbe18950c27eb2eef9045973ad969d77afca83f52b2d"
+    },
+    "public/screenshots/nav-kurd-wide.png": {
+      "bytes": 452580,
+      "sha256": "40cf5d1c93fd4c6d760ee4d2eaf7542db685388ac19d8e9c1b82eb2ddf71c99a"
+    },
+    "public/share/nav-kurd-share.jpg": {
+      "bytes": 169921,
+      "sha256": "bf06749228eafa115b7c453f08bc89090393d973d8bfbbc1125cfecdd410b03b"
+    },
+    "public/sitemap.xml": {
+      "bytes": 241,
+      "sha256": "c4c6673245f52ee94ace4266187f1ec361c9b446f64e6129d778ae26b7d04342"
+    },
+    "public/sw.js": {
+      "bytes": 31606,
+      "sha256": "38fd7c2ea541035fccc8db7dcda2037d7782ce04fdf7294f8e90fcc33aee20e4"
+    },
+    "README.md": {
+      "bytes": 5449,
+      "sha256": "9e64265b698739f07b34002bd5e358beb982483a0cb8e28c7ca33c0296bf9e39"
+    },
+    "release.config.json": {
+      "bytes": 1063,
+      "sha256": "f17439f8b05ab25c02e6a9d3ecdc0a6848040056ee38941247e9eef00392250a"
+    },
+    "src/bootstrap.ts": {
+      "bytes": 1879,
+      "sha256": "3b55b920554e5cf3a81e484bac6f3a6d3640a5cb5824e944fdcdd0a40f4e8b45"
+    },
+    "src/lib/active-static-poi-icons.ts": {
+      "bytes": 3327,
+      "sha256": "4e02776b3c219a1e9b6cc87353a1298b886cb303c93633846183b71d78d7f008"
+    },
+    "src/lib/android-release-experience.ts": {
+      "bytes": 13888,
+      "sha256": "d01fd9dcdbe86eb303bc1fc66c47a68566724c0c67bd103d4bdb45bb7bc6aca6"
+    },
+    "src/lib/app-health.ts": {
+      "bytes": 6407,
+      "sha256": "0f30ab375442bf29c10b5323fa4c7ca093256e2e57bbfb74ecd579f3e3c8e9bc"
+    },
+    "src/lib/app-lifecycle-controller.ts": {
+      "bytes": 4968,
+      "sha256": "5bd2b8a5bc7291e1aaffd05dd5c90394b8a2e3088b5fb97b5cd047f6e80b7faf"
+    },
+    "src/lib/app-shell.ts": {
+      "bytes": 26527,
+      "sha256": "25af7cfd0a9dd39f4fa9472d4f450d9cad526c54cd2eaaa6835cd820bb5b77df"
+    },
+    "src/lib/app-url.ts": {
+      "bytes": 1022,
+      "sha256": "7353342c94a8bfdf1d9328fb629e39911cd406af7b39ef9f0058dfcd50b048ec"
+    },
+    "src/lib/atlas-content-policy.ts": {
+      "bytes": 6864,
+      "sha256": "692b2dec60e7736311545bac0ff23962e6029544db1e818da6343ca1df7a56e6"
+    },
+    "src/lib/atlas-editor-fields.ts": {
+      "bytes": 15428,
+      "sha256": "612c134295f33f0100c033964534c19d6e0ac60a9437eb0e24b4f8f9405a4c3d"
+    },
+    "src/lib/atlas-image-processor.ts": {
+      "bytes": 8319,
+      "sha256": "123db76ddf9625cd15d476e3ec45a1e08354d58a95b9ed841fa8945fe68f116b"
+    },
+    "src/lib/atlas-marker-catalog.ts": {
+      "bytes": 5126,
+      "sha256": "2f3c74868c421cf49d6d2d40c0e4bc1ae15d17df5e2ab17368e7b88cdb164587"
+    },
+    "src/lib/atlas-marker-icon-controller.ts": {
+      "bytes": 9861,
+      "sha256": "e98648918accb16d370c39fb1ab3a26ff3000a0778badba08a96ebe432f54bb8"
+    },
+    "src/lib/atlas-places.ts": {
+      "bytes": 75615,
+      "sha256": "41a085bac2a59c8d116c701bb2efa1c0948fb47fbc6adfe023f26efab0ad98c6"
+    },
+    "src/lib/atlas-taxonomy.ts": {
+      "bytes": 113243,
+      "sha256": "3ecc10a3cd187beda95dfc48eb2afeaf4e3d196a0e6337a2d0df2725e8d38038"
+    },
+    "src/lib/compact-search-payload.ts": {
+      "bytes": 1718,
+      "sha256": "435e655a702fecdef8a76483fa00f94473fdfb390498582af524f76ea5d0ff65"
+    },
+    "src/lib/device-qa.ts": {
+      "bytes": 13621,
+      "sha256": "2f2cdb0af089dcb201fd9efaae983e55b00a34fb82ad9d6156123e55cc6d5ba5"
+    },
+    "src/lib/dialog-close-icon.ts": {
+      "bytes": 261,
+      "sha256": "9cd30502c1163816d69f64fcc4f44fed009acc9e9c1197956eea7090530842ee"
+    },
+    "src/lib/dom.ts": {
+      "bytes": 1975,
+      "sha256": "4d564e69cbdf4877d167f3658c2071e79e82ee6bb38a02004677e244f939dfc7"
+    },
+    "src/lib/feedback-studio.ts": {
+      "bytes": 22472,
+      "sha256": "ce0e67203a116705f30e81fb79cb24d10b6bcefa6ca9510a32d3acf10ce25977"
+    },
+    "src/lib/font.ts": {
+      "bytes": 1070,
+      "sha256": "e52ccd9d61bfd297255012881966f0bb8db8e3849fd5e2f1b43bb249e5479b5e"
+    },
+    "src/lib/geo-format.ts": {
+      "bytes": 4469,
+      "sha256": "db008bf44b0259a1eac5e3dc26bb2a26a3f3acb8b7455559612336de9ada4281"
+    },
+    "src/lib/hardware-profile.ts": {
+      "bytes": 7537,
+      "sha256": "2e07ab9b4bcb19e9962269c687c1a2120c2b9f0945f00f07af36506bdd3d607b"
+    },
+    "src/lib/i18n.ts": {
+      "bytes": 36087,
+      "sha256": "c8beb4d02f1054daff6267879aab8b1b21d4c0a56fe530a515f4e1eaaf378070"
+    },
+    "src/lib/input-mode-controller.ts": {
+      "bytes": 3082,
+      "sha256": "490dcb26725eb1a36ae6b0d4958b13827259cfaa5bc7f160c5542bfca6b463be"
+    },
+    "src/lib/kri-layer-installer.ts": {
+      "bytes": 5898,
+      "sha256": "bb65089275332ddad69dc2399f55b00747cf1d523b4241d432046c4e02621f0f"
+    },
+    "src/lib/kri.ts": {
+      "bytes": 2959,
+      "sha256": "db46d45722c123abec7d8c2471610835dbf5f9968dfd13d8375fbee0159c9851"
+    },
+    "src/lib/label-controller.ts": {
+      "bytes": 22580,
+      "sha256": "2e08fd2d41e8de41625531209009065277c764d6447b299d6c48b588be781c28"
+    },
+    "src/lib/language-asset-cache.ts": {
+      "bytes": 3946,
+      "sha256": "7f997a19a0fcd29ab000f23250758c28219fef7d8a6dfaa794684bb8cf979750"
+    },
+    "src/lib/language-transition-controller.ts": {
+      "bytes": 3250,
+      "sha256": "3ad0f9730dfe2148287ee16959dacac05e4c1c1a05ccfeb4c28f0398ddcfd1a9"
+    },
+    "src/lib/live-location-controller.ts": {
+      "bytes": 31943,
+      "sha256": "fb63340c208d0e91a458ccae9845e6a6cf43b6746b0146da955467ad6967ee64"
+    },
+    "src/lib/live-location-layers.ts": {
+      "bytes": 5977,
+      "sha256": "594b931b206c80eaa6d4ede113fefffb0b31072635fa09ad6daa6325f1b699fc"
+    },
+    "src/lib/locality-language-pack.ts": {
+      "bytes": 9180,
+      "sha256": "79d55251414e9cbbaaa8202bf92c9b7c30598e137a2b48b4cc542c846a832a91"
+    },
+    "src/lib/locality-viewport-source.ts": {
+      "bytes": 5118,
+      "sha256": "be519260a165e406f8adcfaaf75cf0add59b0389a25430e7e2b6656278af1dd4"
+    },
+    "src/lib/location.ts": {
+      "bytes": 9251,
+      "sha256": "76c2c42381630714a81a1a9533acc31b08d3b894a94d4eb19144f805e40f8804"
+    },
+    "src/lib/map-animation-scheduler.ts": {
+      "bytes": 8815,
+      "sha256": "97366df842a19fda4beef125023227c4a7ac003a78acb6d1aae2dbf5b660f062"
+    },
+    "src/lib/map-camera-controller.ts": {
+      "bytes": 1589,
+      "sha256": "c6bd1c87ee01397249098cfd7fa71d86670a8e7ecb6e3ce6f2d7738169dfa0de"
+    },
+    "src/lib/map-coordinate-picker.ts": {
+      "bytes": 6588,
+      "sha256": "949b5d32d9c6d1bfe22b9f50714f35948773f8ea5ef66b2695d17754f5df465b"
+    },
+    "src/lib/map-experience-controller.ts": {
+      "bytes": 7587,
+      "sha256": "28ee7de852c7877d161f2274e4020569fc733fe5f9e860a1326712260084000d"
+    },
+    "src/lib/map-interactions.ts": {
+      "bytes": 8030,
+      "sha256": "959b3bf4116fba39a31e7c09ddcacfb7eab1412b2c555fbe08d92231f13b2e89"
+    },
+    "src/lib/map-language.ts": {
+      "bytes": 10815,
+      "sha256": "d4d4e0c615ce6ce920a2c48aca1cc61b51ff01641dbf838e649cc26e2c0c6c92"
+    },
+    "src/lib/map-layer-ids.ts": {
+      "bytes": 1896,
+      "sha256": "9033df9484f326f9f60e5356f826973a8f7287d97cf6c8cb61ad0274972301f7"
+    },
+    "src/lib/map-layer-priority.ts": {
+      "bytes": 1212,
+      "sha256": "4304c4dd41f08395a2010636a817f92c541a110e990aa3229b09fe0ad40a0f08"
+    },
+    "src/lib/map-left-control-rail.ts": {
+      "bytes": 4075,
+      "sha256": "6704e35c37326c4263d6a80c0b69c749bbe2b58d29c172c8dda0a2f06b7474ba"
+    },
+    "src/lib/map-long-press.ts": {
+      "bytes": 3872,
+      "sha256": "2d1dae6c57ecad32061a19128e5f06f95629cf07b115ee87926805f9e3c176a2"
+    },
+    "src/lib/map-overlay-layout-controller.ts": {
+      "bytes": 6126,
+      "sha256": "d94831d7c6849d6ef3e1ffa5f1cec56032b6455ff5681a1f91ead03441d49551"
+    },
+    "src/lib/map-style-state.ts": {
+      "bytes": 1652,
+      "sha256": "63558923cee227994580410506c8762f3379a2f1ff0c38b25fe0b6e4af3f39a8"
+    },
+    "src/lib/map-style.ts": {
+      "bytes": 19291,
+      "sha256": "52e367251101ea2045481715ebc3ad8db99a432ec00dde9cddbd85ab0d16c09c"
+    },
+    "src/lib/mobile-dialog-layout.ts": {
+      "bytes": 806,
+      "sha256": "884528f926dcabbf7c9d9d0126b6f37a89dabe1a9d9222aebfd434de6613dc0a"
+    },
+    "src/lib/native-geolocation.ts": {
+      "bytes": 350,
+      "sha256": "37cb5d7212fb87a2c6f6465d3a0c2339a72ef5cca3428fcb4002801e771c3a1f"
+    },
+    "src/lib/native-platform.ts": {
+      "bytes": 8662,
+      "sha256": "b8b41a7303c27e0f284d948e59eeaa5812a668562fa580c513b4204caf871758"
+    },
+    "src/lib/native-share.ts": {
+      "bytes": 3474,
+      "sha256": "929cc3b52c0f3270ec44972cc45fa8a27b0d88628b378dbde73cd71668c9064e"
+    },
+    "src/lib/navigation-history-store.ts": {
+      "bytes": 3990,
+      "sha256": "d0ac185bfdfb1e15bc67debd575788512c4bcf7cf0db0c6c3f8a9567c4fc504b"
+    },
+    "src/lib/offline-map-pack.ts": {
+      "bytes": 34984,
+      "sha256": "42be395eff21f1819c18e67ae62315798edfdaf8d031b4336d13905fa66d2924"
+    },
+    "src/lib/offline-map-ui.ts": {
+      "bytes": 11638,
+      "sha256": "808474f913a02d0c652ca2f2a5db2aee0ebb91e98fc00f569defc95d6689ecbe"
+    },
+    "src/lib/owner-places-controller.ts": {
+      "bytes": 5359,
+      "sha256": "eb29fbf59727b4adf50f5616b5e05c4354e8c40c92a82fec5ed816189840fe67"
+    },
+    "src/lib/owner-studio-copy.ts": {
+      "bytes": 23774,
+      "sha256": "7aeaa34ebe31b3f42eca1cdce82f41bdb6b278f5fe2fccff3080dccec4d85ae5"
+    },
+    "src/lib/owner-studio-media.ts": {
+      "bytes": 7535,
+      "sha256": "97baabcee82a5d4193a6a4564b1b5cfdfed6833f222ccbe436fa390974a1032c"
+    },
+    "src/lib/owner-studio-persistence.ts": {
+      "bytes": 2932,
+      "sha256": "a7d78c6efab3706620ce48a65334da68d134f4f65d2b62286ce436363cdcea99"
+    },
+    "src/lib/owner-studio.ts": {
+      "bytes": 76458,
+      "sha256": "e53917cd20be65621706af1722b734a5eef3fc66dfa6cb118077c5a7a9fd6843"
+    },
+    "src/lib/performance.ts": {
+      "bytes": 8373,
+      "sha256": "8c9361d5a271554fa928862dd7037c12c3480a83c3295c07ff7e75b88bc93e75"
+    },
+    "src/lib/persistent-json-cache.ts": {
+      "bytes": 3301,
+      "sha256": "43644df75a923102173e19b0f339e92611c236a67c83e76aecbba252ea4fbc49"
+    },
+    "src/lib/place-detail.ts": {
+      "bytes": 7360,
+      "sha256": "e433245f56f608aa5750956cadcacf913b132800b65c94523cfb083901b85d29"
+    },
+    "src/lib/place-weather.ts": {
+      "bytes": 12928,
+      "sha256": "02f862472b791939fd4095bad1c37a38c4e73f4ea5147c8fe616d618d931abd5"
+    },
+    "src/lib/poi-icon-catalog.ts": {
+      "bytes": 7741,
+      "sha256": "125bfdf3dc8ba936099e3d6063841cc7754d751c0dccd9f06b8d16e797b07b10"
+    },
+    "src/lib/poi-icon-controller.ts": {
+      "bytes": 21838,
+      "sha256": "4684ec5b1f2fc5f29036155e82fc330434b745ce9ff11cc8cea518d24761ce05"
+    },
+    "src/lib/poi-runtime-sprite.ts": {
+      "bytes": 5666,
+      "sha256": "db50aa5960df995ed54ab50a26150e86d114ea7f3d047bbfd744d9c7f3c26a6a"
+    },
+    "src/lib/poi-source.ts": {
+      "bytes": 2235,
+      "sha256": "49d82b6157e8b5dd592ca3776e52c81c87e10d6bf23357966c05e15152b30d5f"
+    },
+    "src/lib/poi-taxonomy-classification.ts": {
+      "bytes": 13128,
+      "sha256": "fd3a96491344716b235dc248afeea25cdd732557dc11cf940fe99ea6abe0ef6a"
+    },
+    "src/lib/pwa-file-handler.ts": {
+      "bytes": 6980,
+      "sha256": "6d2c12d40453683ed51cb5bf91811ad8c2cb1fcf307fbc789e249e8296fc1064"
+    },
+    "src/lib/pwa-launch-intent.ts": {
+      "bytes": 4009,
+      "sha256": "e08d6c1b68f727c554562591104c30464adf81590eb82072f2f51100e2c6e564"
+    },
+    "src/lib/realtime-presence-controller.ts": {
+      "bytes": 11569,
+      "sha256": "49fe915f47efd328f0c7ec6b8986be8b1a7a94dc97a961b106d7afb1287adca3"
+    },
+    "src/lib/release.ts": {
+      "bytes": 1383,
+      "sha256": "37be979642e7351a7edd86f7eba38c4f35e1cb41320c7bc0a5d84181147e69ea"
+    },
+    "src/lib/routing-controller.ts": {
+      "bytes": 68262,
+      "sha256": "2706c4d9ac74d106534073d35aaabccc33a08d414a625e4d79a45eae20b54cc3"
+    },
+    "src/lib/runtime-diagnostics.ts": {
+      "bytes": 14909,
+      "sha256": "eae94cecc70f9087e6ff634387109a3335c380acd72574e7044274a693fff1a1"
+    },
+    "src/lib/runtime-env.ts": {
+      "bytes": 1324,
+      "sha256": "7816eedabe312f65349e216deec549195d9e0c918fc1e41e9e39bc6ad1cb66b8"
+    },
+    "src/lib/runtime-platform.ts": {
+      "bytes": 471,
+      "sha256": "c62a67a986fd385134828ab38f1d6d5b59f186ef5dd8190bd0b8f42390119302"
+    },
+    "src/lib/runtime-state.ts": {
+      "bytes": 2336,
+      "sha256": "4c1fd4d95bf8df8b454487377f6ecc318dd42e75c5e581be8d85d7aa4448a3c9"
+    },
+    "src/lib/satellite.ts": {
+      "bytes": 8245,
+      "sha256": "bcb99517dc071be0d821a6481acb5c055622f7def7ee8163e21cd589e1830049"
+    },
+    "src/lib/search-controller.ts": {
+      "bytes": 12258,
+      "sha256": "0a93906919587ce5471fc928a67f445b4c27c0364291de1d51653990a0a2ca3b"
+    },
+    "src/lib/search-service.ts": {
+      "bytes": 21167,
+      "sha256": "f8adc9152c356be407250d3771d342937496b0103645976841d9092ce54195f4"
+    },
+    "src/lib/search-worker-client.ts": {
+      "bytes": 6650,
+      "sha256": "07ed13df70c9327936eb941782a25fb500c07c7dd5f5e70555f41481c59ed39e"
+    },
+    "src/lib/service-state.ts": {
+      "bytes": 2014,
+      "sha256": "da50cdf0b8fa214e4c3926aea3b6e747ca0148a0087ed9d151f590dcd797f3f7"
+    },
+    "src/lib/service-worker-controller.ts": {
+      "bytes": 13303,
+      "sha256": "15c7fe9aaad81c5e094a8e92b36e48e68fbe5cebe5b5a5984c28e656d2cfccbd"
+    },
+    "src/lib/service-worker-registration.ts": {
+      "bytes": 2156,
+      "sha256": "4cbd4a4e2804c1e95d66a5842fea2b4a2f8e5ae40997c1a406479b5244e06dad"
+    },
+    "src/lib/static-search.ts": {
+      "bytes": 16568,
+      "sha256": "df9a836d358fc33a986973c87a51d4599b15e4763b433149ecb20bb1f27bdbf4"
+    },
+    "src/lib/support-hub.ts": {
+      "bytes": 19456,
+      "sha256": "3cbfbf9a43f71fe2d9e816cdd49e2024b83e48dabcfe4e5177a677864f5a5313"
+    },
+    "src/lib/tutorial-controller.ts": {
+      "bytes": 25005,
+      "sha256": "f4f0a779e974a610612332ffb6d50c3f41bacca226182d4cbdec05c3bbbe8f41"
+    },
+    "src/lib/tutorial-map-demo-controller.ts": {
+      "bytes": 6210,
+      "sha256": "4712c89e96cecfce9fa3338fdf2f220328511d19518b6938ee550c8050c97f5d"
+    },
+    "src/lib/types.ts": {
+      "bytes": 1872,
+      "sha256": "18feb5591b7f9c0b34d1697ab30b409bf9654cde7c06c26d12595aec5b87acaf"
+    },
+    "src/lib/ui-language.ts": {
+      "bytes": 8333,
+      "sha256": "c3de26b87e8810c2a27c0d2845b0a03b3dd9d7e1ee36b9270895cf03079c326f"
+    },
+    "src/lib/ui-shell-controller.ts": {
+      "bytes": 2555,
+      "sha256": "ef5b7bd017af3731c1d2646449cff825902c4cbe0dd0f1052b1f1aa8a6b4ac39"
+    },
+    "src/lib/user-contribution-studio.ts": {
+      "bytes": 127132,
+      "sha256": "0c60d2f01ef0807649510ba8d489ce6b3c798fa85eee4dac3459c586a1b9a108"
+    },
+    "src/lib/viewport-poi-source.ts": {
+      "bytes": 22743,
+      "sha256": "ee16efadfa1b4766f8fa5d9e9d3938bdc083d47412a3582af0e3644ca81f328d"
+    },
+    "src/main.ts": {
+      "bytes": 103151,
+      "sha256": "340bc776c16fc2a3c2e61b1eb6f7b876832525e741be32328a4faff259bd2549"
+    },
+    "src/pwa-register.ts": {
+      "bytes": 663,
+      "sha256": "030041564d4c4ae4a13440757ae665e230e6be1ab122c7e5a9e907a5a61f27ca"
+    },
+    "src/styles.css": {
+      "bytes": 1520,
+      "sha256": "46e7af0efd7c3e9b5ec3e8e1f14a327c5bf35524659ac48e519218394661eb8e"
+    },
+    "src/styles/about-support.css": {
+      "bytes": 6843,
+      "sha256": "06e0352003e96d19e8005cd60fa450bc1753aab67eba85c46c8b71826dacff81"
+    },
+    "src/styles/android-release.css": {
+      "bytes": 9196,
+      "sha256": "79a7e8190dcd492c510378755462df76bcf571300a4155b00815ffb096395d3a"
+    },
+    "src/styles/aurora-shell.css": {
+      "bytes": 11073,
+      "sha256": "06d0fc1503a5d8661361716aec51e1cdf8a2e8e575b226bbc9e5bfdee892b198"
+    },
+    "src/styles/base.css": {
+      "bytes": 1653,
+      "sha256": "fa4826fb5bc132db5572056213df1ed96d6d25cff260f0d38981878ed8bd418a"
+    },
+    "src/styles/components/loader.css": {
+      "bytes": 6573,
+      "sha256": "790f04b6146e231943aa72f909d08a7a4ad692d50151dfa253530c4af9754ff5"
+    },
+    "src/styles/components/map-control-rail.css": {
+      "bytes": 4789,
+      "sha256": "78343df6f0f990b73d02bfa6c397375f8de9ed737081078ee43caf49977ac370"
+    },
+    "src/styles/components/map-surface-state.css": {
+      "bytes": 1374,
+      "sha256": "5140dd8ae4aa6a757e1cb3930b17a897e025bfb6ce4c4233cdceb6debf41d7d1"
+    },
+    "src/styles/coordinate-picker.css": {
+      "bytes": 2313,
+      "sha256": "6dcf290c6317250d2cdb90c45c2850e7d5fcff4384d57fbc95da33a67c9df0a9"
+    },
+    "src/styles/device-adaptation.css": {
+      "bytes": 2632,
+      "sha256": "5a77e90da73a418817866c199fa95063069c062177bf98d1a454b41112026a52"
+    },
+    "src/styles/feedback.css": {
+      "bytes": 11413,
+      "sha256": "5c10e4c4df7f0e0da9346e8400787001c23f804819cb29a7c854890706c06ba3"
+    },
+    "src/styles/font-system.css": {
+      "bytes": 2058,
+      "sha256": "0364991d4bcc9090579eef421c05f2d0bad54e74e8f1eda47ad97b2d8bbe4d42"
+    },
+    "src/styles/interaction-attribution.css": {
+      "bytes": 9383,
+      "sha256": "23abeb01c8905ae4c5145ef4745ac4b4d7e66079942d698be480a002fbcedcdd"
+    },
+    "src/styles/interaction-polish.css": {
+      "bytes": 9681,
+      "sha256": "b2371957695bfa9803a1ec92e602b6c61d0fb39ab68016562dacaace2fb9085c"
+    },
+    "src/styles/interaction-quality.css": {
+      "bytes": 7328,
+      "sha256": "ed80769be343e497187558215e4a74be4b7935a6a759d10fd8b2f89304028d10"
+    },
+    "src/styles/labels-typography.css": {
+      "bytes": 5067,
+      "sha256": "6976b9190210098610dfb6716841faa193162bfc7c158b0939c4d8c97d464e19"
+    },
+    "src/styles/layout-detail.css": {
+      "bytes": 14085,
+      "sha256": "e421ec8798d48187fb6df27bba5a0aa2b572ea9f2b316dedb8d57307bfc5ef42"
+    },
+    "src/styles/layout-runtime.css": {
+      "bytes": 17479,
+      "sha256": "1e80fb5a9a3bd2666f2a30ffed2eb9c1bb4d169420511d73a2f6bbdc537aacf0"
+    },
+    "src/styles/loading-search.css": {
+      "bytes": 1319,
+      "sha256": "b494a27ae3294355155825567950ebbcc3aba09e6bc48870d6d65a8e711be11c"
+    },
+    "src/styles/luxe-ui.css": {
+      "bytes": 14989,
+      "sha256": "e1a226eda06443a0338673559c7fdc5aef740070fd9b657ce82641248b378db6"
+    },
+    "src/styles/map-responsive.css": {
+      "bytes": 7624,
+      "sha256": "8ab685420ec6f43dd8ed47039ccc65f5c3721fd4e461bcac63bcebb4c7df5910"
+    },
+    "src/styles/map-shell.css": {
+      "bytes": 16460,
+      "sha256": "060dc62d123db9902e9be988b25d2afbe633fa5a5938121d9cc551b27be2ce86"
+    },
+    "src/styles/map-visual-system.css": {
+      "bytes": 13300,
+      "sha256": "cd90ac43aa9fd7e69924cf6fb37cddf475b2717430247b98c2782a80a1fcb4ff"
+    },
+    "src/styles/modal-scroll.css": {
+      "bytes": 6408,
+      "sha256": "56b67e804a0f182e7481b18404e89c670db2a9a42e59da9e6f405480d42c87d7"
+    },
+    "src/styles/native-platform.css": {
+      "bytes": 3659,
+      "sha256": "65248aac9e0d139374a436a2a35a61fad5199572bebb717d1ddd599274b0b41d"
+    },
+    "src/styles/nav-kurd-professional.css": {
+      "bytes": 71078,
+      "sha256": "bc14c4c5e44363ea5be79451adc8e2a47edacde9b15b3af6f619d83516fc9272"
+    },
+    "src/styles/network-resilience.css": {
+      "bytes": 1673,
+      "sha256": "50dfe46841c0938ccf33e24f23c5017bf73779975091e210d33e0681b0f18682"
+    },
+    "src/styles/owner-studio.css": {
+      "bytes": 30317,
+      "sha256": "63bcf74d8bc943d6f9116a9673547491d7ea6b33aebca31b1bfe46950921e30b"
+    },
+    "src/styles/place-weather.css": {
+      "bytes": 2523,
+      "sha256": "e1c1d4c99b24d984dabc142e525fa5416060d81912a40611e53f9108113c0103"
+    },
+    "src/styles/platform-data.css": {
+      "bytes": 1714,
+      "sha256": "54b67a2ebd4cb9c001c218e6886985a1416b931e628a4bb11f8fbc35b83d2a89"
+    },
+    "src/styles/premium-ui.css": {
+      "bytes": 11261,
+      "sha256": "b920f0c4e672047fc2afdc47af2e836a399c649c0ef98d92e8dd61916498d091"
+    },
+    "src/styles/realtime-operations.css": {
+      "bytes": 2545,
+      "sha256": "638a5d4dac9287b8af8b529fa9d3fa5058836ff6cdfa34e5596e9c2b7d78bf7c"
+    },
+    "src/styles/runtime-health.css": {
+      "bytes": 1255,
+      "sha256": "27b0f9b4c71f0fe77a49b94c98a14fa447072d134f04af80333034a4f6d6870b"
+    },
+    "src/styles/runtime-performance.css": {
+      "bytes": 2144,
+      "sha256": "0c1a6b7c22f4b07e1b272f08f9283ae097933f637c5c3777b734ef4b0281590a"
+    },
+    "src/styles/search-performance.css": {
+      "bytes": 983,
+      "sha256": "91d5ac5683ccb253489b14cedf5a61b35e57f82f62588cab9114a590fb1887ff"
+    },
+    "src/styles/support-payment.css": {
+      "bytes": 16854,
+      "sha256": "2fbb94e9439e13082859cb8305f22f6b9bdfbfebcd6d7f5eee840323552104d0"
+    },
+    "src/styles/tokens.css": {
+      "bytes": 4885,
+      "sha256": "270637333a4fe44e31bf20eadb1cc072f391eab52541d94b8b4fb001929fb4f6"
+    },
+    "src/styles/user-contribution.css": {
+      "bytes": 44544,
+      "sha256": "8c620aa51dc905bca3669be2413641ebd77d1ae0d68e1ed81f46849e352c641f"
+    },
+    "src/styles/visual-system.css": {
+      "bytes": 33967,
+      "sha256": "2169b391772add33d4e8e7e90e35140b9f6619a0974bfe9a9d8a63414542ca68"
+    },
+    "src/vite-env.d.ts": {
+      "bytes": 1566,
+      "sha256": "a7786111d0b80deada90b2ea5e84d2a0e653d162bdbea5d1a2233304aee2252d"
+    },
+    "src/workers/search.worker.ts": {
+      "bytes": 10553,
+      "sha256": "9419b4f77a80831295793fc04360573be562eb87f2f6fd4e60353a149208dab1"
+    },
+    "supabase/.temp/cli-latest": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "supabase/audits/20260714_stage4b_live_security_inventory.sql": {
+      "bytes": 1604,
+      "sha256": "eb61b99d9f1adfc95358253e900edfa4c256b934f4730d98c3328b6729efc6b9"
+    },
+    "supabase/config.toml": {
+      "bytes": 568,
+      "sha256": "a7bbdc5acc7ea80c9a70c79d326e11e001f5e2d8bba4f264887a00aff54e2763"
+    },
+    "supabase/functions/_shared/http.ts": {
+      "bytes": 4352,
+      "sha256": "8168e7fba95650430afe798e0c96a0db41123ca7ad5ac0eabcdd280e1c8a8fab"
+    },
+    "supabase/functions/delete-atlas-account/index.ts": {
+      "bytes": 8401,
+      "sha256": "bcbbcdaf6e7a0426ceb9696a48cf4b9d8db678c40a681477e173379e6868d911"
+    },
+    "supabase/functions/delete-atlas-place/index.ts": {
+      "bytes": 7603,
+      "sha256": "f11a23e4c0c34952a9f8b8c4686ab3fd43252af5cdb73e3071b1450fdf71b527"
+    },
+    "supabase/functions/review-atlas-submission/index.ts": {
+      "bytes": 7874,
+      "sha256": "bf3fbf295ba7bd5e18663124b82de0c9a97eed0035d7f2d730a00ed0cda66642"
+    },
+    "supabase/migrations/20260707_000001_kurdistan_atlas_owner_content.sql": {
+      "bytes": 6491,
+      "sha256": "1dd8e92ec2e7e48a6a30b9b227d7657235e6226842953a6fd607c7233b7e1d38"
+    },
+    "supabase/migrations/20260708_000002_owner_access_root_fix.sql": {
+      "bytes": 826,
+      "sha256": "70a62d7cb47f13e5adc2859b9ba63da92f4173593f617064ec53b1c1fd399c1f"
+    },
+    "supabase/migrations/20260712_000003_atlas_taxonomy_metadata.sql": {
+      "bytes": 1714,
+      "sha256": "e757ff3974047cbe211e8e13e5118784320b7cd45fffe5424a68db81f930c25d"
+    },
+    "supabase/migrations/20260712_000004_public_contributions_auth_review.sql": {
+      "bytes": 21585,
+      "sha256": "dcf9b9b819de3ec4c4796f25a135ae6aab35b83084565fcb3033b2797f9fa3ad"
+    },
+    "supabase/migrations/20260714_000005_supabase_security_hardening.sql": {
+      "bytes": 4261,
+      "sha256": "ce9f347ce622f84f4cc6b4891acb0ac33c4e12b538fd23c9ad2535daec993555"
+    },
+    "supabase/migrations/20260714_000006_atlas_workflow_security_root.sql": {
+      "bytes": 135374,
+      "sha256": "62258c8a4866fc6bd1dbe415222b54761a65a607196cd5aeb3748b9735d014e4"
+    },
+    "supabase/migrations/20260714_000007_contribution_form_quality_root.sql": {
+      "bytes": 9744,
+      "sha256": "6221ae43a1754766ada3744d628a0f94ec42cd51da102988882e3592aa66ea02"
+    },
+    "supabase/migrations/20260714_000008_user_admin_persistence_security_root.sql": {
+      "bytes": 15969,
+      "sha256": "90d99fb67309b3259020a2afcacd5d12ce26fe1ce41b9853997746a6f52773d9"
+    },
+    "supabase/migrations/20260716_000009_nav_kurd_root_clean.sql": {
+      "bytes": 107199,
+      "sha256": "2b591b5ad1ed86dad41c2194fb1e7bdc68b4289eff197c864492b6bc9e3f875a"
+    },
+    "supabase/migrations/20260716_000010_google_auth_feedback_notifications_root.sql": {
+      "bytes": 25190,
+      "sha256": "19f46c77a0443f37c7469db5a3967478eb39ff2296d76eb3c1900fb65368089f"
+    },
+    "supabase/migrations/20260716_000011_private_admin_user_message_workspaces.sql": {
+      "bytes": 7238,
+      "sha256": "caaf124911318f4e42668956e0a091260750902ff9d849543c0995159739a535"
+    },
+    "supabase/migrations/20260716_000012_auth_language_loader_root.sql": {
+      "bytes": 1654,
+      "sha256": "76e849bc0dbdec378f4428d7b0dc6b309241df08fa1daac1012b485dfe6e9e6d"
+    },
+    "supabase/migrations/20260716_000013_account_place_edge_avatar_loader_root.sql": {
+      "bytes": 7837,
+      "sha256": "1b0e57c59335abb7a00f5915f9aaba0b537753a8960a00da4b85e02645e03061"
+    },
+    "supabase/migrations/20260717_000014_support_presence_cv_root.sql": {
+      "bytes": 4479,
+      "sha256": "0d749246f2f24618af687e5cf3cd8bd0fa667fa102cba8a681456b7f7672f443"
+    },
+    "supabase/migrations/20260717_000015_presence_identity_layout_closure.sql": {
+      "bytes": 3973,
+      "sha256": "049d4e4c3c4ac1d1b7d0e34687e28fa57c43b96cd08b8a5576e1a0f4b9ced2de"
+    },
+    "supabase/migrations/20260718_000016_activity_clock_cache_integrity.sql": {
+      "bytes": 6360,
+      "sha256": "71056a2c515534ea724c7207ddb7faa91f1dee6dfd64b2cb58c9133fff9f9090"
+    },
+    "supabase/migrations/20260718_000017_persistent_visitor_directory.sql": {
+      "bytes": 3424,
+      "sha256": "20cd2b9c62fa57a2317a40492fa7edcfd3da398c6aa99928434a64861a570145"
+    },
+    "supabase/migrations/20260718_000018_public_directory_consent_privacy.sql": {
+      "bytes": 5837,
+      "sha256": "3dba756889ed825116f1681ff55aca52950414190c1d6a350c943ba4c44c16c0"
+    },
+    "supabase/migrations/20260723_000019_street_taxonomy_quality.sql": {
+      "bytes": 586,
+      "sha256": "52f4da944e4e4a8be7f30081de3887cfed4ca286b20395b132b4cf67f62fa8b2"
+    },
+    "supabase/migrations/20260723_000020_direction_taxonomy_quality.sql": {
+      "bytes": 5590,
+      "sha256": "46139edd30bdae1f379efbf4a1d0264553c338f577f50d62e5ce74786830cbe9"
+    },
+    "supabase/migrations/20260724_000021_visitor_presence_share.sql": {
+      "bytes": 8393,
+      "sha256": "2245c37a2f4494f26acfd2a534f625e7444d833b9b29c4b710b8f6f3ed961607"
+    },
+    "supabase/migrations/20260828_000022_fresh_backend_owner_contract.sql": {
+      "bytes": 6481,
+      "sha256": "0cdd830b0231347dc24caa90f9c2c7caed4e8f6589f18752f13ae748ef4622f7"
+    },
+    "supabase/migrations/20260828_000023_release_runtime_fixes.sql": {
+      "bytes": 15080,
+      "sha256": "1e28aaef6c01a01a141694c1b641398fef1868a9ea8a265bdee8cc1828988f96"
+    },
+    "supabase/migrations/20260908_000024_navigation_history_cloud_sync.sql": {
+      "bytes": 2940,
+      "sha256": "a7c06e1ff60c8393adb922e0ce9b5c0c47dba43c7cc8e2f00d45bf5b9b321ff9"
+    },
+    "supabase/README.md": {
+      "bytes": 3070,
+      "sha256": "fe52c30114e364943afe9198e93c47716d79d534f984b7fddfae2b49378998a2"
+    },
+    "TERMUX.sh": {
+      "bytes": 3014,
+      "sha256": "76755226c87ec3f444f852e4aef72d3f105d74dfec7b66068409817e1c060b2d"
+    },
+    "tools/assets/install-nav-kurd-brand.mjs": {
+      "bytes": 2205,
+      "sha256": "c84b3239586c8dd178f745e0be7e9e5475a0473a8ead0af1a402410c9280f424"
+    },
+    "tools/build/build-offline-runtime.mjs": {
+      "bytes": 7445,
+      "sha256": "e609d128d55db5331bd172f94acc30491e45489068d25ce3c0b24c16c933e03c"
+    },
+    "tools/build/generate-pwa-manifest.mjs": {
+      "bytes": 2039,
+      "sha256": "a7288d751093cd6cd1a8bd7935387df4a6d49836eaaca8a1d4ca2e8f91963018"
+    },
+    "tools/build/prune-production-dist.mjs": {
+      "bytes": 1614,
+      "sha256": "3abce7e428ee8ae580bed1f3bfc945c76a72018e43fd65a4883e778449142575"
+    },
+    "tools/build/pwa-manifest-contract.mjs": {
+      "bytes": 725,
+      "sha256": "d810a022cb864ce1a78defdc062a73379e93ff6fd99161f4ed69b5b4e6c773ff"
+    },
+    "tools/data/align-data-release.py": {
+      "bytes": 5995,
+      "sha256": "9fcde7fac6a329fe11825086b4860c7a8fe6a7b8ec1af2caed4bb36651f5a0cc"
+    },
+    "tools/data/build-canonical-poi-catalog.py": {
+      "bytes": 36783,
+      "sha256": "5d4ef0cd20087fada362dac22d8cfdcddb22e8f1b9d776f6d4fb19e5af9fe5a1"
+    },
+    "tools/data/build-compact-runtime.py": {
+      "bytes": 2851,
+      "sha256": "a5058f37a54a8fd4e11ee201cccdf91e0d7b017efcb945a54b23b2dcff20188f"
+    },
+    "tools/data/build-compact-search-runtime.mjs": {
+      "bytes": 3165,
+      "sha256": "54484e0eba4a576b0d54e05ac607f87c3649729f3768c478954f9f162309aa21"
+    },
+    "tools/data/build-language-runtime.py": {
+      "bytes": 4825,
+      "sha256": "7da70b15f3c74cc094e85fd07a52861e36efdf386ccd8fda5c85f8ab737e3b58"
+    },
+    "tools/data/build-locality-language-deltas.mjs": {
+      "bytes": 9353,
+      "sha256": "f2c14004e7b1f55a5df1bf747224ec4466e4a441a5d2ff2963d24aedfa5a1c23"
+    },
+    "tools/data/build-poi-runtime-sprite.py": {
+      "bytes": 2691,
+      "sha256": "d7e6b3348f0b84bfaa75769f92f9ee50abb8fa763ded29e9075fa326f26da90f"
+    },
+    "tools/data/build-road-label-index.py": {
+      "bytes": 4815,
+      "sha256": "60e7ab70d33fcf168522e557707e689ac4634f1fd87cdadceb9575754a216239"
+    },
+    "tools/data/build-unified-roads-pmtiles.py": {
+      "bytes": 7046,
+      "sha256": "f58e7215db812592345d187a50365575209451edebcb9aca0565543781319e7b"
+    },
+    "tools/data/build-viewport-poi-shards.py": {
+      "bytes": 7200,
+      "sha256": "4a6a5196be81bc4a50fb0f09475b140bbc1d4336bfbaccac4a70115bf40c050b"
+    },
+    "tools/data/dedupe-canonical-data.py": {
+      "bytes": 9963,
+      "sha256": "188bfd36624248663f6a317f1b1f91c309f9ffd8838fe857027c4e52b69ebd7c"
+    },
+    "tools/data/generate-atlas-icon-bundle.mjs": {
+      "bytes": 2918,
+      "sha256": "fcf0f8f3326e81cd200d8f2eb1b6bb9e8d91295000bed61d2607df7b265953d4"
+    },
+    "tools/data/generate-atlas-marker-assets.mjs": {
+      "bytes": 14360,
+      "sha256": "4820e836b607b53d5179cd109bc78932b7674dcab4be0033b863b16b2d641342"
+    },
+    "tools/data/generate-source-integrity-manifest.mjs": {
+      "bytes": 1657,
+      "sha256": "89625e8786d1dafa6435554977b809c1360b7caf0d7dbccc1cd74021d8074cbc"
+    },
+    "tools/data/optimize-search-runtime.mjs": {
+      "bytes": 7485,
+      "sha256": "b9e182dfbd1fc9a243efdcb749116e9c61d84a7db9705565a783ffd9ae98b9ed"
+    },
+    "tools/data/prepare-supabase-ci-migrations.py": {
+      "bytes": 1733,
+      "sha256": "b42c1b00170f487fcb63ba7a86e5607f837c7a06901c110dbd951ebda9e4793b"
+    },
+    "tools/data/rebuild-canonical-data.py": {
+      "bytes": 72061,
+      "sha256": "ecff5dcfbe992bc625d6962373ede4a907204b565629ff49e036abae64e660b0"
+    },
+    "tools/data/reconcile-canonical-poi-output.py": {
+      "bytes": 21319,
+      "sha256": "a04ef31d1d2753d63b64f517406fb51ca096f3924b6d1e0bb3b23c2ec21300e8"
+    },
+    "tools/data/refresh-source-data-manifest.mjs": {
+      "bytes": 956,
+      "sha256": "d23108e76c3b265f5913dab7c2bb0077bbc1ae658c871f5229e22434ade103b2"
+    },
+    "tools/data/repair-pmtiles-geometry.mjs": {
+      "bytes": 12948,
+      "sha256": "d79386c11e99326fca14c07a4217600e4befe191bc13194f37f6eaf9e8913f94"
+    },
+    "tools/data/repair-unified-mask.py": {
+      "bytes": 5237,
+      "sha256": "eb2a2fa5c0749576a89e8890e56134e6a8328ad4df3d4c2f234e960287640d87"
+    },
+    "tools/data/requirements.txt": {
+      "bytes": 48,
+      "sha256": "4bbcd9da9f521bf7a47d06ccc3a68cedf2ae392e7bccd899ef008157bfe76d18"
+    },
+    "tools/data/scan-pmtiles-geometry.mjs": {
+      "bytes": 3463,
+      "sha256": "d8c02e2562ad38e728026bcf808fbd675d7ae12015b6989f1a4938420ed71886"
+    },
+    "tools/data/source-data-archive.py": {
+      "bytes": 1801,
+      "sha256": "a9ad9a91c6fb7966da7e87e279e0fb1d040859969bcb21719f3f24d466c286ea"
+    },
+    "tools/data/source-data-stage.mjs": {
+      "bytes": 3638,
+      "sha256": "73af6fcb36eb08e984839dd34e2ccb38959e66035b67424f1a66bfdaf961d5ff"
+    },
+    "tools/data/update-canonical-release-metadata.py": {
+      "bytes": 6166,
+      "sha256": "196bc5b077a63911568a328d7e6e37207df97b5841a18784c3e5e0cb0db55977"
+    },
+    "tools/data/update-release-metadata.mjs": {
+      "bytes": 4999,
+      "sha256": "9154937db2c3f78136790a1dd1e146f099944d8114bec20fef159a1104802e02"
+    },
+    "tools/data/update-runtime-sprite-release.mjs": {
+      "bytes": 1084,
+      "sha256": "772f7a3f81b5ce6946339359a3df22f2598fc8982c7e1727a6b917914714ed05"
+    },
+    "tools/data/with-source-data.mjs": {
+      "bytes": 3239,
+      "sha256": "0e5f3d7b88465fceee324d2dc5bf58681bf18aea6addeb976d23a7b3d87ea19b"
+    },
+    "tools/lib/project.mjs": {
+      "bytes": 2869,
+      "sha256": "6994cdbb0c151da045b5ba3cfb6b1eb7d9e1ea99680b391d9304542b1ee54ec8"
+    },
+    "tools/release/generate-release-manifest.mjs": {
+      "bytes": 1976,
+      "sha256": "290f6ee5653b4c34015cc1a53412408bb1523706afa225d0de297446096f2cc6"
+    },
+    "tools/release/package-release.py": {
+      "bytes": 6004,
+      "sha256": "3620ad38ce80d94bd154787c5ec3d1fd93495200c44cbc9649d23515c87492dc"
+    },
+    "tools/release/prepare-android-download.mjs": {
+      "bytes": 3197,
+      "sha256": "4942f026bf6e387e6b2c8af39e7647347a09ad5c8739c9430a16baa8f45d7498"
+    },
+    "tools/verify/browser-smoke.py": {
+      "bytes": 19303,
+      "sha256": "0f637f6835ac066059f125032ff593cfc8b58dcd1cde9e39b0190986cea0eccc"
+    },
+    "tools/verify/data.py": {
+      "bytes": 9700,
+      "sha256": "5b87c7f9911e492050a5a2bcc047ce426e77aec0855c45cc7531e2b7c2fa7066"
+    },
+    "tools/verify/dependency-security.mjs": {
+      "bytes": 1822,
+      "sha256": "9eb25d37fa5e0b9e12b1afd019299175875cb14bbdbc6df9a6a2f8eddb917aaa"
+    },
+    "tools/verify/mobile-regressions.mjs": {
+      "bytes": 8803,
+      "sha256": "944385a66ab2b6c480c2b219bc9e970c20d1749ac305faf37e0144a240ea779e"
+    },
+    "tools/verify/pmtiles.py": {
+      "bytes": 1835,
+      "sha256": "313e71265a2fdd5696daea91d748940babd1b45e24dcd7566fea0c569d4132c8"
+    },
+    "tools/verify/release.mjs": {
+      "bytes": 2650,
+      "sha256": "f40696007ffa62680abb5c5a1aecc12d239bfa76a8ddc301b9b971837a80bb44"
+    },
+    "tools/verify/runtime.mjs": {
+      "bytes": 18190,
+      "sha256": "5478eb0e9f70a2cf8d48969f1100a9ce7e6c3d41b3d2b7ba79123187fb8e4327"
+    },
+    "tools/verify/security.mjs": {
+      "bytes": 4436,
+      "sha256": "b96af5c6f9a3eeecfcbd0132c6261287209f2331eaeca23350b2071085f8f679"
+    },
+    "tools/verify/source.mjs": {
+      "bytes": 17733,
+      "sha256": "15ee45117ac302e91c5cd86aa2a0d50ba1ed3d63bce1c667e10b096415d7437b"
+    },
+    "tools/verify/styles.py": {
+      "bytes": 6196,
+      "sha256": "f45a4abf6fc027d64531d1b57f92048902522d3a8e1164177abe7f2830bf1e66"
+    },
+    "tools/verify/syntax.py": {
+      "bytes": 3601,
+      "sha256": "ab698d08d31f8ed1534d2b36b227fd678f1c64bad87d5993c5392a5f40892a45"
+    },
+    "tools/verify/toolchain.mjs": {
+      "bytes": 533,
+      "sha256": "990690da40060c3355ae09e37f853ab988efff677529d637c4de8a79862006fd"
+    },
+    "tsconfig.json": {
+      "bytes": 694,
+      "sha256": "b55fa6b537d8bbb4aa98eb39eb2bfea2868a54abd3d88b7f02478007f5df16f9"
+    },
+    "vercel.json": {
+      "bytes": 8153,
+      "sha256": "350a246e6a49147ba84b9230ec52bc98d00940e5026b7a68a7d9592c4b7278d1"
+    },
+    "vite.config.ts": {
+      "bytes": 1646,
+      "sha256": "6840e8bbdfcc952cada67fa9b11929120dca42fd247275045b3475f169148733"
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "release": "9.1.0",
+  "release_id": "2026-09-06-nav-kurd-v9.1.0",
+  "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "format": "PMTiles v3 + production POI GeoJSON/viewport shards + compact multilingual worker search",
+  "source_date": "2026-07-13",
+  "last_reviewed": "2026-07-19",
+  "base_map": {
+    "file": "kri-base.pmtiles",
+    "bytes": 15198962,
+    "sha256": "d169633076785cb361abcc5c3c9ef27a63ed5efd98669c2285d7e4fb30b7a0ea",
+    "native_maxzoom": 12
+  },
+  "roads": {
+    "file": "kri-roads.pmtiles",
+    "bytes": 4352351,
+    "sha256": "d5e18d6bce28cd8b5d161eff12fa2026976fd7a0d2ae0f3bd2c46d8463c685dd",
+    "native_maxzoom": 12
+  },
+  "search": {
+    "version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+    "schema": "NAV KURD compact worker search manifest v1",
+    "files": {
+      "ku": {
+        "file": "kri-search-runtime-ku.json",
+        "records": 69329,
+        "bytes": 6219438,
+        "sha256": "2b2a5b354dac3ecf2881b21d7ad2c40f5457b862700da36f73653817b377c463"
+      },
+      "ar": {
+        "file": "kri-search-runtime-ar.json",
+        "records": 69329,
+        "bytes": 5735568,
+        "sha256": "5cb05b8c3796642344f3708b1ba428262a969abfbbbcab86c513a2abb9320053"
+      },
+      "en": {
+        "file": "kri-search-runtime-en.json",
+        "records": 69329,
+        "bytes": 5661846,
+        "sha256": "16437b06e54bd45a20d6fe5cc441dc60a3eea2899586eeedb890b69530f22935"
+      }
+    },
+    "language_policy": "Exact source-backed selected-language names only; no automatic translation/transliteration and no cross-language visible fallback.",
+    "runtime_policy": "The selected-language compact dictionary payload is fetched only after search opens, parsed exclusively in a Web Worker and persisted by version; source/audit indexes are excluded from production.",
+    "payload_schema": "NAV KURD compact search runtime v1",
+    "source_manifest": "data-src/generated/search/kri-search-index-manifest.json",
+    "compressed_source_archive": "data-src/generated/search/kri-search-index.json.gz"
+  },
+  "localities": {
+    "source_path": "data-src/canonical/kri-localities.geojson",
+    "file": "kri-localities.geojson",
+    "bytes": 21048782,
+    "sha256": "2825c2d39efffadc5c1c01575ef611e0a0a0038e23edb543a7c5f27a01d21060",
+    "records": 12125,
+    "runtime_manifest": "kri-localities-language-manifest.json"
+  },
+  "natural_features": {
+    "file": "kri-natural-features.geojson",
+    "records": 5210,
+    "bytes": 5309296,
+    "sha256": "ddbb25cd5dff3a5508361be44686e72a070feea4dbfb46075e91f200d21c9efc"
+  },
+  "road_labels": {
+    "file": "kri-road-labels.geojson",
+    "records": 1805,
+    "bytes": 1120398,
+    "sha256": "21fc62592ae8e02b5832375a48052a0d947c403ad016d8134eaecf40e9fd4355"
+  },
+  "security_features": {
+    "file": "kri-security-features.geojson",
+    "records": 35,
+    "bytes": 36246,
+    "sha256": "fdc6db6fec379c39526bb7e68890844911ab5a60d4cb586164162396a4c02597"
+  },
+  "reviewed_poi_corrections": {
+    "file": "kri-reviewed-poi-corrections.geojson",
+    "records": 1,
+    "bytes": 1157,
+    "sha256": "9bff85853101485e9d5c686c04da62252990d53375b544f6f8cfaff305b0370c"
+  },
+  "coverage": {
+    "boundary": {
+      "file": "kri-boundary.geojson",
+      "sha256": "26fe373f8dda6d04b0b302794fef9781f27fe258e47c635d627d35fdba7eabd1"
+    },
+    "policy": "Operational application boundary; not a legal/cadastral/political certification."
+  },
+  "language_policy": "Exact source-backed names; missing selected-language names remain empty/hidden.",
+  "offline": "Base/roads PMTiles are downloadable. Canonical POI runtime and exact-language search shards are cached by the service worker. Satellite/weather/routing/accounts require network access.",
+  "canonical_pois": {
+    "catalog": {
+      "source_path": "data-src/canonical/kri-pois.geojson",
+      "compressed_source_archive": "data-src/canonical/kri-pois.geojson.gz",
+      "file": "kri-pois.geojson",
+      "bytes": 63846573,
+      "sha256": "30c7debd20f6f61bfb0bf8e06f16d14027c1b7744319f8142fbea66379db5ae8",
+      "archive_bytes": 3642331,
+      "archive_sha256": "d2592c9c86b813c6e990203763ff037235dbd0a1f89577de26a65af0d3de2ffa",
+      "records": 33055
+    },
+    "runtime": {
+      "source_path": "data-src/generated/kri-pois-runtime.geojson",
+      "file": "kri-pois-runtime.geojson",
+      "bytes": 28725937,
+      "sha256": "8e222f4d0166911671beff44190b77ebd54654dc5a4a8ae043ad137369cfff85",
+      "records": 33055
+    },
+    "report": {
+      "file": "kri-poi-catalog-report.json",
+      "bytes": 5720,
+      "sha256": "b49412503360c607fe3fb7d6fb84f6f5fb91ae207537ce4c4e0717711f3d4bb5"
+    },
+    "quarantine": {
+      "file": "kri-poi-quarantine.json",
+      "bytes": 852545,
+      "sha256": "dba656e9092931623760e94c642eb0c15345ab279864fd42fe83cb6190a7a309"
+    },
+    "categories": 166,
+    "taxonomy_icons": 422,
+    "rendering": "Clustered GeoJSON with zoom-tier category-specific marker handoff.",
+    "render_file": "kri-pois-render.geojson",
+    "viewport_manifest": "kri-viewport-poi-shards-manifest.json"
+  },
+  "source_data_policy": "Canonical, quarantine and build-intermediate data is separated under data-src; large source-only catalogs are deterministic gzip archives and are materialized only inside the release wrapper."
+}

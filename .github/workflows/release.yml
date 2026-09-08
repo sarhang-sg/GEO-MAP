@@ -1,0 +1,170 @@
+name: NAV KURD Web release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_supabase:
+        description: Deploy the production Supabase database and functions
+        required: true
+        default: false
+        type: boolean
+      confirm:
+        description: Type DEPLOY to confirm a production Supabase deployment
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nav-kurd-web-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Verify toolchain and dependency integrity
+        run: |
+          npm run verify:toolchain
+          npm run verify:dependencies
+          npm audit --omit=dev --audit-level=high
+
+      - name: Build and verify the production candidate
+        run: npm run build:vercel
+
+      - name: Upload release evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nav-kurd-web-release-evidence
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            RELEASE_MANIFEST.json
+            public/data/kri/source-integrity-manifest.json
+            public/data/kri/kri-canonical-data-quality-report.json
+            public/data/kri/kri-data-provenance.json
+            dist/offline-manifest.json
+
+  browser-smoke:
+    needs: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build:vercel
+
+      - name: Install Playwright Chromium
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: python3 tools/verify/browser-smoke.py
+
+  database-migrations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v2.1.1
+        with:
+          version: 2.101.0
+
+      - name: Prepare uniquely versioned migrations
+        run: |
+          python3 tools/data/prepare-supabase-ci-migrations.py
+          rm -r supabase/migrations
+          mv supabase/migrations-ci supabase/migrations
+
+      - name: Execute all migrations locally
+        run: |
+          supabase start
+          supabase db reset
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup
+
+  deploy-supabase:
+    needs: [production, browser-smoke, database-migrations]
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_supabase && inputs.confirm == 'DEPLOY' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      NAV_KURD_ALLOWED_ORIGINS: ${{ vars.NAV_KURD_ALLOWED_ORIGINS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate protected configuration
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -n "$SUPABASE_ACCESS_TOKEN"
+          test -n "$SUPABASE_DB_PASSWORD"
+          test -n "$SUPABASE_PROJECT_ID"
+          test -n "$NAV_KURD_ALLOWED_ORIGINS"
+          [[ "$NAV_KURD_ALLOWED_ORIGINS" == https://* ]]
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v2.1.1
+        with:
+          version: 2.101.0
+
+      - name: Link and prepare canonical migrations
+        run: |
+          supabase link --project-ref "$SUPABASE_PROJECT_ID"
+          python3 tools/data/prepare-supabase-ci-migrations.py
+          mv supabase/migrations supabase/migrations-source
+          mv supabase/migrations-ci supabase/migrations
+
+      - name: Preview and apply database migrations
+        run: |
+          supabase db push --linked --include-all --dry-run
+          supabase db push --linked --include-all
+
+      - name: Deploy Edge Functions
+        run: |
+          supabase secrets set --project-ref "$SUPABASE_PROJECT_ID" "NAV_KURD_ALLOWED_ORIGINS=$NAV_KURD_ALLOWED_ORIGINS"
+          supabase functions deploy --project-ref "$SUPABASE_PROJECT_ID"

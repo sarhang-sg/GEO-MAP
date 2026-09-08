@@ -1,0 +1,1931 @@
+{
+  "schema": "NAV KURD Offline Runtime Manifest v2",
+  "release": "9.1.0",
+  "assets": [
+    {
+      "path": "assets/icons/atlas/groups-manifest.json",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/border_route.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/communications_technology.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/culture_religion_media.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/education_research.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/emergency_security.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/finance_professional.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/food_hospitality.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/government_public.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/health.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/industry_agriculture.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/residential_buildings.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/retail_commerce.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/settlement_admin.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/sports_leisure.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/tourism_nature_heritage.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/transport_logistics.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/groups/utilities_infrastructure.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime-2x.png",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime-3x.png",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json",
+      "required": false,
+      "warm": true
+    },
+    {
+      "path": "assets/icons/social/instagram.svg",
+      "required": false,
+      "warm": true
+    },
+    {
+      "path": "assets/support/copy-asmr.wav",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "assets/support/my-cv-preview.jpg",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "assets/weather/clear-day.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/clear-night.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/cloudy.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/fog.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/partly-cloudy-day.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/partly-cloudy-night.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/rain.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/snow.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "assets/weather/thunderstorm.svg",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-boundary-line.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-boundary.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-districts.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-governorates.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-labels.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-localities-cluster-runtime.geojson",
+      "required": true,
+      "warm": true,
+      "offlineRuntime": true,
+      "localityCluster": true
+    },
+    {
+      "path": "data/kri/kri-localities-language-manifest.json",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-localities-major-runtime.geojson",
+      "required": true,
+      "warm": true,
+      "offlineRuntime": true,
+      "localityMajor": true
+    },
+    {
+      "path": "data/kri/kri-localities-properties-ar.json",
+      "required": false,
+      "warm": false,
+      "language": "ar",
+      "languageAsset": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-localities-properties-en.json",
+      "required": false,
+      "warm": false,
+      "language": "en",
+      "languageAsset": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-localities-properties-ku.json",
+      "required": false,
+      "warm": false,
+      "language": "ku",
+      "languageAsset": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-localities-render-ar.geojson",
+      "required": false,
+      "warm": false,
+      "language": "ar",
+      "languageAsset": "localities"
+    },
+    {
+      "path": "data/kri/kri-localities-render-en.geojson",
+      "required": false,
+      "warm": false,
+      "language": "en",
+      "languageAsset": "localities"
+    },
+    {
+      "path": "data/kri/kri-localities-render-ku.geojson",
+      "required": false,
+      "warm": false,
+      "language": "ku",
+      "languageAsset": "localities"
+    },
+    {
+      "path": "data/kri/kri-localities-runtime-base.geojson",
+      "required": true,
+      "warm": true,
+      "offlineRuntime": true,
+      "localityGeometry": true
+    },
+    {
+      "path": "data/kri/kri-natural-features.geojson",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "data/kri/kri-outside-mask.geojson",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-pois-render.geojson",
+      "required": false,
+      "warm": false
+    },
+    {
+      "path": "data/kri/kri-reviewed-poi-corrections.geojson",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-road-labels.geojson",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-search-runtime-ar.json",
+      "required": false,
+      "warm": false,
+      "language": "ar",
+      "languageAsset": "search",
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-search-runtime-en.json",
+      "required": false,
+      "warm": false,
+      "language": "en",
+      "languageAsset": "search",
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-search-runtime-ku.json",
+      "required": false,
+      "warm": false,
+      "language": "ku",
+      "languageAsset": "search",
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-search-shards-manifest.json",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-security-features.geojson",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/kri-viewport-poi-shards-manifest.json",
+      "required": false,
+      "warm": true,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/632/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/632/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/634/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/634/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/635/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/635/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/635/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/635/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/636/403.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/637/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/637/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/637/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/637/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/637/403.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/638/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/638/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/638/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/638/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/403.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/639/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/640/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/640/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/640/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/640/407.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/641/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/641/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/641/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/641/406.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/641/407.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/642/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/642/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/643/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/10/643/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1266/797.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1266/798.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1266/799.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1267/796.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1267/797.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1267/798.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1267/799.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1268/799.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1268/800.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1268/801.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1269/798.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1269/799.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1269/800.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1269/801.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1275/802.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1275/803.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/798.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/799.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/800.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/801.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1276/809.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/798.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/800.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/801.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/807.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/808.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1277/809.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1278/802.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1278/803.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1279/802.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1279/803.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1280/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1280/807.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1280/812.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1280/813.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1281/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1281/807.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1281/812.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1282/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1283/806.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/11/1283/807.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2532/1592.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2532/1593.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2533/1593.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2536/1597.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2537/1597.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2548/1604.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2548/1607.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2549/1604.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2549/1607.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2552/1614.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2552/1615.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2552/1617.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2553/1614.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2553/1617.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2554/1598.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2554/1599.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2555/1598.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2555/1599.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2562/1626.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2562/1627.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2563/1626.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2563/1627.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2564/1615.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/12/2565/1615.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5066/3184.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5066/3185.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5067/3184.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5067/3185.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5072/3192.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5072/3193.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5073/3193.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5074/3193.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5075/3192.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5075/3193.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5096/3210.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5096/3211.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5096/3212.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5096/3213.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5097/3213.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5098/3210.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5098/3212.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5098/3213.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5099/3210.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5099/3211.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5099/3212.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5099/3213.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5104/3232.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5104/3233.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5105/3233.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5106/3230.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5106/3231.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5106/3232.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5106/3233.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5107/3230.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5107/3231.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5107/3232.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5107/3233.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5128/3228.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5128/3229.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5130/3228.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5131/3228.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/13/5131/3229.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10146/6384.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10146/6385.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10147/6384.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10147/6385.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10148/6384.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10148/6385.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10149/6384.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10149/6385.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6420.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6421.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6422.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6423.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6424.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10194/6425.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6420.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6421.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6422.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6423.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6424.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10195/6425.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10196/6422.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10196/6423.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10197/6422.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10197/6423.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10210/6464.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10210/6465.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10211/6464.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10211/6465.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10258/6456.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10258/6457.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10258/6458.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10258/6459.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10259/6456.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10259/6457.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10259/6458.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10259/6459.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10260/6458.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10260/6459.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10261/6458.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/14/10261/6459.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/157/100.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/157/99.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/158/101.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/159/102.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/160/102.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/8/160/99.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/316/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/316/200.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/317/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/317/201.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/318/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/318/202.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/318/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/319/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/320/200.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/321/201.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/base/9/321/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/638/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/638/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/638/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/638/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/639/398.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/639/399.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/639/400.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/639/401.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/640/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/640/403.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/640/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/640/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/641/402.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/641/403.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/641/404.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/10/641/405.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/157/100.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/157/99.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/158/100.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/158/101.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/159/102.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/160/102.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/8/160/99.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/316/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/316/199.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/317/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/317/199.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/198.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/199.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/200.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/201.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/202.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/318/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/319/201.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/319/202.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/319/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/320/200.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/320/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/321/201.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/321/202.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "data/kri/viewport-poi-shards/natural/9/321/203.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "fonts/RedHatDisplay-Variable.woff2",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "fonts/UniQAIDAR-Money-Heist-002.ttf",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "icons/apple-touch-icon.png",
+      "required": false,
+      "warm": true
+    },
+    {
+      "path": "icons/favicon-32x32.png",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "icons/nav-kurd-icon-192.png",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "icons/nav-kurd-icon-512.png",
+      "required": false,
+      "warm": true
+    },
+    {
+      "path": "icons/nav-kurd-logo.png",
+      "required": false,
+      "warm": true
+    },
+    {
+      "path": "index.html",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "manifest.webmanifest",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "offline-manifest.json",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "offline.css",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "offline.html",
+      "required": true,
+      "warm": true
+    },
+    {
+      "path": "widgets/nav-kurd-atlas-data.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "widgets/nav-kurd-atlas-template.json",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    },
+    {
+      "path": "widgets/nav-kurd-atlas-widget.png",
+      "required": false,
+      "warm": false,
+      "offlineRuntime": true
+    }
+  ],
+  "mapEdition": "2027",
+  "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "cacheSchemaVersion": 91,
+  "offlinePackVersion": "2027.13",
+  "version": "2027.55",
+  "scope": "Small app shell is installed atomically. Map data and selected language locality/search files are cached on first use and retained for later switches; parsed runtime memory remains bounded. Base/roads PMTiles download separately. Satellite, live weather, routing and accounts require network access; cached map data, search, labels, weather icons and widget resources remain available offline.",
+  "generatedAt": "2026-08-22T00:00:00.000Z"
+}

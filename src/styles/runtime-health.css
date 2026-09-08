@@ -1,0 +1,8 @@
+.app-health { position: absolute; z-index: var(--z-health); top: calc(98px + env(safe-area-inset-top)); left: 50%; width: min(440px, calc(100% - 32px)); transform: translateX(-50%); padding: 9px 13px; border: 1px solid rgba(225,235,255,.18); border-radius: 999px; color: #ecf4ff; text-align: center; background: rgba(12,20,40,.92); box-shadow: 0 15px 36px rgba(0,0,0,.28); font: 850 10px/1.7 var(--font-ui); }
+.app-health[hidden] { display: none; }
+.app-health[data-level="ready"] { color: #a8e8c2; border-color: rgba(117,220,166,.24); background: rgba(20,62,44,.9); }
+.app-health[data-level="warning"] { color: #ffe4a4; border-color: rgba(255,209,125,.26); background: rgba(66,49,23,.92); }
+.app-health[data-level="error"], .app-health[data-level="offline"] { color: #ffc0c8; border-color: rgba(255,145,163,.28); background: rgba(63,24,35,.94); }
+.map-shell[data-health="offline"] .backend-state { color: #ffd7a2; border-color: rgba(255,193,117,.24); background: rgba(147,87,24,.15); }
+.map-shell[data-health="error"] .map-status__dot { background: #ff7f91; box-shadow: 0 0 0 4px rgba(255,127,145,.14); }
+@media (max-width: 700px) { .app-health { top: calc(86px + env(safe-area-inset-top)); width: min(420px, calc(100% - 24px)); border-radius: 16px; } }

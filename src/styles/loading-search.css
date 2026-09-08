@@ -1,0 +1,33 @@
+/* Loading overlay, search feedback and mobile safe-area polish. */
+/* Production loading and search performance states. */
+.search-empty--loading::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-inline-end: 7px;
+  border: 2px solid rgba(255,255,255,.16);
+  border-top-color: #ffda8b;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: nav-kurd-spin .85s linear infinite;
+}
+@keyframes nav-kurd-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  /* Operational progress must remain visibly alive even when decorative motion
+     is reduced. A slow stepped rotation avoids a misleading frozen loader. */
+  .search-empty--loading::before {
+    animation: nav-kurd-spin 1.8s steps(12, end) infinite !important;
+  }
+}
+
+/* Mobile search hardening and safe-area polish. */
+.search-empty--error { color: #ffb9c7; }
+.search-results[role="listbox"] { max-height: min(42dvh, 360px); overscroll-behavior: contain; }
+.search-result { touch-action: manipulation; }
+@media (max-width: 700px) {
+  .search-results[role="listbox"] { max-height: min(38dvh, 300px); }
+  .search-card input { font-size: 16px; }
+  .map-sheet { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .place-detail__panel, .owner-panel { overscroll-behavior: contain; }
+}

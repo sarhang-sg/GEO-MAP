@@ -1,0 +1,33 @@
+{
+  "version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "schema": "NAV KURD exact-language compact search shards v4",
+  "file": null,
+  "fallback": null,
+  "records": 69329,
+  "bytes": 54668935,
+  "sha256": "fc918d83629dfcacafe54d80e1e1b79ca6cddf3af9bedcf2c84a6793f36e65c8",
+  "files": {
+    "ku": {
+      "file": "kri-search-index-ku.json",
+      "records": 69329,
+      "bytes": 22106776,
+      "sha256": "590cd1a8954f011b74a4a823007f99b71afac468258d22e578e373ca72897863"
+    },
+    "ar": {
+      "file": "kri-search-index-ar.json",
+      "records": 69329,
+      "bytes": 20695897,
+      "sha256": "4dc6e4ad1299e316a5e7ce2c6bdb94f9cd5f8f8ed512cc691d95fb9d65de3634"
+    },
+    "en": {
+      "file": "kri-search-index-en.json",
+      "records": 69329,
+      "bytes": 19787837,
+      "sha256": "bb4145c24822902155a7b811798f7257f7c71e8478f23fe84526814813f1e182"
+    }
+  },
+  "source": "OpenStreetMap/Geofabrik + GeoNames language-coded alternate names + canonical NAV KURD POI catalog",
+  "coverage": "Canonical NAV KURD operational boundary",
+  "language_policy": "Exact source-backed selected-language names only; no automatic translation/transliteration and no cross-language visible fallback.",
+  "runtime_policy": "Only the selected language shard is fetched and cached on demand; the full audit index is not deployed."
+}

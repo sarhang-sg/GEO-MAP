@@ -1,0 +1,36 @@
+.map-coordinate-picker {
+  position: absolute;
+  z-index: var(--z-coordinate-picker);
+  inset-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right));
+  top: max(14px, calc(env(safe-area-inset-top) + 10px));
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  min-height: 66px;
+  padding: 10px 11px;
+  border: 1px solid rgba(184, 156, 255, .34);
+  border-radius: 19px;
+  color: #fff;
+  background: linear-gradient(145deg, rgba(16, 18, 52, .96), rgba(43, 19, 91, .94));
+  box-shadow: 0 16px 50px rgba(5, 7, 27, .48), inset 0 1px rgba(255, 255, 255, .08);
+  backdrop-filter: blur(16px) saturate(135%);
+}
+.map-coordinate-picker[hidden] { display: none; }
+.map-coordinate-picker__icon { display: grid; place-items: center; width: 42px; aspect-ratio: 1; border-radius: 14px; background: linear-gradient(145deg, #8458ff, #5b2dd5); box-shadow: 0 8px 22px rgba(111, 62, 235, .42); }
+.map-coordinate-picker__icon i { width: 17px; aspect-ratio: 1; border: 3px solid #fff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+.map-coordinate-picker > div { display: grid; min-width: 0; gap: 3px; }
+.map-coordinate-picker strong { font: 900 .8rem/1.45 var(--font-ui); overflow-wrap: anywhere; }
+.map-coordinate-picker small { color: #c8cce1; font: 700 .64rem/1.55 var(--font-ui); overflow-wrap: anywhere; }
+.map-coordinate-picker button { min-height: 38px; max-width: 92px; padding: 0 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 12px; color: #f4efff; background: rgba(255,255,255,.07); font: 850 .66rem/1.3 var(--font-ui); white-space: normal; }
+.map-shell.is-coordinate-picking #map { cursor: crosshair; }
+.map-shell.is-coordinate-picking .route-destination-prompt { display: none !important; }
+@media (max-width: 430px) {
+  .map-coordinate-picker { grid-template-columns: 38px minmax(0, 1fr); }
+  .map-coordinate-picker__icon { width: 38px; }
+  .map-coordinate-picker button { grid-column: 1 / -1; width: 100%; max-width: none; min-height: 34px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .map-coordinate-picker:not([hidden]) { animation: coordinate-picker-enter .22s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes coordinate-picker-enter { from { opacity: 0; transform: translateY(-8px) scale(.985); } }
+}

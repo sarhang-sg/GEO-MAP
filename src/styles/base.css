@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "NAVKurd Arabic";
+  src: url("/fonts/UniQAIDAR-Money-Heist-002.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: block;
+}
+@font-face {
+  font-family: "NAVKurd Latin";
+  src: url("/fonts/RedHatDisplay-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: block;
+}
+@font-face {
+  font-family: "Droid Logo";
+  src: url("/fonts/DroidLogo-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Base tokens, reset and language fonts. */
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body, #app { width: 100%; min-width: 0; min-height: 100%; margin: 0; }
+body { min-height: 100vh; min-height: 100dvh; overflow: hidden; background: #09111d; }
+body[data-language="en"] { --font-ui: var(--font-latin); --font-map-label: var(--font-latin); }
+body[data-language="ku"],
+body[data-language="ar"] { --font-ui: var(--font-arabic); --font-map-label: var(--font-arabic); }
+button, input { font: inherit; }
+button { border: 0; cursor: pointer; -webkit-appearance: none; appearance: none; touch-action: manipulation; }
+button:active, button:hover, button:focus { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, input:focus-visible { outline: 2px solid #ffcf77; outline-offset: 3px; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
