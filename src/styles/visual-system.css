@@ -46,8 +46,7 @@ body {
 .route-panel,
 .owner-studio__panel,
 .place-detail__panel,
-.maplibregl-ctrl-group,
-.maplibregl-popup-content {
+.maplibregl-ctrl-group {
   border-color: transparent;
   background:
     linear-gradient(145deg, rgba(12, 16, 39, .88), rgba(8, 10, 26, .76)) padding-box,
@@ -290,10 +289,6 @@ body {
 .action-card:focus-visible { border-color: rgba(138, 104, 255, .30); background: linear-gradient(135deg, rgba(56, 128, 255, .12), rgba(143, 76, 255, .14)); transform: translateY(-2px); }
 .segmented { border-color: rgba(151, 127, 255, .16); background: rgba(2, 4, 15, .38); }
 .backend-state { color: #a8efd0; border-color: rgba(108, 224, 178, .17); background: rgba(42, 152, 112, .10); }
-
-.maplibregl-ctrl button { filter: invert(1) brightness(1.55) saturate(.82); }
-.maplibregl-popup-content { border-radius: 18px; background: rgba(9, 12, 29, .94); }
-.maplibregl-popup-tip { border-top-color: rgba(9, 12, 29, .94) !important; border-bottom-color: rgba(9, 12, 29, .94) !important; }
 
 /* About app overlay opened from the logo. */
 .about-dialog {

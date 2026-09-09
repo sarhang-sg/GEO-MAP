@@ -61,10 +61,8 @@ type LiveLocationControllerOptions = {
   onLocationUpdate?: (snapshot: LiveLocationDiagnosticSnapshot) => void;
 };
 
-const FAST_FIX_MAX_AGE_MS = 3_000;
-const FAST_FIX_MAX_ACCURACY_METERS = 45;
-const INITIAL_FIX_STRICT_WINDOW_MS = 4_000;
-const INITIAL_FIX_RELAXED_WINDOW_MS = 10_000;
+const INITIAL_FIX_MAX_AGE_MS = 30_000;
+const INITIAL_FIX_MAX_ACCURACY_METERS = 650;
 const TRACKING_PREFERENCE_KEY = "nav-kurd:gps:active";
 const STALE_WATCH_MS = 22_000;
 
@@ -104,6 +102,9 @@ export class LiveLocationController {
   private watchdogTimer = 0;
   private locationReadyAnnounced = false;
   private followEnabled = false;
+  private pendingCameraFocus = false;
+  private watchGeneration = 0;
+  private readonly finishCameraMove = (): void => { this.programmaticMove = false; };
   private lastCoordinate: LngLatTuple | null = null;
   private lastHeading: number | null = null;
   private lastHeadingSource: HeadingSource = "none";
@@ -187,26 +188,41 @@ export class LiveLocationController {
   }
 
   stopFollow(): void {
+    this.pendingCameraFocus = false;
     this.setFollowEnabled(false);
   }
 
-  locate(): void {
+  locate(focus = true): void {
     const language = this.getLanguage();
     this.watchWanted = true;
     writeTrackingPreference(true);
     const geolocation = this.geolocation;
     if (!geolocation) {
-      this.setMessage(UI[language].locationDenied, "error");
+      this.watchWanted = false;
+      writeTrackingPreference(false);
+      this.setMessage(UI[language].locationUnavailable, "error");
       return;
     }
-    this.setFollowEnabled(true);
+    this.setFollowEnabled(focus);
+    this.pendingCameraFocus = focus;
+    this.interactionLockUntil = 0;
     this.lastRecenterAt = 0;
     this.setMessage(UI[language].locating);
     this.requestOrientationPermission();
+    // A deliberate locate tap always recenters immediately when a confirmed fix
+    // is already available. A parallel fresh request can refine it afterwards.
+    if (focus && this.lastCoordinate && Date.now() - this.lastPositionAt <= INITIAL_FIX_MAX_AGE_MS) {
+      this.recenter(true);
+      this.pendingCameraFocus = false;
+      this.setMessage(UI[language].locationReady, "success");
+    }
     if (this.requestInFlight) return;
+    if (this.watchId !== null) return;
     this.requestInFlight = true;
+    const requestGeneration = ++this.watchGeneration;
 
-    const onSuccess = (position: GeolocationPosition, source: "fast" | "fresh" | "watch" = "watch"): void => {
+    const onSuccess = (position: GeolocationPosition): void => {
+      if (requestGeneration !== this.watchGeneration || !this.watchWanted) return;
       const explicitRequest = this.requestInFlight;
       const firstFix = this.lastCoordinate === null;
 
@@ -222,16 +238,12 @@ export class LiveLocationController {
           : 999;
       const sampleAgeMs = Math.max(0, receivedAt - sampleTimestamp);
 
-      // Android can return a network/cached position first and replace it with
-      // the real GNSS fix seconds later. Never paint or recenter to that coarse
-      // provisional point; it is the source of the visible initial jump.
-      if (source === "fast" && (sampleAgeMs > FAST_FIX_MAX_AGE_MS || rawAccuracy > FAST_FIX_MAX_ACCURACY_METERS)) return;
+      // Paint a recent network/cached position immediately, then refine it with
+      // the high-accuracy request and watch. The earlier strict 80 m gate forced a
+      // visible 4–10 second wait even when Android already had a useful fix.
       if (firstFix) {
-        const startupElapsed = this.watchStartedAt > 0 ? receivedAt - this.watchStartedAt : 0;
-        if (sampleAgeMs > 8_000) return;
-        if (startupElapsed < INITIAL_FIX_STRICT_WINDOW_MS && rawAccuracy > 80) return;
-        if (startupElapsed < INITIAL_FIX_RELAXED_WINDOW_MS && rawAccuracy > 160) return;
-        if (rawAccuracy > 400) return;
+        if (sampleAgeMs > INITIAL_FIX_MAX_AGE_MS) return;
+        if (rawAccuracy > INITIAL_FIX_MAX_ACCURACY_METERS) return;
       }
 
       this.requestInFlight = false;
@@ -347,12 +359,17 @@ export class LiveLocationController {
         headingConfidence,
         effectiveSpeed,
       );
+      if (this.pendingCameraFocus && this.followEnabled) {
+        this.pendingCameraFocus = false;
+        this.recenter(true);
+      }
       if (firstFix || explicitRequest || !this.locationReadyAnnounced) {
         this.locationReadyAnnounced = true;
         this.setMessage(UI[this.getLanguage()].locationReady, "success");
       }
     };
     const onError = (error: GeolocationPositionError): void => {
+      if (requestGeneration !== this.watchGeneration) return;
       const explicitRequest = this.requestInFlight;
       this.requestInFlight = false;
       if (error.code === error.PERMISSION_DENIED) {
@@ -360,38 +377,45 @@ export class LiveLocationController {
         writeTrackingPreference(false);
         if (this.watchId !== null) geolocation.clearWatch(this.watchId);
         this.watchId = null;
+        this.pendingCameraFocus = false;
         this.setFollowEnabled(false);
         this.setMessage(UI[this.getLanguage()].locationDenied, "error");
         return;
       }
-      // Keep the last valid fix and avoid alternating route/GPS status messages
-      // when Android emits transient timeout or position-unavailable callbacks.
-      if (!this.lastCoordinate && explicitRequest)
-        this.setMessage(UI[this.getLanguage()].locationDenied, "error");
+      // A failed initial request ends acquisition; an explicit tap can retry.
+      // A running navigation watch retains its last valid position.
+      if (!this.lastCoordinate) {
+        this.watchWanted = false;
+        writeTrackingPreference(false);
+        if (this.watchId !== null) geolocation.clearWatch(this.watchId);
+        this.watchId = null;
+        this.pendingCameraFocus = false;
+        this.setFollowEnabled(false);
+      }
+      if (explicitRequest || !this.lastCoordinate) {
+        const copy = UI[this.getLanguage()];
+        this.setMessage(error.code === error.TIMEOUT ? copy.locationTimeout : copy.locationUnavailable, "error");
+      }
     };
-    // Accept a recent cached fix only when it is already credible, while a fresh
-    // high-accuracy request and continuous watch run in parallel. Coarse or
-    // stale network positions never become the visible initial GPS state.
-    const fastOptions: PositionOptions = {
-      enableHighAccuracy: false,
-      timeout: 2_500,
-      maximumAge: 10_000,
-    };
-    const freshOptions: PositionOptions = {
-      enableHighAccuracy: true,
-      timeout: 12_000,
-      maximumAge: 0,
-    };
+    // One provider watch supplies the initial cached/fresh fix and subsequent
+    // updates. Repeated taps reuse it; no concurrent one-shot receivers exist.
     const watchOptions: PositionOptions = {
       enableHighAccuracy: true,
       timeout: 10_000,
-      maximumAge: 750,
+      maximumAge: 15_000,
     };
     this.watchStartedAt = Date.now();
-    geolocation.getCurrentPosition((position) => onSuccess(position, "fast"), () => undefined, fastOptions);
-    geolocation.getCurrentPosition((position) => onSuccess(position, "fresh"), onError, freshOptions);
     if (this.watchId === null) {
-      this.watchId = geolocation.watchPosition((position) => onSuccess(position, "watch"), onError, watchOptions);
+      try {
+        this.watchId = geolocation.watchPosition(onSuccess, onError, watchOptions);
+      } catch {
+        this.requestInFlight = false;
+        this.watchWanted = false;
+        writeTrackingPreference(false);
+        this.pendingCameraFocus = false;
+        this.setFollowEnabled(false);
+        this.setMessage(UI[this.getLanguage()].locationUnavailable, "error");
+      }
     }
   }
 
@@ -446,18 +470,28 @@ export class LiveLocationController {
     if (!initialCenter && now - this.lastRecenterAt <= 2600) return;
     this.lastRecenterAt = now;
     this.map.stop();
+    this.map.off("moveend", this.finishCameraMove);
     this.programmaticMove = true;
+    this.map.once("moveend", this.finishCameraMove);
+    const focusZoom = this.lastAccuracy <= 60
+      ? 16.0
+      : this.lastAccuracy <= 180
+        ? 15.5
+        : this.lastAccuracy <= 400
+          ? 14.8
+          : 14.2;
     this.map.easeTo({
       center: this.lastCoordinate,
       zoom: initialCenter
-        ? Math.max(this.map.getZoom(), 13.2)
+        ? Math.max(this.map.getZoom(), focusZoom)
         : this.map.getZoom(),
-      duration: initialCenter ? 620 : 220,
+      duration: initialCenter ? 480 : 220,
       essential: true,
     });
-    this.map.once("moveend", () => {
-      this.programmaticMove = false;
-    });
+    if (!this.map.isMoving()) {
+      this.map.off("moveend", this.finishCameraMove);
+      this.finishCameraMove();
+    }
   }
 
   private installWatchRecovery(): void {
@@ -479,7 +513,7 @@ export class LiveLocationController {
       this.watchId = null;
       this.watchStartedAt = 0;
       this.requestInFlight = false;
-      this.locate();
+      this.locate(this.followEnabled);
     };
     const startWatchdog = (): void => {
       if (this.watchdogTimer !== 0) return;
@@ -535,6 +569,9 @@ export class LiveLocationController {
           permission.addEventListener("change", () => {
             if (permission.state === "denied") {
               this.watchWanted = false;
+              this.watchGeneration += 1;
+              this.requestInFlight = false;
+              this.pendingCameraFocus = false;
               writeTrackingPreference(false);
               if (this.watchId !== null)
                 this.geolocation?.clearWatch(this.watchId);
@@ -543,7 +580,7 @@ export class LiveLocationController {
               this.setFollowEnabled(false);
             } else if (this.watchWanted) recover(true);
           });
-        });
+        }).catch(() => undefined);
     } catch {
       /* Permissions API is optional. */
     }
@@ -876,7 +913,7 @@ export class LiveLocationController {
         detail: { kind: "gps", at: Date.now() },
       }),
     );
-    if (recenter) this.recenter(previousCoordinate === null);
+    if (recenter && !this.pendingCameraFocus) this.recenter(previousCoordinate === null);
   }
 
   private scheduleVisualRestore(): void {

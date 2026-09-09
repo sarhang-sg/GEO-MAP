@@ -219,7 +219,7 @@ body[data-language="en"] .topbar > .brand-card { direction: ltr; }
   .sheet-handle { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 18px; margin: -5px 0 7px; background: transparent; }
   .sheet-handle > span:first-child { display: block; width: 42px; height: 4px; border-radius: 999px; background: rgba(255,255,255,.32); }
   .map-sheet.is-collapsed {
-    width: min(2116px, calc(100vw - 36px));
+    width: min(440px, calc(100vw - 36px));
     max-height: 116px;
     padding: 9px 12px 10px;
     overflow: hidden;
@@ -233,10 +233,18 @@ body[data-language="en"] .topbar > .brand-card { direction: ltr; }
   .map-sheet.is-collapsed h1 { font-size: 14px; }
 
   .about-dialog__panel,
-  .feedback-studio__panel,
+  .feedback-studio__panel {
+    width: min(680px, calc(100vw - 40px));
+    max-width: none;
+  }
   .user-contrib__panel,
   .owner-studio__panel {
-    max-width: min(520px, calc(100vw - 40px));
+    width: min(680px, calc(100vw - 40px));
+    max-width: none;
+  }
+  .owner-studio__panel {
+    bottom: auto;
+    max-height: calc(100dvh - 40px);
   }
 
   /* Copyright/attribution uses the same compact transparent treatment as mobile. */

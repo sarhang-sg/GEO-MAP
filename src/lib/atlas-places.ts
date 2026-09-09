@@ -1068,9 +1068,10 @@ function navigationHistoryRow(input: AtlasNavigationHistoryInput, userId: string
   };
 }
 
-export async function loadAtlasNavigationHistory(limit = 100): Promise<AtlasNavigationHistory[]> {
+export async function loadAtlasNavigationHistory(limit = 100, expectedUserId?: string): Promise<AtlasNavigationHistory[]> {
   if (!atlasSupabase) return [];
   const identity = await getAtlasAuthIdentity();
+  if (expectedUserId && identity?.userId !== expectedUserId) throw new Error("Navigation history account changed before synchronization.");
   if (!identity) return [];
   const { data, error } = await atlasSupabase
     .from("atlas_navigation_history")
@@ -1082,20 +1083,10 @@ export async function loadAtlasNavigationHistory(limit = 100): Promise<AtlasNavi
   return (data ?? []) as AtlasNavigationHistory[];
 }
 
-export async function saveAtlasNavigationHistory(input: AtlasNavigationHistoryInput): Promise<boolean> {
-  if (!atlasSupabase) return false;
-  const identity = await getAtlasAuthIdentity();
-  if (!identity || !input.id.trim()) return false;
-  const { error } = await atlasSupabase
-    .from("atlas_navigation_history")
-    .upsert(navigationHistoryRow(input, identity.userId), { onConflict: "user_id,id" });
-  if (error) throw error;
-  return true;
-}
-
-export async function syncAtlasNavigationHistory(inputs: readonly AtlasNavigationHistoryInput[]): Promise<number> {
+export async function syncAtlasNavigationHistory(inputs: readonly AtlasNavigationHistoryInput[], expectedUserId?: string): Promise<number> {
   if (!atlasSupabase || inputs.length === 0) return 0;
   const identity = await getAtlasAuthIdentity();
+  if (expectedUserId && identity?.userId !== expectedUserId) throw new Error("Navigation history account changed before synchronization.");
   if (!identity) return 0;
   const rows = inputs.filter((input) => input.id.trim()).map((input) => navigationHistoryRow(input, identity.userId));
   if (rows.length === 0) return 0;

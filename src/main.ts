@@ -328,6 +328,7 @@ class KurdistanAtlasController {
     installRuntimePerformanceGuard({
       map: this.map,
       shell: mapShell,
+      baselineConstrained: this.lowPowerProfile,
       onRecovered: () => { this.queueLabels(); }
     });
     this.map.dragPan.enable();
@@ -519,10 +520,10 @@ class KurdistanAtlasController {
         // Source can disappear during an intentional style transition.
       }
     });
-    const stopLocationFollow = () => { if (!this.liveLocation.isProgrammaticCameraMove) this.liveLocation.stopFollow(); this.liveLocation.lockAgainstGpsJitter(); };
+    const stopLocationFollow = (event: { originalEvent?: unknown }) => { if (event.originalEvent || !this.liveLocation.isProgrammaticCameraMove) this.liveLocation.stopFollow(); this.liveLocation.lockAgainstGpsJitter(); };
     this.map.on("dragstart", stopLocationFollow);
     this.map.on("rotatestart", stopLocationFollow);
-    this.map.on("zoomstart", () => this.liveLocation.lockAgainstGpsJitter());
+    this.map.on("zoomstart", stopLocationFollow);
     window.addEventListener("resize", () => this.scheduleViewportResize(), { passive: true });
     window.addEventListener("online", () => this.softRefreshContent(250), { passive: true });
     this.map.on("error", (event) => {
@@ -1104,6 +1105,11 @@ class KurdistanAtlasController {
       anchor: this.popupAnchorForCoordinate(coordinate),
       focusAfterOpen: false
     }).setLngLat(coordinate).setDOMContent(content).addTo(this.map);
+    const popupElement = popup.getElement();
+    popupElement.classList.add("nav-kurd-place-popup");
+    if (content.classList.contains("atlas-place-popup")) {
+      popupElement.classList.add("nav-kurd-place-popup--atlas");
+    }
     this.activePlacePopup = popup;
     popup.on("close", () => {
       if (this.activePlacePopup === popup) this.activePlacePopup = null;
@@ -1201,6 +1207,7 @@ class KurdistanAtlasController {
     const description = ownerDescription(place, this.language);
     const caption = ownerPhotoCaption(coverPhoto, this.language);
     const markerIcon = atlasMarkerAssetUrl(place.category);
+    content.classList.toggle("atlas-place-popup--with-cover", Boolean(cover));
     content.innerHTML = `${cover ? `<img class="atlas-place-popup__cover" src="${escapeText(cover)}" alt="${escapeText(caption || ownerName(place, this.language))}" loading="lazy">` : ""}<div class="atlas-place-popup__body"><div class="atlas-place-popup__identity"><span class="atlas-place-popup__text"><strong>${escapeText(ownerName(place, this.language))}</strong><small>${escapeText(categoryValue(place.category, this.language, UI[this.language].place))}</small></span><img class="atlas-place-popup__marker" src="${escapeText(markerIcon)}" alt="" aria-hidden="true"></div>${caption ? `<p class="atlas-place-popup__caption">${escapeText(caption)}</p>` : ""}${description ? `<p class="atlas-place-popup__description">${escapeText(description)}</p>` : ""}</div>`;
     const ownerPopupBody = content.querySelector<HTMLElement>(".atlas-place-popup__body") ?? content;
     this.appendShareAction(ownerPopupBody, coordinate, ownerName(place, this.language));
@@ -1817,22 +1824,23 @@ controlsVisibilityButton.addEventListener("click", () => {
   const isPressed = controlsVisibilityButton.getAttribute("aria-pressed") === "true";
   setMapControlsHidden(!isPressed);
 });
-["pointerdown", "touchstart", "wheel", "keydown"].forEach((eventName) => {
+["pointerdown", "wheel", "keydown"].forEach((eventName) => {
   window.addEventListener(eventName, noteMapInteraction, { capture: true, passive: true });
 });
-const releaseTouchControl = (event: PointerEvent): void => {
-  if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
+if (typeof window.PointerEvent === "undefined") {
+  window.addEventListener("touchstart", noteMapInteraction, { capture: true, passive: true });
+}
+const releaseTouchControl = (event: MouseEvent): void => {
+  if (document.documentElement.dataset.inputMode !== "touch") return;
   const target = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("button") : null;
+  if (!target) return;
+  // Run only after click dispatch. The earlier hit-testing implementation on pointerup
+  // let delayed Android WebView clicks land while pointer-events was disabled.
   window.requestAnimationFrame(() => {
-    const active = document.activeElement;
-    if (active instanceof HTMLElement) active.blur();
-    if (!target?.isConnected) return;
-    target.classList.add("is-touch-released");
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => target.classList.remove("is-touch-released")));
+    if (target.isConnected && document.activeElement === target) target.blur();
   });
 };
-window.addEventListener("pointerup", releaseTouchControl, { capture: true, passive: true });
-window.addEventListener("pointercancel", releaseTouchControl, { capture: true, passive: true });
+document.addEventListener("click", releaseTouchControl, { capture: true, passive: true });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     if (mapControlsIdleTimer !== null) window.clearTimeout(mapControlsIdleTimer);

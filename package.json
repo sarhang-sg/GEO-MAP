@@ -31,16 +31,19 @@
     "verify:data": "python3 tools/verify/data.py",
     "verify:runtime": "node tools/verify/runtime.mjs",
     "verify:mobile": "node --disable-warning=ExperimentalWarning tools/verify/mobile-regressions.mjs",
+    "verify:critical-runtime": "node --disable-warning=ExperimentalWarning tools/verify/critical-runtime-regressions.mjs",
     "verify:security": "node tools/verify/security.mjs",
     "verify:pmtiles": "python3 tools/verify/pmtiles.py",
     "verify:release": "node tools/verify/release.mjs",
-    "verify:static": "npm run verify:syntax && npm run verify:source && npm run verify:styles && npm run verify:data && npm run verify:runtime && npm run verify:mobile && npm run verify:security && npm run verify:pmtiles",
+    "verify:static": "npm run verify:syntax && npm run verify:source && npm run verify:styles && npm run verify:data && npm run verify:runtime && npm run verify:mobile && npm run verify:critical-runtime && npm run verify:search-location && npm run verify:phase2 && npm run verify:security && npm run verify:pmtiles",
     "verify:production": "npm run verify:static && npm run verify:dependencies && npm run verify:release",
     "verify": "npm run data:prepare && npm run verify:production",
     "verify:browser": "python3 tools/verify/browser-smoke.py",
     "verify:final": "npm run build && npm run verify:browser && npm audit --omit=dev",
     "package": "npm run build && python3 tools/release/package-release.py",
-    "verify:dependencies": "node tools/verify/dependency-security.mjs"
+    "verify:dependencies": "node tools/verify/dependency-security.mjs",
+    "verify:search-location": "node --disable-warning=ExperimentalWarning tools/verify/search-location-regressions.mjs",
+    "verify:phase2": "node --disable-warning=ExperimentalWarning tools/verify/phase2-regressions.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.4",

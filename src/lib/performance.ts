@@ -91,6 +91,7 @@ export function debounceAsync<T extends unknown[]>(callback: (...args: T) => Pro
 type RuntimePerformanceGuardOptions = {
   map: { getCanvas: () => HTMLCanvasElement; resize: () => void; triggerRepaint: () => void };
   shell: HTMLElement;
+  baselineConstrained?: boolean;
   onRecovered?: () => void;
 };
 
@@ -102,7 +103,7 @@ export const RUNTIME_PERFORMANCE_MODE_EVENT = "nav-kurd:performance-mode";
  * The observers are event-driven, so diagnostics add no permanent RAF sampler.
  */
 export function installRuntimePerformanceGuard(options: RuntimePerformanceGuardOptions): () => void {
-  const { map, shell, onRecovered } = options;
+  const { map, shell, onRecovered, baselineConstrained = false } = options;
   let stopped = false;
   const observers: PerformanceObserver[] = [];
   let recoveryTimer: number | null = null;
@@ -120,13 +121,15 @@ export function installRuntimePerformanceGuard(options: RuntimePerformanceGuardO
 
   const apply = (degraded: boolean): void => {
     if (stopped) return;
-    const changed = shell.classList.contains("is-runtime-low-power") !== degraded;
-    shell.classList.toggle("is-runtime-low-power", degraded);
-    shell.dataset.runtimePerformance = degraded ? "reduced" : "normal";
+    const reduced = baselineConstrained || degraded;
+    const changed = shell.classList.contains("is-runtime-low-power") !== reduced;
+    shell.classList.toggle("is-runtime-low-power", reduced);
+    shell.dataset.runtimePerformance = reduced ? "reduced" : "normal";
     if (changed) {
-      document.dispatchEvent(new CustomEvent(RUNTIME_PERFORMANCE_MODE_EVENT, { detail: { degraded } }));
+      document.dispatchEvent(new CustomEvent(RUNTIME_PERFORMANCE_MODE_EVENT, { detail: { degraded: reduced } }));
     }
   };
+  apply(false);
   const scheduleRecovery = (): void => {
     if (recoveryTimer !== null) window.clearTimeout(recoveryTimer);
     recoveryTimer = window.setTimeout(() => {

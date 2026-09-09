@@ -62,6 +62,7 @@ export class SearchWorkerClient {
     }
 
     if (Date.now() < this.disabledUntil) throw new Error("Search worker is cooling down after a failure.");
+    const activationWorker = this.ensureWorker();
     const task = this.request({ type: "activate", manifestUrl: this.manifestUrl, language })
       .then((reply) => {
         if (reply.type !== "ready") throw new Error("Search worker did not return a ready response.");
@@ -70,7 +71,7 @@ export class SearchWorkerClient {
         return reply.records;
       })
       .catch((error) => {
-        this.disableWorker(error, 4_000);
+        if (this.worker === activationWorker) this.disableWorker(error, 4_000);
         throw error;
       })
       .finally(() => {
@@ -96,6 +97,7 @@ export class SearchWorkerClient {
     if (cached) return cached;
     if (Date.now() < this.disabledUntil) return [];
 
+    const searchWorker = this.worker;
     try {
       const reply = await this.request({ type: "search", query: term, language, limit, manifestUrl: this.manifestUrl });
       if (reply.type !== "results") return [];
@@ -104,7 +106,7 @@ export class SearchWorkerClient {
       if (this.resultCache.size > 48) this.resultCache.delete(this.resultCache.keys().next().value ?? "");
       return reply.items;
     } catch (error) {
-      this.disableWorker(error, 4_000);
+      if (this.worker === searchWorker) this.disableWorker(error, 4_000);
       return [];
     }
   }

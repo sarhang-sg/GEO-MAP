@@ -870,7 +870,6 @@ export class OwnerStudio {
         try { await signOutAtlasOwner(); } catch { /* session may already be gone */ }
         this.identity = null;
         this.navigationHistory = [];
-        removePendingNavigationHistory();
         this.view = "signin";
         this.setMessage("");
         this.render();
@@ -898,12 +897,12 @@ export class OwnerStudio {
           if (pending.kind === "history") {
             await deleteAtlasNavigationHistory(pending.historyId);
             this.navigationHistory = this.navigationHistory.filter((entry) => entry.id !== pending.historyId);
-            removePendingNavigationHistory(pending.historyId);
+            removePendingNavigationHistory(pending.historyId, this.identity?.userId);
             this.setMessage(historyCopy.deleted, "success");
           } else {
             await clearAtlasNavigationHistory();
             this.navigationHistory = [];
-            removePendingNavigationHistory();
+            removePendingNavigationHistory(undefined, this.identity?.userId);
             this.setMessage(historyCopy.cleared, "success");
           }
         }, "list");

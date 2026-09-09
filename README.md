@@ -120,7 +120,7 @@ See [9.1.0 release notes](docs/RELEASE_9.1.0.md), [Security](docs/SECURITY.md),
 ```bash
 termux-wake-lock
 cd "$HOME"
-unzip -q /sdcard/Download/NAV-KURD-9.1.0-WEB-UI-R15.zip
+unzip -q /sdcard/Download/NAV-KURD-9.1.0-WEB-UI-R16.zip
 cd NAV-KURD-9.1.0-WEB
 chmod +x TERMUX.sh
 bash TERMUX.sh setup

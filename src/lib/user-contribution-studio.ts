@@ -1608,6 +1608,7 @@ export class UserContributionStudio {
         this.messageKind = "normal";
         this.render();
         try {
+          const deletedUserId = this.identity?.userId;
           await deleteAtlasAccountAndData(this.identity);
           this.identity = null;
           this.profile = null;
@@ -1615,7 +1616,7 @@ export class UserContributionStudio {
           this.notifications = [];
           this.feedback = [];
           this.navigationHistory = [];
-          removePendingNavigationHistory();
+          removePendingNavigationHistory(undefined, deletedUserId);
           this.clearEditorDraft();
           this.clearPendingNewPlaceCoordinate();
           this.clearPendingPhoto();
@@ -1689,12 +1690,12 @@ export class UserContributionStudio {
           if (pending.kind === "delete-history") {
             await deleteAtlasNavigationHistory(pending.historyId);
             this.navigationHistory = this.navigationHistory.filter((entry) => entry.id !== pending.historyId);
-            removePendingNavigationHistory(pending.historyId);
+            removePendingNavigationHistory(pending.historyId, this.identity?.userId);
             this.message = navigationHistoryCopy(this.options.getLanguage()).deleted;
           } else {
             await clearAtlasNavigationHistory();
             this.navigationHistory = [];
-            removePendingNavigationHistory();
+            removePendingNavigationHistory(undefined, this.identity?.userId);
             this.message = navigationHistoryCopy(this.options.getLanguage()).cleared;
           }
           this.activeDashboardTab = "account";

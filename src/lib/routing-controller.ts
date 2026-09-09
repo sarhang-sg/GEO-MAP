@@ -12,8 +12,7 @@ import type {
   MapAnimationScheduler,
 } from "./map-animation-scheduler";
 import { appUrl } from "./app-url";
-import { saveAtlasNavigationHistory } from "./atlas-places";
-import { queueNavigationHistory, removePendingNavigationHistory } from "./navigation-history-store";
+import { persistNavigationHistory } from "./navigation-history-store";
 import type { AtlasNavigationHistoryInput } from "./atlas-places";
 
 type TrafficLevel = "low" | "moderate" | "heavy" | "severe" | "closed" | "unknown";
@@ -1287,12 +1286,10 @@ export class RoutingController {
       plannedDurationSeconds: Math.max(0, this.navigationPlannedDuration),
       elapsedSeconds: Math.max(0, Math.round((endedAt - this.navigationStartedAt) / 1000))
     };
-    queueNavigationHistory(entry);
-    window.dispatchEvent(new CustomEvent("nav-kurd:navigation-history", { detail: entry }));
-    void saveAtlasNavigationHistory(entry).then((saved) => {
-      if (saved) removePendingNavigationHistory(entry.id);
-    }).catch(() => {
-      // The local copy remains queued for the next authenticated studio sync.
+    void persistNavigationHistory(entry).catch(error => {
+      console.error("Navigation history could not be saved.", error);
+    }).finally(() => {
+      window.dispatchEvent(new CustomEvent("nav-kurd:navigation-history", { detail: entry }));
     });
   }
 

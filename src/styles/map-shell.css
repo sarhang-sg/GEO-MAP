@@ -20,12 +20,9 @@
 }
 #map { position: absolute; inset: 0; }
 .maplibregl-ctrl-group { overflow: hidden; border: 1px solid rgba(210,226,255,.18); border-radius: 13px; background: rgba(12,20,39,.88); box-shadow: 0 10px 24px rgba(0,0,0,.25); }
-.maplibregl-ctrl button { filter: invert(1) brightness(1.7); }
 .maplibregl-ctrl-attrib { max-width: min(58vw, 390px); padding: 2px 7px; border-radius: 10px; color: #d9e6ff; background: rgba(7,12,25,.68); font: 8px/1.48 var(--font-ui); }
 .maplibregl-ctrl-attrib a { color: #f5d88e; }
 .maplibregl-popup { z-index: var(--z-map-popup); }
-.maplibregl-popup-content { padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; color: #eaf2ff; background: #121e36; box-shadow: 0 14px 34px rgba(0,0,0,.38); }
-.maplibregl-popup-tip { border-top-color: #121e36 !important; border-bottom-color: #121e36 !important; }
 .maplibregl-popup-close-button { right: 5px; top: 3px; color: #f4d48b; font-size: 18px; }
 
 .topbar { position: absolute; z-index: var(--z-controls); pointer-events: none; }

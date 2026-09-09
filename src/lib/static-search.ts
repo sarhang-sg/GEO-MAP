@@ -37,6 +37,7 @@ export type PreparedStaticSearchQuery = {
   phrase: string;
   tokens: string[];
   intentIds: string[];
+  phoneticGroups: string[][];
 };
 
 export type StaticSearchTextProfile = {
@@ -45,6 +46,7 @@ export type StaticSearchTextProfile = {
   primaryName: string;
   allNames: string;
   intent?: string;
+  phoneticKeys: string[];
 };
 
 type SearchIntentGroup = {
@@ -61,6 +63,14 @@ const SEARCH_SEPARATOR_RE = /[^\p{L}\p{N}]+/gu;
 const SEARCH_DIGITS: Record<string, string> = {
   "٠": "0", "١": "1", "٢": "2", "٣": "3", "٤": "4", "٥": "5", "٦": "6", "٧": "7", "٨": "8", "٩": "9",
   "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4", "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9"
+};
+
+const SEARCH_PHONETIC_LETTERS: Readonly<Record<string, string>> = {
+  "ا": "a", "ئ": "", "ء": "", "ؤ": "u", "ب": "b", "پ": "p", "ت": "t", "ط": "t", "ث": "s",
+  "ج": "j", "چ": "ch", "ح": "h", "خ": "kh", "د": "d", "ذ": "z", "ر": "r", "ڕ": "r", "ز": "z",
+  "ژ": "zh", "س": "s", "ص": "s", "ش": "sh", "ض": "d", "ظ": "z", "ع": "", "غ": "gh", "ف": "f",
+  "ڤ": "v", "ق": "k", "ک": "k", "گ": "g", "ل": "l", "ڵ": "l", "م": "m", "ن": "n", "ه": "h",
+  "ە": "a", "و": "u", "ۆ": "o", "ی": "i", "ێ": "e"
 };
 
 const SEARCH_STOPWORDS = new Set([
@@ -188,6 +198,65 @@ export function normalizeStaticSearch(value: string): string {
     .trim();
 }
 
+function latinPhoneticSkeleton(
+  value: string,
+  preserveY: boolean,
+  preserveW: boolean,
+  applyLatinSpellingRules: boolean
+): string {
+  let glideAware = value;
+  if (preserveY) glideAware = glideAware.replace(/ia|ya/g, "y");
+  if (preserveW) glideAware = glideAware.replace(/ua|wa/g, "w");
+  const spellingNormalized = applyLatinSpellingRules
+    ? glideAware
+      .replace(/ph/g, "f").replace(/tsh/g, "ch").replace(/ck|qu|q/g, "k")
+      .replace(/dh/g, "z").replace(/th/g, "s")
+      .replace(/c(?=[eiy])/g, "s").replace(/c(?!h)/g, "k")
+      .replace(/g(?=[eiy])/g, "j").replace(/x/g, "ks").replace(/dj/g, "j")
+    : glideAware;
+  return spellingNormalized
+    .replace(/tsh/g, "ch").replace(/dj/g, "j")
+    .replace(/v/g, "f").replace(/w/g, preserveW ? "w" : "u")
+    .replace(preserveY ? /[aeiou]/g : /[aeiouy]/g, "")
+    .replace(/(.)\1+/g, "$1");
+}
+
+/**
+ * Produces alternative consonant/glide keys per word. A group is OR-matched;
+ * separate groups are AND-matched. This handles Arabic's omitted short vowels
+ * while retaining meaningful y/w glides (for example Koya/کۆیا) without a
+ * place-name dictionary. Exact lexical matches always rank above this fallback.
+ */
+export function phoneticSearchGroups(value: string): string[][] {
+  const normalized = normalizeStaticSearch(value).normalize("NFKD").replace(/\p{M}/gu, "");
+  return normalized.split(" ").map((word) => {
+    const latinWord = !/[\u0600-\u06ff]/u.test(word);
+    const baseLatin = word.replace(/[\u0600-\u06ff]/gu, (letter) => SEARCH_PHONETIC_LETTERS[letter] ?? letter);
+    const yGlideLatin = word
+      .replace(/[یێ]/g, "y")
+      .replace(/[\u0600-\u06ff]/gu, (letter) => SEARCH_PHONETIC_LETTERS[letter] ?? letter);
+    const wGlideLatin = word
+      .replace(/[وؤ]/g, "w")
+      .replace(/[\u0600-\u06ff]/gu, (letter) => SEARCH_PHONETIC_LETTERS[letter] ?? letter);
+    const allGlidesLatin = word
+      .replace(/[یێ]/g, "y").replace(/[وؤ]/g, "w")
+      .replace(/[\u0600-\u06ff]/gu, (letter) => SEARCH_PHONETIC_LETTERS[letter] ?? letter);
+    return [...new Set([
+      latinPhoneticSkeleton(baseLatin, false, false, latinWord),
+      latinPhoneticSkeleton(yGlideLatin, true, false, latinWord),
+      latinPhoneticSkeleton(wGlideLatin, false, true, latinWord),
+      latinPhoneticSkeleton(allGlidesLatin, true, true, latinWord)
+    ].filter((key) => key.length >= 2))];
+  }).filter((group) => group.length > 0);
+}
+
+function phoneticNameScore(profile: StaticSearchTextProfile, query: PreparedStaticSearchQuery): number {
+  if (query.phoneticGroups.length === 0) return 0;
+  return query.phoneticGroups.every((alternatives) => alternatives.some((token) =>
+    profile.phoneticKeys.some((name) => name === token || (token.length >= 3 && name.startsWith(token)))
+  )) ? 850 : 0;
+}
+
 const NORMALIZED_INTENT_GROUPS = SEARCH_INTENT_GROUPS.map((group) => ({
   ...group,
   aliases: group.aliases.map(normalizeStaticSearch),
@@ -252,12 +321,13 @@ export function prepareStaticSearchQuery(query: string): PreparedStaticSearchQue
   return {
     phrase: meaningfulTokens.length > 0 ? meaningfulTokens.join(" ") : intentIds.join(" ") || normalized,
     tokens,
-    intentIds
+    intentIds,
+    phoneticGroups: phoneticSearchGroups(meaningfulTokens.length > 0 ? meaningfulTokens.join(" ") : normalized)
   };
 }
 
 function isShortAsciiToken(value: string): boolean {
-  return value.length <= 3 && /^[a-z0-9]+$/u.test(value);
+  return value.length < 2 && /^[a-z0-9]+$/u.test(value);
 }
 
 function phraseMatch(text: string, phrase: string): "exact" | "prefix" | "contains" | null {
@@ -322,7 +392,7 @@ function kindWeight(kind: string): number {
   return kind === "place" ? 90 : kind === "street" ? 80 : kind === "poi" ? 60 : kind === "building" ? 45 : 25;
 }
 
-export function scoreStaticSearchNames(primaryName: string, allNames: string, query: PreparedStaticSearchQuery): number {
+function scoreStaticSearchNames(primaryName: string, allNames: string, query: PreparedStaticSearchQuery): number {
   const { phrase } = query;
   if (phrase.length < 2) return 0;
 
@@ -344,6 +414,7 @@ export function scoreStaticSearchProfile(profile: StaticSearchTextProfile, query
   if (phrase.length < 2 && tokens.length === 0) return 0;
 
   let score = scoreStaticSearchNames(profile.primaryName, profile.allNames, query);
+  if (!score && intentIds.length === 0) score = phoneticNameScore(profile, query);
   const primaryMatch = phraseMatch(profile.primary, phrase);
   const allMatch = phraseMatch(profile.all, phrase);
   if (primaryMatch === "exact") score += 2_300;

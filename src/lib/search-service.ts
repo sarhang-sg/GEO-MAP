@@ -2,6 +2,7 @@ import { languageValue, placeRank } from "./geo-format";
 import { yieldToMainThread } from "./performance";
 import {
   normalizeStaticSearch,
+  phoneticSearchGroups,
   prepareStaticSearchQuery,
   scoreStaticSearchProfile,
   searchIntentIdsForCategory,
@@ -111,6 +112,7 @@ export class SearchService {
   private readonly getLocalities: () => LocalityFeature[];
   private readonly getOwnerPlaces: () => AtlasPlace[];
   private readonly searchStatic: SearchServiceOptions["searchStatic"];
+  private readonly ownerProfiles = new WeakMap<AtlasPlace, Partial<Record<Language, StaticSearchTextProfile>>>();
   private readonly quickIndexes = new Map<Language, LocalitySearchIndex>();
   private readonly localityIndexes = new Map<Language, LocalitySearchIndex>();
   private readonly activeQuickBuilds = new Map<Language, { source: LocalityFeature[]; promise: Promise<LocalitySearchIndex | null> }>();
@@ -187,7 +189,6 @@ export class SearchService {
     if (query.phrase.length < 2 && query.tokens.length === 0) return [];
     const language = this.getLanguage();
     const source = this.getLocalities();
-    const basePromise = this.searchBaseMap(term, query, null);
     const quick = await this.ensureQuickIndex(language, source);
     if (language !== this.getLanguage() || source !== this.getLocalities()) return [];
     const full = this.localityIndexes.get(language);
@@ -196,7 +197,7 @@ export class SearchService {
     const spatialIntent = Boolean(anchor && query.intentIds.length > 0);
     const locals = index && !spatialIntent ? this.searchLocalities(query, index) : [];
     const owners = this.searchOwnerPlaces(query, anchor);
-    const bases = anchor && query.intentIds.length > 0 ? await this.searchBaseMap(term, query, anchor) : await basePromise;
+    const bases = await this.searchBaseMap(term, query, anchor && query.intentIds.length > 0 ? anchor : null);
     return this.mergeChoices([...owners, ...bases, ...locals]);
   }
 
@@ -232,7 +233,8 @@ export class SearchService {
       all: normalizeStaticSearch(all),
       primaryName: normalizeStaticSearch(primaryName),
       allNames: normalizeStaticSearch(allNames),
-      intent: ""
+      intent: "",
+      phoneticKeys: [...new Set(phoneticSearchGroups(allNames).flat())]
     };
     return {
       feature,
@@ -253,6 +255,9 @@ export class SearchService {
       addIndexValue(index.byToken, token, entry);
       prefixes.add(token.slice(0, Math.min(2, token.length)));
       if (token.length >= 3) prefixes.add(token.slice(0, 3));
+    }
+    for (const token of entry.profile.phoneticKeys) {
+      if (token.length >= 2) prefixes.add(`~${token.slice(0, 2)}`);
     }
     for (const prefix of prefixes) addIndexValue(index.byPrefix, prefix, entry);
   }
@@ -316,10 +321,17 @@ export class SearchService {
         ?? index.byPrefix.get(token.slice(0, Math.min(2, token.length)))
         ?? [])
       .filter((group) => group.length > 0);
+    const phoneticGroups = query.phoneticGroups.map((alternatives) => [...new Set(alternatives.flatMap(
+      (token) => index.byPrefix.get(`~${token.slice(0, 2)}`) ?? []
+    ))]);
+    const phonetic = phoneticGroups.length > 0 && phoneticGroups.every((group) => group.length > 0)
+      ? intersectEntries(phoneticGroups)
+      : [];
     if (prefixGroups.length > 0) {
       const prefixed = intersectEntries(prefixGroups);
-      if (prefixed.length > 0) return prefixed;
+      if (prefixed.length > 0) return [...new Set([...prefixed, ...phonetic])];
     }
+    if (phonetic.length > 0) return phonetic;
     // Never fall back to a 12k synchronous scan. The static worker performs the
     // broad/fuzzy pass and the quick index still supplies important settlements.
     return index.entries.length <= 600 ? index.entries : [];
@@ -339,23 +351,12 @@ export class SearchService {
     const language = this.getLanguage();
     const candidates: Array<{ place: AtlasPlace; score: number; distance: number }> = [];
     const effectiveQuery = anchor && query.intentIds.length > 0
-      ? { phrase: query.intentIds.join(" "), tokens: [...query.intentIds], intentIds: [...query.intentIds] }
+      ? { phrase: query.intentIds.join(" "), tokens: [...query.intentIds], intentIds: [...query.intentIds], phoneticGroups: [] }
       : query;
 
     for (const place of this.getOwnerPlaces()) {
-      const metadataValues = Object.values(place.metadata ?? {}).filter((value): value is string | number | boolean => typeof value === "string" || typeof value === "number" || typeof value === "boolean");
-      const primaryName = language === "ku" ? place.name_ku : language === "ar" ? place.name_ar || "" : place.name_en || "";
-      if (!primaryName) continue;
-      const categoryTerms = atlasPlaceTypeSearchTerms(place.category);
-      const allNames = [place.name_ku, place.name_ar, place.name_en, primaryName].filter(Boolean).join(" | ");
-      const all = [allNames, place.category, ...(place.tags ?? []), ...categoryTerms, ...metadataValues.map(String)].join(" | ");
-      const profile: StaticSearchTextProfile = {
-        primary: normalizeStaticSearch([primaryName, place.category].filter(Boolean).join(" | ")),
-        all: normalizeStaticSearch(all),
-        primaryName: normalizeStaticSearch(primaryName),
-        allNames: normalizeStaticSearch(allNames),
-        intent: searchIntentIdsForCategory(place.category, categoryTerms.join(" | ")).join(" ")
-      };
+      const profile = this.ownerProfile(place, language);
+      if (!profile) continue;
       const distance = anchor ? distanceKm(anchor.coordinate, [place.longitude, place.latitude]) : 0;
       const proximityBonus = anchor ? Math.max(0, 2_400 - distance * 22) : 0;
       const score = scoreStaticSearchProfile(profile, effectiveQuery, "poi") + 120 + proximityBonus;
@@ -365,6 +366,30 @@ export class SearchService {
 
     candidates.sort((a, b) => b.score - a.score || a.distance - b.distance);
     return candidates.slice(0, OWNER_RESULT_LIMIT).map((entry): SearchChoice => ({ type: "owner", place: entry.place }));
+  }
+
+  private ownerProfile(place: AtlasPlace, language: Language): StaticSearchTextProfile | null {
+    const cached = this.ownerProfiles.get(place)?.[language];
+    if (cached) return cached;
+    const primaryName = language === "ku" ? place.name_ku : language === "ar" ? place.name_ar || "" : place.name_en || "";
+    if (!primaryName) return null;
+    const metadataValues = Object.values(place.metadata ?? {}).filter((value): value is string | number | boolean =>
+      typeof value === "string" || typeof value === "number" || typeof value === "boolean"
+    );
+    const categoryTerms = atlasPlaceTypeSearchTerms(place.category);
+    const allNames = [place.name_ku, place.name_ar, place.name_en, primaryName].filter(Boolean).join(" | ");
+    const profile: StaticSearchTextProfile = {
+      primary: normalizeStaticSearch([primaryName, place.category].filter(Boolean).join(" | ")),
+      all: normalizeStaticSearch([allNames, place.category, ...(place.tags ?? []), ...categoryTerms, ...metadataValues.map(String)].join(" | ")),
+      primaryName: normalizeStaticSearch(primaryName),
+      allNames: normalizeStaticSearch(allNames),
+      intent: searchIntentIdsForCategory(place.category, categoryTerms.join(" | ")).join(" "),
+      phoneticKeys: [...new Set(phoneticSearchGroups(allNames).flat())]
+    };
+    const profiles = this.ownerProfiles.get(place) ?? {};
+    profiles[language] = profile;
+    this.ownerProfiles.set(place, profiles);
+    return profile;
   }
 
   private async searchBaseMap(term: string, query: PreparedStaticSearchQuery, anchor: SearchAnchor | null): Promise<SearchChoice[]> {
@@ -396,7 +421,7 @@ export class SearchService {
     const target = normalizeStaticSearch(locationTokens.join(" "));
     if (target.length < 2) return null;
     const targetWords = target.split(" ").filter(Boolean);
-    const anchorQuery: PreparedStaticSearchQuery = { phrase: target, tokens: targetWords, intentIds: [] };
+    const anchorQuery: PreparedStaticSearchQuery = { phrase: target, tokens: targetWords, intentIds: [], phoneticGroups: phoneticSearchGroups(target) };
     let best: SearchAnchor | null = null;
     for (const entry of this.localityCandidates(index, anchorQuery)) {
       let lexicalScore = 0;

@@ -20,6 +20,7 @@ export type HardwareProfile = Readonly<{
 declare global {
   interface Window {
     __NAV_KURD_NATIVE_HARDWARE__?: Record<string, unknown>;
+    __NAV_KURD_FLUTTER__?: boolean;
   }
 }
 
@@ -71,6 +72,10 @@ function readGpuProfile(): HardwareProfile["gpu"] {
     gl.getExtension("WEBGL_lose_context")?.loseContext();
     return profile;
   } catch { return unavailable; }
+}
+
+function unavailableGpuProfile(): HardwareProfile["gpu"] {
+  return Object.freeze({ vendor: null, renderer: null, version: null, maxTextureSize: null });
 }
 
 function readNativeProfile(): HardwareProfile | null {
@@ -132,23 +137,28 @@ export function readHardwareProfile(): HardwareProfile {
     return cachedProfile;
   }
   const nav = navigator as Navigator & { deviceMemory?: number };
+  const nativeShell = window.__NAV_KURD_FLUTTER__ === true;
   cachedProfile = Object.freeze({
     logicalProcessors: boundedNumber(nav.hardwareConcurrency, 1, 64, true),
     deviceMemoryGb: boundedNumber(nav.deviceMemory, 0.25, 64),
     screen: readScreenProfile(),
-    gpu: readGpuProfile(),
+    // Flutter's full-screen WebView will create MapLibre's production context
+    // immediately. Do not allocate a second probe context on its critical path.
+    gpu: nativeShell ? unavailableGpuProfile() : readGpuProfile(),
   });
   return cachedProfile;
 }
 
 export function isConstrainedHardware(profile: HardwareProfile = readHardwareProfile()): boolean {
-  return (profile.logicalProcessors !== null && profile.logicalProcessors <= 4)
+  return (typeof window !== "undefined" && window.__NAV_KURD_FLUTTER__ === true)
+    || (profile.logicalProcessors !== null && profile.logicalProcessors <= 4)
     || (profile.deviceMemoryGb !== null && profile.deviceMemoryGb <= 4)
     || (profile.gpu.maxTextureSize !== null && profile.gpu.maxTextureSize < 4096);
 }
 
 /** Balanced default for privacy-reduced browsers; smaller/larger values require actual hints. */
 export function recommendedMapTileCacheSize(profile: HardwareProfile = readHardwareProfile()): number {
+  if (typeof window !== "undefined" && window.__NAV_KURD_FLUTTER__ === true) return 96;
   const { logicalProcessors: cores, deviceMemoryGb: memory } = profile;
   if ((memory !== null && memory <= 3) || (cores !== null && cores <= 4)) return 96;
   if ((memory !== null && memory <= 6) || (cores !== null && cores <= 6)) return 160;

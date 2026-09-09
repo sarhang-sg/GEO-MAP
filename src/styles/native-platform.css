@@ -33,12 +33,16 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
 }
 
 .native-app-panel {
-  margin: 14px 0;
-  padding: 15px;
-  border: 1px solid rgba(177, 91, 214, 0.38);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--nk-border, rgba(105, 157, 241, .23));
   border-radius: 18px;
-  background: linear-gradient(145deg, rgba(24, 15, 38, 0.96), rgba(10, 14, 27, 0.96));
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+  color: var(--nk-text, #f7f9fc);
+  background: var(--nk-surface, #0d1a2b);
+  box-shadow: 0 14px 32px rgba(0, 4, 18, .24), inset 0 1px 0 rgba(255,255,255,.055);
 }
 
 .native-app-panel[hidden] {
@@ -46,60 +50,77 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
 }
 
 .native-app-panel__header,
-.native-app-panel__status,
 .native-app-panel__actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 7px;
 }
 
-.native-app-panel__header p {
-  margin: 0 0 3px;
-  color: #cf9be5;
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+.native-app-panel__header {
+  width: 42px;
+  min-width: 42px;
+  justify-content: flex-start;
 }
-
-.native-app-panel__header h3 {
-  margin: 0;
-  font-size: 0.94rem;
+.native-app-panel__header > div,
+.native-app-panel__action-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .native-app-panel__header > span {
-  font-size: 1.65rem;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  flex: 0 0 42px;
+  border: 1px solid var(--nk-border, rgba(111, 177, 255, .20));
+  border-radius: 13px;
+  color: var(--nk-text, #f7f9fc);
+  background: var(--nk-elevated, #12243a);
 }
 
 .native-app-panel__icon {
   display: block;
-  width: 1em;
-  height: 1em;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   pointer-events: none;
   filter: brightness(0) invert(1);
 }
 
+html[data-ui-mode="light"] .native-app-panel__icon { filter: brightness(0); }
+
 .native-app-panel__status {
-  margin: 13px 0;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
 }
 
 .native-app-panel__status > div {
-  flex: 1;
   min-width: 0;
-  padding: 9px 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--nk-border, rgba(137, 162, 210, .10));
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.055);
+  background: var(--nk-elevated, rgba(255,255,255,.028));
 }
 
 .native-app-panel__status dt {
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.68rem;
+  color: var(--nk-muted, #8e9bb4);
+  font-size: 9px;
 }
 
 .native-app-panel__status dd {
-  margin: 3px 0 0;
-  font-weight: 750;
+  margin: 1px 0 0;
+  color: var(--nk-text, #f4f7ff);
+  font: 800 12px/1.3 var(--font-ui);
 }
 
 .native-app-panel__actions button,
@@ -116,15 +137,35 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
 }
 
 .native-app-panel__actions button {
-  flex: 1;
-  padding: 10px 8px;
+  display: grid;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  place-items: center;
+  flex: 0 0 42px;
+  padding: 0;
+  border-color: var(--nk-border, rgba(124, 164, 235, .19));
+  border-radius: 13px;
+  color: var(--nk-text, #f7f9fc);
+  background: var(--nk-elevated, #12243a);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+  line-height: 0;
+  touch-action: manipulation;
 }
 
+.native-app-panel__actions {
+  grid-column: 2;
+  grid-row: 1;
+  justify-content: flex-start;
+}
+
+#nativeOpenSettingsButton .native-app-panel__icon { transition: transform .32s ease; }
+html[data-hover="available"] #nativeOpenSettingsButton:hover .native-app-panel__icon { transform: rotate(42deg); }
+html[data-hover="available"] #nativeClearCacheButton:hover .native-app-panel__icon { animation: nk-v9-bin .5s cubic-bezier(.34,1.56,.64,1); }
+
 .native-app-panel > p {
-  margin: 12px 0 0;
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 0.72rem;
-  line-height: 1.65;
+  display: none;
 }
 
 .place-popup__share {

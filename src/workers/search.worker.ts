@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 import {
   normalizeStaticSearch,
+  phoneticSearchGroups,
   prepareStaticSearchQuery,
-  scoreStaticSearchNames,
   scoreStaticSearchProfile,
   searchIntentIdsForCategory,
   type PreparedStaticSearchQuery,
@@ -41,6 +41,7 @@ let activeLanguage: Language = "ku";
 let activeIndex: PreparedIndex | null = null;
 let activeLoad: Promise<PreparedIndex> | null = null;
 let generation = 0;
+let latestSearchId = 0;
 
 function post(response: WorkerResponse): void { self.postMessage(response); }
 function languageName(item: StaticSearchItem, language: Language): string {
@@ -73,6 +74,7 @@ async function prepare(items: StaticSearchItem[], language: Language): Promise<P
   const entries: IndexedItem[] = [];
   const byIntent = new Map<string, number[]>();
   const byPrefix = new Map<string, number[]>();
+  const categoryCache = new Map<string, string[]>();
 
   for (let sourceIndex = 0; sourceIndex < items.length; sourceIndex += 1) {
     const item = items[sourceIndex];
@@ -80,16 +82,21 @@ async function prepare(items: StaticSearchItem[], language: Language): Promise<P
     if (!currentName) continue;
     const currentQuery = languageQuery(item, language);
     const currentCategory = languageCategory(item, language);
-    const allNames = [currentName, item.n].filter(Boolean).join(" | ");
+    const allNames = [currentName, item.n, item.n_en, item.n_ar, item.n_ku].filter(Boolean).join(" | ");
     const allQueries = [currentQuery, item.q].filter(Boolean).join(" | ");
     const allCategories = [currentCategory, item.c, item.k].filter(Boolean).join(" | ");
-    const intentIds = searchIntentIdsForCategory(item.c, allCategories);
+    let intentIds = categoryCache.get(allCategories);
+    if (!intentIds) {
+      intentIds = searchIntentIdsForCategory(item.c, allCategories);
+      categoryCache.set(allCategories, intentIds);
+    }
     const profile: StaticSearchTextProfile = {
       primary: normalizeStaticSearch([currentName, currentQuery, currentCategory, item.c].filter(Boolean).join(" | ")),
       all: normalizeStaticSearch([allNames, allQueries, allCategories].filter(Boolean).join(" | ")),
       primaryName: normalizeStaticSearch(currentName),
       allNames: normalizeStaticSearch(allNames),
-      intent: intentIds.join(" ")
+      intent: intentIds.join(" "),
+      phoneticKeys: [...new Set(phoneticSearchGroups(allNames).flat())]
     };
     const entryIndex = entries.length;
     entries.push({ item, profile });
@@ -99,6 +106,9 @@ async function prepare(items: StaticSearchItem[], language: Language): Promise<P
       if (token.length < 2) continue;
       prefixes.add(token.slice(0, 2));
       if (token.length >= 3) prefixes.add(token.slice(0, 3));
+    }
+    for (const token of profile.phoneticKeys) {
+      if (token.length >= 2) prefixes.add(`~${token.slice(0, 2)}`);
     }
     for (const prefix of prefixes) addPosting(byPrefix, prefix, entryIndex);
     if (sourceIndex > 0 && sourceIndex % 1400 === 0) await workerYield();
@@ -149,6 +159,11 @@ function intersectPostings(groups: readonly number[][]): number[] {
   const sets = rest.map((group) => new Set(group));
   return smallest.filter((itemIndex) => sets.every((set) => set.has(itemIndex)));
 }
+function unionPostings(groups: readonly number[][]): number[] {
+  if (groups.length === 0) return [];
+  if (groups.length === 1) return groups[0];
+  return [...new Set(groups.flat())];
+}
 function candidateIds(index: PreparedIndex, query: PreparedStaticSearchQuery): number[] | null {
   if (query.intentIds.length > 0) {
     const intentGroups = query.intentIds.map((intent) => index.byIntent.get(intent) ?? []);
@@ -157,6 +172,11 @@ function candidateIds(index: PreparedIndex, query: PreparedStaticSearchQuery): n
       if (matched.length > 0) return matched;
     }
   }
+  const phoneticPostings = query.phoneticGroups.map((alternatives) => unionPostings(
+    alternatives.map((token) => index.byPrefix.get(`~${token.slice(0, 2)}`) ?? [])
+  ));
+  const phoneticIds = phoneticPostings.every((group) => group.length > 0) ? intersectPostings(phoneticPostings) : [];
+  const mergePhonetic = (ids: number[]): number[] => [...new Set([...ids, ...phoneticIds])];
   const textTokens = query.tokens.filter((token) => !query.intentIds.includes(token));
   if (textTokens.length > 0) {
     const groups = textTokens.map((token) => index.byPrefix.get(token.slice(0, Math.min(3, token.length)))
@@ -164,11 +184,12 @@ function candidateIds(index: PreparedIndex, query: PreparedStaticSearchQuery): n
       ?? []);
     if (groups.every((group) => group.length > 0)) {
       const matched = intersectPostings(groups);
-      if (matched.length > 0) return matched;
+      if (matched.length > 0) return mergePhonetic(matched);
     }
     const available = groups.filter((group) => group.length > 0);
-    if (available.length > 0) return [...available].sort((a, b) => a.length - b.length)[0];
+    if (available.length > 0) return mergePhonetic([...available].sort((a, b) => a.length - b.length)[0]);
   }
+  if (phoneticIds.length > 0) return phoneticIds;
   // A broad scan is safe inside the worker and avoids false negatives for
   // transliteration/alias queries, but no such scan ever runs on the UI thread.
   return null;
@@ -185,7 +206,7 @@ function insertRanked(output: RankedItem[], candidate: RankedItem, limit: number
   output.splice(low, 0, candidate);
   if (output.length > limit) output.pop();
 }
-function search(index: PreparedIndex, rawQuery: string, limit: number, language: Language): StaticSearchItem[] {
+async function search(index: PreparedIndex, rawQuery: string, limit: number, language: Language, requestId: number): Promise<StaticSearchItem[]> {
   const query = prepareStaticSearchQuery(rawQuery);
   if (query.phrase.length < 2 && query.tokens.length === 0) return [];
   const cacheKey = `${limit}:${query.phrase}`;
@@ -198,19 +219,20 @@ function search(index: PreparedIndex, rawQuery: string, limit: number, language:
   const visit = (entry: IndexedItem): void => {
     const textScore = scoreStaticSearchProfile(entry.profile, query, entry.item.k);
     if (textScore <= 0) return;
-    const score = textScore + scoreStaticSearchNames(entry.profile.primaryName, entry.profile.allNames, query);
+    const score = textScore;
     const key = `${entry.item.x}:${entry.item.y}:${entry.item.s || entry.profile.primaryName}`;
     if (seen.has(key)) return;
     seen.add(key);
     insertRanked(ranked, { entry, score, name: languageName(entry.item, language) }, limit);
   };
-  if (ids) {
-    for (const itemIndex of ids) {
-      const entry = index.entries[itemIndex];
-      if (entry) visit(entry);
+  const count = ids?.length ?? index.entries.length;
+  for (let offset = 0; offset < count; offset += 1) {
+    if (offset % 500 === 0) {
+      await workerYield();
+      if (requestId !== latestSearchId) return [];
     }
-  } else {
-    for (const entry of index.entries) visit(entry);
+    const entry = index.entries[ids ? ids[offset] : offset];
+    if (entry) visit(entry);
   }
   const result = ranked.map(({ entry }) => entry.item);
   index.resultCache.set(cacheKey, result);
@@ -226,7 +248,8 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
       .catch((error) => post({ type: "error", id: request.id, message: error instanceof Error ? error.message : String(error) }));
     return;
   }
+  latestSearchId = request.id;
   void ensureIndex(request.language, request.manifestUrl)
-    .then((index) => post({ type: "results", id: request.id, items: search(index, request.query, request.limit, request.language) }))
+    .then(async (index) => post({ type: "results", id: request.id, items: request.id === latestSearchId ? await search(index, request.query, request.limit, request.language, request.id) : [] }))
     .catch((error) => post({ type: "error", id: request.id, message: error instanceof Error ? error.message : String(error) }));
 });

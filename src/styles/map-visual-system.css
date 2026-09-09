@@ -177,7 +177,9 @@
 .maplibregl-ctrl-group button {
   transition: background .17s ease, transform .17s var(--premium-spring), filter .17s ease;
 }
-.maplibregl-ctrl-group button:hover { background: rgba(116, 83, 255, .14); }
+@media (hover: hover) and (pointer: fine) {
+  .maplibregl-ctrl-group button:hover { background: rgba(116, 83, 255, .14); }
+}
 .maplibregl-ctrl-group button:active { transform: scale(.90); }
 
 /* Navigation card and travel-mode selector. */
@@ -268,15 +270,6 @@
 .route-panel__clear svg { width: 18px; height: 18px; }
 .route-panel__clear:hover { color: #fff; background: rgba(133, 93, 255, .20); }
 .route-panel[data-state="loading"] { animation: premium-route-panel-in .36s var(--premium-spring) both, premium-route-breathe 1.8s ease-in-out infinite; }
-
-/* Popups gain a quieter premium glass treatment without changing their content. */
-.maplibregl-popup-content {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(150deg, rgba(11, 14, 37, .96), rgba(6, 7, 20, .94)) padding-box,
-    linear-gradient(135deg, rgba(95, 185, 255, .44), rgba(153, 95, 255, .48), rgba(255,255,255,.08)) border-box;
-  box-shadow: 0 22px 58px rgba(0,0,0,.47), 0 0 28px rgba(95, 62, 226, .15), inset 0 1px 0 rgba(255,255,255,.07);
-  }
 
 .maplibregl-popup-close-button {
   width: 28px;
@@ -372,14 +365,6 @@
 .map-shell #baseMapButton.is-active #baseMapText {
   color: #fff;
   text-shadow: none;
-}
-
-.map-shell .maplibregl-ctrl-top-left .maplibregl-ctrl-group > button {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px;
-  min-height: 44px;
-  box-sizing: border-box;
 }
 
 /* Runtime-only old-device profile. Layout, colors, marker geometry and controls remain unchanged. */

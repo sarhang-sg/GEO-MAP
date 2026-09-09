@@ -73,9 +73,9 @@ html.is-native-app .search-card {
 }
 
 #actionsToggleButton svg circle { transform-box: fill-box; transform-origin: center; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-#actionsToggleButton:hover svg circle:nth-child(1) { transform: translateY(-3px); }
-#actionsToggleButton:hover svg circle:nth-child(2) { transform: translateY(3px); }
-#actionsToggleButton:hover svg circle:nth-child(3) { transform: translateY(-3px); }
+html[data-hover="available"] #actionsToggleButton:hover svg circle:nth-child(1) { transform: translateY(-3px); }
+html[data-hover="available"] #actionsToggleButton:hover svg circle:nth-child(2) { transform: translateY(3px); }
+html[data-hover="available"] #actionsToggleButton:hover svg circle:nth-child(3) { transform: translateY(-3px); }
 
 #userAccountButton svg { transition: transform .32s cubic-bezier(.34,1.56,.64,1), filter .24s ease; }
 #userAccountButton::after {
@@ -88,8 +88,8 @@ html.is-native-app .search-card {
   content: "";
   pointer-events: none;
 }
-#userAccountButton:hover svg { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(118,218,255,.70)); }
-#userAccountButton:hover::after { opacity: 1; animation: nk-v9-spin 1.15s linear infinite; }
+html[data-hover="available"] #userAccountButton:hover svg { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(118,218,255,.70)); }
+html[data-hover="available"] #userAccountButton:hover::after { opacity: 1; animation: nk-v9-spin 1.15s linear infinite; }
 
 #locateButton::after,
 #routePinButton::after {
@@ -101,22 +101,22 @@ html.is-native-app .search-card {
   content: "";
   pointer-events: none;
 }
-#locateButton:hover::after,
-#routePinButton:hover::after { animation: nk-v9-gps-ring 1.05s ease-out infinite; }
-#locateButton:hover svg,
-#routePinButton:hover svg { animation: nk-v9-gps-pulse .62s ease-in-out infinite alternate; }
+html[data-hover="available"] #locateButton:hover::after,
+html[data-hover="available"] #routePinButton:hover::after { animation: nk-v9-gps-ring 1.05s ease-out infinite; }
+html[data-hover="available"] #locateButton:hover svg,
+html[data-hover="available"] #routePinButton:hover svg { animation: nk-v9-gps-pulse .62s ease-in-out infinite alternate; }
 
 #layersButton svg path,
 #fitButton svg path,
 #shareLocationButton svg circle,
 #shareLocationButton svg path { transform-box: fill-box; transform-origin: center; transition: transform .32s cubic-bezier(.34,1.56,.64,1), opacity .25s ease; }
-#layersButton:hover svg path:nth-child(1) { transform: translateY(-2px); }
-#layersButton:hover svg path:nth-child(2) { transform: translateY(2px); }
-#fitButton:hover svg path:first-child { transform: scale(1.14); }
-#fitButton:hover svg path:last-child { transform: scale(.88); }
-#shareLocationButton:hover svg circle:nth-child(1) { transform: translate(1px,-1px) scale(1.1); }
-#shareLocationButton:hover svg circle:nth-child(2) { transform: translateX(-1px) scale(1.1); }
-#shareLocationButton:hover svg circle:nth-child(3) { transform: translate(1px,1px) scale(1.1); }
+html[data-hover="available"] #layersButton:hover svg path:nth-child(1) { transform: translateY(-2px); }
+html[data-hover="available"] #layersButton:hover svg path:nth-child(2) { transform: translateY(2px); }
+html[data-hover="available"] #fitButton:hover svg path:first-child { transform: scale(1.14); }
+html[data-hover="available"] #fitButton:hover svg path:last-child { transform: scale(.88); }
+html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(1) { transform: translate(1px,-1px) scale(1.1); }
+html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(2) { transform: translateX(-1px) scale(1.1); }
+html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(3) { transform: translate(1px,1px) scale(1.1); }
 
 @media (hover:hover) {
   .map-actions :where(.round-button, .map-button):hover,
@@ -145,7 +145,6 @@ html.is-native-app .search-card {
 }
 
 /* About/menu reflow with the requested cover, clean hierarchy and compact tools. */
-.about-dialog__panel { width: min(680px, calc(100vw - 24px)) !important; }
 .about-dialog__scroll { padding-top: 20px !important; }
 .about-dialog__close-row {
   position: relative;
@@ -218,44 +217,6 @@ html.is-native-app .search-card {
   border-color: rgba(146, 196, 255, .22) !important;
   background: rgba(5, 18, 43, .90) !important;
 }
-
-/* Native Android tools: icon-first, aligned and still fully accessible. */
-.native-app-panel {
-  border-color: rgba(117,190,255,.22) !important;
-  background: linear-gradient(145deg,rgba(8,28,59,.95),rgba(4,14,34,.96)) !important;
-}
-.native-app-panel__actions { justify-content: flex-start !important; }
-.native-app-panel__actions button {
-  display: grid !important;
-  width: 46px !important;
-  min-width: 46px !important;
-  height: 46px !important;
-  min-height: 46px !important;
-  place-items: center !important;
-  padding: 0 !important;
-  border-radius: 14px !important;
-  color: #dcecff !important;
-  background: linear-gradient(145deg,rgba(29,78,140,.58),rgba(6,23,51,.78)) !important;
-}
-.native-app-panel__actions button svg,
-.native-app-panel__actions button .native-app-panel__icon { width:22px !important; height:22px !important; }
-.native-app-panel__action-label {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0,0,0,0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-#nativeOpenSettingsButton svg,
-#nativeOpenSettingsButton .native-app-panel__icon { transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
-#nativeOpenSettingsButton:hover svg,
-#nativeOpenSettingsButton:hover .native-app-panel__icon { transform: rotate(42deg) scale(1.08); }
-#nativeClearCacheButton:hover svg,
-#nativeClearCacheButton:hover .native-app-panel__icon { animation: nk-v9-bin .5s cubic-bezier(.34,1.56,.64,1); }
 
 .nav-tutorial__ring {
   border-color: #74dcff !important;
