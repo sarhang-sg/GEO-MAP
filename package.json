@@ -46,8 +46,8 @@
     "verify:phase2": "node --disable-warning=ExperimentalWarning tools/verify/phase2-regressions.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.112.4",
-    "maplibre-gl": "6.6.0",
+    "@supabase/supabase-js": "2.115.0",
+    "maplibre-gl": "6.7.0",
     "pmtiles": "4.5.0"
   },
   "devDependencies": {
