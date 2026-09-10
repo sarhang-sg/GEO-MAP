@@ -53,7 +53,7 @@
   "devDependencies": {
     "@mapbox/vector-tile": "3.0.0",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "24.10.13",
+    "@types/node": "24.13.3",
     "pbf": "5.1.2",
     "typescript": "5.9.3",
     "vite": "8.2.2"
