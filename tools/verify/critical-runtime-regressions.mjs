@@ -37,6 +37,15 @@ for (const code of [1,2,3]) {
   h.c.stopFollow();h.fix();assert.equal(h.moves.length,1);
   h.c.locate();assert.equal(h.moves.length,2);assert.equal(h.watches.length,2);
 }
+{
+  const h=gpsHarness();
+  const request=h.c.locate();
+  h.fix();
+  const snapshot=await request;
+  assert.equal(Array.from(snapshot.coordinate).join(","),"44.2,36.2");
+  assert.equal(h.watches.length,1);
+  console.log('PASS GPS exposes the shared first-fix result without starting a second provider request');
+}
 console.log('PASS GPS first feedback, 1000 repeated taps share one request, error distinctions, retry, stale callbacks/cache, success/cached focus and manual-pan state');
 {
   const h=gpsHarness();const listeners=new Set();const camera=[];
@@ -94,4 +103,38 @@ class Events {
   frames.shift()();assert.equal(blurs,0);
   document.activeElement=button;context.release({target:new Element()});frames.shift()();assert.equal(blurs,1);
   console.log('PASS post-click touch cleanup preserves a newly opened dialog input focus');
+}
+{
+  const source=fs.readFileSync(new URL('src/lib/routing-controller.ts',root),'utf8');
+  const start=source.indexOf('  private async selectDestination');
+  const end=source.indexOf('\n  private setDestination',start);
+  assert.ok(start>0&&end>start,'destination selection method is missing');
+  const classSource=`class Harness {\n${source.slice(start,end)}\n}`;
+  const context=vm.createContext({UI:{en:{routeOutsideBoundary:'outside'}}});
+  vm.runInContext(stripTypeScriptTypes(classSource,{mode:'transform'})+'\nglobalThis.Harness=Harness;',context);
+  const controller=new context.Harness();
+  let resolveLocation;let commits=0;let pinModeCalls=0;
+  Object.assign(controller,{
+    destinationSelectionSerial:0,
+    getLanguage:()=> 'en',
+    getLocationSnapshot:()=>({coordinate:null}),
+    requestLocation:()=>new Promise(resolve=>{resolveLocation=resolve;}),
+    setPinMode(){pinModeCalls++;},
+    isDestinationAllowed:()=>true,
+    setMessage(){},
+    setDestination(){commits++;}
+  });
+  const selection=controller.selectDestination([44.1,36.1],'target');
+  assert.equal(commits,0,'destination must not commit before the first GPS fix');
+  assert.equal(pinModeCalls,1);
+  resolveLocation({coordinate:[44,36]});
+  await selection;
+  assert.equal(commits,1,'destination must commit after GPS succeeds');
+
+  const stale=controller.selectDestination([44.2,36.2],'stale');
+  controller.destinationSelectionSerial+=1;
+  resolveLocation({coordinate:[44,36]});
+  await stale;
+  assert.equal(commits,1,'cancelled/stale destination must never commit later');
+  console.log('PASS destination waits for GPS, paints no premature marker and ignores stale selections');
 }

@@ -78,11 +78,15 @@ export class AppHealthController {
   fail(error: unknown, fallback?: string): void {
     const language = this.getLanguage();
     const message = serviceErrorMessage(error, fallback ?? UI[language].mapLoadError);
-    this.mapShell.dataset.health = error instanceof ServiceError && error.offline ? "offline" : "error";
-    if (this.mapShell.dataset.health === "offline") this.setNetworkVisualState("offline");
+    const offline = error instanceof ServiceError && error.offline;
+    this.mapShell.dataset.health = offline ? "offline" : "error";
+    if (offline) this.setNetworkVisualState("offline");
     this.setStatus("error", UI[language].statusError);
-    this.setMessage(message, "error");
-    this.show(this.mapShell.dataset.health === "offline" ? "offline" : "error", message, true);
+    // Offline state has one authoritative surface: app-health. Previously a
+    // failed resource also wrote the same outage into mapMessage, so Android
+    // showed a toast-like message followed by a second card for one event.
+    if (!offline) this.setMessage(message, "error");
+    this.show(offline ? "offline" : "error", offline ? UI[language].offline : message, true);
   }
 
   offline(sticky = true): void {
@@ -137,6 +141,16 @@ export class AppHealthController {
   }
 
   private show(level: AppHealthLevel, message: string, sticky: boolean): void {
+    const unchanged = !this.container.hidden
+      && this.container.dataset.level === level
+      && this.container.textContent === message;
+    if (unchanged) {
+      if (sticky && this.clearTimer !== null) {
+        window.clearTimeout(this.clearTimer);
+        this.clearTimer = null;
+      }
+      return;
+    }
     if (this.clearTimer !== null) window.clearTimeout(this.clearTimer);
     this.container.hidden = false;
     this.container.dataset.level = level;

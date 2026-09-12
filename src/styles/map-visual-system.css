@@ -369,8 +369,8 @@
 
 /* Runtime-only old-device profile. Layout, colors, marker geometry and controls remain unchanged. */
 .map-shell.is-runtime-low-power *:not([data-essential-animation="true"]),
-.map-shell.is-runtime-low-power *::before,
-.map-shell.is-runtime-low-power *::after {
+.map-shell.is-runtime-low-power *:not([data-essential-animation="true"])::before,
+.map-shell.is-runtime-low-power *:not([data-essential-animation="true"])::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 80ms !important;

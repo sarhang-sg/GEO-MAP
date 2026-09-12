@@ -45,4 +45,4 @@ body[data-language="en"] { font-family: var(--font-ui); }
   .administrative-label[data-level="region"] { font-size: 12px; }
 }
 @media (min-width: 701px) { .map-actions__toggle { display: none; } }
-@media (prefers-reduced-motion: reduce) { *:not([data-essential-animation="true"]), *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+@media (prefers-reduced-motion: reduce) { *:not([data-essential-animation="true"]), *:not([data-essential-animation="true"])::before, *:not([data-essential-animation="true"])::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

@@ -72,7 +72,7 @@ type RoutingControllerOptions = {
   getLanguage: () => Language;
   getLocationSnapshot: () => LiveLocationDiagnosticSnapshot;
   setMessage: (message: string, kind?: "normal" | "error" | "success") => void;
-  requestLocation: () => void;
+  requestLocation: () => Promise<LiveLocationDiagnosticSnapshot | null>;
   isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   onRouteVisualChange?: () => void;
   onRouteStateChange?: (active: boolean) => void;
@@ -320,7 +320,7 @@ export class RoutingController {
   private readonly getLanguage: () => Language;
   private readonly getLocationSnapshot: () => LiveLocationDiagnosticSnapshot;
   private readonly setMessage: (message: string, kind?: "normal" | "error" | "success") => void;
-  private readonly requestLocation: () => void;
+  private readonly requestLocation: () => Promise<LiveLocationDiagnosticSnapshot | null>;
   private readonly isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   private readonly onRouteVisualChange: () => void;
   private readonly onRouteStateChange: (active: boolean) => void;
@@ -360,6 +360,7 @@ export class RoutingController {
   private refreshTimer: number | null = null;
   private scheduledAnnouncement = false;
   private requestSerial = 0;
+  private destinationSelectionSerial = 0;
   private lastEmittedRouteState = false;
   private lastEmittedNavigationState = false;
   private lastEmittedDestinationPromptState = false;
@@ -445,7 +446,7 @@ export class RoutingController {
         this.setMessage(UI[this.getLanguage()].routeOutsideBoundary, "error");
         return;
       }
-      this.setDestination(coordinate, UI[this.getLanguage()].routeDestination);
+      void this.selectDestination(coordinate, UI[this.getLanguage()].routeDestination);
     });
     window.addEventListener("online", () => this.scheduleRouteRefresh(280, false), { passive: true });
     document.addEventListener("visibilitychange", () => { if (!document.hidden) this.scheduleRouteRefresh(320, false); });
@@ -540,7 +541,7 @@ export class RoutingController {
       window.dispatchEvent(new CustomEvent("nav-kurd:add-place", { detail: { coordinate } }));
       return;
     }
-    this.setDestination(coordinate, UI[this.getLanguage()].routeDestination);
+    void this.selectDestination(coordinate, UI[this.getLanguage()].routeDestination);
   }
 
   private refreshDestinationPromptCopy(): void {
@@ -710,6 +711,7 @@ export class RoutingController {
     if (this.arrivalPanelTimer !== null) window.clearTimeout(this.arrivalPanelTimer);
     this.arrivalPanelTimer = null;
     this.hideDestinationPrompt();
+    this.destinationSelectionSerial += 1;
     this.cancelPendingRouteRequest();
     this.navigating = false;
     this.mapShell.classList.remove("is-navigating");
@@ -779,6 +781,7 @@ export class RoutingController {
     const copy = UI[this.getLanguage()];
     this.recordNavigationHistory("arrived");
     this.hideDestinationPrompt();
+    this.destinationSelectionSerial += 1;
     this.cancelPendingRouteRequest();
     this.navigating = false;
     this.destination = null;
@@ -878,6 +881,29 @@ export class RoutingController {
       this.renderPendingPanel();
       this.scheduleRouteRefresh(0, true);
     }
+  }
+
+  private async selectDestination(coordinate: LngLatTuple, label: string): Promise<void> {
+    const selectionSerial = ++this.destinationSelectionSerial;
+    const initialLocation = this.getLocationSnapshot();
+    if (!initialLocation.coordinate) {
+      // Do not persist or paint a destination until GPS has produced a real
+      // origin. Repeated selections share LiveLocationController's one request;
+      // only the newest selection is allowed to commit when it completes.
+      this.setPinMode(false);
+      let acquired: LiveLocationDiagnosticSnapshot | null = null;
+      try {
+        acquired = await this.requestLocation();
+      } catch {
+        acquired = null;
+      }
+      if (selectionSerial !== this.destinationSelectionSerial || !acquired?.coordinate) return;
+    }
+    if (!this.isDestinationAllowed(coordinate)) {
+      this.setMessage(UI[this.getLanguage()].routeOutsideBoundary, "error");
+      return;
+    }
+    this.setDestination(coordinate, label);
   }
 
   private setDestination(coordinate: LngLatTuple, label: string): void {

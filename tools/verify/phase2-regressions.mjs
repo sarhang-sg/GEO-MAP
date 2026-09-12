@@ -18,7 +18,30 @@ function loadSearch() {
   return context.searchApi;
 }
 
+function loadKurdishPlaceLabels() {
+  const taxonomySource = read("src/lib/atlas-taxonomy.ts").replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm, "");
+  const taxonomyContext = vm.createContext({});
+  vm.runInContext(
+    stripTypeScriptTypes(taxonomySource, { mode: "transform" }).replace(/\bexport /g, "")
+      + "\nglobalThis.taxonomyApi={ATLAS_TAXONOMY}",
+    taxonomyContext
+  );
+  const source = read("src/lib/map-language.ts").replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm, "");
+  const context = vm.createContext({
+    ATLAS_TAXONOMY: taxonomyContext.taxonomyApi.ATLAS_TAXONOMY,
+    POI_NAME_PROPERTY_KEYS: [],
+    atlasPlaceTypeLabel: () => ""
+  });
+  vm.runInContext(
+    stripTypeScriptTypes(source, { mode: "transform" }).replace(/\bexport /g, "")
+      + "\nglobalThis.languageApi={toKurdishScript,localizeNameValue}",
+    context
+  );
+  return context.languageApi;
+}
+
 const search = loadSearch();
+const kurdishLabels = loadKurdishPlaceLabels();
 const payload = JSON.parse(read("public/data/kri/kri-search-runtime-ku.json"));
 assert.equal(payload.schema, "NAV KURD compact search runtime v1");
 assert.equal(payload.items.length, payload.records);
@@ -67,6 +90,21 @@ console.log(
   `PASS ${runtimeCases.length} real multilingual runtime names; ${payload.items.length} names normalized in ${Math.round(elapsed)}ms (${preprocessingBudgetMs}ms ${isAndroidTermux ? "Android/Termux" : "desktop/CI"} budget)`
 );
 
+for (const [sourceName, expected] of [
+  ["مدينة هەولێر", "شار هەولێر"],
+  ["قرية الوحدة", "گوند الوحدە"],
+  ["طريق دهوك - الموصل", "ڕێگا دهوک - الموصل"],
+  ["مطار الفاروق العسكري", "فڕۆکەخانە الفاروق سەربازی"],
+  ["تل أشور الأثري", "گرد اشور شوێنەواری"],
+  ["جبل زردكان", "چیا زردکان"],
+  ["وادي زاخو", "دۆڵ زاخو"]
+]) {
+  assert.equal(kurdishLabels.toKurdishScript(sourceName), expected, sourceName);
+}
+assert.equal(kurdishLabels.localizeNameValue("مدينة", "ar"), "مدينة", "Arabic mode must remain exact");
+assert.equal(kurdishLabels.localizeNameValue("City", "en"), "City", "English mode must remain exact");
+console.log("PASS Kurdish place display uses the canonical taxonomy for Arabic place terms without changing Arabic/English modes");
+
 const professional = read("src/styles/nav-kurd-professional.css");
 const layout = read("src/styles/layout-runtime.css");
 const nativeCss = read("src/styles/native-platform.css");
@@ -91,6 +129,22 @@ assert.match(nativeSource, /nativeOpenSettings/);
 const shellSource = read("src/lib/app-shell.ts");
 assert.match(shellSource, /navIcon\("a1"\)/);
 assert.match(shellSource, /assets\/icons\/nav-kurd\/a2\.svg/);
+assert.match(shellSource, /map-loading__slice"><b data-essential-animation="true">Loading<\/b>/);
+assert.match(shellSource, /map-loading__line" data-essential-animation="true"/);
+const visualSystem = read("src/styles/map-visual-system.css");
+assert.doesNotMatch(visualSystem, /is-runtime-low-power \*::(?:before|after)/);
+assert.match(visualSystem, /is-runtime-low-power \*:not\(\[data-essential-animation="true"\]\)::before/);
+assert.match(visualSystem, /is-runtime-low-power \*:not\(\[data-essential-animation="true"\]\)::after/);
+const typography = read("src/styles/labels-typography.css");
+assert.match(typography, /\*:not\(\[data-essential-animation="true"\]\)::before/);
+assert.match(typography, /\*:not\(\[data-essential-animation="true"\]\)::after/);
+assert.match(read("public/sw.js"), /const UI_REVISION = "R16-hotfix-2";/);
+const routingSource = read("src/lib/routing-controller.ts");
+assert.match(routingSource, /await this\.requestLocation\(\)/);
+assert.match(routingSource, /selectionSerial !== this\.destinationSelectionSerial/);
+const healthSource = read("src/lib/app-health.ts");
+assert.match(healthSource, /if \(!offline\) this\.setMessage/);
+assert.match(healthSource, /offline \? UI\[language\]\.offline : message/);
 for (const icon of ["a1.svg", "a2.svg"]) {
   const svg = read(`public/assets/icons/nav-kurd/${icon}`);
   assert.match(svg, /viewBox="0 0 64 64"/);
@@ -101,4 +155,4 @@ for (const icon of ["settings.svg", "clear.svg"]) {
   assert.match(svg, /viewBox="0 0 24 24"/);
   assert.doesNotMatch(svg, /<image\b/);
 }
-console.log("PASS popup/card ownership, desktop widths, zoom states, square native controls and SVG assets");
+console.log("PASS popup/card ownership, desktop widths, zoom states, square native controls, SVG assets and Android loader animation exemption");

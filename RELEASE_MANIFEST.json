@@ -8,7 +8,7 @@
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
   "fileCount": 1140,
-  "totalBytes": 332396816,
+  "totalBytes": 332410871,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -3659,8 +3659,8 @@
       "sha256": "c4c6673245f52ee94ace4266187f1ec361c9b446f64e6129d778ae26b7d04342"
     },
     "public/sw.js": {
-      "bytes": 31606,
-      "sha256": "38fd7c2ea541035fccc8db7dcda2037d7782ce04fdf7294f8e90fcc33aee20e4"
+      "bytes": 31616,
+      "sha256": "7e19a20c099e7ddc81d6e9796d6270129d6c1d8132af6a26d20715d9826cb592"
     },
     "README.md": {
       "bytes": 5449,
@@ -3683,16 +3683,16 @@
       "sha256": "d01fd9dcdbe86eb303bc1fc66c47a68566724c0c67bd103d4bdb45bb7bc6aca6"
     },
     "src/lib/app-health.ts": {
-      "bytes": 6407,
-      "sha256": "0f30ab375442bf29c10b5323fa4c7ca093256e2e57bbfb74ecd579f3e3c8e9bc"
+      "bytes": 6961,
+      "sha256": "338e305a675419d3fab95751827b112113f93fc0712b05fd646b1a4e48aceed5"
     },
     "src/lib/app-lifecycle-controller.ts": {
       "bytes": 4968,
       "sha256": "5bd2b8a5bc7291e1aaffd05dd5c90394b8a2e3088b5fb97b5cd047f6e80b7faf"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 26527,
-      "sha256": "25af7cfd0a9dd39f4fa9472d4f450d9cad526c54cd2eaaa6835cd820bb5b77df"
+      "bytes": 26591,
+      "sha256": "572f30e2543dae1e7aed06d2bdd369d504cbfbe1d01cc839cc027938504fc030"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -3787,8 +3787,8 @@
       "sha256": "3ad0f9730dfe2148287ee16959dacac05e4c1c1a05ccfeb4c28f0398ddcfd1a9"
     },
     "src/lib/live-location-controller.ts": {
-      "bytes": 33282,
-      "sha256": "6f4598127200620236198d1db9d6e4b96e3301758e4f0df2e4daad039b75480c"
+      "bytes": 34594,
+      "sha256": "29648a6682e9deb4267c6ef1ca825de6c126f1e9bb5d11738d4bfac7c95d2160"
     },
     "src/lib/live-location-layers.ts": {
       "bytes": 5977,
@@ -3827,8 +3827,8 @@
       "sha256": "959b3bf4116fba39a31e7c09ddcacfb7eab1412b2c555fbe08d92231f13b2e89"
     },
     "src/lib/map-language.ts": {
-      "bytes": 10815,
-      "sha256": "d4d4e0c615ce6ce920a2c48aca1cc61b51ff01641dbf838e649cc26e2c0c6c92"
+      "bytes": 16461,
+      "sha256": "d00955fc7d18c81de32ba2ef734acd3b06778c0bf16f8a1983a4cbddb2a4317c"
     },
     "src/lib/map-layer-ids.ts": {
       "bytes": 1896,
@@ -3959,8 +3959,8 @@
       "sha256": "37be979642e7351a7edd86f7eba38c4f35e1cb41320c7bc0a5d84181147e69ea"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 68069,
-      "sha256": "0e491a15551d8203f5a3fc12bb04ba3944a920cd89216d190695c50bef068960"
+      "bytes": 69281,
+      "sha256": "ba935b8155beb0d3626a4309a30bf2bd645f978ed0e92d9d6755829b9b995890"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 14909,
@@ -4043,8 +4043,8 @@
       "sha256": "ee16efadfa1b4766f8fa5d9e9d3938bdc083d47412a3582af0e3644ca81f328d"
     },
     "src/main.ts": {
-      "bytes": 103532,
-      "sha256": "e4c1b01cf66a20310464bf27e4e9f68b29940053dd649baa67f90d211a715fb1"
+      "bytes": 103516,
+      "sha256": "3721a2ee1cc5488410654d2d7fc8fc607efce3d57153c24364202f1b2c34670d"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4111,8 +4111,8 @@
       "sha256": "ed80769be343e497187558215e4a74be4b7935a6a759d10fd8b2f89304028d10"
     },
     "src/styles/labels-typography.css": {
-      "bytes": 5067,
-      "sha256": "6976b9190210098610dfb6716841faa193162bfc7c158b0939c4d8c97d464e19"
+      "bytes": 5145,
+      "sha256": "b3897c99407714e3a30071905d960d2251c1a8c8ca917df8a3a6697df43e0147"
     },
     "src/styles/layout-detail.css": {
       "bytes": 14085,
@@ -4139,8 +4139,8 @@
       "sha256": "96bf6e52005747e2583180e6b330d5a2e3a0aade0b9e6ec9e5cd9f87342d2fce"
     },
     "src/styles/map-visual-system.css": {
-      "bytes": 12681,
-      "sha256": "898676fafa5ec2e928ff4e7111d2af08c30898d086859fb1ad479cc15e85f9bd"
+      "bytes": 12759,
+      "sha256": "2a67f283ad9bfafddad71fb6af325b4cacb53da1c765d75d58716a5558129539"
     },
     "src/styles/modal-scroll.css": {
       "bytes": 6408,
@@ -4503,8 +4503,8 @@
       "sha256": "0f637f6835ac066059f125032ff593cfc8b58dcd1cde9e39b0190986cea0eccc"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 8388,
-      "sha256": "170813a3cc890463ffac061556ef2e1a787ffecdb73fc7916b008fa6af17a8e1"
+      "bytes": 10368,
+      "sha256": "f94b1fcd03ab33875d5497a902985de7db320201f20eeb447f70b388010713bc"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4519,8 +4519,8 @@
       "sha256": "944385a66ab2b6c480c2b219bc9e970c20d1749ac305faf37e0144a240ea779e"
     },
     "tools/verify/phase2-regressions.mjs": {
-      "bytes": 5241,
-      "sha256": "51ca95a15aae0fc8cf4bcd2819f33574043961e9f9c73e52ca37ba196a683610"
+      "bytes": 8378,
+      "sha256": "b3898208e182e5c23dbba0dd312923ee4ebb8d7d5f15c63dc305414242f28f04"
     },
     "tools/verify/pmtiles.py": {
       "bytes": 1835,

@@ -1,10 +1,11 @@
 import type { Language } from "./types";
 import type { StaticSearchItem } from "./static-search";
 import { POI_NAME_PROPERTY_KEYS } from "./poi-source";
-import { atlasPlaceTypeLabel } from "./atlas-taxonomy";
+import { ATLAS_TAXONOMY, atlasPlaceTypeLabel } from "./atlas-taxonomy";
 
 const ARABIC_SCRIPT_RE = /[\u0600-\u06ff]/u;
 const LATIN_RE = /[A-Za-z]/u;
+const ARABIC_DIACRITICS_RE = /[\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06ed]/gu;
 
 const CATEGORY_COPY: Record<string, Record<Language, string>> = {
   place: { ku: "شوێن", ar: "مكان", en: "Place" },
@@ -73,6 +74,47 @@ const ARABIC_LATIN_MAP: Record<string, string> = {
   "ا": "a", "أ": "a", "إ": "i", "آ": "a", "ٱ": "a", "ب": "b", "پ": "p", "ت": "t", "ث": "th", "ج": "j", "چ": "ch", "ح": "h", "خ": "kh", "د": "d", "ذ": "dh", "ر": "r", "ڕ": "rr", "ز": "z", "ژ": "zh", "س": "s", "ش": "sh", "ص": "s", "ض": "d", "ط": "t", "ظ": "z", "ع": "a", "غ": "gh", "ف": "f", "ڤ": "v", "ق": "q", "ک": "k", "ك": "k", "گ": "g", "ل": "l", "ڵ": "ll", "م": "m", "ن": "n", "ه": "h", "ھ": "h", "ە": "a", "ة": "a", "و": "w", "ۆ": "o", "ۇ": "u", "ی": "i", "ي": "i", "ێ": "e", "ى": "a", "ئ": "", "ء": "", "ؤ": "o", "ئـ": "", "َ": "", "ُ": "", "ِ": "", "ّ": "", "ْ": "", "ً": "", "ٌ": "", "ٍ": ""
 };
 
+const KURDISH_PLACE_PREFIX_SUPPLEMENTS: readonly (readonly [string, string])[] = [
+  ["جامع", "مزگەوت"],
+  ["مستوصف", "بنکەی تەندروستی"],
+  ["بنك", "بانک"],
+  ["مركز", "ناوەند"],
+  ["محطة", "وێستگە"],
+  ["عين", "کانی"],
+  ["بئر", "بیر"],
+  ["وادي", "دۆڵ"],
+  ["دائرة", "فەرمانگە"],
+  ["شركة", "کۆمپانیا"],
+  ["مكتب", "نوسینگە"],
+  ["مصنع", "کارگە"],
+  ["قصر", "کۆشک"],
+  ["برج", "بورج"],
+  ["بحيرة", "دەریاچە"],
+  ["بستان", "باخ"],
+  ["روضة", "باخچەی منداڵان"],
+];
+
+const KURDISH_PLACE_DESCRIPTOR_TERMS: readonly (readonly [string, string])[] = [
+  ["أثري", "شوێنەواری"], ["أثرية", "شوێنەواری"], ["الأثري", "شوێنەواری"], ["الأثرية", "شوێنەواری"],
+  ["عسكري", "سەربازی"], ["عسكرية", "سەربازی"], ["العسكري", "سەربازی"], ["العسكرية", "سەربازی"],
+  ["دولي", "نێودەوڵەتی"], ["دولية", "نێودەوڵەتی"], ["الدولي", "نێودەوڵەتی"], ["الدولية", "نێودەوڵەتی"],
+  ["حكومي", "حکومی"], ["حكومية", "حکومی"], ["الحكومي", "حکومی"], ["الحكومية", "حکومی"],
+  ["وطني", "نیشتیمانی"], ["وطنية", "نیشتیمانی"], ["الوطني", "نیشتیمانی"], ["الوطنية", "نیشتیمانی"],
+  ["عام", "گشتی"], ["عامة", "گشتی"], ["العام", "گشتی"], ["العامة", "گشتی"],
+  ["كبير", "گەورە"], ["كبيرة", "گەورە"], ["الكبير", "گەورە"], ["الكبرى", "گەورە"], ["الأكبر", "گەورە"],
+  ["صغير", "بچووک"], ["صغيرة", "بچووک"], ["الصغير", "بچووک"], ["الصغرى", "بچووک"],
+  ["جديد", "نوێ"], ["جديدة", "نوێ"], ["الجديد", "نوێ"], ["الجديدة", "نوێ"],
+  ["قديم", "کۆن"], ["قديمة", "کۆن"], ["القديم", "کۆن"], ["القديمة", "کۆن"],
+  ["شمالي", "باکووری"], ["الشمالي", "باکووری"], ["جنوبی", "باشووری"], ["الجنوبي", "باشووری"],
+  ["شرقي", "ڕۆژهەڵاتی"], ["الشرقي", "ڕۆژهەڵاتی"], ["غربي", "ڕۆژئاوایی"], ["الغربي", "ڕۆژئاوایی"],
+  ["رقم", "ژمارە"],
+];
+
+let kurdishPlacePrefixes: readonly (readonly [string, string])[] | null = null;
+let kurdishDescriptorTerms: ReadonlyMap<string, string> | null = null;
+const KURDISH_PLACE_NAME_CACHE = new Map<string, string>();
+const KURDISH_PLACE_NAME_CACHE_LIMIT = 4096;
+
 function clean(value: unknown): string {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : typeof value === "number" && Number.isFinite(value) ? String(value) : "";
 }
@@ -105,6 +147,74 @@ function replaceChars(value: string, table: Record<string, string>): string {
   return out.replace(/\s+/g, " ").trim();
 }
 
+function normalizeKurdishOrthography(value: unknown): string {
+  return replaceChars(clean(value).normalize("NFKC"), ARABIC_TO_KURDISH)
+    .replace(ARABIC_DIACRITICS_RE, "")
+    .replace(/ـ/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function placePrefixEntries(): readonly (readonly [string, string])[] {
+  if (kurdishPlacePrefixes) return kurdishPlacePrefixes;
+  const entries = new Map<string, string>();
+  const add = (source: unknown, target: unknown): void => {
+    const normalizedSource = normalizeKurdishOrthography(source);
+    const normalizedTarget = normalizeKurdishOrthography(target);
+    if (!normalizedSource || !normalizedTarget || normalizedSource === normalizedTarget) return;
+    if (!entries.has(normalizedSource)) entries.set(normalizedSource, normalizedTarget);
+    if (!normalizedSource.startsWith("ال")) {
+      const definite = `ال${normalizedSource}`;
+      if (!entries.has(definite)) entries.set(definite, normalizedTarget);
+    }
+  };
+  Object.values(CATEGORY_COPY).forEach((copy) => add(copy.ar, copy.ku));
+  ATLAS_TAXONOMY.forEach((entry) => add(entry.label.ar, entry.label.ku));
+  KURDISH_PLACE_PREFIX_SUPPLEMENTS.forEach(([source, target]) => add(source, target));
+  kurdishPlacePrefixes = [...entries.entries()].sort((a, b) => b[0].length - a[0].length);
+  return kurdishPlacePrefixes;
+}
+
+function descriptorEntries(): ReadonlyMap<string, string> {
+  if (kurdishDescriptorTerms) return kurdishDescriptorTerms;
+  kurdishDescriptorTerms = new Map(KURDISH_PLACE_DESCRIPTOR_TERMS.map(([source, target]) => [
+    normalizeKurdishOrthography(source),
+    normalizeKurdishOrthography(target),
+  ]));
+  return kurdishDescriptorTerms;
+}
+
+function localizeKurdishPlaceName(value: unknown): string {
+  const source = clean(value);
+  if (!source) return "";
+  const cached = KURDISH_PLACE_NAME_CACHE.get(source);
+  if (cached !== undefined) return cached;
+  let localized = normalizeKurdishOrthography(source);
+  for (const [prefix, replacement] of placePrefixEntries()) {
+    if (localized === prefix) {
+      localized = replacement;
+      break;
+    }
+    if (localized.startsWith(prefix) && /^[\s\-–—/|(),،؛:]/u.test(localized.slice(prefix.length, prefix.length + 1))) {
+      localized = `${replacement}${localized.slice(prefix.length)}`;
+      break;
+    }
+  }
+  const descriptors = descriptorEntries();
+  localized = localized
+    .split(/([\s\-–—/|(),،؛:]+)/u)
+    .map((token) => descriptors.get(token) ?? token)
+    .join("")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (KURDISH_PLACE_NAME_CACHE.size >= KURDISH_PLACE_NAME_CACHE_LIMIT) {
+    const oldest = KURDISH_PLACE_NAME_CACHE.keys().next().value as string | undefined;
+    if (oldest) KURDISH_PLACE_NAME_CACHE.delete(oldest);
+  }
+  KURDISH_PLACE_NAME_CACHE.set(source, localized);
+  return localized;
+}
+
 function titleCaseLatin(value: string): string {
   return value
     .toLocaleLowerCase("en-US")
@@ -122,9 +232,7 @@ export function hasLatinScript(value: string): boolean {
 }
 
 export function toKurdishScript(value: unknown): string {
-  const text = clean(value);
-  if (!text) return "";
-  return replaceChars(text, ARABIC_TO_KURDISH);
+  return localizeKurdishPlaceName(value);
 }
 
 export function toArabicScript(value: unknown): string {
@@ -149,8 +257,9 @@ export function localizeNameValue(primary: unknown, language: Language, _fallbac
   if (!exact) return "";
   if (language === "en") return hasLatinScript(exact) && !hasArabicScript(exact) ? exact : "";
   if (!hasArabicScript(exact) || hasLatinScript(exact)) return "";
-  // Kurdish canonicalisation fixes code-point variants only. It never translates
-  // or transliterates a name from another language.
+  // The selected Kurdish field remains the sole source of the proper name. Its
+  // Arabic-script orthography and leading place-type terms are normalized here
+  // through the canonical taxonomy so Arabic UI terms never leak into ku mode.
   return language === "ku" ? toKurdishScript(exact) : exact;
 }
 

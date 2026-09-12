@@ -684,8 +684,12 @@ class KurdistanAtlasController {
         setMessage(UI[this.language].satelliteLoading, "normal");
         return;
       }
-      setMessage(navigator.onLine ? UI[this.language].satelliteError : UI[this.language].offline, navigator.onLine ? "error" : "normal");
-      if (navigator.onLine) health.warn(UI[this.language].satelliteError);
+      if (navigator.onLine) {
+        setMessage(UI[this.language].satelliteError, "error");
+        health.warn(UI[this.language].satelliteError);
+      } else {
+        health.offline();
+      }
     }, 4_000);
   }
 
