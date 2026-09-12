@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.13",
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
-  "fileCount": 1140,
-  "totalBytes": 332410871,
+  "fileCount": 1139,
+  "totalBytes": 284153775,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -47,8 +47,8 @@
       "sha256": "adf5c42668adf76f71861e18acb8daf0284345373bed1ff932a2b82827acd01a"
     },
     ".gitignore": {
-      "bytes": 139,
-      "sha256": "78e87d56d458ca75856cce81fa6c844425b945e2b2aac8adaca3214a576dfc4a"
+      "bytes": 137,
+      "sha256": "4ebc5dc9ab0f1ad345eb27c4a82486f8b3220e10bb3ed0e3b2cb54ec3044931e"
     },
     ".npmrc": {
       "bytes": 218,
@@ -3530,10 +3530,6 @@
       "bytes": 12409,
       "sha256": "ba47cfd212f5be6e2018ea09be354516bc9097785ee35c4d449c64e3b08e4357"
     },
-    "public/downloads/NAV-KURD-9.1.0.apk": {
-      "bytes": 48257675,
-      "sha256": "b9bc9cf1060254eb84b7ba40bb1181ef8903dd0c0bbba71cba2ec69f266b48fa"
-    },
     "public/fonts/DroidLogo-Bold.ttf": {
       "bytes": 116996,
       "sha256": "4893663ecbb19de5b27f81c1e69fcde1cbc5bd8be8374f3ab51465bad0508a96"
@@ -3623,20 +3619,20 @@
       "sha256": "51c85696c8b11267b557a0ebf1e368fb8f0254b338e667fa3d04001e9f62ecf8"
     },
     "public/offline.html": {
-      "bytes": 1897,
-      "sha256": "c4eab1e1e83da996275ab55f9f732df8d70418f3ed0e5fdc549b78ffb7d0eb43"
+      "bytes": 1929,
+      "sha256": "912f4c75704b6adb107e2776a171f89a105db456baa26b83c6de7bed53d79611"
     },
     "public/offline.js": {
-      "bytes": 1517,
-      "sha256": "413b298bee13bba66333ba8bf184db83d0111b0f6607080ed081ef837831d528"
+      "bytes": 1519,
+      "sha256": "fa90092e66f309997f544731208446f768c155a62e48c5a9b89430b628377a35"
     },
     "public/pwa-init.js": {
       "bytes": 1128,
       "sha256": "1cd9ad24030feb9942fcde7041ceae1be30073e127b8bc68cc528e23aa82b5dc"
     },
     "public/releases/latest.json": {
-      "bytes": 440,
-      "sha256": "fdd84c8bf7aeaddf45991bd6815539d794c2c189d06fc79c55d8e7a75957f8b5"
+      "bytes": 307,
+      "sha256": "c4634aaf6b116114b6ef0ea2e958026a93be4d701f853798088018a9caf4adc7"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3660,7 +3656,7 @@
     },
     "public/sw.js": {
       "bytes": 31616,
-      "sha256": "7e19a20c099e7ddc81d6e9796d6270129d6c1d8132af6a26d20715d9826cb592"
+      "sha256": "20ad3a3f306fb603ec2da9c351390e6689134c5f559bc95de11bcd921c79e628"
     },
     "README.md": {
       "bytes": 5449,
@@ -4520,7 +4516,7 @@
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 8378,
-      "sha256": "b3898208e182e5c23dbba0dd312923ee4ebb8d7d5f15c63dc305414242f28f04"
+      "sha256": "ba128796c1a134062ba9fad15cdfa625b524ba406587fff5795c34526a105d26"
     },
     "tools/verify/pmtiles.py": {
       "bytes": 1835,
@@ -4531,8 +4527,8 @@
       "sha256": "f40696007ffa62680abb5c5a1aecc12d239bfa76a8ddc301b9b971837a80bb44"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 18291,
-      "sha256": "435dfcc98d520b7d3940fa9fe5b387b9a5d3c1b7c7e9bf8a20f37ce3fc9f6473"
+      "bytes": 18971,
+      "sha256": "260a7c42f7e4c685366b51f857f43a02c7be2ff627792df417e6f1c12180eba4"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 4152,

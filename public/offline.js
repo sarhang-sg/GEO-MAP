@@ -13,7 +13,7 @@
   };
 
   const openApp = (reason) => {
-    const target = new URL("./", location.href);
+    const target = new URL("/", location.origin);
     target.searchParams.set("source", "pwa");
     target.searchParams.set(reason, "1");
     location.replace(target.href);
@@ -33,7 +33,7 @@
   });
 
   if (readyMetadata() && !new URL(location.href).searchParams.has("offline_recovery")) {
-    const target = new URL("./", location.href);
+    const target = new URL("/", location.origin);
     target.searchParams.set("source", "pwa");
     target.searchParams.set("offline_recovery", "1");
     location.replace(target.href);

@@ -7,6 +7,8 @@ const offline = await readJson("public/offline-manifest.json");
 const androidRelease = await readJson("public/releases/latest.json");
 const sw = await readText("public/sw.js");
 const pwaInit = await readText("public/pwa-init.js");
+const offlineHtml = await readText("public/offline.html");
+const offlineScript = await readText("public/offline.js");
 const indexHtml = await readText("index.html");
 const offlineBuilder = await readText("tools/build/build-offline-runtime.mjs");
 const lifecycle = await readText("src/lib/app-lifecycle-controller.ts");
@@ -48,6 +50,9 @@ assert(manifest.display_override?.includes("window-controls-overlay") && manifes
 assert(manifest.edge_side_panel?.preferred_width >= 376, "Edge side-panel manifest capability is missing.");
 assert(manifest.scope_extensions?.some((entry) => entry.type === "origin" && entry.origin === "https://geo-map-two.vercel.app"), "Previous production origin is not a valid PWA scope extension.");
 assert(offline.release === release.appVersion, "Offline manifest version mismatch.");
+assert(offlineHtml.includes('data-nav-kurd-offline-fallback="true"'), "Offline document marker for the native single-surface gate is missing.");
+assert(offlineHtml.includes('src="/icons/nav-kurd-logo.png"') && offlineHtml.includes('href="/offline.css"') && offlineHtml.includes('src="/offline.js"'), "Offline document assets are not root-absolute and can break on nested navigation URLs.");
+assert((offlineScript.match(/new URL\("\/", location\.origin\)/gu) ?? []).length === 2, "Offline retry/back recovery does not return to the canonical application root.");
 assert(indexHtml.includes('<script src="%BASE_URL%pwa-init.js"></script>'), "Early service-worker bootstrap is not loaded from HTML.");
 assert(pwaInit.includes("navigator.serviceWorker.register") && pwaInit.includes('new URL("sw.js", scriptUrl)'), "Early service-worker registration is incomplete.");
 assert(offlineBuilder.includes('"pwa-init.js"'), "Early service-worker bootstrap is not in the atomic offline shell.");
