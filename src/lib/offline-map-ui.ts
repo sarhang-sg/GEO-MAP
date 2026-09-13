@@ -8,13 +8,22 @@ type OfflineMapPackUiOptions = {
   getLanguage: () => Language;
 };
 
+const byteFormatters = new Map<Language, Intl.NumberFormat>();
+
 function formatBytes(bytes: number, language: Language): string {
   const locale = language === "en" ? "en-US" : language === "ar" ? "ar-IQ" : "ckb-IQ";
+  let formatter = byteFormatters.get(language);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
+    byteFormatters.set(language, formatter);
+  }
   const mb = bytes / (1024 * 1024);
-  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(mb)} MB`;
+  return `${formatter.format(mb)} MB`;
 }
 
 function setDeleteButtonCopy(button: HTMLButtonElement, label: string): void {
+  // Download progress does not change this icon or its localized label.
+  if (button.getAttribute("aria-label") === label) return;
   const icon = document.createElement("img");
   icon.className = "nav-delete-icon";
   icon.src = appUrl("assets/icons/nav-kurd/delete.svg");
@@ -89,7 +98,15 @@ export class OfflineMapPackUiController {
     });
     this.deleteConfirmProceed.addEventListener("click", () => { void this.confirmDelete(); });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !this.deleteConfirmRoot.hidden && !this.deleteInProgress) {
+      if (this.deleteConfirmRoot.hidden) return;
+      if (event.key === "Tab") {
+        event.preventDefault();
+        if (this.deleteInProgress) return;
+        const next = event.shiftKey
+          ? document.activeElement === this.deleteConfirmProceed ? this.deleteConfirmCancel : this.deleteConfirmProceed
+          : document.activeElement === this.deleteConfirmCancel ? this.deleteConfirmProceed : this.deleteConfirmCancel;
+        next.focus({ preventScroll: true });
+      } else if (event.key === "Escape" && !this.deleteInProgress) {
         event.preventDefault();
         this.closeDeleteConfirmation();
       }
@@ -130,10 +147,8 @@ export class OfflineMapPackUiController {
       this.deleteConfirmMessage.textContent = copy.offlinePackDeleteConfirmMessage;
     }
     this.deleteConfirmCancel.textContent = copy.offlinePackDeleteConfirmCancel;
-    setDeleteButtonCopy(
-      this.deleteConfirmProceed,
-      this.deleteInProgress ? copy.offlinePackDeleting : copy.offlinePackDeleteConfirmAction,
-    );
+    this.deleteConfirmProceed.textContent = this.deleteInProgress
+      ? copy.offlinePackDeleting : copy.offlinePackDeleteConfirmAction;
   }
 
   private openDeleteConfirmation(): void {
@@ -144,7 +159,9 @@ export class OfflineMapPackUiController {
     this.deleteConfirmMessage.textContent = UI[language].offlinePackDeleteConfirmMessage;
     this.deleteConfirmRoot.hidden = false;
     this.renderDeleteConfirmation(language);
-    requestAnimationFrame(() => this.deleteConfirmCancel.focus({ preventScroll: true }));
+    requestAnimationFrame(() => {
+      if (!this.deleteConfirmRoot.hidden) this.deleteConfirmCancel.focus({ preventScroll: true });
+    });
   }
 
   private closeDeleteConfirmation(): void {
@@ -171,6 +188,7 @@ export class OfflineMapPackUiController {
       this.deleteConfirmRoot.hidden = true;
       this.deleteConfirmMessage.dataset.state = "normal";
       this.deleteReturnFocus = null;
+      if (!this.downloadButton.hidden) this.downloadButton.focus({ preventScroll: true });
     } catch {
       this.deleteConfirmMessage.dataset.state = "error";
       this.deleteConfirmMessage.textContent = copy.offlinePackDeleteFailed;
@@ -193,14 +211,9 @@ export class OfflineMapPackUiController {
     this.title.textContent = copy.offlinePackTitle;
     this.size.textContent = `${formatBytes(snapshot.downloadedBytes, language)} / ${formatBytes(snapshot.totalBytes, language)}`;
     const progressPercent = Math.max(0, Math.min(100, Math.round(snapshot.progress * 100)));
-    this.progress.style.setProperty("--offline-progress", `${progressPercent}%`);
+    this.progress.style.setProperty("--offline-progress", String(progressPercent / 100));
     this.progressTrack.setAttribute("aria-valuenow", String(progressPercent));
     this.progressTrack.setAttribute("aria-label", copy.offlinePackTitle);
-    this.root.dataset.progressPhase = snapshot.status === "ready" || progressPercent >= 100
-      ? "complete"
-      : progressPercent >= 50
-        ? "middle"
-        : "start";
     this.persistence.textContent = snapshot.persisted ? copy.offlinePackPersistent : copy.offlinePackBestEffort;
     this.persistence.dataset.state = snapshot.persisted ? "protected" : "best-effort";
     this.storage.textContent = snapshot.storageAvailableBytes === null
@@ -221,11 +234,12 @@ export class OfflineMapPackUiController {
             : snapshot.status === "error"
               ? "offlinePackError"
               : "offlinePackNotReady";
-    this.status.textContent = snapshot.status === "error" && snapshot.error?.startsWith("offline-pack-storage-insufficient")
+    const statusMessage = snapshot.status === "error" && snapshot.error?.startsWith("offline-pack-storage-insufficient")
       ? copy.offlinePackStorageInsufficient
       : snapshot.status === "ready" && this.showCompletedMessage
         ? copy.offlinePackCompleted
         : copy[statusKey];
+    if (this.status.textContent !== statusMessage) this.status.textContent = statusMessage;
 
     this.downloadButton.textContent = copy.offlinePackDownload;
     this.pauseButton.textContent = copy.offlinePackPause;

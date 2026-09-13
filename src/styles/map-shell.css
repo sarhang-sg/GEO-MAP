@@ -32,7 +32,7 @@
 .map-status[data-state="ready"] .map-status__dot { background: #66d8a0; box-shadow: 0 0 0 4px rgba(102,216,160,.12); }
 .map-status[data-state="error"] .map-status__dot { background: #ff8b9b; box-shadow: 0 0 0 4px rgba(255,139,155,.15); }
 .brand-card { display: flex; align-items: center; min-width: 184px; max-width: 285px; gap: 10px; padding: 8px 11px; border-radius: 16px; }
-.brand-card__logo { display: block; width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,.18)); }
+.brand-card__logo { display: block; width: 44px; height: 44px; border-radius: 26%; object-fit: contain; flex: 0 0 auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,.18)); }
 .brand-card__copy { min-width: 0; }
 .brand-card strong, .brand-card span { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .brand-card strong { color: #f2f7ff; font-size: 11px; font-weight: 900; line-height: 1.5; letter-spacing: .04em; }

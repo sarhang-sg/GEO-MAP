@@ -118,14 +118,14 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           <div><dt id="aboutCvLabel">MY CV</dt><dd><a id="aboutCvLink" class="about-dialog__meta-link about-dialog__meta-link--cv" href="https://sarhang-cs.github.io/Sarhang-Cv/" target="_blank" rel="noopener noreferrer" aria-label="MY CV"><img class="about-dialog__meta-icon" src="${import.meta.env.BASE_URL}assets/support/my-cv-preview.jpg" alt="" width="1120" height="1680" loading="lazy" decoding="async" draggable="false" /></a></dd></div>
           <div><dt id="aboutCoverageLabel">Coverage</dt><dd id="aboutCoverageValue">Kurdistan Region + disputed areas</dd></div>
         </dl>
-        <section id="offlineMapPack" class="offline-map-pack" data-status="idle" data-progress-phase="start" aria-live="polite" aria-labelledby="offlineMapPackHeading">
+        <section id="offlineMapPack" class="offline-map-pack" data-status="idle" aria-labelledby="offlineMapPackHeading">
           <h3 id="offlineMapPackHeading" class="visually-hidden">Offline map pack</h3>
           <div class="offline-map-pack__header">
-            <div><strong id="offlinePackTitle">Offline map</strong><small id="offlinePackStatus">Not downloaded</small></div>
+            <div><strong id="offlinePackTitle">Offline map</strong><small id="offlinePackStatus" role="status">Not downloaded</small></div>
             <span id="offlinePackSize">0 MB</span>
           </div>
           <div class="offline-map-pack__track" role="progressbar" aria-label="Offline map download" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="offlinePackProgress"></span></div>
-          <div class="offline-map-pack__meta" aria-live="polite">
+          <div class="offline-map-pack__meta">
             <span id="offlinePackPersistence">—</span>
             <span id="offlinePackStorage">—</span>
           </div>

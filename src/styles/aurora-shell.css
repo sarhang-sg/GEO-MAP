@@ -166,8 +166,7 @@
 .style-choice,
 .action-card,
 .segmented button,
-.language-tabs button,
-.offline-map-pack__actions button {
+.language-tabs button {
   -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--nk-aurora-fast) var(--nk-aurora-ease),
@@ -197,8 +196,7 @@
 .style-choice:active,
 .action-card:active,
 .segmented button:active,
-.language-tabs button:active,
-.offline-map-pack__actions button:active {
+.language-tabs button:active {
   transform: scale(.955);
 }
 
@@ -246,51 +244,9 @@
   box-shadow: var(--nk-aurora-shadow);
 }
 
-/* Offline pack: semantic color progression and polished actions. */
-.offline-map-pack__track {
-  height: 8px;
-  padding: 1px;
-  border: 1px solid rgba(255, 255, 255, .055);
-  background: rgba(0, 0, 0, .25);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .35);
-}
-.offline-map-pack__track > span {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #d8344e, #ef4444);
-  box-shadow: 0 0 13px rgba(239, 68, 68, .35);
-}
-.offline-map-pack[data-progress-phase="middle"] .offline-map-pack__track > span {
-  background: linear-gradient(90deg, #d99a24, var(--nk-aurora-warning));
-  box-shadow: 0 0 13px rgba(242, 184, 75, .34);
-}
-.offline-map-pack[data-progress-phase="complete"] .offline-map-pack__track > span {
-  background: linear-gradient(90deg, #159d70, var(--nk-aurora-success));
-  box-shadow: 0 0 14px rgba(34, 201, 138, .36);
-}
-
-.offline-map-pack__actions button {
-  min-height: 38px;
-  border-radius: 13px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .055);
-}
-.offline-map-pack__actions #offlinePackDownload,
-.offline-map-pack__actions #offlinePackResume {
-  border-color: rgba(125, 160, 255, .34);
-  background: var(--nk-aurora-gradient);
-  box-shadow: 0 10px 24px rgba(87, 74, 228, .24);
-}
-.offline-map-pack__actions #offlinePackDelete {
-  color: #ffd8df;
-  border-color: rgba(239, 68, 68, .25);
-  background: linear-gradient(145deg, rgba(151, 39, 64, .22), rgba(71, 24, 51, .20));
-}
-
 /* Confirmation dialogs share one premium visual language. */
-.offline-pack-confirm__backdrop,
 .owner-confirm__backdrop { background: rgba(2, 4, 14, .90); }
 
-.offline-pack-confirm__panel,
 .owner-confirm__panel {
   border-color: rgba(184, 150, 255, .28);
   border-radius: 25px;
@@ -301,13 +257,11 @@
   animation: nk-aurora-dialog-in 200ms var(--nk-aurora-ease) both;
 }
 
-.offline-pack-confirm__cancel,
 .owner-confirm__cancel {
   color: #d3dbef;
   border-color: rgba(170, 182, 232, .16);
   background: rgba(255, 255, 255, .045);
 }
-.offline-pack-confirm__delete,
 .owner-confirm__delete {
   color: #fff;
   border-color: rgba(255, 139, 165, .22);
@@ -335,7 +289,6 @@
 @media (prefers-reduced-motion: reduce) {
   .search-empty--loading::after { animation: none !important; }
   .search-results,
-  .offline-pack-confirm__panel,
   .owner-confirm__panel { animation: none !important; }
   .round-button,
   .map-button,
@@ -344,6 +297,5 @@
   .search-card,
   .search-card__icon,
   .search-card__clear,
-  .search-result,
-  .offline-map-pack__actions button { transition: none !important; }
+  .search-result { transition: none !important; }
 }

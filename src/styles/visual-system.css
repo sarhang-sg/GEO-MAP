@@ -505,31 +505,29 @@ body {
 .offline-map-pack__header strong { color: #f7f3ff; font-size: .82rem; }
 .offline-map-pack__header small { color: #9fa8c8; font-size: .7rem; line-height: 1.45; }
 .offline-map-pack__header > span { flex: 0 0 auto; color: #c8baff; font: 800 .68rem/1.2 var(--font-ui); }
-.offline-map-pack__track { position: relative; height: 6px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.07); box-shadow: inset 0 1px 2px rgba(0,0,0,.24); }
+.offline-map-pack__track { position: relative; height: 8px; overflow: hidden; border: 1px solid var(--nk-border); border-radius: 999px; background: var(--nk-elevated); }
 .offline-map-pack__track > span {
   display: block;
-  width: var(--offline-progress, 0%);
+  width: 100%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #b91c1c, #ef4444);
-  box-shadow: 0 0 12px rgba(239, 68, 68, .34);
-  transition: width .22s var(--premium-ease), background .28s ease, box-shadow .28s ease;
+  background: linear-gradient(90deg, #1769c7, var(--nk-primary), var(--nk-cyan));
+  transform: scaleX(var(--offline-progress, 0));
+  transform-origin: left center;
+  transition: transform .22s var(--premium-ease);
 }
-.offline-map-pack[data-progress-phase="middle"] .offline-map-pack__track > span {
-  background: linear-gradient(90deg, #f97316, #facc15);
-  box-shadow: 0 0 12px rgba(250, 204, 21, .30);
-}
-.offline-map-pack[data-progress-phase="complete"] .offline-map-pack__track > span {
-  background: linear-gradient(90deg, #15803d, #22c55e);
-  box-shadow: 0 0 12px rgba(34, 197, 94, .30);
-}
+.offline-map-pack[dir="rtl"] .offline-map-pack__track > span { transform-origin: right center; }
 .offline-map-pack__actions { display: flex; flex-wrap: wrap; gap: 7px; }
-.offline-map-pack__actions button { min-height: 34px; padding: 0 11px; border: 1px solid rgba(174, 153, 255, .16); border-radius: 11px; color: #ece8ff; background: rgba(255,255,255,.055); font: 850 .7rem/1 var(--font-ui); transition: transform .16s var(--premium-ease), background-color .16s ease, border-color .16s ease; }
-.offline-map-pack__actions button:active { transform: scale(.98); }
-.offline-map-pack__actions button:disabled { opacity: .46; cursor: not-allowed; }
+.offline-map-pack__actions button { display: inline-grid; place-items: center; min-height: 44px; padding: 8px 13px; border: 1px solid var(--nk-border); border-radius: 13px; color: var(--nk-text); background: var(--nk-elevated); font: 850 .7rem/1.45 var(--font-ui); text-align: center; -webkit-tap-highlight-color: transparent; transition: transform .16s var(--premium-ease), border-color .16s ease; }
+.offline-map-pack__actions button:active:not(:disabled) { transform: scale(.97); }
+.offline-map-pack__actions button:focus-visible { outline: 2px solid var(--nk-primary); outline-offset: 3px; }
+.offline-map-pack__actions button:disabled { opacity: .65; cursor: not-allowed; }
 .offline-map-pack__actions #offlinePackDownload,
-.offline-map-pack__actions #offlinePackResume { color: #fff; border-color: rgba(111, 197, 255, .28); background: linear-gradient(135deg, rgba(56, 128, 255, .72), rgba(129, 78, 255, .74)); }
-.offline-map-pack__actions #offlinePackDelete { color: #ffcad4; border-color: rgba(255, 145, 170, .20); background: rgba(169, 51, 85, .12); }
+.offline-map-pack__actions #offlinePackResume { color: #fff; border-color: #1769c7; background: linear-gradient(135deg, #1258a6, #1769c7); box-shadow: 0 8px 20px rgba(19, 104, 201, .18); }
+.offline-map-pack__actions #offlinePackDelete { width: 44px; min-width: 44px; height: 44px; padding: 0; color: var(--nk-text); border-color: rgba(255, 99, 120, .30); background: rgba(255, 99, 120, .17); }
+@media (hover: hover) and (pointer: fine) {
+  .offline-map-pack__actions button:hover:not(:disabled):not(:active) { border-color: var(--nk-primary); transform: translateY(-1px); }
+}
 .offline-map-pack[data-status="ready"] .offline-map-pack__header small { color: #9fe2bf; }
 .offline-map-pack[data-status="error"] .offline-map-pack__header small { color: #ffb6c1; }
 .offline-map-pack[data-status="unsupported"] { opacity: .72; }

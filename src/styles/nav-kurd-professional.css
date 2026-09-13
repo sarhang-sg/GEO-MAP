@@ -157,7 +157,7 @@ img[src*="assets/icons/nav-kurd/"] {
    consumes this release's two-accent system instead of local purple themes. */
 :where(.user-contrib__header, .owner-studio__header, .user-choice__panel,
   .owner-choice__panel, .user-confirm__panel, .owner-confirm__panel,
-  .offline-pack-confirm__panel, .nav-tutorial__card) {
+  .nav-tutorial__card) {
   border-color: var(--nk-border) !important;
   color: var(--nk-text) !important;
   background: var(--nk-surface) !important;
@@ -170,7 +170,7 @@ img[src*="assets/icons/nav-kurd/"] {
 }
 
 :where(.user-contrib__header p, .owner-studio__eyebrow, .owner-editor__eyebrow,
-  .offline-pack-confirm__eyebrow, .nav-tutorial__progress,
+  .nav-tutorial__progress,
   .about-dialog__meta-icon, .owner-media__heading p) { color: var(--nk-cyan) !important; }
 
 :where(.user-account-card__avatar, .user-contrib__add, .user-contrib__submit,
@@ -242,7 +242,7 @@ img[src*="assets/icons/nav-kurd/"] {
 :where(.user-contrib__signin a, .user-contrib__privacy-actions a, .user-legal-accept a,
   .about-dialog a, .support-section a) { color: var(--nk-primary) !important; }
 
-:where(.user-confirm__delete, .owner-confirm__delete, .offline-pack-confirm__delete,
+:where(.user-confirm__delete, .owner-confirm__delete,
   .is-danger, .user-submission__delete, .user-notification__delete,
   .owner-notification__delete) {
   border-color: rgba(255, 99, 120, .30) !important;
@@ -322,7 +322,7 @@ html[data-ui-mode="light"] .feedback-studio,
 html[data-ui-mode="light"] .place-detail { color: var(--nk-text); }
 html[data-ui-mode="light"] :where(.user-contrib__header, .owner-studio__header,
   .user-choice__panel, .owner-choice__panel, .user-confirm__panel,
-  .owner-confirm__panel, .offline-pack-confirm__panel, .nav-tutorial__card) {
+  .owner-confirm__panel, .nav-tutorial__card) {
   border-color: var(--nk-border) !important;
   color: var(--nk-text) !important;
   background: var(--nk-surface) !important;
@@ -715,23 +715,6 @@ html[data-nav-kurd-theme="professional"] .offline-map-pack__meta {
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-}
-
-html[data-nav-kurd-theme="professional"] .offline-map-pack__actions #offlinePackDelete {
-  display: grid;
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
-  min-height: 40px;
-  padding: 0;
-  place-items: center;
-}
-
-html[data-nav-kurd-theme="professional"] .offline-map-pack__track > span,
-html[data-nav-kurd-theme="professional"] .offline-map-pack[data-progress-phase="middle"] .offline-map-pack__track > span,
-html[data-nav-kurd-theme="professional"] .offline-map-pack[data-progress-phase="complete"] .offline-map-pack__track > span {
-  background: linear-gradient(90deg, #1769c7, var(--nk-primary), var(--nk-cyan)) !important;
-  box-shadow: 0 0 10px rgba(45, 140, 255, .3) !important;
 }
 
 html[data-nav-kurd-theme="professional"] :where(.nav-tutorial__progress-track span,
@@ -1235,7 +1218,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
 html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
   .feedback-studio__actions button:not(.feedback-studio__submit),
   .feedback-studio__preview-actions button,
-  .user-confirm__cancel, .offline-pack-confirm__cancel, .owner-confirm__cancel) {
+  .user-confirm__cancel, .owner-confirm__cancel) {
   border-color: var(--nk-border) !important;
   color: #101828 !important;
   background: var(--nk-elevated) !important;
@@ -1243,8 +1226,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
 }
 
 html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
-  .user-confirm__icon, .user-confirm__data-list li, .user-confirm__ack,
-  .offline-pack-confirm__icon) {
+  .user-confirm__icon, .user-confirm__data-list li, .user-confirm__ack) {
   border-color: var(--nk-border) !important;
   color: #475467 !important;
   background: var(--nk-elevated) !important;
@@ -1253,7 +1235,6 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
 
 html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
   .user-confirm__panel > p:not(.user-confirm__eyebrow),
-  .offline-pack-confirm__panel > p:not(.offline-pack-confirm__eyebrow),
   .owner-confirm__panel p:not(.owner-confirm__eyebrow)) {
   color: var(--nk-muted) !important;
 }
@@ -1537,7 +1518,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"]
 }
 
 html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
-  .user-confirm__delete, .owner-confirm__delete, .offline-pack-confirm__delete,
+  .user-confirm__delete, .owner-confirm__delete,
   .user-account-card__signout, .owner-studio__signout,
   .user-contrib__privacy-actions [data-account-action="signout"],
   .user-contrib__privacy-actions [data-account-action="delete"]) {
@@ -1545,7 +1526,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
 }
 
 html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
-  .user-confirm__delete, .owner-confirm__delete, .offline-pack-confirm__delete,
+  .user-confirm__delete, .owner-confirm__delete,
   .user-account-card__signout, .owner-studio__signout,
   .user-contrib__privacy-actions [data-account-action="signout"],
   .user-contrib__privacy-actions [data-account-action="delete"]) img[src*="assets/icons/nav-kurd/"] {

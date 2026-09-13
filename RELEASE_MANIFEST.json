@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.13",
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
-  "fileCount": 1139,
-  "totalBytes": 284153775,
+  "fileCount": 1140,
+  "totalBytes": 332421213,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -47,8 +47,8 @@
       "sha256": "adf5c42668adf76f71861e18acb8daf0284345373bed1ff932a2b82827acd01a"
     },
     ".gitignore": {
-      "bytes": 137,
-      "sha256": "4ebc5dc9ab0f1ad345eb27c4a82486f8b3220e10bb3ed0e3b2cb54ec3044931e"
+      "bytes": 139,
+      "sha256": "78e87d56d458ca75856cce81fa6c844425b945e2b2aac8adaca3214a576dfc4a"
     },
     ".npmrc": {
       "bytes": 218,
@@ -3530,6 +3530,10 @@
       "bytes": 12409,
       "sha256": "ba47cfd212f5be6e2018ea09be354516bc9097785ee35c4d449c64e3b08e4357"
     },
+    "public/downloads/NAV-KURD-9.1.0.apk": {
+      "bytes": 48257675,
+      "sha256": "b9bc9cf1060254eb84b7ba40bb1181ef8903dd0c0bbba71cba2ec69f266b48fa"
+    },
     "public/fonts/DroidLogo-Bold.ttf": {
       "bytes": 116996,
       "sha256": "4893663ecbb19de5b27f81c1e69fcde1cbc5bd8be8374f3ab51465bad0508a96"
@@ -3631,8 +3635,8 @@
       "sha256": "1cd9ad24030feb9942fcde7041ceae1be30073e127b8bc68cc528e23aa82b5dc"
     },
     "public/releases/latest.json": {
-      "bytes": 307,
-      "sha256": "c4634aaf6b116114b6ef0ea2e958026a93be4d701f853798088018a9caf4adc7"
+      "bytes": 440,
+      "sha256": "fdd84c8bf7aeaddf45991bd6815539d794c2c189d06fc79c55d8e7a75957f8b5"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3656,7 +3660,7 @@
     },
     "public/sw.js": {
       "bytes": 31616,
-      "sha256": "20ad3a3f306fb603ec2da9c351390e6689134c5f559bc95de11bcd921c79e628"
+      "sha256": "89c17d8dcd238bdbb69aa9209b0b40c6117f7a64f72d50a3bbbef4d1fae26338"
     },
     "README.md": {
       "bytes": 5449,
@@ -3687,8 +3691,8 @@
       "sha256": "5bd2b8a5bc7291e1aaffd05dd5c90394b8a2e3088b5fb97b5cd047f6e80b7faf"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 26591,
-      "sha256": "572f30e2543dae1e7aed06d2bdd369d504cbfbe1d01cc839cc027938504fc030"
+      "bytes": 26539,
+      "sha256": "cc7d2e9f19ecde197cdcbe3b0677878799e64818cdda0e966f1ea9eb480398d9"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -3879,8 +3883,8 @@
       "sha256": "42be395eff21f1819c18e67ae62315798edfdaf8d031b4336d13905fa66d2924"
     },
     "src/lib/offline-map-ui.ts": {
-      "bytes": 11638,
-      "sha256": "808474f913a02d0c652ca2f2a5db2aee0ebb91e98fc00f569defc95d6689ecbe"
+      "bytes": 12467,
+      "sha256": "eb85740b069e11e3110a4e6b2729c2fe01d1b0a10cd1a607c7de678e9d9cb47c"
     },
     "src/lib/owner-places-controller.ts": {
       "bytes": 5359,
@@ -4059,8 +4063,8 @@
       "sha256": "79a7e8190dcd492c510378755462df76bcf571300a4155b00815ffb096395d3a"
     },
     "src/styles/aurora-shell.css": {
-      "bytes": 11073,
-      "sha256": "06d0fc1503a5d8661361716aec51e1cdf8a2e8e575b226bbc9e5bfdee892b198"
+      "bytes": 9385,
+      "sha256": "5bb64fb99e9dd4602f7837425f44551ca3ed731701461d4266593d2b29caf2c9"
     },
     "src/styles/base.css": {
       "bytes": 1653,
@@ -4103,8 +4107,8 @@
       "sha256": "b2371957695bfa9803a1ec92e602b6c61d0fb39ab68016562dacaace2fb9085c"
     },
     "src/styles/interaction-quality.css": {
-      "bytes": 7328,
-      "sha256": "ed80769be343e497187558215e4a74be4b7935a6a759d10fd8b2f89304028d10"
+      "bytes": 7637,
+      "sha256": "eb4527875f6652c0c17e18adce3e3e0f54fe007b57838e779d6a608ea4820516"
     },
     "src/styles/labels-typography.css": {
       "bytes": 5145,
@@ -4131,8 +4135,8 @@
       "sha256": "8ab685420ec6f43dd8ed47039ccc65f5c3721fd4e461bcac63bcebb4c7df5910"
     },
     "src/styles/map-shell.css": {
-      "bytes": 16107,
-      "sha256": "96bf6e52005747e2583180e6b330d5a2e3a0aade0b9e6ec9e5cd9f87342d2fce"
+      "bytes": 16127,
+      "sha256": "265934efc84b6f4bf090272a56edeb43d62be6d640f495cf5d5e1de8be7713a2"
     },
     "src/styles/map-visual-system.css": {
       "bytes": 12759,
@@ -4147,8 +4151,8 @@
       "sha256": "237afd54b5046b6c0f9b3eaebd16ca54d119f58a7f386b20c23af00b278b01b5"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 73074,
-      "sha256": "9570d919f3d1222552cd3bdd2434f032e0f1d190cad56a9f2e5843e124fdd08a"
+      "bytes": 72064,
+      "sha256": "77c793215548bd44b253044bd7631d09d700dbb83ec6f5458548bf668f16f732"
     },
     "src/styles/network-resilience.css": {
       "bytes": 1673,
@@ -4199,8 +4203,8 @@
       "sha256": "8c620aa51dc905bca3669be2413641ebd77d1ae0d68e1ed81f46849e352c641f"
     },
     "src/styles/visual-system.css": {
-      "bytes": 33645,
-      "sha256": "291ae34d217c0ef0e18f2d793efe9f5d2d8d0f7bd2831485d7df8d13764f0db9"
+      "bytes": 33798,
+      "sha256": "5ae7086acb65937bf533c5cab1d030ffaf030e6427468fa028681434f53359f2"
     },
     "src/vite-env.d.ts": {
       "bytes": 1566,
@@ -4515,8 +4519,8 @@
       "sha256": "944385a66ab2b6c480c2b219bc9e970c20d1749ac305faf37e0144a240ea779e"
     },
     "tools/verify/phase2-regressions.mjs": {
-      "bytes": 8378,
-      "sha256": "ba128796c1a134062ba9fad15cdfa625b524ba406587fff5795c34526a105d26"
+      "bytes": 19445,
+      "sha256": "93ed2c2707f9567b5bb859705bcd42faa0441bacfe62f2f833c32171bd9b8f6a"
     },
     "tools/verify/pmtiles.py": {
       "bytes": 1835,
