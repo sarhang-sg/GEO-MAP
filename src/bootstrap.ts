@@ -1,3 +1,6 @@
+import { UI, languageDirection } from "./lib/i18n";
+import { readAppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
+
 declare global {
   interface Window {
     __NAV_KURD_FLUTTER__?: boolean;
@@ -38,13 +41,56 @@ function renderHandoffFallback(target: string): void {
   document.body.append(link);
 }
 
+function renderStartupFailure(error: unknown): void {
+  // Module evaluation includes map construction. A renderer/chunk failure can
+  // happen before main installs its normal loading recovery controls.
+  const language = readAppLifecycleSnapshot()?.language ?? "ku";
+  const copy = UI[language];
+  const rendererUnavailable = error instanceof Error && error.name === "MapRendererUnavailableError";
+  const surface = document.createElement("section");
+  surface.id = "mapLoading";
+  surface.className = "map-loading";
+  surface.dataset.phase = "failed";
+  surface.dataset.startupError = rendererUnavailable ? "renderer" : "application";
+  surface.dir = languageDirection(language);
+  surface.setAttribute("role", "alert");
+  surface.setAttribute("aria-labelledby", "startupErrorTitle");
+  const content = document.createElement("div");
+  content.className = "map-loading__content";
+  const title = document.createElement("h1");
+  title.id = "startupErrorTitle";
+  title.className = "map-loading__title";
+  title.textContent = copy.statusError;
+  const message = document.createElement("p");
+  message.className = "map-loading__message";
+  message.textContent = rendererUnavailable ? copy.mapRendererUnavailable : copy.appStartupError;
+  const retry = document.createElement("button");
+  retry.type = "button";
+  retry.className = "map-loading__retry";
+  retry.textContent = copy.loadingRetry;
+  // An ES module whose evaluation failed cannot be imported again in the same
+  // document. Reload ONLY on this explicit fatal-startup retry, never on a timer,
+  // connectivity change, or while a healthy map is running. Keep all stored data.
+  retry.addEventListener("click", () => {
+    retry.disabled = true;
+    window.location.reload();
+  }, { once: true });
+  content.append(title, message, retry);
+  surface.append(content);
+  (document.getElementById("app") ?? document.body).replaceChildren(surface);
+  retry.focus({ preventScroll: true });
+}
+
 const handoffTarget = androidOAuthHandoffUrl();
 if (handoffTarget) {
   window.__NAV_KURD_AUTH_HANDOFF__ = true;
   renderHandoffFallback(handoffTarget);
   window.location.replace(handoffTarget);
 } else {
-  void import("./main");
+  void import("./main").catch((error: unknown) => {
+    console.error("NAV KURD startup failed", error);
+    renderStartupFailure(error);
+  });
 }
 
 export {};

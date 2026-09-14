@@ -23,6 +23,145 @@ function gpsHarness() {
   const fix=(watch=watches.at(-1),age=0)=>watch.success({timestamp:Date.now()-age,coords:{longitude:44.2,latitude:36.2,accuracy:120,speed:0}});
   return {c,gps,watches,moves,messages,fix};
 }
+
+{
+  const { RuntimeStateController } = load('src/lib/runtime-state.ts', { navigator: { onLine: true } }, 'RuntimeStateController');
+  const attributes = new Map();
+  const shell = { dataset: {}, setAttribute: (key, value) => attributes.set(key, value) };
+  const state = new RuntimeStateController(shell);
+  let runs = 0;
+  let release;
+  const task = async () => { runs++; await new Promise(resolve => { release = resolve; }); state.fail(); };
+  const first = state.runBootAttempt(task);
+  for (let i = 0; i < 1000; i++) assert.equal(state.runBootAttempt(task), first);
+  await Promise.resolve();
+  assert.equal(runs, 1);
+  release(); await first;
+  state.markReady();
+  assert.equal(state.snapshot().load, 'error', 'a late background callback must not clear a boot error');
+  state.setNetworkState('offline');
+  state.setUpdateState('available');
+  const retry = state.runBootAttempt(async () => {
+    runs++;
+    assert.equal(state.snapshot().load, 'booting');
+    state.markMapFirstFrame(); state.markInteractive(); state.markReady();
+  });
+  await retry;
+  assert.equal(runs, 2);
+  assert.equal(shell.dataset.loadState, 'ready');
+  assert.equal(attributes.get('aria-busy'), 'false');
+  assert.equal(state.snapshot().network, 'offline');
+  assert.equal(state.snapshot().update, 'available');
+  await state.runBootAttempt(task);
+  assert.equal(runs, 2, 'completed boots must not repeat background initialization');
+  const rejected = new RuntimeStateController(shell);
+  await assert.rejects(rejected.runBootAttempt(() => { throw Error('synchronous failure'); }), /synchronous failure/);
+  await rejected.runBootAttempt(async () => rejected.markReady());
+  assert.equal(rejected.snapshot().load, 'ready', 'a synchronous throw must release the attempt gate');
+  console.log('PASS boot coalesces 1000 retries, explicit retry clears error, ready finalizes once and preserves network/update state');
+}
+
+{
+  const timers = new Map();
+  let serial = 0;
+  const { waitForMapReadiness } = load('src/lib/map-readiness.ts', {
+    window: { setTimeout(fn, ms) { assert.equal(ms, 30000); timers.set(++serial, fn); return serial; }, clearTimeout(id) { timers.delete(id); } }
+  }, 'waitForMapReadiness');
+  const handlers = new Map();
+  const map = {
+    on(event, fn) { const group = handlers.get(event) ?? new Set(); group.add(fn); handlers.set(event, group); },
+    off(event, fn) { handlers.get(event)?.delete(fn); }
+  };
+  const listenerCount = () => [...handlers.values()].reduce((count, group) => count + group.size, 0);
+  const initial = waitForMapReadiness(map, ['load', 'style.load'], () => false);
+  for (const fn of handlers.get('style.load')) fn();
+  await initial;
+  assert.equal(listenerCount(), 0, 'both style/load listeners must be removed after either wins');
+  assert.equal(timers.size, 0);
+  for (let i = 0; i < 100; i++) {
+    const abort = new AbortController();
+    const pending = waitForMapReadiness(map, ['render'], () => false, abort.signal);
+    const rejected = assert.rejects(pending, /cancel/);
+    abort.abort(Error('cancel'));
+    await rejected;
+    assert.equal(listenerCount(), 0);
+    assert.equal(timers.size, 0);
+  }
+  const timedOut = waitForMapReadiness(map, ['render'], () => false);
+  const timeoutAssertion = assert.rejects(timedOut, /timed out/);
+  [...timers.values()][0](); await timeoutAssertion;
+  assert.equal(listenerCount(), 0); assert.equal(timers.size, 0);
+  await waitForMapReadiness(map, ['render'], () => true);
+  assert.equal(listenerCount(), 0); assert.equal(timers.size, 0);
+  const cancelled = new AbortController(); cancelled.abort(Error('cancel'));
+  await assert.rejects(waitForMapReadiness(map, ['render'], () => true, cancelled.signal), /cancel/);
+  assert.equal(listenerCount(), 0);
+  console.log('PASS readiness events/timeouts/100 cancellations clean all observers and timers; already-ready maps do no work');
+}
+
+{
+  const source = fs.readFileSync(new URL('src/bootstrap.ts', root), 'utf8');
+  const recoverySource = source.slice(0, source.indexOf('const handoffTarget ='))
+    .replace(/^import[^\n]+\n/gm, '');
+  const { UI, languageDirection } = load('src/lib/i18n.ts', {}, 'UI,languageDirection');
+  class Element {
+    children = []; dataset = {}; attributes = new Map(); listeners = new Map(); disabled = false;
+    append(...children) { this.children.push(...children); }
+    replaceChildren(...children) { this.children = children; }
+    setAttribute(name, value) { this.attributes.set(name, value); }
+    addEventListener(event, fn, options) { this.listeners.set(event, { fn, options }); }
+    focus() { this.focused = true; }
+    click() {
+      if (this.disabled) return;
+      const listener = this.listeners.get('click');
+      if (listener?.options?.once) this.listeners.delete('click');
+      listener?.fn();
+    }
+  }
+  for (const language of ['ku', 'ar', 'en']) {
+    for (const renderer of [true, false]) {
+      const app = new Element();
+      let reloads = 0;
+      const document = { createElement: () => new Element(), getElementById: () => app, body: app };
+      const context = vm.createContext({ Error, UI, languageDirection, document, readAppLifecycleSnapshot: () => ({ language }), window: { location: { reload() { reloads++; } } } });
+      vm.runInContext(stripTypeScriptTypes(recoverySource, { mode: 'transform' }) + '\nglobalThis.recover = renderStartupFailure;', context);
+      const error = new Error('<img src=x onerror=alert(1)>');
+      error.name = renderer ? 'MapRendererUnavailableError' : 'Error';
+      context.recover(error);
+      const surface = app.children[0];
+      const [title, message, retry] = surface.children[0].children;
+      assert.equal(app.children.length, 1);
+      assert.equal(surface.dataset.phase, 'failed');
+      assert.equal(surface.dir, language === 'en' ? 'ltr' : 'rtl');
+      assert.equal(title.textContent, UI[language].statusError);
+      assert.equal(message.textContent, UI[language][renderer ? 'mapRendererUnavailable' : 'appStartupError']);
+      assert.ok(!message.textContent.includes('<img'));
+      assert.equal(retry.textContent, UI[language].loadingRetry);
+      assert.equal(retry.focused, true);
+      assert.equal(reloads, 0, 'displaying a fatal error must not reload automatically');
+      retry.click(); retry.click();
+      assert.equal(reloads, 1, 'one explicit activation allows only one document reload');
+      assert.equal(retry.disabled, true);
+    }
+  }
+  const main = fs.readFileSync(new URL('src/main.ts', root), 'utf8');
+  assert.ok(main.indexOf('if (!this.map.dragPan)') < main.indexOf('this.animationScheduler ='), 'partial map must be rejected before installing controllers');
+  assert.ok(source.includes('"./main").catch('), 'module evaluation failures must reach the startup boundary');
+  assert.ok(main.includes('visualWait.abort();'), 'critical initialization failure must cancel the competing frame wait');
+  console.log('PASS localized fatal startup surface, no raw error HTML, no automatic reload, explicit first-tap retry and partial-map guard');
+}
+
+{
+  const { AppHealthController } = load('src/lib/app-health.ts', {}, 'AppHealthController');
+  const health = Object.create(AppHealthController.prototype);
+  Object.assign(health, { mapShell: { dataset: {} }, container: { dataset: { level: 'error' }, hidden: false } });
+  health.ready();
+  assert.equal(health.container.hidden, true, 'successful boot retry must remove its stale failure banner');
+  health.container.dataset.level = 'offline'; health.container.hidden = false;
+  health.ready();
+  assert.equal(health.container.hidden, false, 'a real offline notice must survive successful cached-map startup');
+  console.log('PASS successful recovery clears its previous error banner without hiding an active offline notice');
+}
 for (const code of [1,2,3]) {
   const h=gpsHarness();
   for(let i=0;i<1000;i++)h.c.locate();

@@ -257,6 +257,16 @@ for (const absolute of sourceFiles) {
   const path = posixPath(absolute);
   const source = await readFile(absolute, "utf8");
   for (const [pattern, label] of prohibitedRuntimePatterns) {
+    // A failed ES module cannot be re-evaluated in its existing document. The
+    // bootstrap boundary has one tested, click-only fatal retry; the running
+    // application still may not reload for network, GPS, timers or updates.
+    if (path === "src/bootstrap.ts" && label === "document reload") {
+      assert((source.match(/window\.location\.reload\(\)/gu) ?? []).length === 1
+        && source.includes('retry.addEventListener("click", () => {')
+        && source.includes('}, { once: true });')
+        && source.includes('"./main").catch('), "Fatal-startup retry must remain explicit and single-owned.");
+      continue;
+    }
     if (pattern.test(source)) prohibitedRuntimeHits.push(`${path}: ${label}`);
   }
 }

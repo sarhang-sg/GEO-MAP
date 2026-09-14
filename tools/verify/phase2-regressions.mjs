@@ -139,7 +139,7 @@ assert.match(visualSystem, /is-runtime-low-power \*:not\(\[data-essential-animat
 const typography = read("src/styles/labels-typography.css");
 assert.match(typography, /\*:not\(\[data-essential-animation="true"\]\)::before/);
 assert.match(typography, /\*:not\(\[data-essential-animation="true"\]\)::after/);
-assert.match(read("public/sw.js"), /const UI_REVISION = "R16-hotfix-4";/);
+assert.match(read("public/sw.js"), /const UI_REVISION = "R16-hotfix-5";/);
 const routingSource = read("src/lib/routing-controller.ts");
 assert.match(routingSource, /await this\.requestLocation\(\)/);
 assert.match(routingSource, /selectionSerial !== this\.destinationSelectionSerial/);

@@ -63,9 +63,10 @@ import { PlaceWeatherService } from "./lib/place-weather";
 import { installRuntimeDiagnostics, recordRuntimeDiagnostic } from "./lib/runtime-diagnostics";
 import { installSupportHub } from "./lib/support-hub";
 import { createPopupShareButton, shareMapLocation } from "./lib/native-share";
-import { hideNativeSplash, initializeNativePlatform, installNativeSettingsPanel, showNativeFatalError } from "./lib/native-platform";
+import { hideNativeSplash, initializeNativePlatform, installNativeSettingsPanel } from "./lib/native-platform";
 import { installInputModeController } from "./lib/input-mode-controller";
 import { RuntimeStateController } from "./lib/runtime-state";
+import { waitForMapReadiness } from "./lib/map-readiness";
 import { MapAnimationScheduler } from "./lib/map-animation-scheduler";
 import { MapCoordinatePicker } from "./lib/map-coordinate-picker";
 import { installAppLifecycleController, readAppLifecycleSnapshot, type AppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
@@ -316,6 +317,13 @@ class KurdistanAtlasController {
       maxTileCacheSize: recommendedMapTileCacheSize(this.hardwareProfile),
       validateStyle: false
     });
+    // MapLibre returns early (rather than throwing) when WebGL2 initialization
+    // fails. Do not install controllers/listeners on its partial map object.
+    if (!this.map.dragPan) {
+      const error = new Error("WebGL2 map initialization failed");
+      error.name = "MapRendererUnavailableError";
+      throw error;
+    }
     this.animationScheduler = new MapAnimationScheduler({
       map: this.map,
       diagnosticsHost: mapShell,
@@ -749,25 +757,8 @@ class KurdistanAtlasController {
     return this.initialRenderObserved;
   }
 
-  async waitForInitialVisualReady(): Promise<void> {
-    if (this.initialRenderObserved) return;
-
-    await new Promise<void>((resolve) => {
-      let settled = false;
-      const finish = (): void => {
-        if (settled) return;
-        settled = true;
-        this.map.off("render", onFirstRender);
-        window.requestAnimationFrame(() => resolve());
-      };
-      const onFirstRender = (): void => {
-        this.initialRenderObserved = true;
-        finish();
-      };
-
-      this.map.on("render", onFirstRender);
-      if (this.initialRenderObserved) finish();
-    });
+  async waitForInitialVisualReady(signal?: AbortSignal): Promise<void> {
+    await waitForMapReadiness(this.map, ["render"], () => this.initialRenderObserved, signal);
   }
 
   async waitForCriticalMapReady(): Promise<void> {
@@ -942,8 +933,7 @@ class KurdistanAtlasController {
   // app-side labels/search/popups without re-sending 12,125 map features.
 
   private async waitForStyle(): Promise<void> {
-    if (this.map.isStyleLoaded()) return;
-    await new Promise<void>((resolve) => { this.map.once("load", () => resolve()); this.map.once("style.load", () => resolve()); });
+    await waitForMapReadiness(this.map, ["load", "style.load"], () => this.map.isStyleLoaded() === true);
   }
 
   private styleFor(mode: MapMode): StyleSpecification {
@@ -1964,15 +1954,20 @@ let mapLoadingStartedAt = performance.now();
 let mapLoadingExitPromise: Promise<void> | null = null;
 let mapLoadingWatchdog: number | null = null;
 let mapLoadingPhase: "loading" | "retry" | "exiting" = "loading";
+let mapLoadingSlow = false;
 
 function syncMapLoadingCopy(): void {
   if (!mapLoading.isConnected) return;
   const copy = UI[currentLanguage()];
-  const loadingText = mapLoading.querySelector<HTMLElement>("small");
+  const loadingText = mapLoading.querySelector<HTMLElement>(".map-loading__message");
   const offline = mapShell.dataset.networkState === "offline" || navigator.onLine === false;
   mapLoading.dataset.phase = mapLoadingPhase;
   mapLoading.setAttribute("role", mapLoadingPhase === "retry" ? "alert" : "status");
-  if (loadingText) loadingText.textContent = mapLoadingPhase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard;
+  mapLoading.dir = languageDirection(currentLanguage());
+  if (loadingText) {
+    loadingText.textContent = mapLoadingPhase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard;
+    loadingText.hidden = mapLoadingPhase !== "retry" && !mapLoadingSlow;
+  }
   mapLoadingRetry.textContent = copy.loadingRetry;
 }
 
@@ -2042,9 +2037,13 @@ async function completeTruthfulMapReadyFlow(criticalInitialization: Promise<void
   // Start the visual-frame observer immediately while critical data/style work
   // continues in parallel. The overlay can exit only after both branches are real:
   // the critical initialization is complete and a post-install map render occurs.
-  const initialVisualFrame = controller.waitForInitialVisualReady();
-  await criticalInitialization;
-  await initialVisualFrame;
+  const visualWait = new AbortController();
+  try {
+    await Promise.all([criticalInitialization, controller.waitForInitialVisualReady(visualWait.signal)]);
+  } finally {
+    // A data failure must not leave a first-render listener behind on each retry.
+    visualWait.abort();
+  }
   runtimeState.markMapFirstFrame();
   await waitForBrandFontsBounded();
   await controller.waitForCriticalMapReady();
@@ -2069,7 +2068,10 @@ async function completeDegradedVisualReadyFlow(): Promise<void> {
   tutorialController.maybeStart();
 }
 
+let usableBootFinalized = false;
 function finalizeUsableBoot(): void {
+  if (usableBootFinalized) return;
+  usableBootFinalized = true;
   setStatus("ready", UI[currentLanguage()].statusReady);
   setMessage(UI[currentLanguage()].ready, "success");
   health.ready();
@@ -2082,73 +2084,71 @@ function finalizeUsableBoot(): void {
 }
 
 mapLoadingRetry.addEventListener("click", () => {
-  mapLoadingRetry.disabled = true;
-  mapLoadingRetry.hidden = true;
-  mapLoadingPhase = "loading";
-  syncMapLoadingCopy();
-  void completeTruthfulMapReadyFlow(controller.initialize())
-    .then(() => finalizeUsableBoot())
-    .catch((error) => {
+  void boot();
+});
+
+function boot(): Promise<void> {
+  return runtimeState.runBootAttempt(async () => {
+    try {
+      mapLoadingStartedAt = performance.now();
+      mapLoadingPhase = "loading";
+      mapLoadingSlow = false;
+      mapLoadingRetry.hidden = true;
+      mapLoadingRetry.disabled = false;
+      syncMapLoadingCopy();
+      mapLoadingWatchdog = window.setTimeout(() => {
+        if (!mapLoading.isConnected) return;
+        // Keep the in-flight request single-owned. A retry becomes available only
+        // after failure, not while data/style work is still using the same map.
+        mapLoadingSlow = true;
+        syncMapLoadingCopy();
+      }, 18000);
+      brandFontsReadyPromise ??= loadBrandFonts();
+      applySatelliteAvailability();
+      setStatus("loading", UI[currentLanguage()].statusLoading);
+      applyUiLanguage(currentLanguage());
+      offlineMapPack.setLanguage(currentLanguage());
+      mapShell.classList.toggle("map-controls-hidden", recoveredLifecycleState?.controlsHidden === true);
+      controller.syncPrimaryMapSurfaces();
+      syncMapModeControl(recoveredLifecycleState?.mapMode ?? "night");
+      baseMapButton.classList.toggle("is-active", recoveredLifecycleState?.basemapVisible ?? true);
+      layersButton.classList.toggle("is-active", recoveredLifecycleState?.administrativeVisible ?? true);
+      placesButton.classList.toggle("is-active", recoveredLifecycleState?.placesVisible ?? true);
+      syncControlsVisibilityButtonCopy();
+
+      // Critical initialization contains the real layer/locality fetches, style
+      // readiness, layer installation and map preparation. Search warming, auth,
+      // admin-role checks, offline-pack work and other secondary tasks stay out of
+      // the loading gate so a healthy map is neither dismissed too early nor held
+      // hostage by unrelated background work.
+      const criticalInitialization = controller.initialize();
+      await completeTruthfulMapReadyFlow(criticalInitialization);
+      finalizeUsableBoot();
+    } catch (error) {
+      // Once MapLibre has produced a real frame, later initialization failures are
+      // degraded/background failures, not proof that the map itself is unavailable.
+      // Keep the usable map, GPS, routing and account UI alive without a false red
+      // map-load banner. Only a pre-render failure is allowed to become fatal.
+      if (initialVisualReadyReached || controller.hasInitialVisualFrame()) {
+        recordRuntimeDiagnostic("boot.post-render", error, "warning");
+        await completeDegradedVisualReadyFlow();
+        finalizeUsableBoot();
+        health.warnSilently(UI[currentLanguage()].backgroundError);
+        return;
+      }
+      runtimeState.fail();
       mapLoadingPhase = "retry";
       syncMapLoadingCopy();
       mapLoadingRetry.hidden = false;
       mapLoadingRetry.disabled = false;
-      runtimeState.fail();
       health.fail(error, UI[currentLanguage()].mapLoadError);
-      recordRuntimeDiagnostic("boot.retry", error, "error");
-    });
-});
-
-async function boot(): Promise<void> {
-  try {
-    mapLoadingStartedAt = performance.now();
-    mapLoadingPhase = "loading";
-    mapLoadingRetry.hidden = true;
-    mapLoadingRetry.disabled = false;
-    syncMapLoadingCopy();
-    mapLoadingWatchdog = window.setTimeout(() => {
-      if (!mapLoading.isConnected) return;
-      // A slow mobile connection is not a failed boot. Keep the neutral loading
-      // state and only expose a manual retry escape hatch.
-      mapLoadingRetry.hidden = false;
-    }, 18000);
-    brandFontsReadyPromise ??= loadBrandFonts();
-    applySatelliteAvailability();
-    setStatus("loading", UI[currentLanguage()].statusLoading);
-    applyUiLanguage(currentLanguage());
-    offlineMapPack.setLanguage(currentLanguage());
-    mapShell.classList.toggle("map-controls-hidden", recoveredLifecycleState?.controlsHidden === true);
-    controller.syncPrimaryMapSurfaces();
-    syncMapModeControl(recoveredLifecycleState?.mapMode ?? "night");
-    baseMapButton.classList.toggle("is-active", recoveredLifecycleState?.basemapVisible ?? true);
-    layersButton.classList.toggle("is-active", recoveredLifecycleState?.administrativeVisible ?? true);
-    placesButton.classList.toggle("is-active", recoveredLifecycleState?.placesVisible ?? true);
-    syncControlsVisibilityButtonCopy();
-
-    // Critical initialization contains the real layer/locality fetches, style
-    // readiness, layer installation and map preparation. Search warming, auth,
-    // admin-role checks, offline-pack work and other secondary tasks stay out of
-    // the loading gate so a healthy map is neither dismissed too early nor held
-    // hostage by unrelated background work.
-    const criticalInitialization = controller.initialize();
-    await completeTruthfulMapReadyFlow(criticalInitialization);
-    finalizeUsableBoot();
-  } catch (error) {
-    // Once MapLibre has produced a real frame, later initialization failures are
-    // degraded/background failures, not proof that the map itself is unavailable.
-    // Keep the usable map, GPS, routing and account UI alive without a false red
-    // map-load banner. Only a pre-render failure is allowed to become fatal.
-    if (initialVisualReadyReached || controller.hasInitialVisualFrame()) {
-      recordRuntimeDiagnostic("boot.post-render", error, "warning");
-      await completeDegradedVisualReadyFlow();
-      finalizeUsableBoot();
-      health.warnSilently(UI[currentLanguage()].backgroundError);
-      return;
+      recordRuntimeDiagnostic("boot.initialization", error, "error");
+    } finally {
+      if (mapLoadingWatchdog !== null) {
+        window.clearTimeout(mapLoadingWatchdog);
+        mapLoadingWatchdog = null;
+      }
     }
-    runtimeState.fail();
-    health.fail(error, UI[currentLanguage()].mapLoadError);
-    const message = error instanceof Error ? error.message : UI[currentLanguage()].mapLoadError;
-    void showNativeFatalError(message, currentLanguage());
-  }
+  });
 }
 void boot();

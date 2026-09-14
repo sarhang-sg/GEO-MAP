@@ -18,6 +18,7 @@ export class RuntimeStateController {
   private loadState: RuntimeLoadState = "booting";
   private networkState: RuntimeNetworkState;
   private updateState: RuntimeUpdateState = "idle";
+  private bootAttempt: Promise<void> | null = null;
 
   constructor(private readonly shell: HTMLElement) {
     this.networkState = navigator.onLine === false ? "offline" : "online";
@@ -28,6 +29,22 @@ export class RuntimeStateController {
   markInteractive(): void { this.setLoadState("interactive"); }
   markReady(): void { this.setLoadState("ready"); }
   fail(): void { this.setLoadState("error"); }
+
+  runBootAttempt(task: () => Promise<void>): Promise<void> {
+    if (this.bootAttempt) return this.bootAttempt;
+    if (this.loadState === "ready") return Promise.resolve();
+    // Only an explicit boot/retry opens a new loading cycle. Late background
+    // readiness callbacks must not silently clear a genuine startup failure.
+    if (this.loadState === "error") {
+      this.loadState = "booting";
+      this.commit();
+    }
+    const attempt = Promise.resolve().then(task).finally(() => {
+      if (this.bootAttempt === attempt) this.bootAttempt = null;
+    });
+    this.bootAttempt = attempt;
+    return attempt;
+  }
 
   setNetworkState(state: RuntimeNetworkState): void {
     this.networkState = state;

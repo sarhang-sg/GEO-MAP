@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.13",
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
-  "fileCount": 1140,
-  "totalBytes": 332421213,
+  "fileCount": 1141,
+  "totalBytes": 332438316,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -3660,7 +3660,7 @@
     },
     "public/sw.js": {
       "bytes": 31616,
-      "sha256": "89c17d8dcd238bdbb69aa9209b0b40c6117f7a64f72d50a3bbbef4d1fae26338"
+      "sha256": "7a1031dd97f9d81fbad1b37eed29e6b4e2a45fa7a198235d4ea29e52d169e69d"
     },
     "README.md": {
       "bytes": 5449,
@@ -3671,8 +3671,8 @@
       "sha256": "f17439f8b05ab25c02e6a9d3ecdc0a6848040056ee38941247e9eef00392250a"
     },
     "src/bootstrap.ts": {
-      "bytes": 1879,
-      "sha256": "3b55b920554e5cf3a81e484bac6f3a6d3640a5cb5824e944fdcdd0a40f4e8b45"
+      "bytes": 4075,
+      "sha256": "b4f6c22f3f0adec5b172b80ee2012a3308ff84a85f1d840c6181325c11bc9d75"
     },
     "src/lib/active-static-poi-icons.ts": {
       "bytes": 3327,
@@ -3683,16 +3683,16 @@
       "sha256": "d01fd9dcdbe86eb303bc1fc66c47a68566724c0c67bd103d4bdb45bb7bc6aca6"
     },
     "src/lib/app-health.ts": {
-      "bytes": 6961,
-      "sha256": "338e305a675419d3fab95751827b112113f93fc0712b05fd646b1a4e48aceed5"
+      "bytes": 7046,
+      "sha256": "98c05e9a640dcc3b814271a41ee269a032697b2ca5ed05da2aa279f9340c81f1"
     },
     "src/lib/app-lifecycle-controller.ts": {
       "bytes": 4968,
       "sha256": "5bd2b8a5bc7291e1aaffd05dd5c90394b8a2e3088b5fb97b5cd047f6e80b7faf"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 26539,
-      "sha256": "cc7d2e9f19ecde197cdcbe3b0677878799e64818cdda0e966f1ea9eb480398d9"
+      "bytes": 26591,
+      "sha256": "dda8d48099a166c112f9e7e5754bc7d2301205fa8a627a4c74cef06f5fa27295"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -3759,8 +3759,8 @@
       "sha256": "ce44a8f5235ca1265df1b64a4e6d483a25ffe7fb2b36efc374336e984e6362dd"
     },
     "src/lib/i18n.ts": {
-      "bytes": 36696,
-      "sha256": "f1078ed4bebbfaab1dd1da9b15fa8ef4bd95af7aaff975798c44247e145c32ae"
+      "bytes": 37841,
+      "sha256": "28bddcd6249ff379b279716ecd941e22bb056ae1bc5bc0d300fd3d6af1cbf370"
     },
     "src/lib/input-mode-controller.ts": {
       "bytes": 3530,
@@ -3850,6 +3850,10 @@
       "bytes": 6126,
       "sha256": "d94831d7c6849d6ef3e1ffa5f1cec56032b6455ff5681a1f91ead03441d49551"
     },
+    "src/lib/map-readiness.ts": {
+      "bytes": 1252,
+      "sha256": "8a1ae12642a039e05e3fe688f786bc3668fe05f4a5a07686f0afd3a3111c7abe"
+    },
     "src/lib/map-style-state.ts": {
       "bytes": 1652,
       "sha256": "63558923cee227994580410506c8762f3379a2f1ff0c38b25fe0b6e4af3f39a8"
@@ -3867,8 +3871,8 @@
       "sha256": "37cb5d7212fb87a2c6f6465d3a0c2339a72ef5cca3428fcb4002801e771c3a1f"
     },
     "src/lib/native-platform.ts": {
-      "bytes": 8662,
-      "sha256": "b8b41a7303c27e0f284d948e59eeaa5812a668562fa580c513b4204caf871758"
+      "bytes": 8491,
+      "sha256": "d3a37f8380d1d63599c11b4de61a1df19ae487881922c05a4b70d932c8bb8b2d"
     },
     "src/lib/native-share.ts": {
       "bytes": 3474,
@@ -3975,8 +3979,8 @@
       "sha256": "c62a67a986fd385134828ab38f1d6d5b59f186ef5dd8190bd0b8f42390119302"
     },
     "src/lib/runtime-state.ts": {
-      "bytes": 2336,
-      "sha256": "4c1fd4d95bf8df8b454487377f6ecc318dd42e75c5e581be8d85d7aa4448a3c9"
+      "bytes": 3012,
+      "sha256": "b288f0fcb4d2715a4ec7c552a2169f6324fa6ea1a164e2b76f32e1e8836ac2ef"
     },
     "src/lib/satellite.ts": {
       "bytes": 8245,
@@ -4043,8 +4047,8 @@
       "sha256": "ee16efadfa1b4766f8fa5d9e9d3938bdc083d47412a3582af0e3644ca81f328d"
     },
     "src/main.ts": {
-      "bytes": 103516,
-      "sha256": "3721a2ee1cc5488410654d2d7fc8fc607efce3d57153c24364202f1b2c34670d"
+      "bytes": 103726,
+      "sha256": "96ebd8cf0cffc967ae0852938ab674127ace8d3d63e9f7ae55bf37ff00fe9ba7"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4071,8 +4075,8 @@
       "sha256": "fa4826fb5bc132db5572056213df1ed96d6d25cff260f0d38981878ed8bd418a"
     },
     "src/styles/components/loader.css": {
-      "bytes": 6573,
-      "sha256": "790f04b6146e231943aa72f909d08a7a4ad692d50151dfa253530c4af9754ff5"
+      "bytes": 7080,
+      "sha256": "b48bcb4b170fe2d9d96069ce8e84636395c2e29431c515a770174f81089f7f71"
     },
     "src/styles/components/map-control-rail.css": {
       "bytes": 4789,
@@ -4499,12 +4503,12 @@
       "sha256": "4942f026bf6e387e6b2c8af39e7647347a09ad5c8739c9430a16baa8f45d7498"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 19303,
-      "sha256": "0f637f6835ac066059f125032ff593cfc8b58dcd1cde9e39b0190986cea0eccc"
+      "bytes": 22065,
+      "sha256": "bca0a5645bc314e2352a842e38736b4264d7f2a28e670364f295189427ed26bf"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 10368,
-      "sha256": "f94b1fcd03ab33875d5497a902985de7db320201f20eeb447f70b388010713bc"
+      "bytes": 18119,
+      "sha256": "7a079518a7abe58edb1c7e9f168946745eb417e829f0ec0bbdd4eab54691817b"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4520,7 +4524,7 @@
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 19445,
-      "sha256": "93ed2c2707f9567b5bb859705bcd42faa0441bacfe62f2f833c32171bd9b8f6a"
+      "sha256": "c747ea8c21262c1827e30963090f766730a1cc9280e2507967c572e1aba3d3d7"
     },
     "tools/verify/pmtiles.py": {
       "bytes": 1835,
@@ -4543,8 +4547,8 @@
       "sha256": "b96af5c6f9a3eeecfcbd0132c6261287209f2331eaeca23350b2071085f8f679"
     },
     "tools/verify/source.mjs": {
-      "bytes": 17733,
-      "sha256": "15ee45117ac302e91c5cd86aa2a0d50ba1ed3d63bce1c667e10b096415d7437b"
+      "bytes": 18371,
+      "sha256": "83ca6311eb848be727e3e1c58ae79ad7c4e1683ca4880edfa68241a0a6bdf8c4"
     },
     "tools/verify/styles.py": {
       "bytes": 6196,

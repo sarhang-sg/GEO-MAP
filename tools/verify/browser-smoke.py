@@ -325,6 +325,45 @@ def main() -> int:
             tutorial_page.locator(".nav-tutorial.is-positioned:not(.is-minimized)").wait_for(state="visible", timeout=20_000)
             tutorial_context.close()
 
+            # Exercise the real module-evaluation boundary, not just a successful
+            # GPU boot. This context deliberately denies WebGL2 on the first
+            # document; an explicit Retry then restores the normal provider.
+            recovery_context = browser.new_context(viewport={"width": 390, "height": 844}, locale="ku")
+            recovery_page = recovery_context.new_page()
+            recovery_errors: list[str] = []
+            recovery_page.on("pageerror", lambda error: recovery_errors.append(str(error)))
+            recovery_page.add_init_script(
+                """
+                (() => {
+                  localStorage.setItem('nav-kurd:tutorial:completed', '1');
+                  const visits = Number(sessionStorage.getItem('nav-kurd:qa-recovery-visits') || 0) + 1;
+                  sessionStorage.setItem('nav-kurd:qa-recovery-visits', String(visits));
+                  if (visits !== 1) return;
+                  localStorage.setItem('nav-kurd:qa-preserved', 'saved-data');
+                  const original = HTMLCanvasElement.prototype.getContext;
+                  HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+                    return type === 'webgl2' ? null : original.call(this, type, ...args);
+                  };
+                })();
+                """
+            )
+            recovery_page.goto(BASE_URL, wait_until="domcontentloaded", timeout=30_000)
+            recovery_page.locator('#mapLoading[data-startup-error="renderer"]').wait_for(state="visible", timeout=20_000)
+            if recovery_page.locator(".map-loading").count() != 1 or recovery_page.locator("#map").count() != 0:
+                raise AssertionError("fatal startup must replace the partial map with exactly one recovery surface")
+            recovery_page.wait_for_timeout(1200)
+            if recovery_page.evaluate("sessionStorage.getItem('nav-kurd:qa-recovery-visits')") != "1":
+                raise AssertionError("fatal startup retried automatically")
+            recovery_page.locator(".map-loading__retry").click()
+            recovery_page.locator('.map-shell[data-load-state="ready"]').wait_for(state="visible", timeout=45_000)
+            if recovery_page.evaluate("sessionStorage.getItem('nav-kurd:qa-recovery-visits')") != "2":
+                raise AssertionError("one fatal Retry must reload exactly once")
+            if recovery_page.evaluate("localStorage.getItem('nav-kurd:qa-preserved')") != "saved-data":
+                raise AssertionError("fatal startup retry discarded saved data")
+            if recovery_errors:
+                raise AssertionError("uncaught startup recovery errors:\n" + "\n".join(recovery_errors))
+            recovery_context.close()
+
             browser.close()
 
             ignored_fragments = (
@@ -336,7 +375,7 @@ def main() -> int:
             if fatal_errors:
                 raise AssertionError("uncaught browser errors:\n" + "\n".join(fatal_errors))
 
-        print("Chromium smoke test passed: dark boot, light controls, tutorial recovery, shell, support, legal pages and offline reload.")
+        print("Chromium smoke test passed: dark boot, light controls, tutorial recovery, shell, support, legal pages, offline reload and fatal WebGL startup recovery.")
         return 0
     finally:
         server.terminate()

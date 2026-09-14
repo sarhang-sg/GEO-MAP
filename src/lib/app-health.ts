@@ -62,6 +62,7 @@ export class AppHealthController {
   ready(message?: string): void {
     this.mapShell.dataset.health = "ready";
     if (message) this.show("ready", message, true);
+    else if (this.container.dataset.level === "error") this.container.hidden = true;
   }
 
   warn(message: string, sticky = false): void {

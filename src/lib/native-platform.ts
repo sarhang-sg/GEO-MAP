@@ -100,9 +100,6 @@ export async function initializeNativePlatform(getLanguage: () => Language): Pro
 /** Flutter owns the native launch surface; the browser has no native splash. */
 export async function hideNativeSplash(): Promise<void> {}
 
-/** The Flutter shell already exposes its own fatal-error surface. */
-export async function showNativeFatalError(_message: string, _language: Language): Promise<void> {}
-
 type PlatformCopy = {
   eyebrow: string;
   heading: string;

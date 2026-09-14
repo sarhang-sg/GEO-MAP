@@ -18,6 +18,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           <span class="map-loading__line" data-essential-animation="true"></span>
         </div>
         <p class="map-loading__equation" dir="ltr" aria-label="2 plus 2 equals 1">2 + 2 = 1</p>
+        <p class="map-loading__message" hidden></p>
         <button id="mapLoadingRetry" class="map-loading__retry" type="button" hidden>دووبارە هەوڵدان</button>
       </div>
     </div>
