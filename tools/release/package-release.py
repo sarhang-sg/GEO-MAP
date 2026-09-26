@@ -63,7 +63,8 @@ def validate_source_manifest(manifest:dict, files:list[Path])->None:
         actual[relative]={'bytes':len(body),'sha256':digest_bytes(body)}
     missing=sorted(set(expected)-set(actual))
     extra=sorted(set(actual)-set(expected))
-    changed=sorted(path for path in set(expected)&set(actual) if expected[path]!=actual[path])
+    changed=sorted(path for path in set(expected)&set(actual)
+                   if any(expected[path].get(key)!=actual[path][key] for key in ('bytes','sha256')))
     if missing or extra or changed:
         details=[]
         if missing: details.append('Missing files:\n- '+'\n- '.join(missing[:30]))

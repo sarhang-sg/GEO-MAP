@@ -7,8 +7,8 @@
   "offlinePackVersion": "2027.13",
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
-  "fileCount": 1634,
-  "totalBytes": 287291928,
+  "fileCount": 1635,
+  "totalBytes": 287294696,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -3660,7 +3660,7 @@
     },
     "public/sw.js": {
       "bytes": 33339,
-      "sha256": "51b7a3f6e9891a8674dcdf2c84f1e92e0e91b90e3d65de267740eda13488820e"
+      "sha256": "8d14d25a54478a773f72687e9b4c1f4d5d2ffec2c255abe5f31ef4f4c88acb55"
     },
     "README.md": {
       "bytes": 5449,
@@ -3819,8 +3819,8 @@
       "sha256": "76c2c42381630714a81a1a9533acc31b08d3b894a94d4eb19144f805e40f8804"
     },
     "src/lib/map-animation-scheduler.ts": {
-      "bytes": 8815,
-      "sha256": "97366df842a19fda4beef125023227c4a7ac003a78acb6d1aae2dbf5b660f062"
+      "bytes": 8803,
+      "sha256": "aed5b60acd521bf9b56af373d1aa2b48576b182aa38c96f1cc6b1c9d5ee09d28"
     },
     "src/lib/map-camera-controller.ts": {
       "bytes": 1589,
@@ -3831,8 +3831,8 @@
       "sha256": "949b5d32d9c6d1bfe22b9f50714f35948773f8ea5ef66b2695d17754f5df465b"
     },
     "src/lib/map-experience-controller.ts": {
-      "bytes": 7587,
-      "sha256": "28ee7de852c7877d161f2274e4020569fc733fe5f9e860a1326712260084000d"
+      "bytes": 7568,
+      "sha256": "51c8737f93535ca4222f3e0bc287885cc7a50644edcf86b2e71a3e92f8021a61"
     },
     "src/lib/map-interactions.ts": {
       "bytes": 8030,
@@ -3935,8 +3935,8 @@
       "sha256": "e433245f56f608aa5750956cadcacf913b132800b65c94523cfb083901b85d29"
     },
     "src/lib/place-weather.ts": {
-      "bytes": 24350,
-      "sha256": "01b50297f7a959040a8241a041ef29151760a09bad0b4da954ed782031114248"
+      "bytes": 24473,
+      "sha256": "30181dfa8a38d1e5526c77121168f9f33654ad3d1866271b3ee77420b212f13d"
     },
     "src/lib/poi-icon-catalog.ts": {
       "bytes": 7741,
@@ -4083,8 +4083,8 @@
       "sha256": "06d0fc1503a5d8661361716aec51e1cdf8a2e8e575b226bbc9e5bfdee892b198"
     },
     "src/styles/base.css": {
-      "bytes": 1653,
-      "sha256": "fa4826fb5bc132db5572056213df1ed96d6d25cff260f0d38981878ed8bd418a"
+      "bytes": 1681,
+      "sha256": "7ddcd8364c9b44de756ae7feaf7281fcd5218cac261ba7203b86b1cda6201a0c"
     },
     "src/styles/components/loader.css": {
       "bytes": 7080,
@@ -4143,8 +4143,8 @@
       "sha256": "b494a27ae3294355155825567950ebbcc3aba09e6bc48870d6d65a8e711be11c"
     },
     "src/styles/luxe-ui.css": {
-      "bytes": 13298,
-      "sha256": "9d3f4edce959e5d0bad34a8ab7feae55ddd0233cbe5c4590f1c7d94bf0bfb36b"
+      "bytes": 13685,
+      "sha256": "3fe1f0ef7906724b2861be706ec9f1319f705e8a06598bd12413610eea917f9f"
     },
     "src/styles/map-responsive.css": {
       "bytes": 7624,
@@ -4155,8 +4155,8 @@
       "sha256": "96bf6e52005747e2583180e6b330d5a2e3a0aade0b9e6ec9e5cd9f87342d2fce"
     },
     "src/styles/map-visual-system.css": {
-      "bytes": 12681,
-      "sha256": "898676fafa5ec2e928ff4e7111d2af08c30898d086859fb1ad479cc15e85f9bd"
+      "bytes": 11937,
+      "sha256": "9bccd90ab1030a32ec633ced148713487d29ad91b1c5cd906ccda6742972ef3c"
     },
     "src/styles/modal-scroll.css": {
       "bytes": 6408,
@@ -4167,8 +4167,8 @@
       "sha256": "237afd54b5046b6c0f9b3eaebd16ca54d119f58a7f386b20c23af00b278b01b5"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 73469,
-      "sha256": "3e607ef44d825e936d749e38bc970be8a929140a90b593eaefabcbb224896059"
+      "bytes": 73568,
+      "sha256": "296c72431d418f8213b91f7b7693632ccf9478b1176ead7de002df7f0cf2483a"
     },
     "src/styles/network-resilience.css": {
       "bytes": 1673,
@@ -4179,16 +4179,16 @@
       "sha256": "63bcf74d8bc943d6f9116a9673547491d7ea6b33aebca31b1bfe46950921e30b"
     },
     "src/styles/place-weather.css": {
-      "bytes": 4798,
-      "sha256": "fb519ec20553e475d3f683fdc412231b73dc79fc8c6af3820acb0d916873a035"
+      "bytes": 5295,
+      "sha256": "43d0e6c5620b0ca0e54b6ab922700adb7b709dc2296340243a6a46f04b5e0e20"
     },
     "src/styles/platform-data.css": {
       "bytes": 1714,
       "sha256": "54b67a2ebd4cb9c001c218e6886985a1416b931e628a4bb11f8fbc35b83d2a89"
     },
     "src/styles/premium-ui.css": {
-      "bytes": 8429,
-      "sha256": "1d4d97166e7d64f7aa1ecbe386e37eeb670bace70ef8f297fe47fbe80e7facaf"
+      "bytes": 8431,
+      "sha256": "41f877e495f66cf9796672c27b84d940a58a7db9bb1cf4f1ec0804613f2fe6f5"
     },
     "src/styles/realtime-operations.css": {
       "bytes": 2545,
@@ -4510,13 +4510,17 @@
       "bytes": 2869,
       "sha256": "6994cdbb0c151da045b5ba3cfb6b1eb7d9e1ea99680b391d9304542b1ee54ec8"
     },
+    "tools/lib/release-content.mjs": {
+      "bytes": 2022,
+      "sha256": "3736bc2f8747de3c02e0c110f6daa79233cae28b365edf71505d4cb766a684aa"
+    },
     "tools/release/generate-release-manifest.mjs": {
-      "bytes": 1976,
-      "sha256": "290f6ee5653b4c34015cc1a53412408bb1523706afa225d0de297446096f2cc6"
+      "bytes": 2124,
+      "sha256": "6a2f7519ebc8665119df916d9b3202ad5ccb27fdbf1c23c67c0d9f1ae56d2bab"
     },
     "tools/release/package-release.py": {
-      "bytes": 6004,
-      "sha256": "3620ad38ce80d94bd154787c5ec3d1fd93495200c44cbc9649d23515c87492dc"
+      "bytes": 6072,
+      "sha256": "764f0535762185d01f7ca4e4b8b0cc09392d8cdda39e7c06db41c68d82bd0b4e"
     },
     "tools/release/prepare-android-download.mjs": {
       "bytes": 3197,
@@ -4548,7 +4552,7 @@
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 5321,
-      "sha256": "bf2b2bd6630200092219f8fb55dafbe5c110824286f800404c44cf3dead3b702"
+      "sha256": "b8ad2868fe1a3922626fa6192ce7cc2d32384ed9f437b9e4240c5868972e2f7e"
     },
     "tools/verify/phase4-performance.mjs": {
       "bytes": 2710,
@@ -4559,12 +4563,12 @@
       "sha256": "313e71265a2fdd5696daea91d748940babd1b45e24dcd7566fea0c569d4132c8"
     },
     "tools/verify/release.mjs": {
-      "bytes": 2650,
-      "sha256": "f40696007ffa62680abb5c5a1aecc12d239bfa76a8ddc301b9b971837a80bb44"
+      "bytes": 2809,
+      "sha256": "721c76f2038d881bfc0619dca20a6433fc1fe8f1833f995f907e8d3ac1036f67"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 18291,
-      "sha256": "435dfcc98d520b7d3940fa9fe5b387b9a5d3c1b7c7e9bf8a20f37ce3fc9f6473"
+      "bytes": 18301,
+      "sha256": "cfb18437c98b74ab43dc97cfbaaea460e44065cf97255ed7a7fe64e3ce624c3f"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 4265,
@@ -6540,7 +6544,8 @@
     },
     "vercel.json": {
       "bytes": 8153,
-      "sha256": "350a246e6a49147ba84b9230ec52bc98d00940e5026b7a68a7d9592c4b7278d1"
+      "sha256": "350a246e6a49147ba84b9230ec52bc98d00940e5026b7a68a7d9592c4b7278d1",
+      "jsonSha256": "fe22fff35cd17ac564161838736df417c63c21538757755c6016104ffa7b9fae"
     },
     "vite.config.ts": {
       "bytes": 1646,

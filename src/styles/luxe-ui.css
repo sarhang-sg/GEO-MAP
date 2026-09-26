@@ -273,9 +273,16 @@ html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(3) 
   box-shadow: 0 0 14px rgba(54, 174, 255, .22) !important;
 }
 
-/* Weather has one calm surface. Decorative layers must never intercept taps. */
+/* Restore the original night sky; decorations never intercept weather taps. */
 .place-weather[data-phase="night"]::before {
-  content:none;
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background-image:radial-gradient(circle at 12% 28%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 72% 22%,#91ddff 0 1px,transparent 1.5px),radial-gradient(circle at 43% 74%,#fff 0 1px,transparent 1.5px);
+  background-size:47px 47px,73px 73px,91px 91px;
+  opacity:.55;
+  animation:nk-v9-stars 8s linear infinite alternate;
   pointer-events:none;
 }
 

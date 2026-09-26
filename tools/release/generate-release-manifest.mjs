@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from "node:fs/promises";
 import { ROOT, posixPath, readJson, sha256, walk } from "../lib/project.mjs";
+import { configSemanticHash } from "../lib/release-content.mjs";
 
 const release = await readJson("release.config.json");
 const sourceDataManifest = await readJson("data-src/source-data-manifest.json");
@@ -21,6 +22,7 @@ for (const file of await walk(ROOT, { excludeDirectories: [...excludedDirectorie
   if (/\.(?:pyc|pyo|log|tmp|zip|sha256)$/iu.test(name)) continue;
   const body = await readFile(file);
   entries[path] = { bytes: body.length, sha256: sha256(body) };
+  if (path === "vercel.json") entries[path].jsonSha256 = configSemanticHash(body);
 }
 const manifest = {
   schema: "NAV KURD production source manifest v1",

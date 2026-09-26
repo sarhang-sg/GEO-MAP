@@ -24,6 +24,7 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body, #app { width: 100%; min-width: 0; min-height: 100%; margin: 0; }
+html { font-size: 93.75%; }
 body { min-height: 100vh; min-height: 100dvh; overflow: hidden; background: #09111d; }
 body[data-language="en"] { --font-ui: var(--font-latin); --font-map-label: var(--font-latin); }
 body[data-language="ku"],
