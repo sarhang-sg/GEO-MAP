@@ -19,6 +19,10 @@ type FlutterRuntimeInfo = {
   safeArea?: { top?: number; right?: number; bottom?: number; left?: number };
 };
 
+type NativeHardwareWindow = Window & {
+  __NAV_KURD_NATIVE_HARDWARE__?: FlutterRuntimeInfo;
+};
+
 type ConnectionStatus = {
   connected: boolean;
   connectionType: "none" | "unknown";
@@ -48,8 +52,12 @@ function formatMegabytes(bytes: number): string {
   return `${Math.max(0.01, bytes / 1_048_576).toFixed(bytes >= 10_485_760 ? 1 : 2)} MB`;
 }
 
-async function runtimeInfo(): Promise<FlutterRuntimeInfo> {
-  return flutterInvoke<FlutterRuntimeInfo>("nativeRuntimeInfo");
+async function runtimeInfo(includeStorage = false): Promise<FlutterRuntimeInfo> {
+  if (!includeStorage) {
+    const injected = (window as NativeHardwareWindow).__NAV_KURD_NATIVE_HARDWARE__;
+    if (injected) return injected;
+  }
+  return flutterInvoke<FlutterRuntimeInfo>("nativeRuntimeInfo", { includeStorage });
 }
 
 async function applySafeAreaInsets(): Promise<void> {
@@ -157,6 +165,24 @@ export function installNativeSettingsPanel(getLanguage: () => Language): void {
   const clearLabel = panel.querySelector<HTMLElement>("#nativeClearCacheLabel");
   const settingsLabel = panel.querySelector<HTMLElement>("#nativeOpenSettingsLabel");
   const note = panel.querySelector<HTMLElement>("#nativeAppNote");
+  const locationOption = document.createElement("label");
+  locationOption.className = "native-widget-location-option";
+  const automaticLocation = document.createElement("input"); automaticLocation.type = "checkbox";
+  const locationCopy = document.createElement("span");
+  locationOption.append(automaticLocation, locationCopy); panel.append(locationOption);
+  const locationText = () => ({
+    ku: "نوێکردنەوەی خۆکاری شوێنی ویجێت، تەنانەت کاتێک ئەپەکە داخراوە. ئیختیارییە و مۆڵەتی لۆکەیشنی «هەموو کات» پێویستە. ئەندرۆید کاتی نوێکردنەوە دیاری دەکات؛ بەبێ ئەم هەڵبژاردەیە شوێنی پاشەکەوتکراو بەکاردێت.",
+    ar: "تحديث موقع الويدجت تلقائياً حتى عند إغلاق التطبيق. اختياري ويحتاج إذن الموقع دائماً. يحدد Android موعد التحديث؛ عند التعطيل يُستخدم الموقع المحفوظ.",
+    en: "Update the widget location automatically, even when the app is closed. Optional; requires Allow all the time location permission. Android controls update timing. When off, weather uses your saved location."
+  })[getLanguage()];
+  automaticLocation.addEventListener("change", () => {
+    automaticLocation.disabled = true;
+    void flutterInvoke("nativeWidgetLocationOptions", { enabled: automaticLocation.checked })
+      .then((value) => { automaticLocation.checked = value === true; })
+      .catch(() => { automaticLocation.checked = false; })
+      .finally(() => { automaticLocation.disabled = false; });
+  });
+  void flutterInvoke("nativeWidgetLocationOptions").then((value) => { automaticLocation.checked = value === true; }).catch(() => undefined);
 
   const updateCopy = (): void => {
     const copy = platformCopy(getLanguage());
@@ -169,13 +195,14 @@ export function installNativeSettingsPanel(getLanguage: () => Language): void {
     if (clear) { clear.setAttribute("aria-label", copy.clear); clear.title = copy.clear; }
     if (settings) { settings.setAttribute("aria-label", copy.settings); settings.title = copy.settings; }
     if (note) note.textContent = copy.note;
+    locationCopy.textContent = locationText();
   };
 
   const refresh = async (): Promise<void> => {
     updateCopy();
     if (connection) connection.textContent = connectionLabel(normalizedConnection(navigator.onLine), getLanguage());
     try {
-      const native = await runtimeInfo();
+      const native = await runtimeInfo(true);
       const estimate = await navigator.storage?.estimate?.();
       const nativeBytes = Math.max(0, Number(native.appStorageBytes ?? native.cacheBytes ?? 0));
       if (cache) cache.textContent = formatMegabytes(nativeBytes + (estimate?.usage ?? 0));

@@ -897,12 +897,12 @@ export class OwnerStudio {
           if (pending.kind === "history") {
             await deleteAtlasNavigationHistory(pending.historyId);
             this.navigationHistory = this.navigationHistory.filter((entry) => entry.id !== pending.historyId);
-            removePendingNavigationHistory(pending.historyId, this.identity?.userId);
+            await removePendingNavigationHistory(pending.historyId, this.identity?.userId);
             this.setMessage(historyCopy.deleted, "success");
           } else {
             await clearAtlasNavigationHistory();
             this.navigationHistory = [];
-            removePendingNavigationHistory(undefined, this.identity?.userId);
+            await removePendingNavigationHistory(undefined, this.identity?.userId);
             this.setMessage(historyCopy.cleared, "success");
           }
         }, "list");

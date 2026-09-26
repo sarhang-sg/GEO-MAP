@@ -41,7 +41,13 @@ async function activeWorker(): Promise<ServiceWorker | null> {
   }
 }
 
-async function requestWorker(type: "CHECK_LANGUAGE_ASSETS" | "WARM_LANGUAGE_SEARCH", language: Language): Promise<LanguageCacheReply | null> {
+type LanguageAssetKind = "properties" | "search";
+
+async function requestWorker(
+  type: "CHECK_LANGUAGE_ASSETS" | "WARM_LANGUAGE_ASSETS",
+  language: Language,
+  assetKind: LanguageAssetKind
+): Promise<LanguageCacheReply | null> {
   const worker = await activeWorker();
   if (!worker) return null;
   return new Promise((resolve) => {
@@ -57,7 +63,7 @@ async function requestWorker(type: "CHECK_LANGUAGE_ASSETS" | "WARM_LANGUAGE_SEAR
     const timer = window.setTimeout(() => finish(null), type === "CHECK_LANGUAGE_ASSETS" ? REQUEST_TIMEOUT_MS : 12_000);
     channel.port1.onmessage = (event: MessageEvent<LanguageCacheReply>) => finish(event.data ?? null);
     try {
-      worker.postMessage({ type, language, assetKind: type === "CHECK_LANGUAGE_ASSETS" ? "properties" : "search", mapDataVersion: MAP_DATA_VERSION }, [channel.port2]);
+      worker.postMessage({ type, language, assetKind, mapDataVersion: MAP_DATA_VERSION }, [channel.port2]);
     } catch {
       finish(null);
     }
@@ -82,7 +88,7 @@ export class LanguageAssetCacheController {
 
   async verifyPrepared(language: Language): Promise<boolean> {
     const hint = this.prepared.has(language);
-    const reply = await requestWorker("CHECK_LANGUAGE_ASSETS", language);
+    const reply = await requestWorker("CHECK_LANGUAGE_ASSETS", language, "properties");
     if (!reply) return hint;
     const cached = reply.cached === true
       || Boolean(Number(reply.totalEntries) > 0 && reply.cachedEntries === reply.totalEntries);
@@ -93,10 +99,14 @@ export class LanguageAssetCacheController {
     return cached || hint;
   }
 
-  async warm(language: Language): Promise<void> {
-    const reply = await requestWorker("WARM_LANGUAGE_SEARCH", language);
+  async warm(language: Language, assetKind: LanguageAssetKind = "search"): Promise<void> {
+    const reply = await requestWorker("WARM_LANGUAGE_ASSETS", language, assetKind);
     const complete = reply?.ok === true
       || Boolean(reply && Number(reply.totalEntries) > 0 && reply.cachedEntries === reply.totalEntries);
-    if (complete) this.markPrepared(language);
+    if (complete && assetKind === "properties") this.markPrepared(language);
+  }
+
+  warmProperties(language: Language): Promise<void> {
+    return this.warm(language, "properties");
   }
 }

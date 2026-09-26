@@ -1,3 +1,5 @@
+import {coreCall,localCoreEnabled} from '../android/local-provider';
+import {recordRuntimeDiagnostic} from './runtime-diagnostics';
 import {
   getAtlasAuthIdentity,
   loadAtlasNavigationHistory,
@@ -8,9 +10,9 @@ import {
 
 const STORAGE_KEY = "nav-kurd-navigation-history-v1";
 const LIMIT = 40;
-type PendingHistory = AtlasNavigationHistoryInput & { userId?: string | null };
+type PendingHistory = AtlasNavigationHistoryInput & { userId?: string | null; localRevision?:number };
 
-export function loadPendingNavigationHistory(userId?: string): PendingHistory[] {
+function loadBrowserPendingNavigationHistory(userId?: string): PendingHistory[] {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]") as unknown;
     if (!Array.isArray(parsed)) return [];
@@ -48,18 +50,48 @@ export function loadPendingNavigationHistory(userId?: string): PendingHistory[] 
   }
 }
 
-export function queueNavigationHistory(entry: AtlasNavigationHistoryInput, userId: string | null = null): boolean {
+let nativeHandoff:Promise<void>|undefined;
+function initializeNativeHistory():Promise<void>{
+  return nativeHandoff??=(async()=>{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    const receipt=await coreCall<{sourceHash:string;capturedSourceHash:string;alreadyImported:boolean}>('importNavigationHistory',{raw});
+    if(raw!==null){
+      if(receipt.sourceHash!==receipt.capturedSourceHash)throw new Error('Native history import receipt does not match.');
+      if(localStorage.getItem(STORAGE_KEY)!==raw)throw new Error('Legacy history changed during import; it was preserved.');
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  })().catch(error=>{nativeHandoff=undefined;recordRuntimeDiagnostic('local-history',error,'error');throw error;});
+}
+
+export async function loadPendingNavigationHistory(userId?:string):Promise<PendingHistory[]>{
+  if(!localCoreEnabled)return loadBrowserPendingNavigationHistory(userId);
+  await initializeNativeHistory();
+  return coreCall<PendingHistory[]>('navigationHistory',{userId:userId??null});
+}
+
+export async function queueNavigationHistory(entry: AtlasNavigationHistoryInput, userId: string | null = null): Promise<boolean> {
+  if(localCoreEnabled){
+    await initializeNativeHistory();
+    await coreCall('queueNavigationHistory',{entry,userId});
+    return true;
+  }
   try {
-    const history = loadPendingNavigationHistory().filter((item) => item.id !== entry.id || item.userId !== userId);
+    const history = loadBrowserPendingNavigationHistory().filter((item) => item.id !== entry.id || item.userId !== userId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify([{ ...entry, userId }, ...history].slice(0, LIMIT)));
     return true;
   } catch { return false; }
 }
 
-export function removePendingNavigationHistory(id?: string, userId?: string): void {
+export async function removePendingNavigationHistory(id?: string, userId?: string, expectedRevision?:number): Promise<void> {
+  if(localCoreEnabled){
+    if(!userId)return;
+    await initializeNativeHistory();
+    await coreCall('removeNavigationHistory',{id:id??null,userId,expectedRevision:expectedRevision??null});
+    return;
+  }
   try {
     if (!userId) return;
-    const remaining = loadPendingNavigationHistory().filter((entry) => (userId !== undefined && entry.userId !== userId) || (id !== undefined && entry.id !== id));
+    const remaining = loadBrowserPendingNavigationHistory().filter((entry) => (userId !== undefined && entry.userId !== userId) || (id !== undefined && entry.id !== id));
     if (remaining.length > 0) localStorage.setItem(STORAGE_KEY, JSON.stringify(remaining));
     else localStorage.removeItem(STORAGE_KEY);
   } catch { /* The database remains authoritative. */ }
@@ -90,13 +122,15 @@ const retryAt = new Map<string, number>();
 export function loadSynchronizedNavigationHistory(userId: string): Promise<AtlasNavigationHistory[]> {
   const active = loads.get(userId);
   if (active) return active;
-  const pending = loadPendingNavigationHistory(userId);
-  if (Date.now() < (retryAt.get(userId) ?? 0)) return Promise.resolve(pendingRows(pending, userId));
   const task = (async () => {
+    const pending = await loadPendingNavigationHistory(userId);
+    if (Date.now() < (retryAt.get(userId) ?? 0)) return pendingRows(pending, userId);
     try {
       if (pending.length > 0) {
         const synced = await syncAtlasNavigationHistory(pending, userId);
-        if (synced > 0) pending.forEach(entry => removePendingNavigationHistory(entry.id, userId));
+        if(synced===pending.length){
+          for(const entry of pending)await removePendingNavigationHistory(entry.id,userId,entry.localRevision);
+        } else if(synced>0)throw new Error('Navigation history acknowledgement was incomplete; pending routes were retained.');
       }
       const rows = await loadAtlasNavigationHistory(100, userId);
       retryAt.delete(userId);
@@ -104,7 +138,7 @@ export function loadSynchronizedNavigationHistory(userId: string): Promise<Atlas
     } catch (error) {
       retryAt.set(userId, Date.now() + 60_000);
       console.error("Navigation history synchronization failed; queued routes are retained and retry is delayed.", error);
-      return pendingRows(loadPendingNavigationHistory(userId), userId);
+      return pendingRows(await loadPendingNavigationHistory(userId), userId);
     }
   })().finally(() => { loads.delete(userId); });
   loads.set(userId, task);
@@ -120,7 +154,7 @@ export async function persistNavigationHistory(entry: AtlasNavigationHistoryInpu
   } catch (error) {
     console.error("Navigation history identity unavailable; keeping the route on this device.", error);
   }
-  const queued = queueNavigationHistory(entry, userId);
+  const queued = await queueNavigationHistory(entry, userId);
   if (userId) {
     if (queued) await loadSynchronizedNavigationHistory(userId);
     else await syncAtlasNavigationHistory([entry], userId);

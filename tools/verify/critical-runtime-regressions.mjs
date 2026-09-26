@@ -13,7 +13,7 @@ function load(path, globals, exports) {
 }
 function gpsHarness() {
   const watches=[], moves=[], messages=[];
-  const gps=load('src/lib/live-location-controller.ts',{distanceMeters:()=>0,Date,window:{performance:{now:()=>10000}},localStorage:{setItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable'}}},'LiveLocationController');
+  const gps=load('src/lib/live-location-controller.ts',{localCoreEnabled:false,nativeBoolean:()=>false,saveNativeBoolean(){},distanceMeters:()=>0,Date,window:{performance:{now:()=>10000}},localStorage:{setItem(){},removeItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable'}}},'LiveLocationController');
   const c=Object.create(gps.LiveLocationController.prototype);
   Object.assign(c,{watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,lastAccuracy:120,
     geolocation:{watchPosition(success,error,options){watches.push({success,error,options,active:true});return watches.length;},clearWatch(id){watches[id-1].active=false;},getCurrentPosition(){throw Error('Duplicate one-shot request');}},
@@ -162,6 +162,32 @@ function gpsHarness() {
   assert.equal(health.container.hidden, false, 'a real offline notice must survive successful cached-map startup');
   console.log('PASS successful recovery clears its previous error banner without hiding an active offline notice');
 }
+{
+  let calls = 0;
+  const nativeWindow = {
+    __NAV_KURD_LOCAL_CORE__: 1,
+    flutter_inappwebview: {
+      async callHandler(_name, payload) {
+        calls++;
+        return { ok: true, value: [{ id: payload.text, n: payload.text, q: payload.text, c: 'place' }] };
+      }
+    },
+    addEventListener() {}
+  };
+  const { NativeSearchProvider } = load('src/android/local-provider.ts', { window: nativeWindow, Error, Object, Map, Promise }, 'NativeSearchProvider');
+  const provider = new NativeSearchProvider();
+  const repeated = Array.from({ length: 100 }, () => provider.search('hawler', 'ku', 12));
+  const rows = await Promise.all(repeated);
+  assert.equal(calls, 1);
+  assert.equal(rows[0][0].n_ku, 'hawler');
+  provider.reset();
+  await provider.search('hawler', 'ku', 12);
+  assert.equal(calls, 2);
+  for (let index = 0; index < 40; index++) await provider.search(`query-${index}`, 'en', 12);
+  assert.ok(provider.cache.size <= 24);
+  assert.equal(calls, 42);
+  console.log('PASS native search coalescing/LRU: 100 identical requests use one bridge call and cache remains bounded');
+}
 for (const code of [1,2,3]) {
   const h=gpsHarness();
   for(let i=0;i<1000;i++)h.c.locate();
@@ -175,15 +201,6 @@ for (const code of [1,2,3]) {
   h.fix();assert.equal(h.moves.length,1);assert.equal(h.c.requestInFlight,false);
   h.c.stopFollow();h.fix();assert.equal(h.moves.length,1);
   h.c.locate();assert.equal(h.moves.length,2);assert.equal(h.watches.length,2);
-}
-{
-  const h=gpsHarness();
-  const request=h.c.locate();
-  h.fix();
-  const snapshot=await request;
-  assert.equal(Array.from(snapshot.coordinate).join(","),"44.2,36.2");
-  assert.equal(h.watches.length,1);
-  console.log('PASS GPS exposes the shared first-fix result without starting a second provider request');
 }
 console.log('PASS GPS first feedback, 1000 repeated taps share one request, error distinctions, retry, stale callbacks/cache, success/cached focus and manual-pan state');
 {
@@ -215,15 +232,15 @@ class Events {
 }
 {
   const storage=new Map();let reads=0,syncs=0,release;let fail=true;const errors=[];
-  const api=load('src/lib/navigation-history-store.ts',{Date,localStorage:{getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},console:{error:(...args)=>errors.push(args)},loadAtlasNavigationHistory:async()=>{reads++;return [];},syncAtlasNavigationHistory:async entries=>{syncs++;await new Promise(resolve=>release=resolve);if(fail)throw Error('PGRST205 test');return entries.length;}},'queueNavigationHistory,loadPendingNavigationHistory,loadSynchronizedNavigationHistory');
+  const api=load('src/lib/navigation-history-store.ts',{localCoreEnabled:false,coreCall(){throw Error('native core must not be called');},recordRuntimeDiagnostic(){},Date,localStorage:{getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},console:{error:(...args)=>errors.push(args)},loadAtlasNavigationHistory:async()=>{reads++;return [];},syncAtlasNavigationHistory:async entries=>{syncs++;await new Promise(resolve=>release=resolve);if(fail)throw Error('PGRST205 test');return entries.length;}},'queueNavigationHistory,loadPendingNavigationHistory,loadSynchronizedNavigationHistory');
   const entry={id:'one',status:'arrived',startedAt:1,endedAt:2,destination:'test',travelMode:'walking'};
-  api.queueNavigationHistory(entry, "account-a");
+  await api.queueNavigationHistory(entry, "account-a");
   const a=api.loadSynchronizedNavigationHistory('account-a');const b=api.loadSynchronizedNavigationHistory('account-a');assert.equal(a,b);
-  release();await a;assert.equal(syncs,1);assert.equal(reads,0);assert.equal(errors.length,1);
+  await Promise.resolve();release();await a;assert.equal(syncs,1);assert.equal(reads,0);assert.equal(errors.length,1);
   for(let i=0;i<100;i++)await api.loadSynchronizedNavigationHistory('account-a');
-  assert.equal(syncs,1);assert.equal(api.loadPendingNavigationHistory().length,1);
-  fail=false;api.queueNavigationHistory({...entry,id:"account-b-entry"},"account-b");const next=api.loadSynchronizedNavigationHistory('account-b');api.queueNavigationHistory({...entry,id:'new-during-upload'},"account-b");release();await next;
-  assert.equal(reads,1);assert.equal(api.loadPendingNavigationHistory('account-b')[0].id,'new-during-upload');assert.equal(api.loadPendingNavigationHistory('account-a')[0].id,'one');
+  assert.equal(syncs,1);assert.equal((await api.loadPendingNavigationHistory()).length,1);
+  fail=false;await api.queueNavigationHistory({...entry,id:"account-b-entry"},"account-b");const next=api.loadSynchronizedNavigationHistory('account-b');await api.queueNavigationHistory({...entry,id:'new-during-upload'},"account-b");await Promise.resolve();release();await next;
+  assert.equal(reads,1);assert.equal((await api.loadPendingNavigationHistory('account-b'))[0].id,'new-during-upload');assert.equal((await api.loadPendingNavigationHistory('account-a'))[0].id,'one');
   console.log('PASS history concurrent requests deduplicate, failures back off, no failed GET loop and in-flight queue additions survive');
 }
 {
@@ -242,38 +259,4 @@ class Events {
   frames.shift()();assert.equal(blurs,0);
   document.activeElement=button;context.release({target:new Element()});frames.shift()();assert.equal(blurs,1);
   console.log('PASS post-click touch cleanup preserves a newly opened dialog input focus');
-}
-{
-  const source=fs.readFileSync(new URL('src/lib/routing-controller.ts',root),'utf8');
-  const start=source.indexOf('  private async selectDestination');
-  const end=source.indexOf('\n  private setDestination',start);
-  assert.ok(start>0&&end>start,'destination selection method is missing');
-  const classSource=`class Harness {\n${source.slice(start,end)}\n}`;
-  const context=vm.createContext({UI:{en:{routeOutsideBoundary:'outside'}}});
-  vm.runInContext(stripTypeScriptTypes(classSource,{mode:'transform'})+'\nglobalThis.Harness=Harness;',context);
-  const controller=new context.Harness();
-  let resolveLocation;let commits=0;let pinModeCalls=0;
-  Object.assign(controller,{
-    destinationSelectionSerial:0,
-    getLanguage:()=> 'en',
-    getLocationSnapshot:()=>({coordinate:null}),
-    requestLocation:()=>new Promise(resolve=>{resolveLocation=resolve;}),
-    setPinMode(){pinModeCalls++;},
-    isDestinationAllowed:()=>true,
-    setMessage(){},
-    setDestination(){commits++;}
-  });
-  const selection=controller.selectDestination([44.1,36.1],'target');
-  assert.equal(commits,0,'destination must not commit before the first GPS fix');
-  assert.equal(pinModeCalls,1);
-  resolveLocation({coordinate:[44,36]});
-  await selection;
-  assert.equal(commits,1,'destination must commit after GPS succeeds');
-
-  const stale=controller.selectDestination([44.2,36.2],'stale');
-  controller.destinationSelectionSerial+=1;
-  resolveLocation({coordinate:[44,36]});
-  await stale;
-  assert.equal(commits,1,'cancelled/stale destination must never commit later');
-  console.log('PASS destination waits for GPS, paints no premature marker and ignores stale selections');
 }

@@ -14,8 +14,8 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
     <div id="mapLoading" class="map-loading" data-phase="loading" role="status" aria-live="polite" aria-atomic="true">
       <div class="map-loading__content">
         <div class="map-loading__word" aria-hidden="true">
-          ${Array.from({ length: 9 }, () => '<span class="map-loading__slice"><b data-essential-animation="true">Loading</b></span>').join("")}
-          <span class="map-loading__line" data-essential-animation="true"></span>
+          ${Array.from({ length: 9 }, () => '<span class="map-loading__slice"><b>Loading</b></span>').join("")}
+          <span class="map-loading__line"></span>
         </div>
         <p class="map-loading__equation" dir="ltr" aria-label="2 plus 2 equals 1">2 + 2 = 1</p>
         <p class="map-loading__message" hidden></p>
@@ -119,14 +119,14 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
           <div><dt id="aboutCvLabel">MY CV</dt><dd><a id="aboutCvLink" class="about-dialog__meta-link about-dialog__meta-link--cv" href="https://sarhang-cs.github.io/Sarhang-Cv/" target="_blank" rel="noopener noreferrer" aria-label="MY CV"><img class="about-dialog__meta-icon" src="${import.meta.env.BASE_URL}assets/support/my-cv-preview.jpg" alt="" width="1120" height="1680" loading="lazy" decoding="async" draggable="false" /></a></dd></div>
           <div><dt id="aboutCoverageLabel">Coverage</dt><dd id="aboutCoverageValue">Kurdistan Region + disputed areas</dd></div>
         </dl>
-        <section id="offlineMapPack" class="offline-map-pack" data-status="idle" aria-labelledby="offlineMapPackHeading">
+        <section id="offlineMapPack" class="offline-map-pack" data-status="idle" data-progress-phase="start" aria-live="polite" aria-labelledby="offlineMapPackHeading">
           <h3 id="offlineMapPackHeading" class="visually-hidden">Offline map pack</h3>
           <div class="offline-map-pack__header">
-            <div><strong id="offlinePackTitle">Offline map</strong><small id="offlinePackStatus" role="status">Not downloaded</small></div>
+            <div><strong id="offlinePackTitle">Offline map</strong><small id="offlinePackStatus">Not downloaded</small></div>
             <span id="offlinePackSize">0 MB</span>
           </div>
           <div class="offline-map-pack__track" role="progressbar" aria-label="Offline map download" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="offlinePackProgress"></span></div>
-          <div class="offline-map-pack__meta">
+          <div class="offline-map-pack__meta" aria-live="polite">
             <span id="offlinePackPersistence">—</span>
             <span id="offlinePackStorage">—</span>
           </div>

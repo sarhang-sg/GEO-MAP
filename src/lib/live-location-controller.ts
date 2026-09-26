@@ -1,3 +1,5 @@
+import {localCoreEnabled} from "../android/local-provider";
+import {nativeBoolean,saveNativeBoolean} from "../android/ui-preferences";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { UI } from "./i18n";
@@ -67,11 +69,13 @@ const TRACKING_PREFERENCE_KEY = "nav-kurd:gps:active";
 const STALE_WATCH_MS = 22_000;
 
 function readTrackingPreference(): boolean {
+  if(localCoreEnabled)return nativeBoolean("trackingEnabled");
   try { return localStorage.getItem(TRACKING_PREFERENCE_KEY) === "1"; }
   catch { return false; }
 }
 
 function writeTrackingPreference(active: boolean): void {
+  if(localCoreEnabled){saveNativeBoolean("trackingEnabled",active);return;}
   try {
     if (active) localStorage.setItem(TRACKING_PREFERENCE_KEY, "1");
     else localStorage.removeItem(TRACKING_PREFERENCE_KEY);
@@ -104,8 +108,6 @@ export class LiveLocationController {
   private followEnabled = false;
   private pendingCameraFocus = false;
   private watchGeneration = 0;
-  private locationRequestPromise: Promise<LiveLocationDiagnosticSnapshot | null> | null = null;
-  private locationRequestResolve: ((snapshot: LiveLocationDiagnosticSnapshot | null) => void) | null = null;
   private readonly finishCameraMove = (): void => { this.programmaticMove = false; };
   private lastCoordinate: LngLatTuple | null = null;
   private lastHeading: number | null = null;
@@ -185,22 +187,6 @@ export class LiveLocationController {
     };
   }
 
-  private pendingLocationRequest(): Promise<LiveLocationDiagnosticSnapshot | null> {
-    if (!this.locationRequestPromise) {
-      this.locationRequestPromise = new Promise((resolve) => {
-        this.locationRequestResolve = resolve;
-      });
-    }
-    return this.locationRequestPromise;
-  }
-
-  private completeLocationRequest(snapshot: LiveLocationDiagnosticSnapshot | null): void {
-    const resolve = this.locationRequestResolve;
-    this.locationRequestPromise = null;
-    this.locationRequestResolve = null;
-    resolve?.(snapshot);
-  }
-
   lockAgainstGpsJitter(): void {
     this.interactionLockUntil = window.performance.now() + 1600;
   }
@@ -210,7 +196,7 @@ export class LiveLocationController {
     this.setFollowEnabled(false);
   }
 
-  locate(focus = true): Promise<LiveLocationDiagnosticSnapshot | null> {
+  locate(focus = true): void {
     const language = this.getLanguage();
     this.watchWanted = true;
     writeTrackingPreference(true);
@@ -219,8 +205,7 @@ export class LiveLocationController {
       this.watchWanted = false;
       writeTrackingPreference(false);
       this.setMessage(UI[language].locationUnavailable, "error");
-      this.completeLocationRequest(null);
-      return Promise.resolve(this.lastCoordinate ? this.diagnosticSnapshot() : null);
+      return;
     }
     this.setFollowEnabled(focus);
     this.pendingCameraFocus = focus;
@@ -235,11 +220,8 @@ export class LiveLocationController {
       this.pendingCameraFocus = false;
       this.setMessage(UI[language].locationReady, "success");
     }
-    const result = this.lastCoordinate
-      ? Promise.resolve(this.diagnosticSnapshot())
-      : this.pendingLocationRequest();
-    if (this.requestInFlight) return result;
-    if (this.watchId !== null) return result;
+    if (this.requestInFlight) return;
+    if (this.watchId !== null) return;
     this.requestInFlight = true;
     const requestGeneration = ++this.watchGeneration;
 
@@ -389,7 +371,6 @@ export class LiveLocationController {
         this.locationReadyAnnounced = true;
         this.setMessage(UI[this.getLanguage()].locationReady, "success");
       }
-      this.completeLocationRequest(this.diagnosticSnapshot());
     };
     const onError = (error: GeolocationPositionError): void => {
       if (requestGeneration !== this.watchGeneration) return;
@@ -403,7 +384,6 @@ export class LiveLocationController {
         this.pendingCameraFocus = false;
         this.setFollowEnabled(false);
         this.setMessage(UI[this.getLanguage()].locationDenied, "error");
-        this.completeLocationRequest(null);
         return;
       }
       // A failed initial request ends acquisition; an explicit tap can retry.
@@ -420,7 +400,6 @@ export class LiveLocationController {
         const copy = UI[this.getLanguage()];
         this.setMessage(error.code === error.TIMEOUT ? copy.locationTimeout : copy.locationUnavailable, "error");
       }
-      this.completeLocationRequest(this.lastCoordinate ? this.diagnosticSnapshot() : null);
     };
     // One provider watch supplies the initial cached/fresh fix and subsequent
     // updates. Repeated taps reuse it; no concurrent one-shot receivers exist.
@@ -440,10 +419,8 @@ export class LiveLocationController {
         this.pendingCameraFocus = false;
         this.setFollowEnabled(false);
         this.setMessage(UI[this.getLanguage()].locationUnavailable, "error");
-        this.completeLocationRequest(null);
       }
     }
-    return result;
   }
 
   updateLayers(): void {

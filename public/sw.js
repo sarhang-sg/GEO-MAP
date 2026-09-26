@@ -1,6 +1,6 @@
 /* Build placeholders are replaced in dist/sw.js by tools/build/build-offline-runtime.mjs. */
 const RELEASE_ID = "__KRI_RELEASE_ID__";
-const UI_REVISION = "R16-hotfix-5";
+const UI_REVISION = "R16-hotfix-5-R3-2";
 const CACHE_SCHEMA = "__KRI_CACHE_SCHEMA__";
 const MAP_DATA_VERSION = "__KRI_MAP_DATA_VERSION__";
 const OFFLINE_PACK_VERSION = "__KRI_OFFLINE_PACK_VERSION__";
@@ -12,6 +12,7 @@ const DATA_CACHE = `${CACHE_PREFIX}data-s${CACHE_SCHEMA}-${MAP_DATA_VERSION}`;
 const SATELLITE_CACHE = `${CACHE_PREFIX}satellite-s${CACHE_SCHEMA}`;
 const SATELLITE_CACHE_LIMIT = 256;
 const RUNTIME_CACHE_LIMIT = 320;
+const CACHE_TRIM_WRITE_BATCH = 16;
 const TRANSPARENT_TILE_BYTES = Uint8Array.from(atob("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAF/gL+Avz7WQAAAABJRU5ErkJggg=="), (char) => char.charCodeAt(0));
 const BASE = self.registration.scope;
 const BACKGROUND_SYNC_TAG = "nav-kurd-runtime-sync";
@@ -29,6 +30,8 @@ const REQUIRED_SHELL_PATHS = new Set(
     .map((entry) => new URL(entry.path.replace(/^\//, ""), self.registration.scope).pathname)
 );
 let offlineRuntimeAborter = null;
+const cacheTrimStates = new Map();
+const versionedDataFetches = new Map();
 
 const absolute = (path) => new URL(path.replace(/^\//, ""), BASE).toString();
 const isSameOrigin = (request) => new URL(request.url).origin === self.location.origin;
@@ -128,8 +131,10 @@ async function installRequiredShell() {
 async function warmOptionalShell() {
   const cache = await caches.open(SHELL_CACHE);
   const entries = PRECACHE.filter((item) => !item.required && item.warm !== false);
-  const results = await runBounded(entries, 4, (entry) => cacheEntry(cache, entry.path, false));
-  return results.filter(Boolean).length;
+  const cached = await runBounded(entries, 8, async (entry) => Boolean(await cache.match(absolute(entry.path))));
+  const missing = entries.filter((_, index) => !cached[index]);
+  const results = await runBounded(missing, 4, (entry) => cacheEntry(cache, entry.path, false));
+  return entries.length - missing.length + results.filter(Boolean).length;
 }
 
 function normalizedLanguage(value) {
@@ -380,28 +385,62 @@ async function cacheFirstVersionedData(request) {
   const cached = (await cache.match(key)) || (await cache.match(request));
   if (cached) return cached;
   if (workerIsOffline()) return offlineFailureResponse(request);
+  const existing = versionedDataFetches.get(key);
+  if (existing) return (await existing).clone();
 
-  try {
-    // Language/property packs are immutable and can exceed one MiB. A short API
-    // timeout used to abort valid mobile downloads and reject the FetchEvent.
-    const response = await fetchWithTimeout(
-      request,
-      { cache: "no-store", credentials: "same-origin" },
-      VERSIONED_DATA_TIMEOUT_MS
-    );
-    if (response.ok) await cache.put(key, response.clone());
-    return response;
-  } catch {
-    // A FetchEvent must always resolve with a Response. Recheck the cache in
-    // case another tab completed the same immutable request while this one ran.
-    return (await cache.match(key)) || (await cache.match(request)) || offlineFailureResponse(request);
-  }
+  const task = (async () => {
+    try {
+      // Language/property packs are immutable and can exceed one MiB. A short API
+      // timeout used to abort valid mobile downloads and reject the FetchEvent.
+      const response = await fetchWithTimeout(
+        request,
+        { cache: "no-store", credentials: "same-origin" },
+        VERSIONED_DATA_TIMEOUT_MS
+      );
+      if (response.ok) await cache.put(key, response.clone());
+      return response;
+    } catch {
+      // A FetchEvent must always resolve with a Response. Recheck the cache in
+      // case another tab completed the same immutable request while this one ran.
+      return (await cache.match(key)) || (await cache.match(request)) || offlineFailureResponse(request);
+    }
+  })().finally(() => {
+    if (versionedDataFetches.get(key) === task) versionedDataFetches.delete(key);
+  });
+  versionedDataFetches.set(key, task);
+  return (await task).clone();
 }
 
 async function trimCache(cache, limit) {
   const keys = await cache.keys();
   if (keys.length <= limit) return;
   await Promise.all(keys.slice(0, keys.length - limit).map((key) => cache.delete(key)));
+}
+
+async function trimCacheAfterWrite(cacheName, cache, limit) {
+  let state = cacheTrimStates.get(cacheName);
+  if (!state) {
+    // Verify the persisted cache on the first write after worker startup, then
+    // amortize keys()/delete scans across a bounded batch of later writes.
+    state = { writes: CACHE_TRIM_WRITE_BATCH - 1, dirty: false, task: null };
+    cacheTrimStates.set(cacheName, state);
+  }
+  state.writes += 1;
+  if (state.writes < CACHE_TRIM_WRITE_BATCH) return state.task;
+  state.writes = 0;
+  state.dirty = true;
+  if (!state.task) {
+    const task = (async () => {
+      while (state.dirty) {
+        state.dirty = false;
+        await trimCache(cache, limit);
+      }
+    })().finally(() => {
+      if (state.task === task) state.task = null;
+    });
+    state.task = task;
+  }
+  return state.task;
 }
 
 async function staleWhileRevalidate(request, cacheName, limit = 0, lifetimeEvent = null) {
@@ -412,7 +451,7 @@ async function staleWhileRevalidate(request, cacheName, limit = 0, lifetimeEvent
     .then(async (response) => {
       if (response.ok) {
         await cache.put(request, response.clone());
-        if (limit > 0) await trimCache(cache, limit);
+        if (limit > 0) await trimCacheAfterWrite(cacheName, cache, limit);
       }
       return response;
     })
@@ -431,7 +470,8 @@ async function cacheFirstVisual(request, lifetimeEvent = null) {
     // general 4.5-second API timeout on fonts/icons over constrained mobile links.
     const response = await fetch(request, { cache: "force-cache", credentials: "same-origin" });
     if (response.ok) {
-      const write = runtime.put(request, response.clone()).then(() => trimCache(runtime, RUNTIME_CACHE_LIMIT));
+      const write = runtime.put(request, response.clone())
+        .then(() => trimCacheAfterWrite(RUNTIME_CACHE, runtime, RUNTIME_CACHE_LIMIT));
       if (lifetimeEvent) lifetimeEvent.waitUntil(write);
       else await write;
     }
@@ -467,7 +507,7 @@ async function cachedMapTilerSatellite(request, lifetimeEvent = null) {
     .then(async (response) => {
       if (response.ok || response.type === "opaque") {
         await cache.put(key, response.clone());
-        await trimCache(cache, SATELLITE_CACHE_LIMIT);
+        await trimCacheAfterWrite(SATELLITE_CACHE, cache, SATELLITE_CACHE_LIMIT);
       }
       return response;
     })
@@ -628,16 +668,17 @@ self.addEventListener("message", (event) => {
     return;
   }
 
-  if (data.type === "WARM_LANGUAGE_SEARCH") {
+  if (data.type === "WARM_LANGUAGE_ASSETS" || data.type === "WARM_LANGUAGE_SEARCH") {
     event.waitUntil((async () => {
       const language = normalizedLanguage(data.language);
+      const assetKind = data.type === "WARM_LANGUAGE_SEARCH" || data.assetKind === "search" ? "search" : "properties";
       const cache = await caches.open(DATA_CACHE);
-      let state = await inspectLanguageAssets(cache, language, "search");
+      let state = await inspectLanguageAssets(cache, language, assetKind);
       if (state.missing.length > 0) {
         await runBounded(state.missing, 2, (entry) => cacheEntry(cache, entry.path, false));
-        state = await inspectLanguageAssets(cache, language, "search");
+        state = await inspectLanguageAssets(cache, language, assetKind);
       }
-      reply({ ok: state.cached, assetKind: "search", ...state });
+      reply({ ok: state.cached, assetKind, ...state });
     })());
     return;
   }

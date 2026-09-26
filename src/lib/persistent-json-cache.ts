@@ -1,3 +1,4 @@
+import {localCoreEnabled} from "../android/local-provider";
 import { ServiceError, isAbortError } from "./service-state";
 
 const inFlightJson = new Map<string, Promise<unknown>>();
@@ -19,7 +20,7 @@ function jsonRequest(resource: string, signal?: AbortSignal): Request {
  * owner; page and worker code never opens or writes a second language cache.
  */
 async function readServiceWorkerCachedJson<T>(request: Request): Promise<T | null> {
-  if (!canReadServiceWorkerCache()) return null;
+  if (localCoreEnabled || !canReadServiceWorkerCache()) return null;
   try {
     const response = await caches.match(request, { ignoreVary: false, ignoreSearch: false });
     if (!response) return null;
@@ -33,7 +34,7 @@ async function loadJson<T>(request: Request, label: string): Promise<T> {
   try {
     // The service worker owns persistent versioned data caching. Browser HTTP
     // cache remains the fallback when the page is not yet service-worker controlled.
-    const response = await fetch(request, { cache: "force-cache" });
+    const response = await fetch(request, { cache: localCoreEnabled ? "no-store" : "force-cache" });
     if (!response.ok) {
       throw new ServiceError(`${label} request failed (${response.status}).`, {
         resource: request.url,

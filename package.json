@@ -22,7 +22,7 @@
     "build:web": "vite build && node tools/build/prune-production-dist.mjs",
     "build:offline": "node tools/build/build-offline-runtime.mjs",
     "build": "npm run typecheck && npm run data:prepare && npm run build:web && npm run build:offline && npm run verify:production",
-    "build:vercel": "NAV_KURD_DEPLOYMENT_BUILD=1 npm run build",
+    "build:vercel": "npm run verify:release && npm run typecheck && npm run build:web && npm run build:offline && npm run verify:production",
     "preview": "vite preview",
     "verify:toolchain": "node tools/verify/toolchain.mjs --require-npm",
     "verify:source": "node tools/verify/source.mjs",
@@ -43,7 +43,8 @@
     "package": "npm run build && python3 tools/release/package-release.py",
     "verify:dependencies": "node tools/verify/dependency-security.mjs",
     "verify:search-location": "node --disable-warning=ExperimentalWarning tools/verify/search-location-regressions.mjs",
-    "verify:phase2": "node --disable-warning=ExperimentalWarning tools/verify/phase2-regressions.mjs"
+    "verify:phase2": "node --disable-warning=ExperimentalWarning tools/verify/phase2-regressions.mjs",
+    "verify:phase4-performance": "node tools/verify/phase4-performance.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.4",

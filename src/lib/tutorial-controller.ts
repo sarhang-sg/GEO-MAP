@@ -1,3 +1,5 @@
+import {localCoreEnabled} from "../android/local-provider";
+import {nativeBoolean,saveNativeBoolean} from "../android/ui-preferences";
 import type { TutorialMapDemoController } from "./tutorial-map-demo-controller";
 
 type TutorialLanguage = "ku" | "ar" | "en";
@@ -308,7 +310,8 @@ export function installTutorialController(options: TutorialOptions): TutorialCon
     options.setMapActionsExpanded(actionsExpandedBeforeTutorial);
     void options.mapDemo.cleanup();
     if (completed) {
-      try { localStorage.setItem(STORAGE_KEY, "1"); } catch { /* private mode */ }
+      if(localCoreEnabled)saveNativeBoolean("tutorialCompleted",true);
+      else try { localStorage.setItem(STORAGE_KEY, "1"); } catch { /* private mode */ }
     }
     if (completed && announceCompletion) options.onCompleted?.();
   };
@@ -401,7 +404,8 @@ export function installTutorialController(options: TutorialOptions): TutorialCon
 
   const maybeStart = (): void => {
     let completed = false;
-    try { completed = localStorage.getItem(STORAGE_KEY) === "1"; } catch { /* private mode */ }
+    if(localCoreEnabled)completed=nativeBoolean("tutorialCompleted");
+    else try { completed = localStorage.getItem(STORAGE_KEY) === "1"; } catch { /* private mode */ }
     if (!completed) scheduleAutoStart();
   };
 

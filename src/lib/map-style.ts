@@ -13,10 +13,11 @@ export type StaticCoverageSources = {
   districts: FeatureCollection;
 };
 
-export type KriMapStyleOptions = {
+export type MapVectorSources =
+  | { vectorSourceUrls:{base:string;roads:string}; pmtilesUrl?:never; roadsPmtilesUrl?:never }
+  | { vectorSourceUrls?:undefined; pmtilesUrl:string; roadsPmtilesUrl:string };
+export type KriMapStyleOptions = MapVectorSources & {
   mode: MapMode;
-  pmtilesUrl: string;
-  roadsPmtilesUrl: string;
   satelliteEnabled: boolean;
   satelliteSource: SatelliteSource;
   basemapVisible: boolean;
@@ -60,8 +61,8 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
   const roadOpacity = satellite ? 0.92 : 0.98;
 
   const sources: StyleSpecification["sources"] = {
-    "kri-vector": { type: "vector", url: `pmtiles://${options.pmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
-    "kri-road-vector": { type: "vector", url: `pmtiles://${options.roadsPmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
+    "kri-vector": { type: "vector", url: options.vectorSourceUrls?.base ?? `pmtiles://${options.pmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
+    "kri-road-vector": { type: "vector", url: options.vectorSourceUrls?.roads ?? `pmtiles://${options.roadsPmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
     [BASE_POI_SOURCE_ID]: { type: "geojson", data: options.deferBasePoiData ? EMPTY_POINT_COLLECTION : dataAssetUrl("data/kri/kri-pois-render.geojson"), attribution: "© OpenStreetMap contributors", cluster: true, clusterMaxZoom: options.lowPowerProfile ? 12 : 13, clusterRadius: options.lowPowerProfile ? 68 : 54, clusterMinPoints: 3 },
     "kri-mask-source": { type: "geojson", data: sourceData("data/kri/kri-outside-mask.geojson", options.coverage?.mask) },
     "kri-boundary-source": { type: "geojson", data: sourceData("data/kri/kri-boundary.geojson", options.coverage?.boundary) },

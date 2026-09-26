@@ -52,6 +52,15 @@ export type OfflinePackSnapshot = {
   packVersion: string;
 };
 
+export interface OfflineMapPackController {
+  snapshot(): OfflinePackSnapshot;
+  subscribe(listener:(snapshot:OfflinePackSnapshot)=>void):()=>void;
+  initialize():Promise<OfflinePackSnapshot>;
+  download():Promise<void>;
+  pause():void|Promise<void>;
+  delete():Promise<void>;
+}
+
 type OfflinePackListener = (snapshot: OfflinePackSnapshot) => void;
 
 type StoredPackFileMetadata = {
@@ -59,6 +68,8 @@ type StoredPackFileMetadata = {
   complete: boolean;
   sha256: string;
   headerVerified: boolean;
+  lastModified: number;
+  verifiedAt: number;
 };
 
 type StoredPackRuntimeMetadata = { bytes: number; complete: boolean; language: Language; totalBytes: number; };
@@ -98,7 +109,14 @@ function storageManager(): StorageManager & { getDirectory?: () => Promise<FileS
 function emptyMetadata(): StoredPackMetadata {
   return {
     schema: 1, mapDataVersion: MAP_DATA_VERSION, packVersion: OFFLINE_PACK_VERSION,
-    files: Object.fromEntries(OFFLINE_MAP_FILES.map((file) => [file.id, { bytes: 0, complete: false, sha256: file.sha256, headerVerified: false }])),
+    files: Object.fromEntries(OFFLINE_MAP_FILES.map((file) => [file.id, {
+      bytes: 0,
+      complete: false,
+      sha256: file.sha256,
+      headerVerified: false,
+      lastModified: 0,
+      verifiedAt: 0
+    }])),
     runtime: { bytes: 0, complete: false, language: "ku", totalBytes: OFFLINE_RUNTIME_BYTES }, updatedAt: Date.now()
   };
 }
@@ -113,7 +131,14 @@ function readStoredMetadata(): StoredPackMetadata {
     for (const config of OFFLINE_MAP_FILES) {
       const stored = parsed.files?.[config.id];
       if (!stored) continue;
-      metadata.files[config.id] = { bytes: Math.max(0, Math.min(Number(stored.bytes) || 0, config.bytes)), complete: Boolean(stored.complete), sha256: typeof stored.sha256 === "string" ? stored.sha256 : config.sha256, headerVerified: Boolean(stored.headerVerified) };
+      metadata.files[config.id] = {
+        bytes: Math.max(0, Math.min(Number(stored.bytes) || 0, config.bytes)),
+        complete: Boolean(stored.complete),
+        sha256: typeof stored.sha256 === "string" ? stored.sha256 : config.sha256,
+        headerVerified: Boolean(stored.headerVerified),
+        lastModified: Math.max(0, Number(stored.lastModified) || 0),
+        verifiedAt: Math.max(0, Number(stored.verifiedAt) || 0)
+      };
     }
     if (parsed.runtime) {
       const runtime = parsed.runtime as Partial<StoredPackRuntimeMetadata>;
@@ -169,7 +194,14 @@ function abortableDelay(milliseconds: number, signal: AbortSignal): Promise<void
 }
 
 function incompleteFileMetadata(config: OfflineMapFileConfig, bytes = 0): StoredPackFileMetadata {
-  return { bytes: Math.max(0, Math.min(bytes, config.bytes)), complete: false, sha256: config.sha256, headerVerified: false };
+  return {
+    bytes: Math.max(0, Math.min(bytes, config.bytes)),
+    complete: false,
+    sha256: config.sha256,
+    headerVerified: false,
+    lastModified: 0,
+    verifiedAt: 0
+  };
 }
 
 class HybridPmtilesSource implements Source {
@@ -211,6 +243,9 @@ export class OfflineMapPackManager {
   private aborter: AbortController | null = null;
   private downloadPromise: Promise<void> | null = null;
   private rootPromise: Promise<FileSystemDirectoryHandle> | null = null;
+  private packDirectoryPromise: Promise<FileSystemDirectoryHandle> | null = null;
+  private readonly fileHandlePromises = new Map<OfflineMapFileConfig["id"], Promise<FileSystemFileHandle>>();
+  private readonly completeFiles = new Map<OfflineMapFileConfig["id"], File>();
   private lastProgressEmitAt = 0;
   private snapshotState: OfflinePackSnapshot;
   private language: Language;
@@ -332,6 +367,9 @@ export class OfflineMapPackManager {
     } catch (error) {
       if (!(error instanceof DOMException && error.name === "NotFoundError")) throw error;
     }
+    this.packDirectoryPromise = null;
+    this.fileHandlePromises.clear();
+    this.completeFiles.clear();
     await this.clearOfflineRuntime();
     this.metadata = emptyMetadata();
     this.persistMetadata();
@@ -353,13 +391,22 @@ export class OfflineMapPackManager {
     const config = OFFLINE_MAP_FILES.find((file) => file.id === fileId);
     if (!config) return null;
     try {
-      const directory = await this.getPackDirectory(false);
-      const handle = await directory.getFileHandle(config.fileName);
-      const file = await handle.getFile();
-      if (file.size !== config.bytes || offset < 0 || length <= 0 || offset + length > file.size) return null;
+      const metadata = this.metadata.files[fileId];
+      let file = this.completeFiles.get(fileId);
+      if (!file || file.size !== config.bytes || (metadata.lastModified > 0 && file.lastModified !== metadata.lastModified)) {
+        const handle = await this.getPackFileHandle(config, false);
+        file = await handle.getFile();
+        if (file.size !== config.bytes || (metadata.lastModified > 0 && file.lastModified !== metadata.lastModified)) {
+          throw new OfflinePackError("offline-pack-file-size", { file: config.id, actual: file.size, expected: config.bytes });
+        }
+        this.completeFiles.set(fileId, file);
+      }
+      if (offset < 0 || length <= 0 || offset + length > file.size) return null;
       signal?.throwIfAborted();
       return await file.slice(offset, offset + length).arrayBuffer();
     } catch {
+      this.completeFiles.delete(fileId);
+      this.fileHandlePromises.delete(fileId);
       this.metadata.files[fileId] = incompleteFileMetadata(config);
       this.persistMetadata();
       this.updateProgress();
@@ -521,8 +568,8 @@ export class OfflineMapPackManager {
   }
 
   private async downloadFile(config: OfflineMapFileConfig, remoteUrl: string, signal: AbortSignal): Promise<void> {
-    const directory = await this.getPackDirectory(true);
-    const handle = await directory.getFileHandle(config.fileName, { create: true });
+    this.completeFiles.delete(config.id);
+    const handle = await this.getPackFileHandle(config, true);
     let currentFile = await handle.getFile();
     let offset = Math.min(currentFile.size, config.bytes);
 
@@ -543,8 +590,16 @@ export class OfflineMapPackManager {
         await resetWriter.close();
         offset = 0;
       } else {
-        this.metadata.files[config.id] = { bytes: config.bytes, complete: true, sha256: config.sha256, headerVerified: true };
+        this.metadata.files[config.id] = {
+          bytes: config.bytes,
+          complete: true,
+          sha256: config.sha256,
+          headerVerified: true,
+          lastModified: currentFile.lastModified,
+          verifiedAt: Date.now()
+        };
         this.persistMetadata();
+        this.completeFiles.set(config.id, currentFile);
         this.updateProgress();
         return;
       }
@@ -595,8 +650,16 @@ export class OfflineMapPackManager {
       throw new OfflinePackError("offline-pack-file-hash", { file: config.id });
     }
 
-    this.metadata.files[config.id] = { bytes: config.bytes, complete: true, sha256: config.sha256, headerVerified: true };
+    this.metadata.files[config.id] = {
+      bytes: config.bytes,
+      complete: true,
+      sha256: config.sha256,
+      headerVerified: true,
+      lastModified: completeFile.lastModified,
+      verifiedAt: Date.now()
+    };
     this.persistMetadata();
+    this.completeFiles.set(config.id, completeFile);
     this.updateProgress();
   }
 
@@ -605,25 +668,48 @@ export class OfflineMapPackManager {
     let changed = false;
     for (const config of OFFLINE_MAP_FILES) {
       try {
-        const directory = await this.getPackDirectory(false);
-        const handle = await directory.getFileHandle(config.fileName);
+        const handle = await this.getPackFileHandle(config, false);
         const file = await handle.getFile();
         const sized = file.size === config.bytes;
         const headerVerified = sized ? await hasValidPmtilesHeader(file) : false;
-        const shaVerified = headerVerified ? await hasExpectedSha256(file, config.sha256) : false;
+        const current = this.metadata.files[config.id];
+        const unchangedVerifiedFile = Boolean(
+          headerVerified
+          && current?.complete
+          && current.bytes === config.bytes
+          && current.sha256 === config.sha256
+          && current.headerVerified
+          && current.lastModified > 0
+          && current.lastModified === file.lastModified
+          && current.verifiedAt > 0
+        );
+        const shaVerified = headerVerified
+          ? unchangedVerifiedFile || await hasExpectedSha256(file, config.sha256)
+          : false;
         const complete = sized && headerVerified && shaVerified;
         const next: StoredPackFileMetadata = {
           bytes: Math.min(file.size, config.bytes),
           complete,
           sha256: config.sha256,
-          headerVerified
+          headerVerified,
+          lastModified: complete ? file.lastModified : 0,
+          verifiedAt: complete ? (unchangedVerifiedFile ? current.verifiedAt : Date.now()) : 0
         };
-        const current = this.metadata.files[config.id];
-        if (!current || current.bytes !== next.bytes || current.complete !== next.complete || current.sha256 !== next.sha256 || current.headerVerified !== next.headerVerified) {
+        if (!current
+          || current.bytes !== next.bytes
+          || current.complete !== next.complete
+          || current.sha256 !== next.sha256
+          || current.headerVerified !== next.headerVerified
+          || current.lastModified !== next.lastModified
+          || current.verifiedAt !== next.verifiedAt) {
           this.metadata.files[config.id] = next;
           changed = true;
         }
+        if (complete) this.completeFiles.set(config.id, file);
+        else this.completeFiles.delete(config.id);
       } catch {
+        this.completeFiles.delete(config.id);
+        this.fileHandlePromises.delete(config.id);
         const current = this.metadata.files[config.id];
         if (!current || current.bytes !== 0 || current.complete) {
           this.metadata.files[config.id] = incompleteFileMetadata(config);
@@ -639,7 +725,12 @@ export class OfflineMapPackManager {
     this.updateProgress();
     if (this.metadataComplete()) {
       this.snapshotState.status = "ready";
-      this.snapshotState.verifiedAt = this.metadata.updatedAt || Date.now();
+      const verifiedAt = OFFLINE_MAP_FILES
+        .map((file) => this.metadata.files[file.id]?.verifiedAt ?? 0)
+        .filter((value) => value > 0);
+      this.snapshotState.verifiedAt = verifiedAt.length === OFFLINE_MAP_FILES.length
+        ? Math.min(...verifiedAt)
+        : this.metadata.updatedAt || Date.now();
     }
     else if (this.currentDownloadedBytes() > 0 && this.snapshotState.status !== "downloading") this.snapshotState.status = "paused";
     else if (this.snapshotState.status !== "downloading") this.snapshotState.status = "idle";
@@ -749,8 +840,28 @@ export class OfflineMapPackManager {
   }
 
   private async getPackDirectory(create: boolean): Promise<FileSystemDirectoryHandle> {
-    const root = await this.getRoot();
-    return root.getDirectoryHandle(PACK_DIRECTORY, { create });
+    if (this.packDirectoryPromise) return this.packDirectoryPromise;
+    const task = this.getRoot()
+      .then((root) => root.getDirectoryHandle(PACK_DIRECTORY, { create }))
+      .catch((error) => {
+        if (this.packDirectoryPromise === task) this.packDirectoryPromise = null;
+        throw error;
+      });
+    this.packDirectoryPromise = task;
+    return task;
+  }
+
+  private getPackFileHandle(config: OfflineMapFileConfig, create: boolean): Promise<FileSystemFileHandle> {
+    const cached = this.fileHandlePromises.get(config.id);
+    if (cached) return cached;
+    const task = this.getPackDirectory(create)
+      .then((directory) => directory.getFileHandle(config.fileName, { create }))
+      .catch((error) => {
+        if (this.fileHandlePromises.get(config.id) === task) this.fileHandlePromises.delete(config.id);
+        throw error;
+      });
+    this.fileHandlePromises.set(config.id, task);
+    return task;
   }
 
   private fileComplete(fileId: OfflineMapFileConfig["id"]): boolean {

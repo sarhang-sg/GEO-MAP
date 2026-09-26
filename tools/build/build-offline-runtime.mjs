@@ -109,6 +109,7 @@ for (const path of ["icons/nav-kurd-logo.png", "icons/nav-kurd-icon-512.png", "i
 const offlineUiAssets = distFiles
   .map((file) => relative(dist, file).split(sep).join("/"))
   .filter((path) => path.startsWith("assets/icons/nav-kurd/")
+    || path.startsWith("assets/icons/social/")
     || path.startsWith("assets/promo/")
     || path.startsWith("assets/support/")
     || path.startsWith("assets/native/")
@@ -147,13 +148,32 @@ for (const entry of sortedAssets) {
 }
 manifest.assets = materializedAssets;
 
+// `offline-manifest.json` is itself part of the atomic shell. Its size must
+// describe the manifest being written, not the older copy from `public/` that
+// Vite placed in `dist/`. Resolve the self-reference before the manifest and
+// service-worker catalog are finalized. The serialized length converges as
+// soon as the decimal width of the byte count is stable.
+const manifestEntry = manifest.assets.find((entry) => entry.path === "offline-manifest.json");
+if (!manifestEntry) throw new Error("Offline runtime manifest must inventory itself.");
+let manifestJson = "";
+for (let attempt = 0; attempt < 8; attempt += 1) {
+  manifestJson = `${JSON.stringify(manifest, null, 2)}\n`;
+  const serializedBytes = Buffer.byteLength(manifestJson);
+  if (manifestEntry.bytes === serializedBytes) break;
+  manifestEntry.bytes = serializedBytes;
+}
+manifestJson = `${JSON.stringify(manifest, null, 2)}\n`;
+if (manifestEntry.bytes !== Buffer.byteLength(manifestJson)) {
+  throw new Error("Offline runtime manifest size did not converge.");
+}
+
 const requiredAssets = manifest.assets.filter((entry) => entry.required);
 const requiredBytes = requiredAssets.reduce((sum, entry) => sum + entry.bytes, 0);
 if (requiredAssets.length > 16) throw new Error(`Atomic shell has too many required files: ${requiredAssets.length}.`);
 if (requiredBytes > 3.5 * 1024 * 1024) throw new Error(`Atomic shell exceeds 3.5 MiB: ${requiredBytes} bytes.`);
 for (const entry of requiredAssets) await stat(resolve(dist, entry.path));
 
-await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+await writeFile(manifestPath, manifestJson);
 let sw = await readFile(swPath, "utf8");
 const replacements = new Map([
   ["__KRI_RELEASE_ID__", release.serviceWorkerRelease],

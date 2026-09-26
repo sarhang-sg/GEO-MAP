@@ -1616,7 +1616,7 @@ export class UserContributionStudio {
           this.notifications = [];
           this.feedback = [];
           this.navigationHistory = [];
-          removePendingNavigationHistory(undefined, deletedUserId);
+          await removePendingNavigationHistory(undefined, deletedUserId);
           this.clearEditorDraft();
           this.clearPendingNewPlaceCoordinate();
           this.clearPendingPhoto();
@@ -1690,12 +1690,12 @@ export class UserContributionStudio {
           if (pending.kind === "delete-history") {
             await deleteAtlasNavigationHistory(pending.historyId);
             this.navigationHistory = this.navigationHistory.filter((entry) => entry.id !== pending.historyId);
-            removePendingNavigationHistory(pending.historyId, this.identity?.userId);
+            await removePendingNavigationHistory(pending.historyId, this.identity?.userId);
             this.message = navigationHistoryCopy(this.options.getLanguage()).deleted;
           } else {
             await clearAtlasNavigationHistory();
             this.navigationHistory = [];
-            removePendingNavigationHistory(undefined, this.identity?.userId);
+            await removePendingNavigationHistory(undefined, this.identity?.userId);
             this.message = navigationHistoryCopy(this.options.getLanguage()).cleared;
           }
           this.activeDashboardTab = "account";

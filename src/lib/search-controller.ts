@@ -6,7 +6,7 @@ import type { Language, SearchChoice } from "./types";
 
 export type SearchAdapter = {
   isSearchIndexReady: () => boolean;
-  searchFast?: (term: string) => SearchChoice[];
+  searchFast?: (term: string) => SearchChoice[] | Promise<SearchChoice[]>;
   prepare?: () => void;
   search: (term: string) => Promise<SearchChoice[]>;
   focusSearch: (choice: SearchChoice) => void;
@@ -208,7 +208,10 @@ export function installSearchController(options: SearchControllerOptions): Searc
       render([], "");
       return;
     }
-    const fastChoices = adapter.searchFast?.(term) ?? [];
+    let fastChoices:SearchChoice[]=[];
+    try { fastChoices=await (adapter.searchFast?.(term)??[]); }
+    catch { if(version===searchVersion)renderSearchError(); return; }
+    if(version!==searchVersion)return;
     if (fastChoices.length > 0) render(fastChoices, term);
     else if (!adapter.isSearchIndexReady()) renderLoading();
     try {

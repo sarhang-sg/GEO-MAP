@@ -27,6 +27,7 @@ export class SearchWorkerClient {
   private readonly manifestUrl: string;
   private readonly timeoutMs: number;
   private readonly resultCache = new Map<string, StaticSearchItem[]>();
+  private readonly inFlightSearches = new Map<string, Promise<StaticSearchItem[]>>();
   private worker: Worker | null = null;
   private sequence = 0;
   private pending = new Map<number, PendingRequest>();
@@ -48,6 +49,7 @@ export class SearchWorkerClient {
     if (this.activationLanguage === language && this.activationPromise) return this.activationPromise;
     if (this.activeLanguage !== language) {
       this.resultCache.clear();
+      this.inFlightSearches.clear();
       this.activeLanguage = language;
       this.readyState = false;
       this.activeRecords = 0;
@@ -95,20 +97,28 @@ export class SearchWorkerClient {
     const cacheKey = `${language}:${limit}:${term.trim().toLocaleLowerCase("en-US")}`;
     const cached = this.resultCache.get(cacheKey);
     if (cached) return cached;
+    const inFlight = this.inFlightSearches.get(cacheKey);
+    if (inFlight) return inFlight;
     if (Date.now() < this.disabledUntil) return [];
 
     const searchWorker = this.worker;
-    try {
-      const reply = await this.request({ type: "search", query: term, language, limit, manifestUrl: this.manifestUrl });
-      if (reply.type !== "results") return [];
-      this.readyState = true;
-      this.resultCache.set(cacheKey, reply.items);
-      if (this.resultCache.size > 48) this.resultCache.delete(this.resultCache.keys().next().value ?? "");
-      return reply.items;
-    } catch (error) {
-      if (this.worker === searchWorker) this.disableWorker(error, 4_000);
-      return [];
-    }
+    const task = (async (): Promise<StaticSearchItem[]> => {
+      try {
+        const reply = await this.request({ type: "search", query: term, language, limit, manifestUrl: this.manifestUrl });
+        if (reply.type !== "results") return [];
+        this.readyState = true;
+        this.resultCache.set(cacheKey, reply.items);
+        if (this.resultCache.size > 48) this.resultCache.delete(this.resultCache.keys().next().value ?? "");
+        return reply.items;
+      } catch (error) {
+        if (this.worker === searchWorker) this.disableWorker(error, 4_000);
+        return [];
+      }
+    })().finally(() => {
+      if (this.inFlightSearches.get(cacheKey) === task) this.inFlightSearches.delete(cacheKey);
+    });
+    this.inFlightSearches.set(cacheKey, task);
+    return task;
   }
 
   reset(): void {
@@ -118,6 +128,7 @@ export class SearchWorkerClient {
     this.activationLanguage = null;
     this.activationPromise = null;
     this.resultCache.clear();
+    this.inFlightSearches.clear();
   }
 
   private ensureWorker(): Worker {
@@ -156,6 +167,7 @@ export class SearchWorkerClient {
     this.worker = null;
     this.readyState = false;
     this.activeRecords = 0;
+    this.inFlightSearches.clear();
     this.disabledUntil = cooldownMs > 0 ? Date.now() + cooldownMs : 0;
     this.rejectPending(failure);
   }

@@ -1,3 +1,4 @@
+import { captureMapGpuProfile } from "./hardware-profile";
 type IdleDeadlineLike = { didTimeout: boolean; timeRemaining: () => number };
 type IdleRequestCallbackLike = (deadline: IdleDeadlineLike) => void;
 type WindowWithIdleCallbacks = Window & typeof globalThis & {
@@ -29,7 +30,8 @@ function pumpIdleQueue(): void {
 
   scheduleQueueTurn(() => {
     if (entry.cancelled) {
-      idleQueue.splice(idleQueue.indexOf(entry), 1);
+      const index = idleQueue.indexOf(entry);
+      if (index >= 0) idleQueue.splice(index, 1);
       idleQueueRunning = false;
       pumpIdleQueue();
       return;
@@ -59,7 +61,11 @@ export function scheduleIdleTask(task: () => void | Promise<void>, timeout = 160
   const entry: IdleTask = { id: ++idleTaskSequence, task, timeout, cancelled: false };
   idleQueue.push(entry);
   pumpIdleQueue();
-  return () => { entry.cancelled = true; };
+  return () => {
+    entry.cancelled = true;
+    const index = idleQueue.indexOf(entry);
+    if (index >= 0) idleQueue.splice(index, 1);
+  };
 }
 type SchedulerWithYield = { yield?: () => Promise<void> };
 
@@ -182,6 +188,11 @@ export function installRuntimePerformanceGuard(options: RuntimePerformanceGuardO
   }
 
   const canvas = map.getCanvas();
+  const captureRenderer = (): void => {
+    const gpu = captureMapGpuProfile(canvas);
+    if (gpu.version) shell.dataset.webglContext = "ready";
+  };
+  captureRenderer();
   const onContextLost = (event: Event): void => {
     event.preventDefault();
     shell.dataset.webglContext = "lost";
@@ -189,6 +200,7 @@ export function installRuntimePerformanceGuard(options: RuntimePerformanceGuardO
   };
   const onContextRestored = (): void => {
     shell.dataset.webglContext = "restored";
+    captureRenderer();
     window.setTimeout(() => {
       if (stopped) return;
       map.resize();

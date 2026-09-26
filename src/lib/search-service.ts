@@ -1,3 +1,4 @@
+import {coreStatistics,localCoreEnabled,nativeLocalities} from '../android/local-provider';
 import { languageValue, placeRank } from "./geo-format";
 import { yieldToMainThread } from "./performance";
 import {
@@ -28,6 +29,7 @@ const SPATIAL_SEARCH_CANDIDATE_LIMIT = 120;
 const SPATIAL_SEARCH_RADIUS_KM = 110;
 const LOCALITY_BUILD_CHUNK = 160;
 const QUICK_BUILD_CHUNK = 256;
+const PREPARED_QUERY_CACHE_LIMIT = 48;
 const QUICK_LOCALITY_PLACES = new Set(["city", "town", "suburb", "hamlet"]);
 
 type SearchAnchor = { coordinate: [number, number]; score: number };
@@ -115,6 +117,7 @@ export class SearchService {
   private readonly ownerProfiles = new WeakMap<AtlasPlace, Partial<Record<Language, StaticSearchTextProfile>>>();
   private readonly quickIndexes = new Map<Language, LocalitySearchIndex>();
   private readonly localityIndexes = new Map<Language, LocalitySearchIndex>();
+  private readonly preparedQueries = new Map<string, PreparedStaticSearchQuery>();
   private readonly activeQuickBuilds = new Map<Language, { source: LocalityFeature[]; promise: Promise<LocalitySearchIndex | null> }>();
   private buildGeneration = 0;
   private quickGeneration = 0;
@@ -145,6 +148,7 @@ export class SearchService {
   }
 
   async warmLocalities(): Promise<void> {
+    if(localCoreEnabled){await coreStatistics();return;}
     const language = this.getLanguage();
     const source = this.getLocalities();
     const cached = this.localityIndexes.get(language);
@@ -169,8 +173,9 @@ export class SearchService {
     return task;
   }
 
-  searchFast(term: string): SearchChoice[] {
-    const query = prepareStaticSearchQuery(term);
+  searchFast(term: string): SearchChoice[] | Promise<SearchChoice[]> {
+    if(localCoreEnabled)return this.searchNative(term,true);
+    const query = this.prepareQuery(term);
     if (query.phrase.length < 2 && query.tokens.length === 0) return [];
     const language = this.getLanguage();
     const source = this.getLocalities();
@@ -185,7 +190,8 @@ export class SearchService {
   }
 
   async search(term: string): Promise<SearchChoice[]> {
-    const query = prepareStaticSearchQuery(term);
+    if(localCoreEnabled)return this.searchNative(term,false);
+    const query = this.prepareQuery(term);
     if (query.phrase.length < 2 && query.tokens.length === 0) return [];
     const language = this.getLanguage();
     const source = this.getLocalities();
@@ -199,6 +205,33 @@ export class SearchService {
     const owners = this.searchOwnerPlaces(query, anchor);
     const bases = await this.searchBaseMap(term, query, anchor && query.intentIds.length > 0 ? anchor : null);
     return this.mergeChoices([...owners, ...bases, ...locals]);
+  }
+
+  private async searchNative(term:string,quick:boolean):Promise<SearchChoice[]> {
+    const language=this.getLanguage(),query=this.prepareQuery(term);
+    if(query.phrase.length<2&&query.tokens.length===0)return [];
+    const {choices,anchor}=await nativeLocalities(term,language,quick);
+    if(language!==this.getLanguage())return [];
+    const owners=this.searchOwnerPlaces(query,anchor);
+    const bases=quick?[]:await this.searchBaseMap(term,query,anchor&&query.intentIds.length>0?anchor:null);
+    if(language!==this.getLanguage())return [];
+    return this.mergeChoices([...owners,...bases,...choices]);
+  }
+
+  private prepareQuery(term: string): PreparedStaticSearchQuery {
+    const key = term.trim();
+    const cached = this.preparedQueries.get(key);
+    if (cached) {
+      this.preparedQueries.delete(key);
+      this.preparedQueries.set(key, cached);
+      return cached;
+    }
+    const prepared = prepareStaticSearchQuery(term);
+    this.preparedQueries.set(key, prepared);
+    while (this.preparedQueries.size > PREPARED_QUERY_CACHE_LIMIT) {
+      this.preparedQueries.delete(this.preparedQueries.keys().next().value ?? "");
+    }
+    return prepared;
   }
 
   private createEntry(feature: LocalityFeature, language: Language): LocalitySearchEntry {
@@ -409,7 +442,8 @@ export class SearchService {
       }
       const items = await this.searchStatic(term, this.getLanguage(), SEARCH_RESULT_LIMIT);
       return items.map((item): SearchChoice => ({ type: "base", item }));
-    } catch {
+    } catch(error) {
+      if(localCoreEnabled)throw error;
       return [];
     }
   }

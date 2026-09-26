@@ -30,12 +30,32 @@ export class AppHealthController {
   private networkVisualTimer: number | null = null;
   private nativeConnected: boolean | null = null;
   private disposed = false;
+  private nativeTransport = "";
+  private recoveryTimer: number | null = null;
+  private readonly connection = (navigator as Navigator & { connection?: EventTarget }).connection;
+  private readonly handleTransport = (): void => {
+    if (navigator.onLine !== false) this.queueRecovery();
+  };
+  private queueRecovery(): void {
+    if (this.disposed) return;
+    if (this.recoveryTimer !== null) window.clearTimeout(this.recoveryTimer);
+    this.recoveryTimer = window.setTimeout(() => {
+      this.recoveryTimer = null;
+      if (!this.disposed && this.nativeConnected !== false && navigator.onLine !== false) {
+        window.dispatchEvent(new Event("nav-kurd:network-recovered"));
+      }
+    }, 500);
+  }
   private readonly handleOffline = (): void => this.offline();
   private readonly handleOnline = (): void => this.online();
   private readonly handleNativeNetwork = (event: Event): void => {
-    const connected = Boolean((event as CustomEvent<{ connected?: boolean }>).detail?.connected);
-    const changed = this.nativeConnected !== null && this.nativeConnected !== connected;
+    const detail = (event as CustomEvent<{ connected?: boolean; transport?: string }>).detail;
+    if (typeof detail?.connected !== "boolean") return;
+    const connected = detail.connected;
+    const transport = detail.transport ?? "";
+    const changed = this.nativeConnected !== null && (this.nativeConnected !== connected || this.nativeTransport !== transport);
     this.nativeConnected = connected;
+    this.nativeTransport = transport;
     if (!connected) this.offline();
     else if (changed || this.mapShell.dataset.health === "offline") this.online();
     else this.setNetworkVisualState("online");
@@ -79,15 +99,11 @@ export class AppHealthController {
   fail(error: unknown, fallback?: string): void {
     const language = this.getLanguage();
     const message = serviceErrorMessage(error, fallback ?? UI[language].mapLoadError);
-    const offline = error instanceof ServiceError && error.offline;
-    this.mapShell.dataset.health = offline ? "offline" : "error";
-    if (offline) this.setNetworkVisualState("offline");
+    this.mapShell.dataset.health = error instanceof ServiceError && error.offline ? "offline" : "error";
+    if (this.mapShell.dataset.health === "offline") this.setNetworkVisualState("offline");
     this.setStatus("error", UI[language].statusError);
-    // Offline state has one authoritative surface: app-health. Previously a
-    // failed resource also wrote the same outage into mapMessage, so Android
-    // showed a toast-like message followed by a second card for one event.
-    if (!offline) this.setMessage(message, "error");
-    this.show(offline ? "offline" : "error", offline ? UI[language].offline : message, true);
+    this.setMessage(message, "error");
+    this.show(this.mapShell.dataset.health === "offline" ? "offline" : "error", message, true);
   }
 
   offline(sticky = true): void {
@@ -99,6 +115,7 @@ export class AppHealthController {
   }
 
   private online(): void {
+    this.queueRecovery();
     const language = this.getLanguage();
     this.setNetworkVisualState("restored");
     this.mapShell.dataset.health = "ready";
@@ -120,6 +137,8 @@ export class AppHealthController {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    if (this.recoveryTimer !== null) window.clearTimeout(this.recoveryTimer);
+    this.connection?.removeEventListener("change", this.handleTransport);
     window.removeEventListener("offline", this.handleOffline);
     window.removeEventListener("online", this.handleOnline);
     window.removeEventListener("nav-kurd:native-network", this.handleNativeNetwork);
@@ -130,6 +149,7 @@ export class AppHealthController {
   }
 
   private installNetworkListeners(): void {
+    this.connection?.addEventListener("change", this.handleTransport);
     window.addEventListener("offline", this.handleOffline, { passive: true });
     window.addEventListener("online", this.handleOnline, { passive: true });
     window.addEventListener("nav-kurd:native-network", this.handleNativeNetwork);
@@ -142,16 +162,6 @@ export class AppHealthController {
   }
 
   private show(level: AppHealthLevel, message: string, sticky: boolean): void {
-    const unchanged = !this.container.hidden
-      && this.container.dataset.level === level
-      && this.container.textContent === message;
-    if (unchanged) {
-      if (sticky && this.clearTimer !== null) {
-        window.clearTimeout(this.clearTimer);
-        this.clearTimer = null;
-      }
-      return;
-    }
     if (this.clearTimer !== null) window.clearTimeout(this.clearTimer);
     this.container.hidden = false;
     this.container.dataset.level = level;

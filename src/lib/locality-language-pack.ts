@@ -1,3 +1,4 @@
+import {localCoreEnabled,localCollection} from "../android/local-provider";
 import type { FeatureCollection, Point } from "geojson";
 import { dataAssetUrl } from "./release";
 import { fetchPersistentJson } from "./persistent-json-cache";
@@ -63,7 +64,10 @@ export class LocalityLanguagePackController {
   private readonly propertyPacks = new Map<Language, LanguagePropertyPayload>();
   private readonly propertyPackLimit: number;
 
-  constructor(profile: HardwareProfile = readHardwareProfile()) {
+  private nativeSignature='';
+  private nativeLoad:Promise<LocalityFeature[]>|null=null;
+  private nativeAbort:AbortController|null=null;
+  constructor(profile: HardwareProfile = readHardwareProfile(), private readonly getViewport?:()=>{bounds:[number,number,number,number];zoom:number}) {
     this.propertyPackLimit = recommendedLanguagePackLimit(profile);
   }
 
@@ -71,6 +75,7 @@ export class LocalityLanguagePackController {
   get features(): readonly LocalityFeature[] { return this.activeFeatures; }
 
   async load(language: Language): Promise<LocalityFeature[]> {
+    if(localCoreEnabled)return this.loadNative(language);
     if (this.activeLanguage === language && this.activeFeatures.length > 0) return this.activeFeatures;
     if (this.inflightLanguage === language && this.inflightPromise) return this.inflightPromise;
 
@@ -86,16 +91,26 @@ export class LocalityLanguagePackController {
     return task;
   }
 
-  async prepare(language: Language): Promise<void> {
-    await this.properties(language);
-  }
-
   release(): void {
+    this.nativeAbort?.abort();this.nativeAbort=null;this.nativeLoad=null;this.nativeSignature="";
     this.activeLanguage = null;
     this.activeFeatures = [];
     this.inflightLanguage = null;
     this.inflightPromise = null;
     this.propertyPacks.clear();
+  }
+
+  private loadNative(language:Language):Promise<LocalityFeature[]> {
+    const viewport=this.getViewport?.();
+    if(!viewport)return Promise.reject(new Error('Native locality viewport is unavailable.'));
+    const rank=viewport.zoom<9.05?80:0,signature=JSON.stringify([language,viewport.bounds,rank]);
+    if(signature===this.nativeSignature)return this.nativeLoad??Promise.resolve(this.activeFeatures);
+    this.nativeAbort?.abort();const aborter=new AbortController();this.nativeAbort=aborter;this.nativeSignature=signature;
+    const task=localCollection(['locality'],language,viewport.bounds,aborter.signal,rank).then(payload=>{
+      const features=payload.features.filter((f):f is LocalityFeature=>f.geometry?.type==='Point'&&Boolean(f.properties?.id));
+      this.activeFeatures=features;this.activeLanguage=language;return features;
+    }).catch(error=>{if(this.nativeSignature===signature)this.nativeSignature='';throw error;}).finally(()=>{if(this.nativeLoad===task)this.nativeLoad=null;});
+    this.nativeLoad=task;return task;
   }
 
   private manifest(): Promise<LanguagePackManifest> {
@@ -135,7 +150,7 @@ export class LocalityLanguagePackController {
         throw new Error(`Locality runtime geometry record mismatch: ${features.length}/${entry.records}.`);
       }
       if (!properties) throw new Error(`Locality language properties are missing: ${language}`);
-      await this.applyPropertyPayload(features, properties, language);
+      await this.applyPropertyPayload(features, properties, language, false);
       this.activeLanguage = language;
       this.activeFeatures = features;
       return features;
@@ -192,7 +207,8 @@ export class LocalityLanguagePackController {
   private async applyPropertyPayload(
     features: LocalityFeature[],
     payload: LanguagePropertyPayload,
-    language: Language
+    language: Language,
+    replaceExistingLanguageProperties = true
   ): Promise<void> {
     for (let index = 0; index < features.length; index += 1) {
       const feature = features[index];
@@ -201,7 +217,12 @@ export class LocalityLanguagePackController {
         throw new Error(`Locality language property identity mismatch at row ${index}.`);
       }
       const properties = feature.properties as LocalityProperties & Record<string, unknown>;
-      for (const key of LANGUAGE_PROPERTY_KEYS) delete properties[key];
+      // Fresh geometry contains only id/place/category/population. Deleting all
+      // 16 language fields for every one of the 12,125 records on first load is
+      // pure startup work; deletion is required only for an actual language swap.
+      if (replaceExistingLanguageProperties) {
+        for (const key of LANGUAGE_PROPERTY_KEYS) delete properties[key];
+      }
       const [id, name, verified, governorate, district, subdistrict, category, nameStatus] = row;
       properties.id = id;
       properties.name = name;

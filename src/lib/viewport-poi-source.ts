@@ -1,3 +1,4 @@
+import {coreCall,localCoreEnabled} from "../android/local-provider";
 import type { Feature, FeatureCollection, Point } from "geojson";
 import type { GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import { fetchPersistentJson } from "./persistent-json-cache";
@@ -209,9 +210,10 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     diagnosticsHost.dataset[`${prefix}SourceCommits`] = String(sourceCommitCount);
     diagnosticsHost.dataset[`${prefix}LastCommitMs`] = String(Math.round(performance.now() - startedAt));
   };
-  const setData = (collection: FeatureCollection<Point, Record<string, unknown>>): Promise<void> => {
+  const setData = (collection: FeatureCollection<Point, Record<string, unknown>>, requestGeneration = generation): Promise<void> => {
     const localTask = sourceWrite.catch(() => undefined).then(async () => {
       const globalTask = globalViewportSourceWrite.catch(() => undefined).then(async () => {
+        if (destroyed || requestGeneration !== generation) return;
         const commitStartedAt = performance.now();
         const target = source() as (GeoJSONSource & {
           updateData?: (diff: {
@@ -237,6 +239,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
         const update = target.updateData?.bind(target);
         if (!update) {
           await Promise.resolve(target.setData(collection, true));
+          if (destroyed || target !== source()) return;
           recordSourceCommit(commitStartedAt);
           committedFeatures = nextFeatures;
           return;
@@ -245,7 +248,8 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
         if (nextFeatures.size === 0) {
           if (committedFeatures.size > 0) {
             await Promise.resolve(update({ removeAll: true }, true));
-            recordSourceCommit(commitStartedAt);
+            if (destroyed || target !== source()) return;
+          recordSourceCommit(commitStartedAt);
           }
           committedFeatures = nextFeatures;
           return;
@@ -256,6 +260,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
           // chunk loop made MapLibre rebuild clustering repeatedly and produced
           // a long series of `message handler` violations on Android.
           await Promise.resolve(target.setData(collection, true));
+          if (destroyed || target !== source()) return;
           recordSourceCommit(commitStartedAt);
           committedFeatures = nextFeatures;
           return;
@@ -268,6 +273,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
           add: add.length ? add : undefined,
           remove: remove.length ? remove : undefined
         }, true));
+        if (destroyed || target !== source()) return;
         recordSourceCommit(commitStartedAt);
         committedFeatures = nextFeatures;
       });
@@ -303,11 +309,11 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     }
 
     const resource = resolveViewportPoiAssetUrl(manifestUrl, leaf.file);
-    const task = fetchPersistentJson<ViewportPoiShard>(
+    const task = (localCoreEnabled ? coreCall<ViewportPoiShard>('poiShard',{dataset:datasetId,key:leaf.key}) : fetchPersistentJson<ViewportPoiShard>(
       resource,
       `Viewport POI shard ${datasetId}:${leaf.key}`,
       { signal: lifetimeAborter.signal }
-    )
+    ))
       .then((payload) => {
         if (payload.type !== "FeatureCollection" || !Array.isArray(payload.features)) {
           throw new Error(`Viewport POI shard is invalid: ${datasetId}:${leaf.key}`);
@@ -360,14 +366,14 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     const east = bounds.getEast();
     const south = bounds.getSouth();
     const north = bounds.getNorth();
-    const longitudeSpan = Math.max(0.1, east - west);
-    const latitudeSpan = Math.max(0.1, north - south);
+    const longitudeSpan = Math.max(0.0002, east - west);
+    const latitudeSpan = Math.max(0.0002, north - south);
     const bufferRatio = map.getZoom() >= 13 ? 0.18 : 0.24;
     const viewport: [number, number, number, number] = [
-      west - Math.max(0.10, longitudeSpan * bufferRatio),
-      south - Math.max(0.08, latitudeSpan * bufferRatio),
-      east + Math.max(0.10, longitudeSpan * bufferRatio),
-      north + Math.max(0.08, latitudeSpan * bufferRatio)
+      west - Math.max(0.0002, longitudeSpan * bufferRatio),
+      south - Math.max(0.0002, latitudeSpan * bufferRatio),
+      east + Math.max(0.0002, longitudeSpan * bufferRatio),
+      north + Math.max(0.0002, latitudeSpan * bufferRatio)
     ];
     const center = map.getCenter();
     const candidates = dataset.leaves
@@ -508,6 +514,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
   }, lowPowerProfile ? 90 : 60);
   const onViewportChange = (): void => queuedRefresh();
   const onStyleLoad = (): void => {
+    generation += 1;
     // setStyle() creates a fresh GeoJSON source. The parsed shard LRU remains
     // valid, but the source identity must be re-seeded from cache immediately.
     committedFeatures = new Map();
@@ -517,13 +524,13 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     queuedRefresh();
   };
 
-  const start = async (): Promise<void> => {
+  let starting: Promise<void> | null = null;
+  const startOnce = async (): Promise<void> => {
     if (started) {
       await refreshNow();
       return;
     }
-    started = true;
-    const manifest = await fetchPersistentJson<ViewportPoiManifest>(manifestUrl, "Viewport POI manifest");
+    const manifest = await (localCoreEnabled ? coreCall<ViewportPoiManifest>('poiManifest') : fetchPersistentJson<ViewportPoiManifest>(manifestUrl, "Viewport POI manifest"));
     if (manifest.schema !== "NAV KURD viewport POI shards v1" || manifest.release !== MAP_DATA_VERSION) {
       throw new Error("Viewport POI manifest identity is invalid.");
     }
@@ -535,11 +542,26 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
       keys.add(leaf.key);
       resolveViewportPoiAssetUrl(manifestUrl, leaf.file);
     }
+    if (destroyed) return;
+    started = true;
     map.on("moveend", onViewportChange);
     map.on("zoomend", onViewportChange);
     map.on("style.load", onStyleLoad);
     await refreshNow();
   };
+
+  const start = (): Promise<void> => {
+    if (starting) return starting;
+    starting = startOnce().finally(() => { starting = null; });
+    return starting;
+  };
+
+  const onNetworkRecovered = (): void => {
+    if (destroyed) return;
+    failedUntil.clear();
+    void start().catch((error) => recordRuntimeDiagnostic("poi.recovery", String(error), "warning"));
+  };
+  window.addEventListener("nav-kurd:network-recovered", onNetworkRecovered);
 
   const setVisible = (nextVisible: boolean): void => {
     visible = nextVisible;
@@ -571,6 +593,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     snapshot: () => currentSnapshot,
     destroy: () => {
       destroyed = true;
+      window.removeEventListener("nav-kurd:network-recovered", onNetworkRecovered);
       generation += 1;
       activeBatchAborter?.abort();
       lifetimeAborter.abort();

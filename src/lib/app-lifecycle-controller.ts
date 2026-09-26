@@ -1,3 +1,5 @@
+import {localCoreEnabled} from "../android/local-provider";
+import {nativeUiSnapshot,saveNativeUiSnapshot} from "../android/ui-preferences";
 import type { Language, MapMode } from "./types";
 import type { LngLatTuple } from "./location";
 
@@ -68,6 +70,7 @@ function validSnapshot(value: unknown): value is AppLifecycleSnapshot {
 }
 
 export function readAppLifecycleSnapshot(): AppLifecycleSnapshot | null {
+  if(localCoreEnabled)return nativeUiSnapshot();
   try {
     const raw = window.sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
@@ -87,6 +90,7 @@ export function installAppLifecycleController(options: AppLifecycleControllerOpt
 
   const persist = (): void => {
     if (destroyed) return;
+    if(localCoreEnabled){saveNativeUiSnapshot({...options.capture(),schema:1,savedAt:Date.now()});return;}
     try {
       const snapshot = options.capture();
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...snapshot, schema: 1, savedAt: Date.now() }));
@@ -124,6 +128,10 @@ export function installAppLifecycleController(options: AppLifecycleControllerOpt
 
   document.addEventListener("visibilitychange", onVisibilityChange, { passive: true });
   window.addEventListener("pagehide", onPageHide, { passive: true });
+  if(localCoreEnabled){
+    window.addEventListener("nav-kurd:native-suspend",onPageHide);
+    window.addEventListener("nav-kurd:ui-state-changed",persist);
+  }
   window.addEventListener("pageshow", onPageShow, { passive: true });
   document.addEventListener("freeze", onFreeze, { passive: true });
   document.addEventListener("resume", onResume, { passive: true });
@@ -137,6 +145,10 @@ export function installAppLifecycleController(options: AppLifecycleControllerOpt
       if (resumeFrame !== null) window.cancelAnimationFrame(resumeFrame);
       document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("pagehide", onPageHide);
+      if(localCoreEnabled){
+        window.removeEventListener("nav-kurd:native-suspend",onPageHide);
+        window.removeEventListener("nav-kurd:ui-state-changed",persist);
+      }
       window.removeEventListener("pageshow", onPageShow);
       document.removeEventListener("freeze", onFreeze);
       document.removeEventListener("resume", onResume);

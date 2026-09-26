@@ -28,7 +28,16 @@ assert.ok(search.scoreStaticSearchProfile({primary:'sarhang',all:'sarhang',prima
 console.log('PASS generalized Kurdish/Arabic/Latin phonetics, normalization, prefix and exact ranking');
 for (const native of [false,true]) {
   let callback, calls=0, oneShots=0, centers=0;
-  const gps = load('src/lib/live-location-controller.ts', {distanceMeters:()=>0,window:{__NAV_KURD_FLUTTER__:native},localStorage:{setItem(){}},Date,UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied'}}}, 'LiveLocationController');
+  const gps = load('src/lib/live-location-controller.ts', {
+    distanceMeters:()=>0,
+    localCoreEnabled:native,
+    nativeBoolean:()=>false,
+    saveNativeBoolean(){},
+    window:{__NAV_KURD_FLUTTER__:native},
+    localStorage:{setItem(){}},
+    Date,
+    UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied'}}
+  }, 'LiveLocationController');
   const controller = Object.create(gps.LiveLocationController.prototype);
   Object.assign(controller, {geolocation:{watchPosition(fn){calls++;callback=fn;return 1;},getCurrentPosition(){oneShots++;},clearWatch(){}},getLanguage:()=> 'en',watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,locationReadyAnnounced:false,
     setFollowEnabled(value){this.followEnabled=value;},setMessage(){},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,

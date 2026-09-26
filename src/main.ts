@@ -1,3 +1,6 @@
+import {NativeOfflineMapPack} from "./android/offline-map-pack";
+import {initializeLocalPreferences,flushNativePreferences} from "./android/ui-preferences";
+import {coreStatistics,localCoreEnabled,NativeSearchProvider} from './android/local-provider';
 import "./pwa-register";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./styles.css";
@@ -73,6 +76,7 @@ import { installAppLifecycleController, readAppLifecycleSnapshot, type AppLifecy
 import { isConstrainedHardware, readHardwareProfile, recommendedMapTileCacheSize } from "./lib/hardware-profile";
 import { installAndroidReleaseExperience } from "./lib/android-release-experience";
 
+await initializeLocalPreferences();
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 type PopupAnchor = "center" | "top" | "bottom" | "left" | "right" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
@@ -136,7 +140,7 @@ if (recoveredLifecycleState) {
   languageButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.language === recoveredLifecycleState.language));
 }
 const languageTransition = installLanguageTransitionController();
-const languageAssetCache = new LanguageAssetCacheController();
+const languageAssetCache = localCoreEnabled ? null : new LanguageAssetCacheController();
 const mapStyleButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-map-mode]"));
 const mapModeCycleButton = query<HTMLButtonElement>("#mapModeCycleButton");
 const brandAboutButton = query<HTMLButtonElement>("#brandAboutButton");
@@ -162,16 +166,20 @@ const pmtilesBaseUrl = import.meta.env.VITE_KRI_PMTILES_URL?.trim() || asset("da
 const roadsPmtilesBaseUrl = import.meta.env.VITE_KRI_ROADS_PMTILES_URL?.trim() || asset("data/kri/kri-roads.pmtiles");
 const remotePmtilesUrl = versionedAssetUrl(pmtilesBaseUrl, mapDataVersion);
 const remoteRoadsPmtilesUrl = versionedAssetUrl(roadsPmtilesBaseUrl, mapDataVersion);
-const offlineMapPack = new OfflineMapPackManager({ baseRemoteUrl: remotePmtilesUrl, roadsRemoteUrl: remoteRoadsPmtilesUrl });
+const browserMapPack = localCoreEnabled ? null : new OfflineMapPackManager({ baseRemoteUrl: remotePmtilesUrl, roadsRemoteUrl: remoteRoadsPmtilesUrl });
+const offlineMapPack = browserMapPack ?? await NativeOfflineMapPack.create();
 const satelliteSource = resolveSatelliteSource();
 const satelliteEnabled = satelliteSource.enabled;
 const SATELLITE_RUNTIME_SOURCE_IDS = ["kri-satellite", "kri-satellite-fallback", "kri-satellite-detail"] as const;
 const isSatelliteRuntimeSource = (sourceId: string | undefined): boolean => sourceId !== undefined && SATELLITE_RUNTIME_SOURCE_IDS.includes(sourceId as (typeof SATELLITE_RUNTIME_SOURCE_IDS)[number]);
-const pmtilesProtocol = new Protocol();
-const offlinePmtilesSources = offlineMapPack.registerPmtilesSources(pmtilesProtocol);
-const pmtilesUrl = offlinePmtilesSources.baseSourceKey;
-const roadsPmtilesUrl = offlinePmtilesSources.roadsSourceKey;
-maplibregl.addProtocol("pmtiles", pmtilesProtocol.tile);
+const mapVectorSources = localCoreEnabled
+  ? {vectorSourceUrls:{base:asset("__navkurd/maps/base.json"),roads:asset("__navkurd/maps/roads.json")}}
+  : (() => {
+    const protocol = new Protocol();
+    const sources = browserMapPack!.registerPmtilesSources(protocol);
+    maplibregl.addProtocol("pmtiles", protocol.tile);
+    return {pmtilesUrl:sources.baseSourceKey,roadsPmtilesUrl:sources.roadsSourceKey};
+  })();
 
 function currentLanguage(): Language {
   return (languageButtons.find((button) => button.classList.contains("is-active"))?.dataset.language as Language | undefined) ?? "ku";
@@ -248,10 +256,14 @@ class KurdistanAtlasController {
   private localityById = new Map<string, LocalityFeature>();
   private readonly hardwareProfile = readHardwareProfile();
   private readonly lowPowerProfile = isConstrainedHardware(this.hardwareProfile);
-  private readonly localityLanguagePacks = new LocalityLanguagePackController(this.hardwareProfile);
+  private readonly localityLanguagePacks = new LocalityLanguagePackController(this.hardwareProfile,()=>{
+    const b=this.map.getBounds(),dx=Math.max(.18,(b.getEast()-b.getWest())*.12),dy=Math.max(.12,(b.getNorth()-b.getSouth())*.12);
+    return {bounds:[Math.max(-180,b.getWest()-dx),Math.max(-90,b.getSouth()-dy),Math.min(180,b.getEast()+dx),Math.min(90,b.getNorth()+dy)],zoom:this.map.getZoom()};
+  });
+  private localityGeneration=0;
   private readonly ownerPlaces: OwnerPlacesController;
   private readonly searchService: SearchService;
-  private readonly searchWorker: SearchWorkerClient;
+  private readonly searchWorker: SearchWorkerClient | NativeSearchProvider;
   private language: Language = recoveredLifecycleState?.language ?? "ku";
   private mapMode: MapMode = recoveredLifecycleState?.mapMode === "satellite"
     ? (satelliteEnabled ? "satellite" : "night")
@@ -317,8 +329,8 @@ class KurdistanAtlasController {
       maxTileCacheSize: recommendedMapTileCacheSize(this.hardwareProfile),
       validateStyle: false
     });
-    // MapLibre returns early (rather than throwing) when WebGL2 initialization
-    // fails. Do not install controllers/listeners on its partial map object.
+    // MapLibre returns early rather than throwing when WebGL2 initialization
+    // fails. Never install controllers on that partial map instance.
     if (!this.map.dragPan) {
       const error = new Error("WebGL2 map initialization failed");
       error.name = "MapRendererUnavailableError";
@@ -438,6 +450,7 @@ class KurdistanAtlasController {
         this.syncPrimaryMapSurfaces();
       },
       onNavigationStateChange: (active) => {
+        this.syncPrimaryMapSurfaces();
         if (active) setMapControlsIdle(true);
         else revealMapControls();
         armMapControlsIdle();
@@ -466,7 +479,7 @@ class KurdistanAtlasController {
       getActiveCategories: () => this.ownerPlaces.getItems().map((place) => place.category),
       isMobileViewport: () => this.isMobileViewport()
     });
-    this.searchWorker = new SearchWorkerClient({
+    this.searchWorker = localCoreEnabled ? new NativeSearchProvider() : new SearchWorkerClient({
       manifestUrl: versionedAssetUrl(asset("data/kri/kri-search-shards-manifest.json"), mapDataVersion)
     });
     this.searchService = new SearchService({
@@ -570,6 +583,7 @@ class KurdistanAtlasController {
   }
 
   private applySheetState(): void {
+    this.persistNativeUi();
     const collapsed = this.sheetCollapsed;
     mapSheet.classList.toggle("is-collapsed", collapsed);
     mapShell.classList.toggle("map-sheet-collapsed", collapsed);
@@ -692,12 +706,8 @@ class KurdistanAtlasController {
         setMessage(UI[this.language].satelliteLoading, "normal");
         return;
       }
-      if (navigator.onLine) {
-        setMessage(UI[this.language].satelliteError, "error");
-        health.warn(UI[this.language].satelliteError);
-      } else {
-        health.offline();
-      }
+      setMessage(navigator.onLine ? UI[this.language].satelliteError : UI[this.language].offline, navigator.onLine ? "error" : "normal");
+      if (navigator.onLine) health.warn(UI[this.language].satelliteError);
     }, 4_000);
   }
 
@@ -800,10 +810,16 @@ class KurdistanAtlasController {
   }
 
   private async performInitialization(): Promise<void> {
-    const [layers, localities, searchManifest] = await Promise.all([
+    // Web search metadata is informational and already has a post-interactive
+    // loader. Do not make the first map frame wait for that extra request.
+    // Android local-core statistics remain on the existing critical path.
+    const criticalSearchCount = localCoreEnabled
+      ? this.searchRecordCount().catch(() => 0)
+      : Promise.resolve(0);
+    const [layers, localities, searchRecords] = await Promise.all([
       this.loadLayers(),
       this.localityLanguagePacks.load(this.language),
-      loadStaticSearchManifest().catch(() => null)
+      criticalSearchCount
     ]);
     this.layers = layers;
     this.setLocalities(localities);
@@ -821,14 +837,7 @@ class KurdistanAtlasController {
     }
     this.overlayLayout.refresh();
     this.map.resize();
-    localityCount.textContent = new Intl.NumberFormat("en-US").format(this.localities.length);
-    const searchRecords = searchManifest
-      ? Math.max(
-        searchManifest.files?.[this.language]?.records ?? 0,
-        searchManifest.records ?? 0,
-        ...Object.values(searchManifest.files ?? {}).map((entry) => entry?.records ?? 0)
-      )
-      : null;
+    localityCount.textContent = new Intl.NumberFormat("en-US").format(localCoreEnabled?(await coreStatistics()).datasets.locality:this.localities.length);
     baseSearchCount.textContent = searchRecords && searchRecords > 0
       ? new Intl.NumberFormat("en-US").format(searchRecords)
       : "—";
@@ -869,19 +878,18 @@ class KurdistanAtlasController {
     // loads immediately on user input, so warming is an optimization—not a
     // readiness dependency. This avoids a CPU/RAM spike directly after loader
     // dismissal on low-end phones and desktop-mode mobile browsers.
-    scheduleIdleTask(() => Promise.all((["ku", "ar", "en"] as const)
-      .map((language) => languageAssetCache.verifyPrepared(language))).then(() => undefined), 900);
+    if (!localCoreEnabled) scheduleIdleTask(() => Promise.all((["ku", "ar", "en"] as const)
+      .map((language) => languageAssetCache!.verifyPrepared(language))).then(() => undefined), 900);
 
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const canPrefetchLanguages = !connection?.saveData
+    const canPrefetchLanguages = !localCoreEnabled && !connection?.saveData
       && connection?.effectiveType !== "2g"
       && connection?.effectiveType !== "slow-2g";
     if (canPrefetchLanguages) {
       scheduleIdleTask(async () => {
         for (const language of (["ku", "ar", "en"] as const)) {
           try {
-            await this.localityLanguagePacks.prepare(language);
-            languageAssetCache.markPrepared(language);
+            await languageAssetCache!.warmProperties(language);
           } catch {
             // Optional prefetch may be skipped on a transient connection; the
             // same single-request loader remains authoritative on user action.
@@ -909,14 +917,15 @@ class KurdistanAtlasController {
       .catch(() => { delete mapShell.dataset.searchLanguageReady; });
   }
 
+  private async searchRecordCount():Promise<number>{
+    if(localCoreEnabled)return (await coreStatistics()).search[this.language];
+    const manifest=await loadStaticSearchManifest();
+    return Math.max(manifest.files?.[this.language]?.records??0,manifest.records??0,...Object.values(manifest.files??{}).map(entry=>entry?.records??0));
+  }
+
   private async loadSearchMetadata(): Promise<void> {
     try {
-      const manifest = await loadStaticSearchManifest();
-      const searchRecords = Math.max(
-        manifest.files?.[this.language]?.records ?? 0,
-        manifest.records ?? 0,
-        ...Object.values(manifest.files ?? {}).map((entry) => entry?.records ?? 0)
-      );
+      const searchRecords = await this.searchRecordCount();
       baseSearchCount.textContent = searchRecords > 0
         ? new Intl.NumberFormat("en-US").format(searchRecords)
         : "—";
@@ -939,8 +948,7 @@ class KurdistanAtlasController {
   private styleFor(mode: MapMode): StyleSpecification {
     return buildKriMapStyle({
       mode,
-      pmtilesUrl,
-      roadsPmtilesUrl,
+      ...mapVectorSources,
       satelliteEnabled,
       satelliteSource,
       basemapVisible: this.basemapVisible,
@@ -1011,8 +1019,18 @@ class KurdistanAtlasController {
     this.deviceQa?.refreshSoon(420);
   }
 
+  private persistNativeUi(): void {
+    if(localCoreEnabled)window.dispatchEvent(new Event("nav-kurd:ui-state-changed"));
+  }
+
   private queueLabels(): void {
-    this.labelController.queue();
+    this.persistNativeUi();
+    if(!localCoreEnabled){this.labelController.queue();return;}
+    const generation=++this.localityGeneration,language=this.language;
+    void this.localityLanguagePacks.load(language).then(features=>{
+      if(generation!==this.localityGeneration||language!==this.language)return;
+      this.setLocalities(features);this.localityViewport.refresh();this.labelController.queue();
+    }).catch(error=>{if(error?.name!=='AbortError')recordRuntimeDiagnostic('locality-viewport',error,'error');});
   }
 
   private readyMessageFor(language: Language = this.language): string {
@@ -1046,6 +1064,7 @@ class KurdistanAtlasController {
   }
 
   private refreshLanguageSurface(): void {
+    this.persistNativeUi();
     setStatus("ready", UI[this.language].statusReady);
     setMessage(this.readyMessageFor(), "success");
     this.ownerPlaces.setLanguageStatus();
@@ -1216,7 +1235,7 @@ class KurdistanAtlasController {
     const coordinate = feature.geometry.coordinates as LngLatTuple; this.map.flyTo({ center: coordinate, zoom: Math.max(this.map.getZoom(), feature.properties.place === "city" ? 11.7 : 13), duration: 680, essential: true }); this.showLocalityPopup(feature);
   }
 
-  searchFast(term: string): SearchChoice[] {
+  searchFast(term: string): SearchChoice[] | Promise<SearchChoice[]> {
     return this.searchService.searchFast(term);
   }
 
@@ -1267,7 +1286,7 @@ class KurdistanAtlasController {
     this.setLocalities(localities);
     this.language = language;
     this.searchService.activateLanguage(language);
-    localityCount.textContent = new Intl.NumberFormat("en-US").format(this.localities.length);
+    localityCount.textContent = new Intl.NumberFormat("en-US").format(localCoreEnabled?(await coreStatistics()).datasets.locality:this.localities.length);
     this.refreshLanguageSurface();
     this.normalizeAttributionCard();
 
@@ -1297,8 +1316,8 @@ class KurdistanAtlasController {
     }
     fit();
   }
-  setBasemapVisible(visible: boolean): void { this.basemapVisible = visible; this.applyCurrentStyleState(); }
-  setAdministrativeVisible(visible: boolean): void { this.administrativeVisible = visible; ADMINISTRATIVE_LAYER_IDS.forEach((id) => { if (this.map.getLayer(id)) this.map.setLayoutProperty(id, "visibility", visible ? "visible" : "none"); }); this.labelController.queueAdministrative(); }
+  setBasemapVisible(visible: boolean): void { this.basemapVisible = visible; this.persistNativeUi(); this.applyCurrentStyleState(); }
+  setAdministrativeVisible(visible: boolean): void { this.administrativeVisible = visible; this.persistNativeUi(); ADMINISTRATIVE_LAYER_IDS.forEach((id) => { if (this.map.getLayer(id)) this.map.setLayoutProperty(id, "visibility", visible ? "visible" : "none"); }); this.labelController.queueAdministrative(); }
   setPlacesVisible(visible: boolean): void { this.placesVisible = visible; PLACE_VISIBILITY_LAYER_IDS.forEach((id) => { if (this.map.getLayer(id)) this.map.setLayoutProperty(id, "visibility", visible ? "visible" : "none"); }); this.localityViewport.setVisible(visible); this.basePoiViewport.setVisible(visible); this.naturalPoiViewport.setVisible(visible); this.poiIcons.setVisible(visible); this.atlasMarkers.setVisible(visible); this.queueLabels(); }
   async setMapMode(mode: MapMode): Promise<void> {
     if (mode === "satellite") {
@@ -1324,6 +1343,7 @@ class KurdistanAtlasController {
       return;
     }
     this.mapMode = mode;
+    this.persistNativeUi();
     applyUiMode(mode);
     mapShell.dataset.mapMode = mode;
     mapElement.dataset.mapMode = mode;
@@ -1399,19 +1419,20 @@ class KurdistanAtlasController {
 
     const controlsHidden = mapShell.classList.contains("map-controls-hidden");
     const suppressSheet = this.searchOverlayOpen || this.routeOverlayActive || this.destinationPromptOpen || controlsHidden;
-    const suppressControls = this.searchOverlayOpen || controlsHidden;
+    const navigating = mapShell.classList.contains("is-navigating");
+    const suppressControls = this.searchOverlayOpen || controlsHidden || navigating;
     const sheetWithInert = mapSheet as HTMLElement & { inert?: boolean };
     const actionsWithInert = mapActions as HTMLElement & { inert?: boolean };
     const searchWithInert = searchCard as HTMLElement & { inert?: boolean };
     const topbarWithInert = topbar as HTMLElement & { inert?: boolean };
     sheetWithInert.inert = suppressSheet;
     actionsWithInert.inert = suppressControls;
-    searchWithInert.inert = controlsHidden;
-    topbarWithInert.inert = controlsHidden;
+    searchWithInert.inert = controlsHidden || navigating;
+    topbarWithInert.inert = controlsHidden || navigating;
     mapSheet.setAttribute("aria-hidden", String(suppressSheet));
     mapActions.setAttribute("aria-hidden", String(suppressControls));
-    searchCard.setAttribute("aria-hidden", String(controlsHidden));
-    topbar.setAttribute("aria-hidden", String(controlsHidden));
+    searchCard.setAttribute("aria-hidden", String(controlsHidden || navigating));
+    topbar.setAttribute("aria-hidden", String(controlsHidden || navigating));
 
     if (suppressSheet && mapSheet.contains(document.activeElement)) {
       (document.activeElement as HTMLElement | null)?.blur?.();
@@ -1619,7 +1640,7 @@ const offlineMapPackUi = new OfflineMapPackUiController({
   getLanguage: currentLanguage
 });
 
-const serviceWorkerController = new ServiceWorkerController({
+const serviceWorkerController = localCoreEnabled ? null : new ServiceWorkerController({
   // Activate a waiting worker only while the page is safely backgrounded.
   // The current document is never force-reloaded; the next navigation receives
   // the new application shell while active map, route and editor state survive.
@@ -1636,15 +1657,21 @@ const serviceWorkerController = new ServiceWorkerController({
 
 // Register the production service worker before heavy map initialization so PWA analyzers
 // and browsers can discover it immediately without delaying map boot.
-serviceWorkerController.start();
+serviceWorkerController?.start();
 const appLifecycle = installAppLifecycleController({
   capture: () => controller.captureLifecycleState(),
   onResume: ({ hiddenForMs }) => controller.resumeFromLifecycle(hiddenForMs)
 });
+if(localCoreEnabled){
+  window.__navKurdPersistUi=async()=>{appLifecycle.persist();await flushNativePreferences();};
+  window.addEventListener('nav-kurd:local-storage-error',()=>setMessage(UI[currentLanguage()].offlinePackError,'error'));
+}
 window.addEventListener("beforeunload", () => {
+  if(localCoreEnabled)delete window.__navKurdPersistUi;
   appLifecycle.destroy();
+  if(offlineMapPack instanceof NativeOfflineMapPack)offlineMapPack.dispose();
   health.dispose();
-  serviceWorkerController.dispose();
+  serviceWorkerController?.dispose();
 }, { once: true });
 
 const searchController = installSearchController({
@@ -1817,6 +1844,7 @@ actionsToggleButton.addEventListener("click", () => {
 controlsVisibilityButton.addEventListener("click", () => {
   const isPressed = controlsVisibilityButton.getAttribute("aria-pressed") === "true";
   setMapControlsHidden(!isPressed);
+  if(localCoreEnabled)appLifecycle.persist();
 });
 ["pointerdown", "wheel", "keydown"].forEach((eventName) => {
   window.addEventListener(eventName, noteMapInteraction, { capture: true, passive: true });
@@ -1877,18 +1905,18 @@ languageButtons.forEach((button) => button.addEventListener("click", () => {
   languageSwitchInProgress = true;
   mapShell.classList.add("is-language-switching");
   languageButtons.forEach((item) => { item.disabled = true; item.setAttribute("aria-busy", "true"); });
-  languageTransition.show(language, languageAssetCache.wasPrepared(language) ? "switch" : "download");
+  languageTransition.show(language, (localCoreEnabled || languageAssetCache!.wasPrepared(language)) ? "switch" : "download");
 
   void controller.setLanguage(language).then(() => {
     languageButtons.forEach((item) => item.classList.toggle("is-active", item === button));
-    offlineMapPack.setLanguage(language);
+    browserMapPack?.setLanguage(language);
     applyUiLanguage(language);
     applySatelliteAvailability();
     searchController.refreshLanguage();
     offlineMapPackUi.refreshLanguage();
     supportHub.refreshLanguage();
     renderAccountPresentation(currentAccountIdentity);
-    languageAssetCache.markPrepared(language);
+    languageAssetCache?.markPrepared(language);
   }).catch((error) => {
     recordRuntimeDiagnostic("language-switch", error, "warning");
     const failure = currentLanguage() === "ar"
@@ -2041,7 +2069,7 @@ async function completeTruthfulMapReadyFlow(criticalInitialization: Promise<void
   try {
     await Promise.all([criticalInitialization, controller.waitForInitialVisualReady(visualWait.signal)]);
   } finally {
-    // A data failure must not leave a first-render listener behind on each retry.
+    // A data failure must not leave another first-render listener on each retry.
     visualWait.abort();
   }
   runtimeState.markMapFirstFrame();
@@ -2098,8 +2126,8 @@ function boot(): Promise<void> {
       syncMapLoadingCopy();
       mapLoadingWatchdog = window.setTimeout(() => {
         if (!mapLoading.isConnected) return;
-        // Keep the in-flight request single-owned. A retry becomes available only
-        // after failure, not while data/style work is still using the same map.
+        // Keep the in-flight boot single-owned. Retry becomes actionable only
+        // after failure, while a slow healthy boot keeps one canonical attempt.
         mapLoadingSlow = true;
         syncMapLoadingCopy();
       }, 18000);
@@ -2107,7 +2135,7 @@ function boot(): Promise<void> {
       applySatelliteAvailability();
       setStatus("loading", UI[currentLanguage()].statusLoading);
       applyUiLanguage(currentLanguage());
-      offlineMapPack.setLanguage(currentLanguage());
+      browserMapPack?.setLanguage(currentLanguage());
       mapShell.classList.toggle("map-controls-hidden", recoveredLifecycleState?.controlsHidden === true);
       controller.syncPrimaryMapSurfaces();
       syncMapModeControl(recoveredLifecycleState?.mapMode ?? "night");
@@ -2127,8 +2155,6 @@ function boot(): Promise<void> {
     } catch (error) {
       // Once MapLibre has produced a real frame, later initialization failures are
       // degraded/background failures, not proof that the map itself is unavailable.
-      // Keep the usable map, GPS, routing and account UI alive without a false red
-      // map-load banner. Only a pre-render failure is allowed to become fatal.
       if (initialVisualReadyReached || controller.hasInitialVisualFrame()) {
         recordRuntimeDiagnostic("boot.post-render", error, "warning");
         await completeDegradedVisualReadyFlow();

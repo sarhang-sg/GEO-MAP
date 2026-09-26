@@ -1,3 +1,4 @@
+import { recordRuntimeDiagnostic } from "./runtime-diagnostics";
 import { atlasSupabase, recordAtlasUserActivity, type AtlasActivityKind } from "./atlas-places";
 import { appUrl } from "./app-url";
 import { query } from "./dom";
@@ -111,7 +112,7 @@ export function installSupportHub(options: SupportHubOptions) {
   const copyButtons = Array.from(document.querySelectorAll<HTMLButtonElement>(".support-method__copy-button"));
   const audio = typeof Audio !== "undefined" ? new Audio(`${import.meta.env.BASE_URL}assets/support/copy-asmr.wav`) : null;
   if (audio) {
-    audio.preload = "auto";
+    audio.preload = "none";
     audio.volume = 0.8;
   }
   let lastVisitors: ActivityRow[] = [];
@@ -210,7 +211,10 @@ export function installSupportHub(options: SupportHubOptions) {
       if (audio) {
         try {
           audio.currentTime = 0;
-          void audio.play();
+          void audio.play().catch((error: unknown) => {
+            if (error instanceof DOMException && ["NotAllowedError", "AbortError"].includes(error.name)) return;
+            recordRuntimeDiagnostic("support.copy-audio", String(error), "warning");
+          });
         } catch { /* ignored */ }
       }
       window.setTimeout(() => {

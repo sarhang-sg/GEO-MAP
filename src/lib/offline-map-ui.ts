@@ -1,29 +1,22 @@
+import { localCoreEnabled } from "../android/local-provider";
+import {recordRuntimeDiagnostic} from './runtime-diagnostics';
 import { UI, languageDirection } from "./i18n";
-import type { OfflineMapPackManager, OfflinePackSnapshot } from "./offline-map-pack";
+import type { OfflineMapPackController, OfflinePackSnapshot } from "./offline-map-pack";
 import type { Language } from "./types";
 import { appUrl } from "./app-url";
 
 type OfflineMapPackUiOptions = {
-  manager: OfflineMapPackManager;
+  manager: OfflineMapPackController;
   getLanguage: () => Language;
 };
 
-const byteFormatters = new Map<Language, Intl.NumberFormat>();
-
 function formatBytes(bytes: number, language: Language): string {
   const locale = language === "en" ? "en-US" : language === "ar" ? "ar-IQ" : "ckb-IQ";
-  let formatter = byteFormatters.get(language);
-  if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
-    byteFormatters.set(language, formatter);
-  }
   const mb = bytes / (1024 * 1024);
-  return `${formatter.format(mb)} MB`;
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(mb)} MB`;
 }
 
 function setDeleteButtonCopy(button: HTMLButtonElement, label: string): void {
-  // Download progress does not change this icon or its localized label.
-  if (button.getAttribute("aria-label") === label) return;
   const icon = document.createElement("img");
   icon.className = "nav-delete-icon";
   icon.src = appUrl("assets/icons/nav-kurd/delete.svg");
@@ -39,7 +32,7 @@ function setDeleteButtonCopy(button: HTMLButtonElement, label: string): void {
 }
 
 export class OfflineMapPackUiController {
-  private readonly manager: OfflineMapPackManager;
+  private readonly manager: OfflineMapPackController;
   private readonly getLanguage: () => Language;
   private readonly root: HTMLElement;
   private readonly title: HTMLElement;
@@ -89,24 +82,16 @@ export class OfflineMapPackUiController {
     document.body.append(this.deleteConfirmRoot);
     this.latest = this.manager.snapshot();
 
-    this.downloadButton.addEventListener("click", () => { void this.manager.download(); });
-    this.pauseButton.addEventListener("click", () => this.manager.pause());
-    this.resumeButton.addEventListener("click", () => { void this.manager.download(); });
+    this.downloadButton.addEventListener("click", () => { void this.manager.download().catch(error=>recordRuntimeDiagnostic("offline-map-action",error,"error")); });
+    this.pauseButton.addEventListener("click", () => {void Promise.resolve().then(()=>this.manager.pause()).catch(error=>recordRuntimeDiagnostic("offline-map-pause",error,"error"));});
+    this.resumeButton.addEventListener("click", () => { void this.manager.download().catch(error=>recordRuntimeDiagnostic("offline-map-action",error,"error")); });
     this.deleteButton.addEventListener("click", () => this.openDeleteConfirmation());
     this.deleteConfirmRoot.querySelectorAll<HTMLElement>('[data-offline-pack-confirm="cancel"]').forEach((element) => {
       element.addEventListener("click", () => this.closeDeleteConfirmation());
     });
     this.deleteConfirmProceed.addEventListener("click", () => { void this.confirmDelete(); });
     document.addEventListener("keydown", (event) => {
-      if (this.deleteConfirmRoot.hidden) return;
-      if (event.key === "Tab") {
-        event.preventDefault();
-        if (this.deleteInProgress) return;
-        const next = event.shiftKey
-          ? document.activeElement === this.deleteConfirmProceed ? this.deleteConfirmCancel : this.deleteConfirmProceed
-          : document.activeElement === this.deleteConfirmCancel ? this.deleteConfirmProceed : this.deleteConfirmCancel;
-        next.focus({ preventScroll: true });
-      } else if (event.key === "Escape" && !this.deleteInProgress) {
+      if (event.key === "Escape" && !this.deleteConfirmRoot.hidden && !this.deleteInProgress) {
         event.preventDefault();
         this.closeDeleteConfirmation();
       }
@@ -144,11 +129,13 @@ export class OfflineMapPackUiController {
     this.deleteConfirmRoot.dir = languageDirection(language);
     this.deleteConfirmTitle.textContent = copy.offlinePackDeleteConfirmTitle;
     if (!this.deleteInProgress && this.deleteConfirmMessage.dataset.state !== "error") {
-      this.deleteConfirmMessage.textContent = copy.offlinePackDeleteConfirmMessage;
+      this.deleteConfirmMessage.textContent = localCoreEnabled ? copy.offlinePackBundledDeleteMessage : copy.offlinePackDeleteConfirmMessage;
     }
     this.deleteConfirmCancel.textContent = copy.offlinePackDeleteConfirmCancel;
-    this.deleteConfirmProceed.textContent = this.deleteInProgress
-      ? copy.offlinePackDeleting : copy.offlinePackDeleteConfirmAction;
+    setDeleteButtonCopy(
+      this.deleteConfirmProceed,
+      this.deleteInProgress ? copy.offlinePackDeleting : copy.offlinePackDeleteConfirmAction,
+    );
   }
 
   private openDeleteConfirmation(): void {
@@ -156,12 +143,10 @@ export class OfflineMapPackUiController {
     const language = this.getLanguage();
     this.deleteReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : this.deleteButton;
     this.deleteConfirmMessage.dataset.state = "normal";
-    this.deleteConfirmMessage.textContent = UI[language].offlinePackDeleteConfirmMessage;
+    this.deleteConfirmMessage.textContent = localCoreEnabled ? UI[language].offlinePackBundledDeleteMessage : UI[language].offlinePackDeleteConfirmMessage;
     this.deleteConfirmRoot.hidden = false;
     this.renderDeleteConfirmation(language);
-    requestAnimationFrame(() => {
-      if (!this.deleteConfirmRoot.hidden) this.deleteConfirmCancel.focus({ preventScroll: true });
-    });
+    requestAnimationFrame(() => this.deleteConfirmCancel.focus({ preventScroll: true }));
   }
 
   private closeDeleteConfirmation(): void {
@@ -188,7 +173,6 @@ export class OfflineMapPackUiController {
       this.deleteConfirmRoot.hidden = true;
       this.deleteConfirmMessage.dataset.state = "normal";
       this.deleteReturnFocus = null;
-      if (!this.downloadButton.hidden) this.downloadButton.focus({ preventScroll: true });
     } catch {
       this.deleteConfirmMessage.dataset.state = "error";
       this.deleteConfirmMessage.textContent = copy.offlinePackDeleteFailed;
@@ -211,15 +195,20 @@ export class OfflineMapPackUiController {
     this.title.textContent = copy.offlinePackTitle;
     this.size.textContent = `${formatBytes(snapshot.downloadedBytes, language)} / ${formatBytes(snapshot.totalBytes, language)}`;
     const progressPercent = Math.max(0, Math.min(100, Math.round(snapshot.progress * 100)));
-    this.progress.style.setProperty("--offline-progress", String(progressPercent / 100));
+    this.progress.style.setProperty("--offline-progress", `${progressPercent}%`);
     this.progressTrack.setAttribute("aria-valuenow", String(progressPercent));
     this.progressTrack.setAttribute("aria-label", copy.offlinePackTitle);
+    this.root.dataset.progressPhase = snapshot.status === "ready"
+      ? "complete"
+      : progressPercent >= 50
+        ? "middle"
+        : "start";
     this.persistence.textContent = snapshot.persisted ? copy.offlinePackPersistent : copy.offlinePackBestEffort;
     this.persistence.dataset.state = snapshot.persisted ? "protected" : "best-effort";
     this.storage.textContent = snapshot.storageAvailableBytes === null
       ? copy.offlinePackStorageUnknown
       : `${copy.offlinePackFreeStorage}: ${formatBytes(snapshot.storageAvailableBytes, language)}`;
-    this.note.textContent = snapshot.status === "ready"
+    this.note.textContent = localCoreEnabled ? copy.offlinePackBundledNote : snapshot.status === "ready"
       ? copy.offlinePackRedownloadHint
       : copy.offlinePackOneTimeNote;
 
@@ -234,14 +223,13 @@ export class OfflineMapPackUiController {
             : snapshot.status === "error"
               ? "offlinePackError"
               : "offlinePackNotReady";
-    const statusMessage = snapshot.status === "error" && snapshot.error?.startsWith("offline-pack-storage-insufficient")
+    this.status.textContent = snapshot.status === "error" && snapshot.error?.startsWith("offline-pack-storage-insufficient")
       ? copy.offlinePackStorageInsufficient
       : snapshot.status === "ready" && this.showCompletedMessage
         ? copy.offlinePackCompleted
-        : copy[statusKey];
-    if (this.status.textContent !== statusMessage) this.status.textContent = statusMessage;
+        : localCoreEnabled && snapshot.status === "downloading" ? copy.offlinePackPreparingCopy : copy[statusKey];
 
-    this.downloadButton.textContent = copy.offlinePackDownload;
+    this.downloadButton.textContent = localCoreEnabled ? copy.offlinePackPrepareCopy : copy.offlinePackDownload;
     this.pauseButton.textContent = copy.offlinePackPause;
     this.resumeButton.textContent = copy.offlinePackResume;
     setDeleteButtonCopy(this.deleteButton, copy.offlinePackDelete);

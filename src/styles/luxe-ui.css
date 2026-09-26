@@ -273,19 +273,10 @@ html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(3) 
   box-shadow: 0 0 14px rgba(54, 174, 255, .22) !important;
 }
 
-/* Space.html idea, reduced to a performant weather-only star field. */
-.place-weather { position:relative; isolation:isolate; border-color:rgba(118,190,255,.20); background:linear-gradient(135deg,rgba(22,82,159,.17),rgba(20,155,197,.10)); }
+/* Weather has one calm surface. Decorative layers must never intercept taps. */
 .place-weather[data-phase="night"]::before {
-  position:absolute;
-  inset:0;
-  opacity:.55;
-  background-image:
-    radial-gradient(circle at 12% 28%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 72% 22%,#91ddff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 43% 74%,#fff 0 1px,transparent 1.5px);
-  background-size:47px 47px,73px 73px,91px 91px;
-  content:"";
-  animation:nk-v9-stars 8s linear infinite alternate;
+  content:none;
+  pointer-events:none;
 }
 
 @keyframes nk-v9-spin { to { transform:rotate(360deg); } }

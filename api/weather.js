@@ -3,7 +3,7 @@ const OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/ai
 const REQUEST_TIMEOUT_MS = 4500;
 const AIR_QUALITY_TIMEOUT_MS = 3200;
 const FRESH_TTL_MS = 10 * 60 * 1000;
-const STALE_TTL_MS = 60 * 60 * 1000;
+const STALE_TTL_MS = 10 * 60 * 60 * 1000;
 const CACHE_LIMIT = 320;
 const RATE_LIMIT = 180;
 const RATE_WINDOW_MS = 60 * 1000;
@@ -30,12 +30,13 @@ function allowRequest(request) {
 }
 
 function parseCoordinate(value, minimum, maximum) {
+  if ((typeof value !== "number" && typeof value !== "string") || String(value).trim() === "") return null;
   const number = Number(value);
   return Number.isFinite(number) && number >= minimum && number <= maximum ? number : null;
 }
 
 function coordinateKey(latitude, longitude) {
-  return `${latitude.toFixed(2)},${longitude.toFixed(2)}`;
+  return `${latitude.toFixed(3)},${longitude.toFixed(3)}`;
 }
 
 function trimCache() {
@@ -47,7 +48,7 @@ function trimCache() {
 }
 
 function finiteNumber(value) {
-  if (value === null || value === undefined || value === "") return null;
+  if ((typeof value !== "number" && typeof value !== "string") || String(value).trim() === "") return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
@@ -92,9 +93,12 @@ async function fetchUpstream(latitude, longitude) {
   url.searchParams.set("wind_speed_unit", "kmh");
   url.searchParams.set("timezone", "auto");
 
+  url.searchParams.set("hourly", "temperature_2m,weather_code,is_day,precipitation_probability,wind_speed_10m");
+  url.searchParams.set("forecast_hours", "12");
+  url.searchParams.set("timeformat", "unixtime");
   const airQualityPromise = fetchAirQuality(latitude, longitude);
   let lastError = null;
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  for (let attempt = 0; attempt < 1; attempt += 1) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
@@ -108,14 +112,43 @@ async function fetchUpstream(latitude, longitude) {
       const current = payload?.current;
       const temperature = finiteNumber(current?.temperature_2m);
       const weatherCode = finiteNumber(current?.weather_code);
-      if (temperature === null || weatherCode === null) throw new Error("weather-invalid-payload");
+      const isDay = finiteNumber(current?.is_day);
+      const observedAt = finiteNumber(current?.time);
+      const validCodes = new Set([0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99]);
+      if (temperature === null || temperature < -90 || temperature > 65 || !validCodes.has(weatherCode)
+        || (isDay !== 0 && isDay !== 1) || observedAt === null || observedAt <= 0
+        || observedAt * 1000 > Date.now() + 3600000 || observedAt * 1000 < Date.now() - 10800000) {
+        throw new Error("weather-invalid-payload");
+      }
+      const timezone = payload?.timezone;
+      const utcOffset = finiteNumber(payload?.utc_offset_seconds);
+      if (typeof timezone !== "string" || !timezone || utcOffset === null || Math.abs(utcOffset) > 50400) {
+        throw new Error("weather-invalid-timezone");
+      }
+      try { new Intl.DateTimeFormat("en", { timeZone: timezone }).format(0); }
+      catch { throw new Error("weather-invalid-timezone"); }
+      const hourly = { time: [], temperature_2m: [], weather_code: [], is_day: [], precipitation_probability: [], wind_speed_10m: [] };
+      for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 24); i += 1) {
+        const at = finiteNumber(payload.hourly.time[i]);
+        const temp = finiteNumber(payload.hourly.temperature_2m?.[i]);
+        const code = finiteNumber(payload.hourly.weather_code?.[i]);
+        const day = finiteNumber(payload.hourly.is_day?.[i]);
+        if (at === null || at * 1000 <= Date.now() || at * 1000 > Date.now() + 10 * 3600000
+          || (hourly.time.length && at <= hourly.time.at(-1)) || temp === null || temp < -90 || temp > 65
+          || !validCodes.has(code) || (day !== 0 && day !== 1)) continue;
+        hourly.time.push(at); hourly.temperature_2m.push(temp); hourly.weather_code.push(code); hourly.is_day.push(day);
+        const chance = finiteNumber(payload.hourly.precipitation_probability?.[i]);
+        const wind = finiteNumber(payload.hourly.wind_speed_10m?.[i]);
+        hourly.precipitation_probability.push(chance !== null && chance >= 0 && chance <= 100 ? chance : null);
+        hourly.wind_speed_10m.push(wind !== null && wind >= 0 ? wind : null);
+      }
       const airQuality = await airQualityPromise;
       return {
         current: {
           temperature_2m: temperature,
           weather_code: weatherCode,
-          is_day: Number(current?.is_day) === 1 ? 1 : 0,
-          time: typeof current?.time === "string" ? current.time : new Date().toISOString(),
+          is_day: isDay,
+          time: observedAt,
           relative_humidity_2m: finiteNumber(current?.relative_humidity_2m),
           apparent_temperature: finiteNumber(current?.apparent_temperature),
           precipitation: finiteNumber(current?.precipitation),
@@ -128,16 +161,20 @@ async function fetchUpstream(latitude, longitude) {
           dust: airQuality.dust,
           pm10: airQuality.pm10
         },
-        timezone: typeof payload?.timezone === "string" ? payload.timezone : "UTC",
+        timezone,
         timezone_abbreviation: typeof payload?.timezone_abbreviation === "string"
           ? payload.timezone_abbreviation
           : "",
-        utc_offset_seconds: finiteNumber(payload?.utc_offset_seconds) ?? 0,
+        utc_offset_seconds: utcOffset,
+        hourly,
+        requested_location: { latitude, longitude },
+        fetched_at: Date.now(),
+        stale: false,
+        provider: "Open-Meteo",
         available: true
       };
     } catch (error) {
       lastError = error;
-      if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 180));
     } finally {
       clearTimeout(timeout);
     }
@@ -166,9 +203,8 @@ async function resolveWeather(latitude, longitude) {
   try {
     return { payload: await pending, cache: "miss" };
   } catch {
-    if (cached && now - cached.storedAt <= STALE_TTL_MS) return { payload: cached.payload, cache: "stale" };
-    // A successful same-origin response prevents an upstream 5xx from polluting
-    // the browser console. The client simply omits the weather badge this time.
+    if (cached && now - cached.storedAt <= STALE_TTL_MS) return { payload: { ...cached.payload, stale: true }, cache: "stale" };
+    // Optional weather has an explicit unavailable state; never invent readings.
     return { payload: { available: false, current: null }, cache: "degraded" };
   }
 }
@@ -188,7 +224,7 @@ export default async function handler(request, response) {
   if (!allowRequest(request)) {
     response.setHeader("Retry-After", "60");
     response.setHeader("Cache-Control", "no-store");
-    response.status(200).send(request.method === "HEAD" ? undefined : JSON.stringify({ available: false, current: null }));
+    response.status(429).send(request.method === "HEAD" ? undefined : JSON.stringify({ available: false, current: null }));
     return;
   }
 
@@ -202,6 +238,7 @@ export default async function handler(request, response) {
 
   const result = await resolveWeather(latitude, longitude);
   response.setHeader("X-NAV-KURD-Weather-Cache", result.cache);
-  response.setHeader("Cache-Control", "public, max-age=300, s-maxage=600, stale-while-revalidate=3600");
+  response.setHeader("Cache-Control", result.payload.available && result.cache !== "stale"
+    ? "public, max-age=120, s-maxage=300" : "no-store");
   response.status(200).send(request.method === "HEAD" ? undefined : JSON.stringify(result.payload));
 }

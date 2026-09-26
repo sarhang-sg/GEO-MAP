@@ -1,3 +1,4 @@
+import { readHardwareProfile } from "./hardware-profile";
 import type { Language } from "./types";
 
 export type RuntimeDiagnosticKind = "error" | "warning" | "network" | "rejection" | "manual";
@@ -26,6 +27,8 @@ export type RuntimeDiagnosticsSnapshot = {
     hardware_concurrency: number | null;
     device_memory_gb: number | null;
     touch_points: number;
+    gpu_renderer: string | null;
+    gpu_version: string | null;
   };
   network: {
     effective_type: string | null;
@@ -241,8 +244,10 @@ export async function collectRuntimeDiagnostics(options: {
     device: {
       platform: String(nav.platform || "unknown").slice(0, 120),
       user_agent: String(nav.userAgent || "unknown").slice(0, 500),
-      hardware_concurrency: finiteOrNull(nav.hardwareConcurrency),
-      device_memory_gb: finiteOrNull(nav.deviceMemory),
+      hardware_concurrency: readHardwareProfile().logicalProcessors,
+      device_memory_gb: readHardwareProfile().deviceMemoryGb,
+      gpu_renderer: readHardwareProfile().gpu.renderer,
+      gpu_version: readHardwareProfile().gpu.version,
       touch_points: Math.max(0, Number(nav.maxTouchPoints || 0))
     },
     network: {
@@ -301,6 +306,7 @@ export function formatRuntimeDiagnosticsText(snapshot: RuntimeDiagnosticsSnapsho
     `[META] Viewport: ${snapshot.viewport.width}×${snapshot.viewport.height} @${snapshot.viewport.dpr} · ${snapshot.display_mode}`,
     `[META] Device: ${snapshot.device.platform} · cores ${displayValue(snapshot.device.hardware_concurrency)} · memory ${displayValue(snapshot.device.device_memory_gb)} GB · touch ${snapshot.device.touch_points}`,
     `[${snapshot.service_worker.controlled ? "OK" : snapshot.service_worker.lifecycle === "error" ? "WARN" : "META"}] Service worker: ${snapshot.service_worker.supported ? "supported" : "unsupported"} / ${snapshot.service_worker.controlled ? "controlled" : displayValue(snapshot.service_worker.lifecycle ?? "registration pending")}`,
+    `[META] Renderer: ${displayValue(snapshot.device.gpu_renderer)} · ${displayValue(snapshot.device.gpu_version)} · load measured through long tasks/frames; CPU/GPU utilization unavailable`,
     `[META] Runtime: load=${displayValue(snapshot.runtime.load_state)} mode=${displayValue(snapshot.runtime.map_mode)} network=${displayValue(snapshot.runtime.network_state)} performance=${displayValue(snapshot.runtime.performance_profile)} webgl=${displayValue(snapshot.runtime.webgl_context)}`,
     `[META] Performance: longTasks=${displayValue(snapshot.runtime.long_task_count)} maxTask=${displayValue(snapshot.runtime.longest_long_task_ms)}ms longFrames=${displayValue(snapshot.runtime.long_animation_frame_count)} maxFrame=${displayValue(snapshot.runtime.longest_animation_frame_ms)}ms animations=${displayValue(snapshot.runtime.animation_running_count)}/${displayValue(snapshot.runtime.animation_task_count)}`,
     `[META] POI commits: base=${displayValue(snapshot.runtime.base_poi_source_commits)} (${displayValue(snapshot.runtime.base_poi_last_commit_ms)}ms) natural=${displayValue(snapshot.runtime.natural_poi_source_commits)} (${displayValue(snapshot.runtime.natural_poi_last_commit_ms)}ms)`,

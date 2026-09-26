@@ -35,6 +35,8 @@ export class OwnerPlacesController {
   private readonly sourceId: string;
   private places: AtlasPlace[] = [];
   private refreshTimer: number | null = null;
+  private refreshPromise: Promise<void> | null = null;
+  private refreshQueued = false;
 
   constructor(options: OwnerPlacesControllerOptions) {
     this.map = options.map;
@@ -98,6 +100,19 @@ export class OwnerPlacesController {
   }
 
   async refresh(): Promise<void> {
+    if (this.refreshPromise) return this.refreshPromise;
+    const task = this.performRefresh().finally(() => {
+      if (this.refreshPromise !== task) return;
+      this.refreshPromise = null;
+      if (!this.refreshQueued) return;
+      this.refreshQueued = false;
+      window.queueMicrotask(() => { void this.refresh(); });
+    });
+    this.refreshPromise = task;
+    return task;
+  }
+
+  private async performRefresh(): Promise<void> {
     const language = this.getLanguage();
     if (!isAtlasBackendConfigured) {
       this.places = [];
@@ -126,7 +141,14 @@ export class OwnerPlacesController {
 
   queueRefresh(delayMs = 650): void {
     if (this.refreshTimer) window.clearTimeout(this.refreshTimer);
-    this.refreshTimer = window.setTimeout(() => { void this.refresh(); }, delayMs);
+    this.refreshTimer = window.setTimeout(() => {
+      this.refreshTimer = null;
+      if (this.refreshPromise) {
+        this.refreshQueued = true;
+        return;
+      }
+      void this.refresh();
+    }, delayMs);
   }
 
   private setBackendState(label: string, state: "connected" | "local" | "error"): void {

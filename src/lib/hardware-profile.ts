@@ -25,6 +25,7 @@ declare global {
 }
 
 let cachedProfile: HardwareProfile | null = null;
+let activeGpuProfile: HardwareProfile["gpu"] | null = null;
 
 if (typeof window !== "undefined") {
   window.addEventListener("nav-kurd:native-hardware", () => {
@@ -52,12 +53,11 @@ function readScreenProfile(): HardwareProfile["screen"] {
   });
 }
 
-function readGpuProfile(): HardwareProfile["gpu"] {
+export function captureMapGpuProfile(canvas: HTMLCanvasElement): HardwareProfile["gpu"] {
   const unavailable = Object.freeze({ vendor: null, renderer: null, version: null, maxTextureSize: null });
   try {
-    const canvas = document.createElement("canvas");
-    const gl = canvas.getContext("webgl2", { powerPreference: "high-performance" })
-      ?? canvas.getContext("webgl", { powerPreference: "high-performance" });
+    // Reuse the renderer's canvas. Never create a second probe context or benchmark.
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
     if (!gl) return unavailable;
     const debug = gl.getExtension("WEBGL_debug_renderer_info") as { UNMASKED_VENDOR_WEBGL: number; UNMASKED_RENDERER_WEBGL: number } | null;
     const clean = (value: unknown): string | null => typeof value === "string" && value.trim()
@@ -69,7 +69,8 @@ function readGpuProfile(): HardwareProfile["gpu"] {
       version: clean(gl.getParameter(gl.VERSION)),
       maxTextureSize: boundedNumber(gl.getParameter(gl.MAX_TEXTURE_SIZE), 256, 65_536, true),
     });
-    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    activeGpuProfile = profile;
+    cachedProfile = null;
     return profile;
   } catch { return unavailable; }
 }
@@ -124,7 +125,7 @@ export function readHardwareProfile(): HardwareProfile {
   if (cachedProfile) return cachedProfile;
   const nativeProfile = readNativeProfile();
   if (nativeProfile) {
-    cachedProfile = nativeProfile;
+    cachedProfile = Object.freeze({ ...nativeProfile, gpu: activeGpuProfile ?? nativeProfile.gpu });
     return cachedProfile;
   }
   if (typeof navigator === "undefined") {
@@ -137,28 +138,25 @@ export function readHardwareProfile(): HardwareProfile {
     return cachedProfile;
   }
   const nav = navigator as Navigator & { deviceMemory?: number };
-  const nativeShell = window.__NAV_KURD_FLUTTER__ === true;
   cachedProfile = Object.freeze({
     logicalProcessors: boundedNumber(nav.hardwareConcurrency, 1, 64, true),
     deviceMemoryGb: boundedNumber(nav.deviceMemory, 0.25, 64),
     screen: readScreenProfile(),
     // Flutter's full-screen WebView will create MapLibre's production context
     // immediately. Do not allocate a second probe context on its critical path.
-    gpu: nativeShell ? unavailableGpuProfile() : readGpuProfile(),
+    gpu: activeGpuProfile ?? unavailableGpuProfile(),
   });
   return cachedProfile;
 }
 
 export function isConstrainedHardware(profile: HardwareProfile = readHardwareProfile()): boolean {
-  return (typeof window !== "undefined" && window.__NAV_KURD_FLUTTER__ === true)
-    || (profile.logicalProcessors !== null && profile.logicalProcessors <= 4)
+  return (profile.logicalProcessors !== null && profile.logicalProcessors <= 4)
     || (profile.deviceMemoryGb !== null && profile.deviceMemoryGb <= 4)
     || (profile.gpu.maxTextureSize !== null && profile.gpu.maxTextureSize < 4096);
 }
 
 /** Balanced default for privacy-reduced browsers; smaller/larger values require actual hints. */
 export function recommendedMapTileCacheSize(profile: HardwareProfile = readHardwareProfile()): number {
-  if (typeof window !== "undefined" && window.__NAV_KURD_FLUTTER__ === true) return 96;
   const { logicalProcessors: cores, deviceMemoryGb: memory } = profile;
   if ((memory !== null && memory <= 3) || (cores !== null && cores <= 4)) return 96;
   if ((memory !== null && memory <= 6) || (cores !== null && cores <= 6)) return 160;
