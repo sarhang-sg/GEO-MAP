@@ -47,8 +47,8 @@
     "verify:phase4-performance": "node tools/verify/phase4-performance.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.112.4",
-    "maplibre-gl": "6.6.0",
+    "@supabase/supabase-js": "2.117.1",
+    "maplibre-gl": "6.11.1",
     "pmtiles": "4.5.0"
   },
   "devDependencies": {
