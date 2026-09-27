@@ -58,7 +58,7 @@ function gpsHarness() {
   await assert.rejects(rejected.runBootAttempt(() => { throw Error('synchronous failure'); }), /synchronous failure/);
   await rejected.runBootAttempt(async () => rejected.markReady());
   assert.equal(rejected.snapshot().load, 'ready', 'a synchronous throw must release the attempt gate');
-  console.log('PASS boot coalesces 1000 retries, explicit retry clears error, ready finalizes once and preserves network/update state');
+  console.log('PASS boot coalesces 1000 retries, explicit retry restores startup, ready finalizes once and preserves network/update state');
 }
 
 {
@@ -119,19 +119,21 @@ function gpsHarness() {
     }
   }
   for (const language of ['ku', 'ar', 'en']) {
-    for (const renderer of [true, false]) {
+    for (const name of ['MapRendererUnavailableError', 'GPUInitializationError', 'Error']) {
+      const renderer = name !== 'Error';
       const app = new Element();
       let reloads = 0;
       const document = { createElement: () => new Element(), getElementById: () => app, body: app };
       const context = vm.createContext({ Error, UI, languageDirection, document, readAppLifecycleSnapshot: () => ({ language }), window: { location: { reload() { reloads++; } } } });
       vm.runInContext(stripTypeScriptTypes(recoverySource, { mode: 'transform' }) + '\nglobalThis.recover = renderStartupFailure;', context);
       const error = new Error('<img src=x onerror=alert(1)>');
-      error.name = renderer ? 'MapRendererUnavailableError' : 'Error';
+      error.name = name;
       context.recover(error);
       const surface = app.children[0];
       const [title, message, retry] = surface.children[0].children;
       assert.equal(app.children.length, 1);
       assert.equal(surface.dataset.phase, 'failed');
+      assert.equal(surface.dataset.startupError, renderer ? 'renderer' : 'application');
       assert.equal(surface.dir, language === 'en' ? 'ltr' : 'rtl');
       assert.equal(title.textContent, UI[language].statusError);
       assert.equal(message.textContent, UI[language][renderer ? 'mapRendererUnavailable' : 'appStartupError']);
@@ -148,7 +150,7 @@ function gpsHarness() {
   assert.ok(main.indexOf('if (!this.map.dragPan)') < main.indexOf('this.animationScheduler ='), 'partial map must be rejected before installing controllers');
   assert.ok(source.includes('"./main").catch('), 'module evaluation failures must reach the startup boundary');
   assert.ok(main.includes('visualWait.abort();'), 'critical initialization failure must cancel the competing frame wait');
-  console.log('PASS localized fatal startup surface, no raw error HTML, no automatic reload, explicit first-tap retry and partial-map guard');
+  console.log('PASS localized startup recovery for both renderer APIs, safe text, explicit first-tap retry and partial-map guard');
 }
 
 {
@@ -160,7 +162,7 @@ function gpsHarness() {
   health.container.dataset.level = 'offline'; health.container.hidden = false;
   health.ready();
   assert.equal(health.container.hidden, false, 'a real offline notice must survive successful cached-map startup');
-  console.log('PASS successful recovery clears its previous error banner without hiding an active offline notice');
+  console.log('PASS successful recovery clears its previous startup banner and preserves an active offline notice');
 }
 {
   let calls = 0;
@@ -202,7 +204,7 @@ for (const code of [1,2,3]) {
   h.c.stopFollow();h.fix();assert.equal(h.moves.length,1);
   h.c.locate();assert.equal(h.moves.length,2);assert.equal(h.watches.length,2);
 }
-console.log('PASS GPS first feedback, 1000 repeated taps share one request, error distinctions, retry, stale callbacks/cache, success/cached focus and manual-pan state');
+console.log('PASS GPS first feedback, 1000 repeated taps share one request, distinct provider outcomes, retry, stale callbacks/cache, success/cached focus and manual-pan state');
 {
   const h=gpsHarness();const listeners=new Set();const camera=[];
   Object.assign(h.c,{lastCoordinate:[44,36],finishCameraMove(){h.c.programmaticMove=false;},map:{stop(){},off(_,fn){listeners.delete(fn);},once(_,fn){listeners.add(fn);},getZoom:()=>8,easeTo(options){camera.push(options);for(const fn of listeners)fn();listeners.clear();},isMoving:()=>false}});
