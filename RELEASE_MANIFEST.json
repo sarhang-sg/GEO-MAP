@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "e6e3aa26324118bd844149ac054cbd288e4ba8af9b12bdac350869d59c76fd42"
   },
   "fileCount": 1637,
-  "totalBytes": 287302217,
+  "totalBytes": 287303265,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -4535,8 +4535,8 @@
       "sha256": "4942f026bf6e387e6b2c8af39e7647347a09ad5c8739c9430a16baa8f45d7498"
     },
     "tools/release/prepare-dependency-preview.mjs": {
-      "bytes": 2900,
-      "sha256": "3666d525c47c654fb6bff129c05de201d6c8509c743ac705d33326c86946d2f9"
+      "bytes": 3948,
+      "sha256": "c8a138a9c51001efe25b386f9852e4370a80a9f4f5feebd1c64810aa355954bc"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 755,
