@@ -75,7 +75,8 @@ function renderStartupFailure(error: unknown): void {
   let language: keyof typeof UI = "ku";
   try { language = readAppLifecycleSnapshot()?.language ?? "ku"; } catch { /* fallback must survive damaged preferences */ }
   const copy = UI[language];
-  const rendererUnavailable = error instanceof Error && error.name === "MapRendererUnavailableError";
+  const rendererUnavailable = error instanceof Error &&
+    ["MapRendererUnavailableError", "GPUInitializationError"].includes(error.name);
   const surface = document.createElement("section");
   surface.id = "mapLoading";
   surface.className = "map-loading";

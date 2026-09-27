@@ -420,7 +420,10 @@ export class PlaceWeatherService {
         body.append(empty);
       }
       const credit = document.createElement("small"); credit.className = "place-weather__credit";
-      credit.textContent = `Open-Meteo · ${words.estimate}`; body.append(credit); details.append(body); root.append(details);
+      credit.textContent = `Open-Meteo · ${words.estimate} · `;
+      const developerCredit = document.createElement("bdi"); developerCredit.dir = "ltr";
+      developerCredit.textContent = "DEVLOPER: SARHANG SALAH";
+      credit.append(developerCredit); body.append(credit); details.append(body); root.append(details);
     } catch {
       if (!root.isConnected) return;
       root.dataset.state = "unavailable"; root.replaceChildren();
