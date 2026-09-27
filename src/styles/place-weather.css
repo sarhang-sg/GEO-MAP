@@ -1,29 +1,32 @@
-/* Shared Web/Android weather surface. One background; no nested metric cards. */
+/* Compact shared Web/Android weather card; retain the original artwork. */
 .place-weather {
-  position: relative; isolation: isolate; display: flex; flex-wrap: wrap; gap: 8px 10px;
+  position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; gap: 2px 8px;
   align-items: center; width: 100%; max-width: 100%; min-width: 0; margin-top: 7px;
-  padding: 12px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
+  padding: 7px 9px 2px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
   border: 1px solid var(--nk-border, rgba(132,180,255,.16)); border-radius: 12px;
-  background: var(--nk-surface, #101e31);
+  background: linear-gradient(135deg, rgba(49,92,169,.13), rgba(112,67,190,.11));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
 }
 .place-weather::before, .place-weather::after { pointer-events: none; }
-.place-weather__visual { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 auto; }
-.place-weather__visual img { width: 42px; height: 42px; object-fit: contain; pointer-events: none; }
+.place-weather > * { position: relative; z-index: var(--z-local-content); }
+.place-weather .place-weather__visual { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; }
+.place-weather .place-weather__visual img { width: 32px; height: 32px; min-width: 0; min-height: 0; margin: 0; object-fit: contain; pointer-events: none; }
 .place-weather__visual img[hidden], .place-weather__loading[hidden] { display: none !important; }
 .place-weather__loading {
   width: 20px; height: 20px; border: 2px solid rgba(159,184,235,.2);
   border-top-color: #87c8ff; border-radius: 50%; animation: place-weather-spin .8s linear infinite;
 }
-.place-weather__copy { display: grid; flex: 1 1 0; min-width: 0; gap: 2px; text-align: start; }
+.place-weather .place-weather__copy { display: grid; flex: 1 1 0; min-width: 0; gap: 0; text-align: start; }
 .place-weather .place-weather__copy strong {
-  color: inherit !important; font: 800 24px/1.2 var(--font-ui) !important;
+  color: inherit !important; font: 800 19px/1.15 var(--font-ui) !important;
   letter-spacing: -.02em; white-space: nowrap; text-transform: none !important;
 }
 .place-weather .place-weather__copy small {
-  color: inherit !important; opacity: .82; font: 600 11px/1.55 var(--font-ui) !important;
+  color: inherit !important; opacity: .82; font: 600 10px/1.4 var(--font-ui) !important;
   text-transform: none !important; overflow-wrap: anywhere;
 }
-.place-weather .place-weather__copy .place-weather__timestamp { font-size: 9px !important; opacity: .65; }
+.place-weather .place-weather__copy .place-weather__timestamp { font-size: 8px !important; opacity: .7; }
+.place-weather__timestamp bdi, .place-weather__hour time { direction: ltr; unicode-bidi: isolate; }
 .place-weather__details { flex-basis: 100%; min-width: 0; font: 600 11px/1.6 var(--font-ui); }
 .place-weather__details > summary {
   position: relative; z-index: var(--z-local-content); display: flex; align-items: center; justify-content: space-between;
@@ -42,17 +45,18 @@
   outline: 2px solid #80b8ff; outline-offset: 2px; border-radius: 4px;
 }
 .place-weather__body {
-  max-height: min(210px, 35vh); overflow-y: auto; overflow-x: hidden;
+  max-height: min(150px, 28vh); overflow-y: auto; overflow-x: hidden;
   overscroll-behavior: contain; padding: 2px 1px 6px; scrollbar-width: thin;
 }
-.place-weather__metrics { display: flex; flex-wrap: wrap; gap: 6px 12px; padding: 4px 0 12px; }
+.place-weather__metrics { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 2px 0 7px; }
 .place-weather__metrics span { font: inherit; color: inherit; }
 .place-weather .place-weather__heading { display: block; font: 700 11px/1.6 var(--font-ui); color: inherit; }
 .place-weather__forecast {
   display: flex; gap: 4px; overflow-x: auto; overscroll-behavior-x: contain;
-  padding: 10px 0 12px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+  padding: 6px 0 7px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
 }
-.place-weather__hour { display: grid; flex: 0 0 52px; justify-items: center; gap: 5px; padding: 0 2px; color: inherit; }
+.place-weather__hour { display: grid; flex: 0 0 48px; justify-items: center; gap: 3px; padding: 0 2px; color: inherit; }
+.place-weather .place-weather__hour img { width: 24px; height: 24px; min-width: 0; min-height: 0; object-fit: contain; margin: 0; }
 .place-weather__hour time { font: 500 10px/1.4 var(--font-ui); opacity: .7; }
 .place-weather .place-weather__hour strong { font: 800 15px/1.3 var(--font-ui); color: inherit; }
 .place-weather .place-weather__hour small { font: 500 10px/1.4 var(--font-ui); color: inherit; opacity: .8; text-transform: none; }

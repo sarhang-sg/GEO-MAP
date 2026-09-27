@@ -75,7 +75,7 @@ function weatherTime(value: unknown, offset = 0): number | null {
 }
 function clock(at: number, timezone: string, language: Language): string {
   return new Intl.DateTimeFormat(language === "en" ? "en-GB" : language === "ar" ? "ar-IQ" : "ckb-IQ",
-    { timeZone: timezone, hour: "2-digit", minute: "2-digit" }).format(at);
+    { timeZone: timezone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(at);
 }
 function decodeReading(payload: OpenMeteoResponse): WeatherReading {
   if (payload.available === false) throw new Error("weather-unavailable");
@@ -384,7 +384,8 @@ export class PlaceWeatherService {
       root.setAttribute("aria-label", `${temperature}. ${conditionLabel}. ${words.updated} ${at}${reading.stale ? ` · ${words.cached}` : ""}`);
       root.title = root.getAttribute("aria-label") ?? "";
       const timestamp = document.createElement("small"); timestamp.className = "place-weather__timestamp";
-      timestamp.textContent = `${words.updated} ${at}${reading.stale ? ` · ${words.cached}` : ""}`;
+      const timeLabel = document.createElement("bdi"); timeLabel.dir = "ltr"; timeLabel.textContent = at;
+      timestamp.append(`${words.updated} `, timeLabel, reading.stale ? ` · ${words.cached}` : "");
       root.querySelector(".place-weather__copy")!.append(timestamp);
       const details = document.createElement("details"); details.className = "place-weather__details"; details.open = expanded;
       const summary = document.createElement("summary"); summary.textContent = words.more; details.append(summary);

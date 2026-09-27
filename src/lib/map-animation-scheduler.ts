@@ -57,6 +57,7 @@ export class MapAnimationScheduler {
   private raf: number | null = null;
   private timer: number | null = null;
   private interacting = false;
+  private readonly activeGestures = new Set<string>();
   private destroyed = false;
 
   constructor(options: MapAnimationSchedulerOptions) {
@@ -136,22 +137,21 @@ export class MapAnimationScheduler {
     document.removeEventListener(RUNTIME_PERFORMANCE_MODE_EVENT, this.onPerformanceModeChange);
   }
 
-  private readonly onInteractionStart = (event: { originalEvent?: Event }): void => {
-    // User gestures are recorded separately for diagnostics. Decorative paint
-    // work also pauses while MapLibre reports any camera motion, including GPS
-    // follow/ease operations, so camera rendering remains the highest priority.
+  private readonly onInteractionStart = (event: { type?: string; originalEvent?: Event }): void => {
+    // GPS follow is programmatic camera motion, not a user gesture. Keeping it
+    // out of this set lets location and route motion continue during navigation.
     if (!event.originalEvent) return;
+    this.activeGestures.add((event.type ?? "move").replace(/start$/, ""));
     this.interacting = true;
     this.syncDiagnostics();
     this.schedule();
   };
 
-  private readonly onInteractionEnd = (): void => {
-    // MapLibre can emit overlapping move/zoom/rotate end events. Re-check on the
-    // next task so the scheduler does not resume while another gesture is active.
+  private readonly onInteractionEnd = (event: { type?: string }): void => {
+    this.activeGestures.delete((event.type ?? "move").replace(/end$/, ""));
     window.setTimeout(() => {
       if (this.destroyed) return;
-      this.interacting = this.map.isMoving();
+      this.interacting = this.activeGestures.size > 0;
       this.syncDiagnostics();
       this.schedule();
     }, 0);
@@ -180,7 +180,7 @@ export class MapAnimationScheduler {
 
   private runnableTasks(): ScheduledTask[] {
     if (document.hidden) return [];
-    const cameraBusy = this.interacting || this.map.isMoving();
+    const cameraBusy = this.interacting;
     return [...this.tasks.values()].filter((task) => task.active && !(cameraBusy && task.pauseDuringInteraction));
   }
 

@@ -1,6 +1,6 @@
 /* Build placeholders are replaced in dist/sw.js by tools/build/build-offline-runtime.mjs. */
 const RELEASE_ID = "__KRI_RELEASE_ID__";
-const UI_REVISION = "R16-hotfix-5-R3-2";
+const UI_REVISION = "R16-hotfix-5-R3-4";
 const CACHE_SCHEMA = "__KRI_CACHE_SCHEMA__";
 const MAP_DATA_VERSION = "__KRI_MAP_DATA_VERSION__";
 const OFFLINE_PACK_VERSION = "__KRI_OFFLINE_PACK_VERSION__";
@@ -21,8 +21,9 @@ const WIDGET_TAG = "nav-kurd-atlas";
 const OFFLINE_FALLBACK_PATH = "offline.html";
 const OFFLINE_READY_MARKER_PATH = "__nav-kurd-offline-pack-ready__.json";
 const NETWORK_TIMEOUT_MS = 8_000;
+const SHELL_FETCH_TIMEOUT_MS = 45_000;
 const VERSIONED_DATA_TIMEOUT_MS = 45_000;
-const INSTALL_FETCH_TIMEOUT_MS = 12_000;
+const INSTALL_FETCH_TIMEOUT_MS = SHELL_FETCH_TIMEOUT_MS;
 const PRECACHE = __KRI_PRECACHE__;
 const REQUIRED_SHELL_PATHS = new Set(
   PRECACHE
@@ -72,6 +73,14 @@ const isPrivateOrMutableRequest = (request, url) => request.headers.has("authori
   || url.pathname.startsWith("/auth/")
   || url.pathname.startsWith("/releases/");
 
+function usableShellResponse(path, response) {
+  if (!response?.ok) return false;
+  const type = response.headers.get("content-type")?.toLowerCase() || "";
+  if (path.endsWith(".js")) return /(?:java|ecma)script/u.test(type);
+  if (path.endsWith(".css")) return type.includes("text/css");
+  return true;
+}
+
 function offlineFailureResponse(request, message = "Resource unavailable while offline") {
   const url = new URL(request.url);
   const jsonLike = /\.(?:json|geojson)$/u.test(url.pathname) || request.headers.get("accept")?.includes("application/json");
@@ -89,7 +98,7 @@ function offlineFailureResponse(request, message = "Resource unavailable while o
 async function cacheEntry(cache, path, required, signal = undefined) {
   try {
     const response = await fetchWithTimeout(absolute(path), { cache: "reload", credentials: "same-origin", signal }, INSTALL_FETCH_TIMEOUT_MS);
-    if (!response.ok) {
+    if (!usableShellResponse(path, response)) {
       if (required) throw new Error(`Required offline asset failed: ${path}`);
       return false;
     }
@@ -312,6 +321,10 @@ async function clearFullOfflineRuntime() {
 async function deleteOldCaches() {
   const keep = new Set([SHELL_CACHE, RUNTIME_CACHE, DATA_CACHE, SATELLITE_CACHE]);
   const keys = await caches.keys();
+  // An old document may still import a hashed chunk after a new worker takes
+  // control. Keep one verified prior shell for that in-flight import.
+  const previousShell = [...keys].reverse().find((key) => key.startsWith(`${CACHE_PREFIX}shell-s${CACHE_SCHEMA}-`) && key !== SHELL_CACHE);
+  if (previousShell) keep.add(previousShell);
   await Promise.all(keys
     .filter((key) => OWNED_CACHE_PREFIXES.some((prefix) => key.startsWith(prefix)) && !keep.has(key))
     .map((key) => caches.delete(key)));
@@ -361,11 +374,24 @@ async function offlineNavigation(event) {
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
-  if (cached) return cached;
+  const path = new URL(request.url).pathname;
+  if (usableShellResponse(path, cached)) return cached;
+  if (cached) await cache.delete(request);
+  // The new worker can control a page with the previous release's HTML.
+  // Its hashed main chunk is still valid in the previous atomic shell.
+  if (cacheName === SHELL_CACHE) {
+    const names = await caches.keys();
+    for (const name of [...names].reverse()) {
+      if (name === SHELL_CACHE || !name.startsWith(`${CACHE_PREFIX}shell-s${CACHE_SCHEMA}-`)) continue;
+      const previous = await (await caches.open(name)).match(request);
+      if (usableShellResponse(path, previous)) return previous;
+    }
+  }
   if (workerIsOffline()) return offlineFailureResponse(request);
   try {
-    const response = await fetchWithTimeout(request);
-    if (response.ok) await cache.put(request, response.clone());
+    const response = await fetchWithTimeout(request, {}, SHELL_FETCH_TIMEOUT_MS);
+    if (!usableShellResponse(path, response)) return offlineFailureResponse(request);
+    await cache.put(request, response.clone());
     return response;
   } catch {
     return (await cache.match(request)) || offlineFailureResponse(request);

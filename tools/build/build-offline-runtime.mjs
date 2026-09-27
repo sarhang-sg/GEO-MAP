@@ -56,6 +56,16 @@ for (const assetPath of directBuildAssets) {
   if (assetPath.endsWith(".js")) await addStaticModuleDependencies(assetPath, requiredBuildAssets);
   else requiredBuildAssets.add(assetPath);
 }
+// The bootstrap imports main dynamically. Its static imports, stylesheet and
+// MapLibre worker must be available before an offline/slow-network startup.
+const mainEntry = generatedAssets.find((path) => /^assets\/main-[A-Za-z0-9_-]{6,}\.js$/u.test(path));
+if (!mainEntry) throw new Error("Main module is absent from the production build.");
+await addStaticModuleDependencies(mainEntry, requiredBuildAssets);
+for (const path of generatedAssets) {
+  if (path.endsWith(".css") || /^assets\/maplibre-gl-worker-[A-Za-z0-9_-]{6,}\.js$/u.test(path)) {
+    requiredBuildAssets.add(path);
+  }
+}
 
 const requiredStaticAssets = new Set([
   "index.html",
@@ -169,8 +179,8 @@ if (manifestEntry.bytes !== Buffer.byteLength(manifestJson)) {
 
 const requiredAssets = manifest.assets.filter((entry) => entry.required);
 const requiredBytes = requiredAssets.reduce((sum, entry) => sum + entry.bytes, 0);
-if (requiredAssets.length > 16) throw new Error(`Atomic shell has too many required files: ${requiredAssets.length}.`);
-if (requiredBytes > 3.5 * 1024 * 1024) throw new Error(`Atomic shell exceeds 3.5 MiB: ${requiredBytes} bytes.`);
+if (requiredAssets.length > 32) throw new Error(`Atomic shell has too many required files: ${requiredAssets.length}.`);
+if (requiredBytes > 8 * 1024 * 1024) throw new Error(`Atomic shell exceeds 8 MiB: ${requiredBytes} bytes.`);
 for (const entry of requiredAssets) await stat(resolve(dist, entry.path));
 
 await writeFile(manifestPath, manifestJson);

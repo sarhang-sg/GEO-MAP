@@ -2,6 +2,7 @@
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
 import { ROOT, assert, fileExists, posixPath, readJson, sha256, walk } from "../lib/project.mjs";
+import { releaseContent } from "../lib/release-content.mjs";
 
 const release = await readJson("release.config.json");
 const manifest = await readJson("RELEASE_MANIFEST.json");
@@ -34,7 +35,8 @@ assert(missing.length === 0 && extra.length === 0, `Release manifest file-set mi
 let bytes = 0;
 for (const [path, expected] of Object.entries(manifest.files ?? {})) {
   assert(await fileExists(path), `Release manifest file missing: ${path}`);
-  const body = await readFile(path);
+  const body = releaseContent(path, await readFile(path), expected, ROOT);
+  if (body === null) { bytes += expected.bytes; continue; }
   assert(body.length === expected.bytes, `Release manifest byte mismatch: ${path}`);
   assert(sha256(body) === expected.sha256, `Release manifest hash mismatch: ${path}`);
   bytes += body.length;

@@ -60,7 +60,7 @@ assert(lifecycle.includes("visibilitychange") && lifecycle.includes("pageshow") 
 assert(lifecycle.includes("sessionStorage") && lifecycle.includes('const STORAGE_KEY = "nav-kurd:app-session"'), "Lifecycle state is not session-persistent under the canonical key.");
 assert(/destroy:\s*\(\)\s*=>\s*\{[\s\S]*?persist\(\);[\s\S]*?destroyed\s*=\s*true/u.test(lifecycle), "Lifecycle destroy does not persist before teardown.");
 assert(!main.includes("window.location.reload()"), "Document reload remains in the app runtime.");
-assert(scheduler.includes("NORMAL_FRAME_BUDGET_MS") && scheduler.includes("CONSTRAINED_FRAME_BUDGET_MS") && scheduler.includes('task.priority === "visual"') && scheduler.includes("this.map.isMoving()"), "Central animation/camera frame budgeting is missing.");
+assert(scheduler.includes("NORMAL_FRAME_BUDGET_MS") && scheduler.includes("CONSTRAINED_FRAME_BUDGET_MS") && scheduler.includes('task.priority === "visual"') && scheduler.includes("this.activeGestures.size > 0"), "Central animation/gesture frame budgeting is missing.");
 assert(overlay.includes("requestAnimationFrame") && !overlay.includes("setInterval"), "Overlay layout is not event-coalesced.");
 assert(!overlay.includes("getBoundingClientRect") && !overlay.includes("ResizeObserver"), "Overlay layout still forces rendered-box measurement.");
 assert(!/observe\(card\)/u.test(tutorial) && tutorial.includes("targetInfo") && tutorial.includes("cardRect"), "Tutorial layout is not target-only/coalesced.");

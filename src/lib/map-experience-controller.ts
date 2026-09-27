@@ -26,7 +26,7 @@ function clamp01(value: number): number {
  */
 export function installMapExperienceController(options: MapExperienceOptions): MapExperienceController {
   const { map, mapShell, lowPowerProfile } = options;
-  const reducedMotion = lowPowerProfile || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const minimumVisualIntervalMs = lowPowerProfile ? 80 : 48;
   let visualFrame: number | null = null;
   let visualTimer: number | null = null;

@@ -315,17 +315,9 @@
   .maplibregl-ctrl-bottom-left { transition-duration: .01ms !important; }
 }
 
-.map-shell.is-low-power-visual .map-edge-frame > span { animation: none; opacity: .08; }
 .map-shell.is-low-power-visual .map-focus-vignette { background: radial-gradient(ellipse 76% 72% at 50% 48%, transparent 0 54%, rgba(2,3,10,.30) 100%); }
 @supports not (background: conic-gradient(red, blue)) {
   .map-edge-frame > span { display: none; }
-}
-
-/* Premium mobile polish — smoother bottom sheet centering, lighter GPU load and clearer deep zoom focus. */
-.map-shell.is-low-power-visual .map-edge-frame > span,
-.map-shell.is-low-power-visual .route-panel,
-.map-shell.is-low-power-visual .style-picker {
-  animation: none !important;
 }
 
 .map-shell.is-low-power-visual .map-focus-vignette {
@@ -347,7 +339,6 @@
 /* Adaptive rendering retains the visual language while reducing constrained-device GPU work. */
 .map-shell.is-low-power-visual .route-panel::before,
 .map-shell.is-low-power-visual .about-dialog__aurora { display: none; }
-.map-shell.is-low-power-visual .route-panel[data-state="loading"] { animation: premium-route-panel-in .28s var(--premium-spring) both; }
 
 /* Final Technical Closure 2027 — audited accessibility overrides. */
 .map-shell .style-choice.is-active {
@@ -367,14 +358,8 @@
   text-shadow: none;
 }
 
-/* Runtime-only old-device profile. Layout, colors, marker geometry and controls remain unchanged. */
-.map-shell.is-runtime-low-power *:not([data-essential-animation="true"]),
-.map-shell.is-runtime-low-power *::before,
-.map-shell.is-runtime-low-power *::after {
-  animation-duration: 0.001ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 80ms !important;
-}
+/* Runtime pressure reduces costly filters, not the approved motion language.
+   The existing prefers-reduced-motion rules still honor accessibility settings. */
 .map-shell.is-runtime-low-power .map-control,
 .map-shell.is-runtime-low-power .map-sheet,
 .map-shell.is-runtime-low-power .place-popup,

@@ -1462,6 +1462,9 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] .user-contrib__ed
 /* MapLibre owns positioning only. An explicit runtime class avoids :has(),
    which is missing in older Android WebViews and previously exposed a second
    bordered wrapper around the real place card. */
+.maplibregl-popup.nav-kurd-place-popup {
+  max-width: min(272px, calc(100vw - 36px)) !important;
+}
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-popup-content {
   overflow: visible;
   padding: 0 !important;
@@ -1473,7 +1476,7 @@ html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-pop
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-popup-content > :where(.place-popup, .atlas-place-popup) {
   overflow: hidden;
   min-width: 170px;
-  padding: 14px;
+  padding: 10px;
   border: 1px solid var(--nk-border);
   border-radius: 16px;
   color: var(--nk-text);

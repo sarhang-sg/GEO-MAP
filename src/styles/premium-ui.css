@@ -28,7 +28,7 @@
 /* Compact, readable type rhythm across shared native/web surfaces. */
 :where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) {
   color: var(--nk-ink, #f7f9ff);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -37,12 +37,12 @@
 }
 
 :where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) h2 {
-  font-size: clamp(18px, 4.8vw, 24px);
+  font-size: clamp(17px, 4.4vw, 22px);
   line-height: 1.35;
 }
 
 :where(.map-sheet, .about-dialog__panel, .place-detail__panel, .user-contrib__panel, .owner-studio__panel, .feedback-studio__panel) h3 {
-  font-size: clamp(15px, 4vw, 19px);
+  font-size: clamp(14px, 3.7vw, 17px);
   line-height: 1.4;
 }
 
