@@ -5,6 +5,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { ROOT, assert, sha256 } from "../lib/project.mjs";
 import { previewPolicy } from "../lib/dependency-preview.mjs";
+import { releaseContent } from "../lib/release-content.mjs";
 
 const isPreview = process.env.VERCEL_ENV === "preview"
   && /^dependabot\/npm_and_yarn\//u.test(process.env.VERCEL_GIT_COMMIT_REF || "");
@@ -29,6 +30,20 @@ try {
   execFileSync(process.execPath, ["tools/release/generate-release-manifest.mjs"], { cwd: ROOT, stdio: "inherit" });
   updated = true;
   const candidate = JSON.parse(await readFile(path, "utf8"));
+  // Vercel may serialize vercel.json in its build sandbox without changing
+  // its configuration. Keep the pinned Git source entry in this preview-only
+  // manifest, using the same validation as the production release verifier.
+  const originalConfig = baseline.files["vercel.json"];
+  const builtConfig = candidate.files["vercel.json"];
+  assert(originalConfig && builtConfig, "Dependency preview is missing vercel.json.");
+  if (JSON.stringify(builtConfig) !== JSON.stringify(originalConfig)) {
+    const trusted = releaseContent("vercel.json", await readFile("vercel.json"), originalConfig, ROOT);
+    assert(trusted === null || (trusted.length === originalConfig.bytes && sha256(trusted) === originalConfig.sha256),
+      "Dependency preview changed protected source: vercel.json");
+    candidate.files["vercel.json"] = originalConfig;
+    candidate.totalBytes += originalConfig.bytes - builtConfig.bytes;
+    await writeFile(path, `${JSON.stringify(candidate, null, 2)}\n`);
+  }
   assert(candidate.fileCount === baseline.fileCount, "Dependency preview changed the source inventory.");
   assert(candidate.release === baseline.release && candidate.mapDataVersion === baseline.mapDataVersion,
     "Dependency preview changed the map or release identity.");
