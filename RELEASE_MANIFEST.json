@@ -8,11 +8,11 @@
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "9f615937351d54fc1496c271c3e70e3fef3c6ef6662d4b9896d749421ccf5ad4",
+    "packageDefinitionSha256": "1c0e69a4024bea6de955a1264810aed85b97b7640b7094c7287932b8dc09841c",
     "lockRootDefinitionSha256": "e6e3aa26324118bd844149ac054cbd288e4ba8af9b12bdac350869d59c76fd42"
   },
   "fileCount": 1637,
-  "totalBytes": 287303265,
+  "totalBytes": 287303804,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -179,8 +179,8 @@
       "sha256": "2acb94cdb2ea451bfccd47c3c13a7a0aee4d3ee0ff3ec5ab1ee2b51fb0fcb81a"
     },
     "package.json": {
-      "bytes": 4608,
-      "sha256": "e03a0c489827562259544ae1a488d15810b042dd5ff2686cbcf5bb1907436f9b"
+      "bytes": 4779,
+      "sha256": "65005a80c938a3de51e553cd9134396e68ee7d1b64d02d4cdc1b5f417201d03e"
     },
     "public/_headers": {
       "bytes": 2601,
@@ -3687,8 +3687,8 @@
       "sha256": "a460ada93227473a5dc1781a13af473e97058359d49ad773c42a540f466626bf"
     },
     "src/bootstrap.ts": {
-      "bytes": 5639,
-      "sha256": "7a37e40e92d16dcbcdf8f0776cfcf3b87e6c080dd90417e1295bcb097d748bcd"
+      "bytes": 5677,
+      "sha256": "641c9cc278d4b91905023047e74cc29cd183a38be9dd5545095053c7ffbc8941"
     },
     "src/lib/active-static-poi-icons.ts": {
       "bytes": 3327,
@@ -3939,8 +3939,8 @@
       "sha256": "e433245f56f608aa5750956cadcacf913b132800b65c94523cfb083901b85d29"
     },
     "src/lib/place-weather.ts": {
-      "bytes": 24473,
-      "sha256": "30181dfa8a38d1e5526c77121168f9f33654ad3d1866271b3ee77420b212f13d"
+      "bytes": 24668,
+      "sha256": "4d1d37e423420d1022d8c34a977f722d855ce873506c1e19af5498f48a22ee1c"
     },
     "src/lib/poi-icon-catalog.ts": {
       "bytes": 7741,
@@ -4547,8 +4547,8 @@
       "sha256": "bca0a5645bc314e2352a842e38736b4264d7f2a28e670364f295189427ed26bf"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 17518,
-      "sha256": "01396e8695e02c4ccf65e0e57154593451d1d136a7627702765624c44d352abb"
+      "bytes": 17653,
+      "sha256": "432473f4ada63c3a8d604328e1d93fb3c4ab82b486e9af654c57e71a8c3f2ec1"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
