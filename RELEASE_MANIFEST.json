@@ -7,8 +7,12 @@
   "offlinePackVersion": "2027.13",
   "generatedForDate": "2026-09-06",
   "secretSafe": true,
-  "fileCount": 1635,
-  "totalBytes": 287294696,
+  "dependencyPreview": {
+    "packageDefinitionSha256": "9f615937351d54fc1496c271c3e70e3fef3c6ef6662d4b9896d749421ccf5ad4",
+    "lockRootDefinitionSha256": "e6e3aa26324118bd844149ac054cbd288e4ba8af9b12bdac350869d59c76fd42"
+  },
+  "fileCount": 1637,
+  "totalBytes": 287302217,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -175,8 +179,8 @@
       "sha256": "2acb94cdb2ea451bfccd47c3c13a7a0aee4d3ee0ff3ec5ab1ee2b51fb0fcb81a"
     },
     "package.json": {
-      "bytes": 4555,
-      "sha256": "c4d657762b875ce8f2f7c6fea0c187f654ea52adc858a06f8efcad4ad324a526"
+      "bytes": 4608,
+      "sha256": "e03a0c489827562259544ae1a488d15810b042dd5ff2686cbcf5bb1907436f9b"
     },
     "public/_headers": {
       "bytes": 2601,
@@ -3659,8 +3663,8 @@
       "sha256": "c4c6673245f52ee94ace4266187f1ec361c9b446f64e6129d778ae26b7d04342"
     },
     "public/sw.js": {
-      "bytes": 33339,
-      "sha256": "8d14d25a54478a773f72687e9b4c1f4d5d2ffec2c255abe5f31ef4f4c88acb55"
+      "bytes": 34788,
+      "sha256": "b897fd3394cdee145f0470bbb1eac399a51dbfbd159c60ca05eebf7b74d9c8a6"
     },
     "README.md": {
       "bytes": 5449,
@@ -3683,8 +3687,8 @@
       "sha256": "a460ada93227473a5dc1781a13af473e97058359d49ad773c42a540f466626bf"
     },
     "src/bootstrap.ts": {
-      "bytes": 4075,
-      "sha256": "b4f6c22f3f0adec5b172b80ee2012a3308ff84a85f1d840c6181325c11bc9d75"
+      "bytes": 5639,
+      "sha256": "7a37e40e92d16dcbcdf8f0776cfcf3b87e6c080dd90417e1295bcb097d748bcd"
     },
     "src/lib/active-static-poi-icons.ts": {
       "bytes": 3327,
@@ -4375,8 +4379,8 @@
       "sha256": "c84b3239586c8dd178f745e0be7e9e5475a0473a8ead0af1a402410c9280f424"
     },
     "tools/build/build-offline-runtime.mjs": {
-      "bytes": 8497,
-      "sha256": "1f3cecf263710fbe33e24b08d58d38e014b96a8c80d31d1d0d862219d8a29856"
+      "bytes": 9080,
+      "sha256": "bdeee4bfd97ad513ba671bb20dbe9b2aa490489daa1c5a6f9ecd8ad2b536022c"
     },
     "tools/build/generate-pwa-manifest.mjs": {
       "bytes": 2039,
@@ -4506,6 +4510,10 @@
       "bytes": 3239,
       "sha256": "0e5f3d7b88465fceee324d2dc5bf58681bf18aea6addeb976d23a7b3d87ea19b"
     },
+    "tools/lib/dependency-preview.mjs": {
+      "bytes": 752,
+      "sha256": "d41c42127e732491aa5c3c257e8a04c052d301ea09a978317666063078193d23"
+    },
     "tools/lib/project.mjs": {
       "bytes": 2869,
       "sha256": "6994cdbb0c151da045b5ba3cfb6b1eb7d9e1ea99680b391d9304542b1ee54ec8"
@@ -4515,8 +4523,8 @@
       "sha256": "3736bc2f8747de3c02e0c110f6daa79233cae28b365edf71505d4cb766a684aa"
     },
     "tools/release/generate-release-manifest.mjs": {
-      "bytes": 2124,
-      "sha256": "6a2f7519ebc8665119df916d9b3202ad5ccb27fdbf1c23c67c0d9f1ae56d2bab"
+      "bytes": 2344,
+      "sha256": "ed3eb00b2ea9670d0854620da79eb6331d5ff780d80bdabe2dc95038f4fcb0e6"
     },
     "tools/release/package-release.py": {
       "bytes": 6072,
@@ -4525,6 +4533,10 @@
     "tools/release/prepare-android-download.mjs": {
       "bytes": 3197,
       "sha256": "4942f026bf6e387e6b2c8af39e7647347a09ad5c8739c9430a16baa8f45d7498"
+    },
+    "tools/release/prepare-dependency-preview.mjs": {
+      "bytes": 2900,
+      "sha256": "3666d525c47c654fb6bff129c05de201d6c8509c743ac705d33326c86946d2f9"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 755,
@@ -4552,7 +4564,7 @@
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 5321,
-      "sha256": "b8ad2868fe1a3922626fa6192ce7cc2d32384ed9f437b9e4240c5868972e2f7e"
+      "sha256": "c9231a72257f65e7b4374a4013aa2157a70ffecd7bc72ab039fb89c00a934b19"
     },
     "tools/verify/phase4-performance.mjs": {
       "bytes": 2710,

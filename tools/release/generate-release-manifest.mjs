@@ -2,6 +2,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { ROOT, posixPath, readJson, sha256, walk } from "../lib/project.mjs";
 import { configSemanticHash } from "../lib/release-content.mjs";
+import { previewPolicy } from "../lib/dependency-preview.mjs";
 
 const release = await readJson("release.config.json");
 const sourceDataManifest = await readJson("data-src/source-data-manifest.json");
@@ -33,6 +34,10 @@ const manifest = {
   offlinePackVersion: release.offlinePackVersion,
   generatedForDate: release.releaseDate,
   secretSafe: true,
+  dependencyPreview: previewPolicy(
+    JSON.parse(await readFile("package.json", "utf8")),
+    JSON.parse(await readFile("package-lock.json", "utf8"))
+  ),
   fileCount: Object.keys(entries).length,
   totalBytes: Object.values(entries).reduce((sum, entry) => sum + entry.bytes, 0),
   files: entries

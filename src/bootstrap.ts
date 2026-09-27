@@ -41,10 +41,39 @@ function renderHandoffFallback(target: string): void {
   document.body.append(link);
 }
 
+async function updateWorkerBeforeRetry(): Promise<void> {
+  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
+  const worker = navigator.serviceWorker;
+  if (!worker.controller) return;
+  const registration = await worker.getRegistration().catch(() => undefined);
+  if (!registration) return;
+  let updateTimer: number | undefined;
+  await Promise.race([
+    registration.update().then(() => undefined).catch(() => undefined),
+    new Promise<void>((resolve) => { updateTimer = window.setTimeout(resolve, 45_000); })
+  ]);
+  window.clearTimeout(updateTimer);
+  const waiting = registration.waiting;
+  if (waiting) {
+    const url = new URL(waiting.scriptURL);
+    if (url.origin === window.location.origin && url.pathname.endsWith("/sw.js")) {
+      waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+  }
+  if (!registration.waiting && !registration.installing) return;
+  await new Promise<void>((resolve) => {
+    let timer: number;
+    const onChange = () => { window.clearTimeout(timer); worker.removeEventListener("controllerchange", onChange); resolve(); };
+    worker.addEventListener("controllerchange", onChange, { once: true });
+    timer = window.setTimeout(onChange, 45_000);
+  });
+}
+
 function renderStartupFailure(error: unknown): void {
   // Module evaluation includes map construction. A renderer/chunk failure can
   // happen before main installs its normal loading recovery controls.
-  const language = readAppLifecycleSnapshot()?.language ?? "ku";
+  let language: keyof typeof UI = "ku";
+  try { language = readAppLifecycleSnapshot()?.language ?? "ku"; } catch { /* fallback must survive damaged preferences */ }
   const copy = UI[language];
   const rendererUnavailable = error instanceof Error && error.name === "MapRendererUnavailableError";
   const surface = document.createElement("section");
@@ -73,7 +102,12 @@ function renderStartupFailure(error: unknown): void {
   // connectivity change, or while a healthy map is running. Keep all stored data.
   retry.addEventListener("click", () => {
     retry.disabled = true;
-    window.location.reload();
+    const reloadDocument = () => window.location.reload();
+    if (rendererUnavailable || typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
+      reloadDocument();
+      return;
+    }
+    void updateWorkerBeforeRetry().finally(reloadDocument);
   }, { once: true });
   content.append(title, message, retry);
   surface.append(content);
