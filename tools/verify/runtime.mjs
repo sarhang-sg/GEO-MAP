@@ -127,11 +127,19 @@ for (const variant of sprite.variants ?? []) {
 
 const apkPath = `public/downloads/NAV-KURD-${release.appVersion}.apk`;
 if (androidRelease.directApkAvailable === true) {
-  assert(androidRelease.directApkUrl === `/downloads/NAV-KURD-${release.appVersion}.apk`, "Direct APK URL is not canonical.");
   assert(/^[a-f0-9]{64}$/u.test(androidRelease.apkSha256 ?? ""), "Direct APK hash is missing.");
-  assert(await fileExists(apkPath), "Direct APK metadata points to a missing file.");
-  const apk = await fileMeta(apkPath);
-  assert(apk.bytes === androidRelease.apkBytes && apk.sha256 === androidRelease.apkSha256, "Direct APK metadata does not match the signed file.");
+  if (androidRelease.artifact) {
+    const artifact = androidRelease.artifact;
+    assert(artifact.url === `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${release.appVersion}/NAV-KURD-${release.appVersion}.apk`, "Published APK URL is not canonical.");
+    assert(artifact.version === release.appVersion && artifact.versionCode === release.androidVersionCode, "Published APK version differs.");
+    assert(artifact.signingCertificateSha256 === "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246", "Published APK identity differs.");
+    assert(artifact.bytes === androidRelease.apkBytes && artifact.sha256 === androidRelease.apkSha256 && artifact.url === androidRelease.directApkUrl, "Published APK receipt differs.");
+  } else {
+    assert(androidRelease.directApkUrl === `/downloads/NAV-KURD-${release.appVersion}.apk`, "Direct APK URL is not canonical.");
+    assert(await fileExists(apkPath), "Direct APK metadata points to a missing file.");
+    const apk = await fileMeta(apkPath);
+    assert(apk.bytes === androidRelease.apkBytes && apk.sha256 === androidRelease.apkSha256, "Direct APK metadata does not match the signed file.");
+  }
 } else {
   assert(androidRelease.directApkUrl === null && !(await fileExists(apkPath)), "Unavailable direct APK state still exposes a broken installer.");
 }

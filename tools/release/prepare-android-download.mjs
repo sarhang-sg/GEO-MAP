@@ -12,7 +12,7 @@ const downloadsDirectory = resolve(ROOT, "public/downloads");
 const apkName = `NAV-KURD-${release.appVersion}.apk`;
 const apkPath = resolve(downloadsDirectory, apkName);
 const minimumApkBytes = 10 * 1024 * 1024;
-const maximumApkBytes = 95 * 1024 * 1024;
+const maximumApkBytes = 256 * 1024 * 1024;
 
 await mkdir(downloadsDirectory, { recursive: true });
 const metadata = JSON.parse(await readFile(metadataPath, "utf8"));
@@ -62,7 +62,23 @@ try {
   if (error?.code !== "ENOENT") throw error;
 }
 
-if (!apkInfo) {
+if (!apkInfo && metadata.artifact) {
+  // Produced only after Termux verifies the signed CI output and publishes it.
+  const artifact = metadata.artifact;
+  const expectedUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${release.appVersion}/${apkName}`;
+  if (artifact.version !== release.appVersion || artifact.versionCode !== release.androidVersionCode
+      || artifact.url !== expectedUrl || !Number.isSafeInteger(artifact.bytes)
+      || artifact.bytes < minimumApkBytes || artifact.bytes > maximumApkBytes
+      || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")
+      || artifact.signingCertificateSha256 !== "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246") {
+    throw new Error("Published Android artifact does not match this release/signing identity.");
+  }
+  metadata.directApkAvailable = true;
+  metadata.directApkUrl = artifact.url;
+  metadata.apkBytes = artifact.bytes;
+  metadata.apkSha256 = artifact.sha256;
+  console.log(`Published signed Android download bound to ${release.appVersion}.`);
+} else if (!apkInfo) {
   metadata.directApkAvailable = false;
   metadata.directApkUrl = null;
   delete metadata.apkBytes;

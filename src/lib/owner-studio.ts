@@ -25,7 +25,7 @@ import {
   signInAtlasWithGoogle,
   signOutAtlasOwner,
   subscribeToAtlasAuth,
-  subscribeToAtlasPlaces,
+  subscribeToAtlasAccount,
   updateManagedAtlasFeedback,
   updateManagedAtlasPhoto,
   updateManagedAtlasPlaceStatus,
@@ -201,8 +201,11 @@ export class OwnerStudio {
     this.host.className = "owner-studio";
     this.host.hidden = true;
     document.body.append(this.host);
-    subscribeToAtlasAuth(() => { if (!this.host.hidden) void this.refresh(); });
-    subscribeToAtlasPlaces(() => { if (!this.host.hidden && this.identity && !this.busy) void this.refresh(); });
+    subscribeToAtlasAuth((change) => {
+      if (change?.event === "TOKEN_REFRESHED") return;
+      if (!this.host.hidden) void this.refresh();
+    });
+    subscribeToAtlasAccount(() => { if (!this.host.hidden && this.identity && !this.busy) void this.refresh(); });
     window.addEventListener("nav-kurd:navigation-history", () => {
       if (!this.host.hidden && this.identity && !this.busy) void this.refresh();
     });

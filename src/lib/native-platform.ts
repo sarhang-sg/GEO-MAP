@@ -1,4 +1,5 @@
 import type { Language } from "./types";
+import { installNativeAccountNotifications } from "./native-account-notifications";
 import {
   isFlutterAndroidRuntime,
   isNativeAppRuntime,
@@ -103,6 +104,7 @@ export async function initializeNativePlatform(getLanguage: () => Language): Pro
   };
   synchronizeLanguage();
   window.addEventListener("nav-kurd:language-change", synchronizeLanguage);
+  installNativeAccountNotifications(getLanguage);
 }
 
 /** Flutter owns the native launch surface; the browser has no native splash. */

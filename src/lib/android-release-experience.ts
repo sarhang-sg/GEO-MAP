@@ -29,7 +29,6 @@ type ReleaseCopy = {
   updateBody: (version: string) => string;
   updateNow: string;
   updateLater: string;
-  notificationTitle: string;
 };
 
 const APKPURE_URL = "https://apkpure.com/nav-kurd/com.navkurd.app/download";
@@ -41,7 +40,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "APK دابگرە",
     directSub: `ڕاستەوخۆ · v${APP_VERSION}`,
     store: "لە کۆگای APKPure",
-    storeSub: `APKPure · v${APP_VERSION}`,
+    storeSub: "ڤێرژنی بەردەست لە APKPure ببینە",
     promoTitle: "NAV KURD لە Android لەگەڵتە",
     promoBody: "ماپی خێراتر، ویجێتی کەش‌وهەوا و کارکردنی باشتر لە دەرەوەی وێبگەڕ.",
     promoDownload: "ئێستا APK دابگرە",
@@ -50,7 +49,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     updateBody: (version) => `وەشانی ${version} چاکسازیی GPS، ویجێت، ئۆفلاین و پاراستنی زیاتری تێدایە.`,
     updateNow: "ئێستا نوێی بکەرەوە",
     updateLater: "دواتر بیرم بخەرەوە",
-    notificationTitle: "نوێکردنەوەی NAV KURD",
   },
   ar: {
     title: "تنزيل تطبيق Android",
@@ -58,7 +56,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "تنزيل APK",
     directSub: `مباشر · v${APP_VERSION}`,
     store: "من متجر APKPure",
-    storeSub: `APKPure · v${APP_VERSION}`,
+    storeSub: "تحقق من الإصدار المتاح في APKPure",
     promoTitle: "NAV KURD معك على Android",
     promoBody: "خريطة أسرع وطقس على الشاشة الرئيسية وتجربة أفضل خارج المتصفح.",
     promoDownload: "تنزيل APK الآن",
@@ -67,7 +65,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     updateBody: (version) => `يتضمن الإصدار ${version} تحسينات GPS والودجت والعمل دون اتصال والأمان.`,
     updateNow: "التحديث الآن",
     updateLater: "ذكّرني لاحقاً",
-    notificationTitle: "تحديث NAV KURD",
   },
   en: {
     title: "Download the Android app",
@@ -75,7 +72,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     direct: "Download APK",
     directSub: `Direct · v${APP_VERSION}`,
     store: "Get it from APKPure",
-    storeSub: `APKPure · v${APP_VERSION}`,
+    storeSub: "Check the version listed on APKPure",
     promoTitle: "Take NAV KURD with you on Android",
     promoBody: "Faster maps, live weather on your home screen, and a smoother experience outside the browser.",
     promoDownload: "Download the APK",
@@ -84,7 +81,6 @@ const COPY: Record<Language, ReleaseCopy> = {
     updateBody: (version) => `Version ${version} improves GPS recovery, widgets, offline maps, and security.`,
     updateNow: "Update now",
     updateLater: "Remind me later",
-    notificationTitle: "NAV KURD update",
   },
 };
 
@@ -148,7 +144,8 @@ async function readLatestRelease(): Promise<LatestRelease | null> {
       candidateUrl
       && apkBytes >= MINIMUM_DIRECT_APK_BYTES
       && apkSha256
-      && await directApkIsReachable(candidateUrl, apkBytes)
+      && (candidateUrl === `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${value.version}/NAV-KURD-${value.version}.apk`
+        || await directApkIsReachable(candidateUrl, apkBytes))
     );
     return {
       version: value.version!,
@@ -258,7 +255,7 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     overlay.querySelector<HTMLElement>("h2")!.textContent = copy.updateTitle;
     overlay.querySelector<HTMLElement>("p")!.textContent = copy.updateBody(release.version);
     const update = overlay.querySelector<HTMLAnchorElement>("a")!;
-    update.href = nativeAndroid() ? release.apkPureUrl : (release.directApkUrl ?? release.apkPureUrl);
+    update.href = release.directApkUrl ?? release.apkPureUrl;
     update.textContent = copy.updateNow;
     const later = overlay.querySelector<HTMLButtonElement>("button")!;
     later.textContent = copy.updateLater;
@@ -275,20 +272,11 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     if (!release) return;
     synchronizeLinks(release);
     const installed = installedAndroidVersion();
-    if (!installed || compareVersions(installed, release.version) >= 0) return;
+    if (!installed || !release.directApkAvailable || compareVersions(installed, release.version) >= 0) return;
+    if (document.querySelector(".app-update-dialog")) return;
     showUpdateDialog(release, installed);
-    if ("Notification" in window && Notification.permission === "granted") {
-      const notificationKey = `nav-kurd:update-notified:${release.version}`;
-      try {
-        if (localStorage.getItem(notificationKey) === "1") return;
-        localStorage.setItem(notificationKey, "1");
-      } catch { /* A visual update prompt is still shown. */ }
-      new Notification(COPY[getLanguage()].notificationTitle, {
-        body: COPY[getLanguage()].updateBody(release.version),
-        icon: new URL("icons/nav-kurd-logo.png", window.location.href).toString(),
-        tag: `nav-kurd-update-${release.version}`,
-      });
-    }
+    // The Android release job owns system notifications and delivery receipts.
+    // The presentation only opens the in-app dialog, avoiding duplicate alerts.
   };
 
   void readLatestRelease().then((release) => { if (release) synchronizeLinks(release); });

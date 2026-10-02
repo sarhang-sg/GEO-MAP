@@ -1025,7 +1025,11 @@ export async function signOutAtlasUser(): Promise<void> {
   clearAtlasAuthNavigationState();
   if (!atlasSupabase) return;
   const { error } = await atlasSupabase.auth.signOut({ scope: "local" });
-  if (error && !isAuthSessionMissing(error)) throw error;
+  if (error && !isAuthSessionMissing(error)) {
+    // Local session removal succeeds even when server revocation is offline.
+    const { data, error: sessionError } = await atlasSupabase.auth.getSession();
+    if (sessionError || data.session) throw error;
+  }
 }
 
 export async function getAtlasUserProfile(identityOverride?: AtlasAuthIdentity): Promise<AtlasUserProfile | null> {
@@ -1298,11 +1302,7 @@ export async function updateManagedAtlasFeedback(
 }
 
 export async function signOutAtlasOwner(): Promise<void> {
-  clearAtlasAuthIdentityCache();
-  clearAtlasAuthNavigationState();
-  if (!atlasSupabase) return;
-  const { error } = await atlasSupabase.auth.signOut({ scope: "local" });
-  if (error && !isAuthSessionMissing(error)) throw error;
+  return signOutAtlasUser();
 }
 
 export type AtlasAuthChange = { event: AuthChangeEvent; session: Session | null };
@@ -1680,10 +1680,16 @@ type AtlasPlaceChangeListener = () => void;
 type AtlasRealtimeChannel = ReturnType<SupabaseClient["channel"]>;
 
 const atlasPlaceChangeListeners = new Set<AtlasPlaceChangeListener>();
+const atlasAccountChangeListeners = new Set<AtlasPlaceChangeListener>();
 let atlasPlacesRealtimeChannel: AtlasRealtimeChannel | null = null;
+
+function dispatchAtlasAccountChange(): void {
+  for (const listener of atlasAccountChangeListeners) listener();
+}
 
 function dispatchAtlasPlaceChange(): void {
   for (const listener of atlasPlaceChangeListeners) listener();
+  dispatchAtlasAccountChange();
 }
 
 function ensureAtlasPlacesRealtimeChannel(): void {
@@ -1694,26 +1700,33 @@ function ensureAtlasPlacesRealtimeChannel(): void {
     .on("postgres_changes", { event: "*", schema: "public", table: "atlas_places" }, dispatchAtlasPlaceChange)
     .on("postgres_changes", { event: "*", schema: "public", table: "atlas_place_photos" }, dispatchAtlasPlaceChange)
     .on("postgres_changes", { event: "*", schema: "public", table: "atlas_place_revisions" }, dispatchAtlasPlaceChange)
-    .on("postgres_changes", { event: "*", schema: "public", table: "atlas_notifications" }, dispatchAtlasPlaceChange)
-    .on("postgres_changes", { event: "*", schema: "public", table: "atlas_feedback" }, dispatchAtlasPlaceChange)
+    .on("postgres_changes", { event: "*", schema: "public", table: "atlas_notifications" }, dispatchAtlasAccountChange)
+    .on("postgres_changes", { event: "*", schema: "public", table: "atlas_feedback" }, dispatchAtlasAccountChange)
     .subscribe();
 }
 
-export function subscribeToAtlasPlaces(onChange: AtlasPlaceChangeListener): (() => void) | null {
+function subscribeToAtlasChanges(listeners: Set<AtlasPlaceChangeListener>, onChange: AtlasPlaceChangeListener): (() => void) | null {
   if (!atlasSupabase) return null;
 
-  atlasPlaceChangeListeners.add(onChange);
+  listeners.add(onChange);
   ensureAtlasPlacesRealtimeChannel();
 
   let active = true;
   return () => {
     if (!active) return;
     active = false;
-    atlasPlaceChangeListeners.delete(onChange);
+    listeners.delete(onChange);
 
-    if (atlasPlaceChangeListeners.size > 0 || !atlasPlacesRealtimeChannel) return;
+    if (atlasPlaceChangeListeners.size > 0 || atlasAccountChangeListeners.size > 0 || !atlasPlacesRealtimeChannel) return;
     const channel = atlasPlacesRealtimeChannel;
     atlasPlacesRealtimeChannel = null;
     void atlasSupabase.removeChannel(channel);
   };
+}
+
+export function subscribeToAtlasPlaces(onChange: AtlasPlaceChangeListener): (() => void) | null {
+  return subscribeToAtlasChanges(atlasPlaceChangeListeners, onChange);
+}
+export function subscribeToAtlasAccount(onChange: AtlasPlaceChangeListener): (() => void) | null {
+  return subscribeToAtlasChanges(atlasAccountChangeListeners, onChange);
 }

@@ -91,8 +91,7 @@ def main() -> int:
             if page.locator("#mapModeCycleButton").get_attribute("data-map-mode") != "night":
                 raise AssertionError("first-frame map mode and runtime mode differ")
 
-            # A direct APK button may only appear when the same-origin signed
-            # binary exists and its byte count matches verified release metadata.
+            # Direct downloads use an embedded binary or a signed CI receipt.
             android_release = page.evaluate(
                 "async () => (await fetch('/releases/latest.json', { cache: 'no-store' })).json()"
             )
@@ -103,9 +102,17 @@ def main() -> int:
                     "() => !document.querySelector('#androidDirectDownload')?.hidden",
                     timeout=10_000,
                 )
-                direct_probe = page.evaluate(
+                external_url = f"https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v{android_release['version']}/NAV-KURD-{android_release['version']}.apk"
+                if android_release.get("directApkUrl") == external_url:
+                    receipt = android_release.get("artifact", {})
+                    if receipt.get("url") != external_url or receipt.get("sha256") != android_release.get("apkSha256"):
+                        raise AssertionError("published APK receipt mismatch")
+                    page.wait_for_function("url => document.querySelector('#androidDirectDownload')?.href === url", arg=external_url)
+                    direct_probe = {"ok": True, "bytes": receipt.get("bytes"), "expected": android_release.get("apkBytes")}
+                else:
+                    direct_probe = page.evaluate(
                     """async expected => {
-                      const response = await fetch('/downloads/NAV-KURD-9.1.0.apk', {
+                      const response = await fetch('/downloads/NAV-KURD-10.0.0.apk', {
                         method: 'HEAD', cache: 'no-store', redirect: 'error'
                       });
                       return {
@@ -115,7 +122,7 @@ def main() -> int:
                       };
                     }""",
                     android_release.get("apkBytes"),
-                )
+                    )
                 if not direct_probe["ok"] or direct_probe["bytes"] != direct_probe["expected"]:
                     raise AssertionError(f"direct APK probe failed: {direct_probe}")
             else:

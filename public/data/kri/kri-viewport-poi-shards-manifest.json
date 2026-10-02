@@ -10966,7 +10966,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/157/99.json",
           "records": 9,
           "bytes": 13612,
-          "sha256": "fe69fa699929e11181e1b7b8eb8d30874c71167b97c9cc966d82d3e4637f18e5",
+          "sha256": "b7526574bca7c962680d866ad857ad85aeafdc13363f3e95187d2b69b2242d2c",
           "icon_ids": [
             "hill",
             "river",
@@ -10988,7 +10988,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/157/100.json",
           "records": 122,
           "bytes": 179485,
-          "sha256": "205538c745ec06c6df5f6c0086d71aa831f0568cb3b8a658359166c0e059ff6e",
+          "sha256": "04599359eda9760ea110811b643df9954444a4cc4ead7e227209b5e498e08a5e",
           "icon_ids": [
             "canyon",
             "forest",
@@ -11014,7 +11014,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/158/100.json",
           "records": 283,
           "bytes": 431072,
-          "sha256": "d3654414311d6375a25f939c908e37cee59406408b15cf0db13506ce23a4e36a",
+          "sha256": "408cb10212b02ca03d8394f25c08447ce5ea9967305835276424cfe90a504d12",
           "icon_ids": [
             "hill",
             "lake",
@@ -11040,7 +11040,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/158/101.json",
           "records": 30,
           "bytes": 45385,
-          "sha256": "39bae6b8c61e925a629bcb4b3eebbf14d596dda585df614115d2035d1f4431fc",
+          "sha256": "9ec8f4999f03ec0ce80c76612b21acfef3482b8201c0c6a67e157756e60a261c",
           "icon_ids": [
             "hill",
             "orchard",
@@ -11063,7 +11063,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/159/102.json",
           "records": 9,
           "bytes": 13734,
-          "sha256": "71ab0036ee750363bfb7d975a1ffed2e4f2837845a86df4cc81d59e80ee02eb1",
+          "sha256": "8c67926a2319b135dd925c865d3e2fe9d5f61632aedfaabe68af7a4be80cc850",
           "icon_ids": [
             "dam",
             "hill",
@@ -11088,7 +11088,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/160/99.json",
           "records": 7,
           "bytes": 10624,
-          "sha256": "0162866249eff83d2d8bd4f8781e0c02b22ff33f16ae8e917c7fb31edbab8255",
+          "sha256": "af307d9e1ad0b5a40ccf501ec3ccd126f9c2565a3fb483e1511c1c9b2da88d23",
           "icon_ids": [
             "hill",
             "mountain",
@@ -11109,7 +11109,7 @@
           "file": "data/kri/viewport-poi-shards/natural/8/160/102.json",
           "records": 65,
           "bytes": 96554,
-          "sha256": "f520b87f58b9c4bcb7cab0bb5cfaf3ea9626a24975d40461a062bff8bb4ab7e2",
+          "sha256": "a9d0808e8ee7e4e14787e276ebc674cab1ae6ba23b97c4dfd4e68f49408c2cad",
           "icon_ids": [
             "canyon",
             "hill",
@@ -11136,7 +11136,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/316/198.json",
           "records": 27,
           "bytes": 38273,
-          "sha256": "8c3659053175ab78e123f8d8e9b4520ddba4b7c0c4538af17ac667e17cdcf8e2",
+          "sha256": "1602f7ff208b9d77d276ee774372ca67d09268b9cd22470a023b21fb6792732c",
           "icon_ids": [
             "hill",
             "mountain",
@@ -11159,7 +11159,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/316/199.json",
           "records": 169,
           "bytes": 247981,
-          "sha256": "386b5d62be4e6be3379bf9c79c40fbb522eab1fae801755087c112a6434bb2ab",
+          "sha256": "88cc4cf1b7f3024c0fbd0d9bc1d0ee63f1fc8e7fa56d22ac5d37ec2d6161f580",
           "icon_ids": [
             "dam",
             "forest",
@@ -11187,7 +11187,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/317/198.json",
           "records": 100,
           "bytes": 146115,
-          "sha256": "3670b99a8401e9f5de811f74b9508c7502efebc822666d0d21648a0f8d64ee13",
+          "sha256": "8b416f67d3c070b2d61adc3961b51dddae23dc9fb9ee0a1c7af37ebd191921e8",
           "icon_ids": [
             "forest",
             "hill",
@@ -11215,7 +11215,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/317/199.json",
           "records": 211,
           "bytes": 309264,
-          "sha256": "98ec7dce619f0f1abbc463929aabb4fc537a49aee79dbf8a5eeabff22ccd8104",
+          "sha256": "119268edef2971156377d66e77cc1554f8d6872ca6df1f50737ac66753169ffd",
           "icon_ids": [
             "forest",
             "hill",
@@ -11245,7 +11245,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/198.json",
           "records": 74,
           "bytes": 111279,
-          "sha256": "903b5cfa7041b30a9c2aeb4e8fe52b54b7db644444472bcfeacfa66437c6e3c3",
+          "sha256": "568d4c5edccd80db60055b672f1d0373effb405f32db2c9c4b5a56940af5514f",
           "icon_ids": [
             "canyon",
             "forest",
@@ -11272,7 +11272,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/199.json",
           "records": 270,
           "bytes": 403041,
-          "sha256": "8a17573c0d28e9f062f33a81a22697bff34bb9123b1af0079949c1ce4ff398d5",
+          "sha256": "94d37a46194c1fbd3606383568bf92ea5094d62e7b0997692489c878dd23b1ed",
           "icon_ids": [
             "dam",
             "forest",
@@ -11303,7 +11303,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/200.json",
           "records": 179,
           "bytes": 269130,
-          "sha256": "b7651834e70a8b50336ededee63f4153a3a81c5a2383a0d68bd68deb65603baa",
+          "sha256": "d876945f42bab602c5cb88eb970c421d459c5b08cd3f8fcabf92b407690920ab",
           "icon_ids": [
             "forest",
             "hill",
@@ -11334,7 +11334,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/201.json",
           "records": 168,
           "bytes": 253611,
-          "sha256": "750ce13ee5dcfd8a1e6bdb9aff94c15da3535fec9699c89208b964c5ba59c15a",
+          "sha256": "ab3d8fafbc883a2793b7fe46ec28b451f9236d17e63cf5085f005e695d06a9a5",
           "icon_ids": [
             "dam",
             "forest",
@@ -11363,7 +11363,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/202.json",
           "records": 135,
           "bytes": 202722,
-          "sha256": "c5c6a71e707e4a7c8873c5805cb55265277e7e2277f986ddfa31294da28ccffc",
+          "sha256": "e6c129233e2e680621ec60fbb1b1ddeee9a928ea2dcf856d0fb5e9cd53383727",
           "icon_ids": [
             "hill",
             "lake",
@@ -11388,7 +11388,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/318/203.json",
           "records": 3,
           "bytes": 4674,
-          "sha256": "ee6f486dc19ec84dde34582c970a141422f572100e913417ce2cdbae0d73abfa",
+          "sha256": "dcbe790a3018f9edee011e60dd0a295091ca05bf1b31ccf34cbced27c6688933",
           "icon_ids": [
             "stream",
             "valley"
@@ -11408,7 +11408,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/319/201.json",
           "records": 275,
           "bytes": 426087,
-          "sha256": "1dca5eb386d8ae7a2376f5c7458ded2d7bbe8bf1699a9fc6e8b5e686ce5a82b3",
+          "sha256": "5ac8571b8c6ec66a22ffd0a9db3145317d5a833b7dd3eca8a3edaf0201bb48ec",
           "icon_ids": [
             "dam",
             "forest",
@@ -11438,7 +11438,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/319/202.json",
           "records": 200,
           "bytes": 310365,
-          "sha256": "e0a2d2bd22d61f8b525ba57144a18dda65aa85d65e49e35fdffc9661438cb7ae",
+          "sha256": "b88127ad569eb4d4a3f700f5592d226d349ecfe12da616fcc1e4b1839799e0b3",
           "icon_ids": [
             "hill",
             "lake",
@@ -11465,7 +11465,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/319/203.json",
           "records": 144,
           "bytes": 220852,
-          "sha256": "5e078467e68c9a2fb8addb27ed4c6b280a8c9c9541a16684dc59cfaca4926ed8",
+          "sha256": "49bfa043d2cff1a2e006000e681233e0930deb59aa971687a87cc8327202db58",
           "icon_ids": [
             "hill",
             "lake",
@@ -11493,7 +11493,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/320/200.json",
           "records": 104,
           "bytes": 160961,
-          "sha256": "793cdea2ba3a77456c37cbd14465678e854769abd215d65b54558b449691ebd5",
+          "sha256": "91c1b3fe805c4afdee0de36f2989dd4622c49cea7bce4157ab2f9426f3a9f360",
           "icon_ids": [
             "hill",
             "lake",
@@ -11519,7 +11519,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/320/203.json",
           "records": 252,
           "bytes": 386816,
-          "sha256": "2359a463c36303498bc001ae22e04eb6bd31e89afbe395fe6f78f63526f794d2",
+          "sha256": "53e74c06be0bec03ef9e67f5aefcd962f68bb516a7358688f0f91d6e23d03772",
           "icon_ids": [
             "forest",
             "hill",
@@ -11549,7 +11549,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/321/201.json",
           "records": 131,
           "bytes": 205052,
-          "sha256": "c8add186ae6e667f9aaba43f94af3ed47a7da6af2179bb5123ca94403a3515a1",
+          "sha256": "44c25785bee245b085a300c97eeb25896c2b706098d42aa68b8c3b6718daae5c",
           "icon_ids": [
             "forest",
             "hill",
@@ -11576,7 +11576,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/321/202.json",
           "records": 174,
           "bytes": 272907,
-          "sha256": "c56a1898cebc6fe37c65679cff33f9c3eafe0b920f4dae83e833883c0dcd298d",
+          "sha256": "5490bebfeaee4c463bccde7d05373b75d745751f7bf431623f23aeba771b2325",
           "icon_ids": [
             "dam",
             "forest",
@@ -11607,7 +11607,7 @@
           "file": "data/kri/viewport-poi-shards/natural/9/321/203.json",
           "records": 8,
           "bytes": 12409,
-          "sha256": "ba47cfd212f5be6e2018ea09be354516bc9097785ee35c4d449c64e3b08e4357",
+          "sha256": "914bf5cad4047d7bb0faf7efe1fd4451ac06b2d9a7f9b05b131b4fd8e76e8e3b",
           "icon_ids": [
             "mountain",
             "mountain_pass",
@@ -11630,7 +11630,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/638/398.json",
           "records": 80,
           "bytes": 119597,
-          "sha256": "a7a9aba8788f934cb8934cadc094c64f0032ef7b8fcbe344d2eddbf54d6324ff",
+          "sha256": "79582f6c7892c0cea870ff1739d7075d69f6486e2d8a2c6276893b10e07763ad",
           "icon_ids": [
             "mountain",
             "peak",
@@ -11653,7 +11653,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/638/399.json",
           "records": 98,
           "bytes": 147017,
-          "sha256": "dde2be34b0fe8961bc87b84e214d8c2542a40204af71615f1d0940ee930646ae",
+          "sha256": "79edcd9add11d0e1ef135e470c90deb0c8b84a0e00a257b68100970921733806",
           "icon_ids": [
             "canyon",
             "hill",
@@ -11679,7 +11679,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/638/400.json",
           "records": 200,
           "bytes": 302817,
-          "sha256": "403b8c98631c2fbb977c0575bda78fd07a55548ed5712f5eac0c4f80a63e4303",
+          "sha256": "ba8c524f0162801e902fd7912bba901a4459f3f9f1ebc1814162f32e83f7ff75",
           "icon_ids": [
             "forest",
             "hill",
@@ -11705,7 +11705,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/638/401.json",
           "records": 58,
           "bytes": 88990,
-          "sha256": "d17cbe40d11fb584253a816b4991035486aa5d1c3ee2577f4fd4d6fbf68c420c",
+          "sha256": "bade33a7d3cc57141310b9f224cbd7b10510b60ae49f9f5557f7812016b29f63",
           "icon_ids": [
             "forest",
             "hill",
@@ -11733,7 +11733,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/639/398.json",
           "records": 162,
           "bytes": 244084,
-          "sha256": "f4368e13fa6116b8e6dab1ac4b6aa2b7b0a3a9c3c6b88924846874ff3d49de95",
+          "sha256": "62144476f3549ada765717676e38fefb73e0d883d6d2ff274b2db0bd1ba05189",
           "icon_ids": [
             "hill",
             "lake",
@@ -11759,7 +11759,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/639/399.json",
           "records": 153,
           "bytes": 230344,
-          "sha256": "21aca40368d4749657873eb8708213e886f4055c66ec35f4d10b36d8a7d65260",
+          "sha256": "431a9dc5fe2075596f5422cc3f8864b8cde62d88b78be1edf3ebd7eec88400d8",
           "icon_ids": [
             "forest",
             "hill",
@@ -11785,7 +11785,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/639/400.json",
           "records": 133,
           "bytes": 201768,
-          "sha256": "244b63ff430f5624b5ae73750051d35c3e1aa75748f8967b95f061cf75e3e778",
+          "sha256": "52890e05a73204d2c5c26408318846aa4b66011d079e6eac10021bd7c72f1262",
           "icon_ids": [
             "forest",
             "hill",
@@ -11811,7 +11811,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/639/401.json",
           "records": 65,
           "bytes": 101428,
-          "sha256": "6cb8f8087e340000f61d89ef6cc6fb9b087f72b665594923bb239817cfcc4b57",
+          "sha256": "7042663a6f6e6816cb35d4af22dcabd64b60548a66acb14ebe8e3b8837b55f0f",
           "icon_ids": [
             "forest",
             "hill",
@@ -11839,7 +11839,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/640/402.json",
           "records": 207,
           "bytes": 325142,
-          "sha256": "9d89faff034a5d1179e9228936f49b65f1570f5f5aaf2a4e835bfabbacfddb66",
+          "sha256": "4236472a4b3cb68d8c582c2cfa9167b770db60ffbe3ba5c16f0ca5da5a896782",
           "icon_ids": [
             "hill",
             "lake",
@@ -11865,7 +11865,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/640/403.json",
           "records": 140,
           "bytes": 221183,
-          "sha256": "59cbad9c6e1cac34b9b730172e85f520913c93c0bed7765737888db594f72708",
+          "sha256": "d742f6c7282cb65dc2d4441cbbc6fe302d172ed6e70ec8e746af27cd50183c48",
           "icon_ids": [
             "forest",
             "hill",
@@ -11891,7 +11891,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/640/404.json",
           "records": 195,
           "bytes": 308253,
-          "sha256": "6155f43a6199b2b893d7f4627f0098fc0be03a6f832634919f32763a5328b19f",
+          "sha256": "0767d9dbe9c5c35d55c758b104aae8f1e31164db8a26e0ff44fc9f281d8a573c",
           "icon_ids": [
             "canyon",
             "forest",
@@ -11921,7 +11921,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/640/405.json",
           "records": 135,
           "bytes": 211259,
-          "sha256": "88dcf042008adb642f20766e2f7210b24d839cd75f5df856ecc0b30640cfbe79",
+          "sha256": "f09ff77a9e134f55eeb48e1a64e025c48207bf95f2bb90c524dee101e0941d8d",
           "icon_ids": [
             "hill",
             "mountain",
@@ -11946,7 +11946,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/641/402.json",
           "records": 117,
           "bytes": 187638,
-          "sha256": "b0bc13133d4bcced384fed8ef9da00440ff9ee5638cda9905419cdb4491e4a8c",
+          "sha256": "536bdee8aa0de4a3a23d1dc973040d10f8dac3c8137ba3d28a62a8a0d76b8b17",
           "icon_ids": [
             "lake",
             "mountain",
@@ -11971,7 +11971,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/641/403.json",
           "records": 146,
           "bytes": 234229,
-          "sha256": "198915a4c64025bc308c14230583b8a7f31905914153f1672ad5528e519faf52",
+          "sha256": "42bf1694e98fcf49f3523fa31528425aad0a4d51cb1f7f82dfe9255e66d7c170",
           "icon_ids": [
             "canyon",
             "forest",
@@ -12001,7 +12001,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/641/404.json",
           "records": 67,
           "bytes": 108798,
-          "sha256": "e6408745131b6c21c4255bee09ba318400066db8c7a89d6d1f706503bf1ec660",
+          "sha256": "1e6fefd27cb9f112556234bc340b93568f34672bbbb15c52320d662e3cc7f3a8",
           "icon_ids": [
             "canyon",
             "forest",
@@ -12029,7 +12029,7 @@
           "file": "data/kri/viewport-poi-shards/natural/10/641/405.json",
           "records": 105,
           "bytes": 164140,
-          "sha256": "16bcfbf316300513804e67ecb128a65ab59674845932bc11d63037f744a85dc2",
+          "sha256": "06645976ce09347c7ead11216021b779f3072227c007086619083fb86eb531e9",
           "icon_ids": [
             "hill",
             "mountain",

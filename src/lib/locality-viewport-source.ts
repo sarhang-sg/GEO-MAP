@@ -1,11 +1,11 @@
 import type { Feature, FeatureCollection, Point } from "geojson";
 import type { GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import type { LocalityFeature } from "./types";
+import { recordRuntimeDiagnostic } from "./runtime-diagnostics";
 
 const SOURCE_ID = "kri-locality-source";
 const MIN_DETAIL_ZOOM = 9.05;
 const MINOR_PLACES = new Set(["village", "locality", "hamlet", "suburb"]);
-const EMPTY: FeatureCollection<Point, Record<string, unknown>> = { type: "FeatureCollection", features: [] };
 
 type LocalityViewportSourceOptions = {
   map: MapLibreMap;
@@ -40,6 +40,9 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
   let frame: number | null = null;
   let lastSignature = "";
   let committedIds = new Set<string>();
+  let committedSource: GeoJSONSource | undefined;
+  let writing = false;
+  let refreshQueued = false;
 
   const source = (): GeoJSONSource | undefined => map.getSource(SOURCE_ID) as GeoJSONSource | undefined;
 
@@ -50,19 +53,18 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
       setData: (data: FeatureCollection<Point, Record<string, unknown>>, waitForCompletion?: true) => Promise<void> | GeoJSONSource;
     }) | undefined;
     if (!target) return;
+    if (target !== committedSource) {
+      committedSource = target;
+      committedIds = new Set();
+      lastSignature = "";
+    }
 
     const zoom = map.getZoom();
     const signature = `${visible}:${boundsSignature(map)}`;
     if (signature === lastSignature) return;
-    lastSignature = signature;
-
-    if (!visible || zoom < MIN_DETAIL_ZOOM) {
-      if (committedIds.size === 0) return;
-      if (target.updateData) await Promise.resolve(target.updateData({ removeAll: true }, true));
-      else await Promise.resolve(target.setData(EMPTY, true));
-      committedIds = new Set();
-      return;
-    }
+    // Visibility and minzoom belong to the layers. Retain this bounded viewport
+    // so hiding/zooming does not destroy and recreate identical features.
+    if (!visible || zoom < MIN_DETAIL_ZOOM) return;
 
     const bounds = map.getBounds();
     const longitudePadding = Math.max(0.08, (bounds.getEast() - bounds.getWest()) * 0.12);
@@ -96,14 +98,25 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
     } else {
       await Promise.resolve(target.setData({ type: "FeatureCollection", features }, true));
     }
-    committedIds = nextIds;
+    if (!destroyed && source() === target) {
+      committedIds = nextIds;
+      lastSignature = signature;
+    }
   };
 
   const refresh = (): void => {
     if (destroyed || document.hidden || frame !== null) return;
+    if (writing) { refreshQueued = true; return; }
     frame = window.requestAnimationFrame(() => {
       frame = null;
-      void commit();
+      writing = true;
+      void commit().catch((error: unknown) => {
+        lastSignature = "";
+        recordRuntimeDiagnostic("map.locality-viewport", error, "warning");
+      }).finally(() => {
+        writing = false;
+        if (refreshQueued) { refreshQueued = false; refresh(); }
+      });
     });
   };
   const onSettledCamera = (): void => refresh();
@@ -114,6 +127,7 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
       started = true;
       map.on("moveend", onSettledCamera);
       map.on("zoomend", onSettledCamera);
+      map.on("style.load", onSettledCamera);
       refresh();
     },
     refresh,
@@ -124,6 +138,7 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
       if (frame !== null) window.cancelAnimationFrame(frame);
       map.off("moveend", onSettledCamera);
       map.off("zoomend", onSettledCamera);
+      map.off("style.load", onSettledCamera);
       committedIds.clear();
     }
   };

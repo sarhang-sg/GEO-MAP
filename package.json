@@ -1,6 +1,6 @@
 {
   "name": "nav-kurd",
-  "version": "9.1.0",
+  "version": "10.0.0",
   "private": true,
   "type": "module",
   "description": "Mobile-first Kurdistan map with multilingual search, GPS navigation, satellite context, local PMTiles data and owner-managed places.",
@@ -35,7 +35,7 @@
     "verify:security": "node tools/verify/security.mjs",
     "verify:pmtiles": "python3 tools/verify/pmtiles.py",
     "verify:release": "node tools/verify/release.mjs",
-    "verify:static": "npm --silent run verify:syntax && npm --silent run verify:source && npm --silent run verify:styles && npm --silent run verify:data && npm --silent run verify:runtime && npm --silent run verify:mobile && npm --silent run verify:critical-runtime && npm --silent run verify:search-location && npm --silent run verify:phase2 && npm --silent run verify:security && npm --silent run verify:pmtiles",
+    "verify:static": "npm --silent run verify:syntax && npm --silent run verify:source && npm --silent run verify:styles && npm --silent run verify:data && npm --silent run verify:runtime && npm --silent run verify:mobile && npm --silent run verify:critical-runtime && npm --silent run verify:search-location && npm --silent run verify:phase2 && npm --silent run verify:v10 && npm --silent run verify:security && npm --silent run verify:pmtiles",
     "verify:production": "npm --silent run verify:static && npm --silent run verify:dependencies && npm --silent run verify:release",
     "verify": "npm run data:prepare && npm run verify:production",
     "verify:browser": "python3 tools/verify/browser-smoke.py",
@@ -44,7 +44,8 @@
     "verify:dependencies": "node tools/verify/dependency-security.mjs",
     "verify:search-location": "node --disable-warning=ExperimentalWarning tools/verify/search-location-regressions.mjs",
     "verify:phase2": "node --disable-warning=ExperimentalWarning tools/verify/phase2-regressions.mjs",
-    "verify:phase4-performance": "node tools/verify/phase4-performance.mjs"
+    "verify:phase4-performance": "node tools/verify/phase4-performance.mjs",
+    "verify:v10": "node --disable-warning=ExperimentalWarning tools/verify/v10-regressions.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.4",

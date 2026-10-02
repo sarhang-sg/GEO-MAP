@@ -26,7 +26,7 @@ import {
   signInAtlasWithGoogle,
   signOutAtlasUser,
   subscribeToAtlasAuth,
-  subscribeToAtlasPlaces,
+  subscribeToAtlasAccount,
   uploadUserAtlasPhoto,
   withdrawUserAtlasApprovedPlace,
   withdrawUserAtlasRevision,
@@ -762,8 +762,11 @@ export class UserContributionStudio {
     this.host.hidden = true;
     document.body.append(this.host);
     this.pendingNewPlaceCoordinate = this.loadPendingNewPlaceCoordinate();
-    subscribeToAtlasAuth(() => { void this.handleAuthStateChange(); });
-    subscribeToAtlasPlaces(() => {
+    subscribeToAtlasAuth((change) => {
+      if (change?.event === "TOKEN_REFRESHED" && change.session?.user.id === this.identity?.userId) return;
+      void this.handleAuthStateChange();
+    });
+    subscribeToAtlasAccount(() => {
       if (!this.identity || this.identity.role !== "user") return;
       if (!this.host.hidden) void this.refresh();
       else void this.syncNotifications();
@@ -962,8 +965,11 @@ export class UserContributionStudio {
       this.options.onUnreadCountChange?.(0);
       return;
     }
+    const userId = this.identity.userId;
     try {
-      this.notifications = await loadAtlasNotifications();
+      const notifications = await loadAtlasNotifications();
+      if (this.identity?.userId !== userId) return;
+      this.notifications = notifications;
       this.options.onUnreadCountChange?.(this.notifications.filter((item) => !item.is_read).length);
     } catch {
       // Keep the last known unread indicator on transient network errors.
@@ -977,7 +983,10 @@ export class UserContributionStudio {
 
   private async refreshNavigationHistory(): Promise<void> {
     if (!this.identity || this.identity.role !== "user") return;
-    this.navigationHistory = await this.loadSyncedNavigationHistory();
+    const userId = this.identity.userId;
+    const history = await this.loadSyncedNavigationHistory();
+    if (this.identity?.userId !== userId) return;
+    this.navigationHistory = history;
     if (!this.host.hidden && this.view === "dashboard" && this.activeDashboardTab === "account") this.render();
   }
 

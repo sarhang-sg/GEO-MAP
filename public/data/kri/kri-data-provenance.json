@@ -1,6 +1,6 @@
 {
-  "release": "2026-09-06-nav-kurd-v9.1.0",
-  "app_version": "9.1.0",
+  "release": "2026-10-02-nav-kurd-v10.0.0",
+  "app_version": "10.0.0",
   "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "scope": "NAV KURD operational coverage for the Kurdistan Region and the agreed disputed-area scope; not a legal/cadastral/political certification.",
   "sources": [
@@ -182,5 +182,5 @@
   ],
   "kirkuk_correction_file": "kirkuk-verified-name-corrections.json",
   "unresolved_name_policy": "Preserve the original source name; never invent or remove a place solely because a Kurdish translation is unavailable.",
-  "last_reviewed": "2026-09-06"
+  "last_reviewed": "2026-10-02"
 }

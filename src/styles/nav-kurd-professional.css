@@ -1,4 +1,4 @@
-/* NAV KURD 9.1.0 — one professional visual system for map, account and dialogs. */
+/* NAV KURD 10.0.0 — one professional visual system for map, account and dialogs. */
 html[data-nav-kurd-theme="professional"] {
   --nk-bg: #07111f;
   --nk-surface: #0d1a2b;
@@ -1350,7 +1350,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
   }
 }
 
-/* NAV KURD 9.1.0 — canonical account, popup and workspace contract. */
+/* NAV KURD 10.0.0 — canonical account, popup and workspace contract. */
 #userAccountButton[hidden],
 #ownerStudioButton[hidden] {
   display: none !important;

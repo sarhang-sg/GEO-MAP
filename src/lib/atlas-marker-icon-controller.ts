@@ -137,10 +137,13 @@ function stateFor(active: number, registered: number, failed: number): AtlasMark
 export function installAtlasMarkerIconController(options: AtlasMarkerIconControllerOptions): AtlasMarkerIconController {
   const { map, lowPowerProfile, getPlacesVisible, getActiveCategories, isMobileViewport } = options;
   let reconcileInFlight: Promise<AtlasMarkerIconResult> | null = null;
+  let reconcileQueued = false;
+  const layerSignatures = new Map<string, string>();
   let lastResult: AtlasMarkerIconResult = { state: "unavailable", activeCategories: 0, registered: 0, failedIds: [], layerCount: 0 };
 
   const removeLayers = (): void => {
     for (const layerId of ATLAS_MARKER_LAYER_IDS) if (map.getLayer(layerId)) map.removeLayer(layerId);
+    layerSignatures.clear();
   };
 
   const restoreFallback = (): void => {
@@ -209,14 +212,27 @@ export function installAtlasMarkerIconController(options: AtlasMarkerIconControl
       else failedIds.push(activeProfiles[index].id);
     });
 
-    removeLayers();
     handOffSuccessfulMarkers(successful);
 
     let layerCount = 0;
     const beforeId = map.getLayer(LAYER_BEFORE) ? LAYER_BEFORE : undefined;
     for (const tier of ["local", "community", "landmark"] as const) {
-      if (!atlasMarkerProfilesForTier(tier, successful).length) continue;
-      map.addLayer(makeLayer(tier, successful), beforeId);
+      const profiles = atlasMarkerProfilesForTier(tier, successful);
+      const layer = makeLayer(tier, successful);
+      if (!profiles.length) {
+        if (map.getLayer(layer.id)) map.removeLayer(layer.id);
+        layerSignatures.delete(layer.id);
+        continue;
+      }
+      const signature = `${layer.minzoom}:${profiles.map((profile) => profile.id).sort().join(",")}`;
+      if (!map.getLayer(layer.id)) map.addLayer(layer, beforeId);
+      else if (layerSignatures.get(layer.id) !== signature) {
+        map.setFilter(layer.id, layer.filter!);
+        map.setLayerZoomRange(layer.id, layer.minzoom ?? 0, 24);
+      }
+      layerSignatures.set(layer.id, signature);
+      const visibility = getPlacesVisible() ? "visible" : "none";
+      if (map.getLayoutProperty(layer.id, "visibility") !== visibility) map.setLayoutProperty(layer.id, "visibility", visibility);
       layerCount += 1;
     }
 
@@ -231,10 +247,9 @@ export function installAtlasMarkerIconController(options: AtlasMarkerIconControl
   };
 
   const reconcile = (): Promise<AtlasMarkerIconResult> => {
-    if (reconcileInFlight) return reconcileInFlight;
+    if (reconcileInFlight) { reconcileQueued = true; return reconcileInFlight; }
     reconcileInFlight = reconcileNow()
       .catch(() => {
-        removeLayers();
         restoreFallback();
         const activeProfiles = atlasMarkerProfilesForCategories(getActiveCategories());
         lastResult = {
@@ -242,11 +257,14 @@ export function installAtlasMarkerIconController(options: AtlasMarkerIconControl
           activeCategories: activeProfiles.length,
           registered: 0,
           failedIds: activeProfiles.map((profile) => profile.id),
-          layerCount: 0
+          layerCount: ATLAS_MARKER_LAYER_IDS.filter((id) => Boolean(map.getLayer(id))).length
         };
         return lastResult;
       })
-      .finally(() => { reconcileInFlight = null; });
+      .finally(() => {
+        reconcileInFlight = null;
+        if (reconcileQueued) { reconcileQueued = false; void reconcile(); }
+      });
     return reconcileInFlight;
   };
 

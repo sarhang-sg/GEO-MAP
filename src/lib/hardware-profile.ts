@@ -164,6 +164,12 @@ export function recommendedMapTileCacheSize(profile: HardwareProfile = readHardw
   return 256;
 }
 
+/** Limit map fill-rate on dense screens; HTML text and controls keep native DPR. */
+export function recommendedMapPixelRatio(profile: HardwareProfile = readHardwareProfile()): number {
+  const ratio = profile.screen.devicePixelRatio;
+  return Math.max(1, Math.min(Number.isFinite(ratio) ? ratio : 1, isConstrainedHardware(profile) ? 1.5 : 2));
+}
+
 export function recommendedLanguagePackLimit(profile: HardwareProfile = readHardwareProfile()): 1 | 2 | 3 {
   const memory = profile.deviceMemoryGb;
   if (memory === null) return 2;

@@ -73,7 +73,7 @@ import { waitForMapReadiness } from "./lib/map-readiness";
 import { MapAnimationScheduler } from "./lib/map-animation-scheduler";
 import { MapCoordinatePicker } from "./lib/map-coordinate-picker";
 import { installAppLifecycleController, readAppLifecycleSnapshot, type AppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
-import { isConstrainedHardware, readHardwareProfile, recommendedMapTileCacheSize } from "./lib/hardware-profile";
+import { isConstrainedHardware, readHardwareProfile, recommendedMapTileCacheSize, recommendedMapPixelRatio } from "./lib/hardware-profile";
 import { installAndroidReleaseExperience } from "./lib/android-release-experience";
 
 await initializeLocalPreferences();
@@ -327,6 +327,7 @@ class KurdistanAtlasController {
       fadeDuration: this.lowPowerProfile ? 0 : 90,
       refreshExpiredTiles: false,
       maxTileCacheSize: recommendedMapTileCacheSize(this.hardwareProfile),
+      pixelRatio: recommendedMapPixelRatio(this.hardwareProfile),
       validateStyle: false
     });
     // MapLibre returns early rather than throwing when WebGL2 initialization
@@ -1875,6 +1876,12 @@ baseMapButton.addEventListener("click", () => { const next = !baseMapButton.clas
 layersButton.addEventListener("click", () => { const next = !layersButton.classList.contains("is-active"); layersButton.classList.toggle("is-active", next); layersButton.setAttribute("aria-pressed", String(next)); controller.setAdministrativeVisible(next); });
 placesButton.addEventListener("click", () => { const next = !placesButton.classList.contains("is-active"); placesButton.classList.toggle("is-active", next); placesButton.setAttribute("aria-pressed", String(next)); controller.setPlacesVisible(next); });
 userAccountButton.addEventListener("click", () => { void loadUserContributionStudio().then((studio) => studio.open()); });
+window.addEventListener("nav-kurd:widget-open", (event) => {
+  if ((event as CustomEvent<{ action?: string }>).detail?.action === "account") userAccountButton.click();
+});
+if (new URLSearchParams(window.location.search).get("action") === "account") {
+  void loadUserContributionStudio().then((studio) => studio.open());
+}
 ownerStudioButton.addEventListener("click", () => { void loadOwnerStudio().then((studio) => studio.open()); });
 routePinButton.addEventListener("click", () => controller.toggleRoutePinMode());
 [locateButton, sheetLocateButton].forEach((button) => button.addEventListener("click", () => controller.locate()));
