@@ -1,5 +1,6 @@
 const OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast";
 const OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
+const UPSTREAM_USER_AGENT = "NAV-KURD-Weather-Proxy/10.0.0";
 const REQUEST_TIMEOUT_MS = 4500;
 const AIR_QUALITY_TIMEOUT_MS = 3200;
 const FRESH_TTL_MS = 10 * 60 * 1000;
@@ -65,7 +66,7 @@ async function fetchAirQuality(latitude, longitude) {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { Accept: "application/json", "User-Agent": "NAV-KURD-Weather-Proxy/9.1.0" },
+      headers: { Accept: "application/json", "User-Agent": UPSTREAM_USER_AGENT },
       cache: "no-store"
     });
     if (!response.ok) return { dust: null, pm10: null };
@@ -104,7 +105,7 @@ async function fetchUpstream(latitude, longitude) {
     try {
       const response = await fetch(url, {
         signal: controller.signal,
-        headers: { Accept: "application/json", "User-Agent": "NAV-KURD-Weather-Proxy/1.0" },
+        headers: { Accept: "application/json", "User-Agent": UPSTREAM_USER_AGENT },
         cache: "no-store"
       });
       if (!response.ok) throw new Error(`weather-upstream-${response.status}`);

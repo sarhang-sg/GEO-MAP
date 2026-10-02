@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "206c8a75b8806f606a17c5a4359e31e2cd0cde962b55fea91dccd3a935842dba"
   },
   "fileCount": 1639,
-  "totalBytes": 287317507,
+  "totalBytes": 287317550,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -75,8 +75,8 @@
       "sha256": "8c1f3af3faad7e6f460e83804e0af3da09d1d017b8303b3cf187c9a5c2926a44"
     },
     "api/weather.js": {
-      "bytes": 10498,
-      "sha256": "c1614b6da05ea5f8d407597f6ff82b28444fd2a6f54c78a12172bcc74206a3f8"
+      "bytes": 10539,
+      "sha256": "352bb5a0ae73316e25f03d4634dec28ec280cc8328f0089a6616f89db9a36639"
     },
     "contracts/gps-visual-contract.json": {
       "bytes": 1119,
@@ -183,8 +183,8 @@
       "sha256": "b5b3cd2f6154b33d14573ee3476e6b4767bd8059f63038a1fe83183877f99dfa"
     },
     "public/_headers": {
-      "bytes": 2601,
-      "sha256": "e8e8d31228d8aabc7e2f4da28a26e8fbf32575776df727fd19e6fd96886bb752"
+      "bytes": 2603,
+      "sha256": "30c02a9000f77719a4e2e56f525fc2657a1a1a65e2183f6c24ce9bc97404162c"
     },
     "public/.well-known/security.txt": {
       "bytes": 230,
@@ -4368,7 +4368,7 @@
     },
     "TERMUX.sh": {
       "bytes": 3016,
-      "sha256": "4a7a1533e9cdf27c3338067b83bf1125b6805e3391664e013a670ffbb500388d"
+      "sha256": "9bcabc5e68b7601b18b9804f6c1a2488e69a7136e3fa6a97e1c8febab51485c7"
     },
     "tools/android/build-runtime.mjs": {
       "bytes": 4119,

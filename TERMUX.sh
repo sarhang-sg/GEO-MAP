@@ -72,7 +72,7 @@ package_source() {
   mkdir -p "$DOWNLOADS"
   python3 tools/release/package-release.py \
     --output-dir "$DOWNLOADS" \
-    --name NAV-KURD-10.0.0-WEB-UI-R16.zip \
+    --name NAV-KURD-10.0.0-WEB-SOURCE.zip \
     --root-name NAV-KURD-10.0.0-WEB
   log "Source ZIP and checksums saved in Android Download"
 }
