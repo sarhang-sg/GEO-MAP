@@ -1,18 +1,18 @@
 {
   "schema": "NAV KURD production source manifest v1",
-  "release": "2026-10-02-nav-kurd-v10.0.0",
-  "version": "10.0.0",
+  "release": "2026-10-03-nav-kurd-v10.0.1",
+  "version": "10.0.1",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "cacheSchemaVersion": 91,
   "offlinePackVersion": "2027.13",
-  "generatedForDate": "2026-10-02",
+  "generatedForDate": "2026-10-03",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "3a4def118fb667f98cd391b205ad127c51c18a953666fd4eb9b259c004b65dba",
-    "lockRootDefinitionSha256": "206c8a75b8806f606a17c5a4359e31e2cd0cde962b55fea91dccd3a935842dba"
+    "packageDefinitionSha256": "2a9ebd93a405839a3b6ebf1b9c15190c420659c120fffef6750c804d4037d54e",
+    "lockRootDefinitionSha256": "547b3b20a09789e5455bf64feabffdb0d2bcdbdae0b021c0615f1b2750cd561b"
   },
   "fileCount": 1639,
-  "totalBytes": 287317550,
+  "totalBytes": 287319720,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -76,7 +76,7 @@
     },
     "api/weather.js": {
       "bytes": 10539,
-      "sha256": "352bb5a0ae73316e25f03d4634dec28ec280cc8328f0089a6616f89db9a36639"
+      "sha256": "d7a096bc25575dff22f324a3621b11ddaa4d0acfa6a1089bb9cdf0e96e09715b"
     },
     "contracts/gps-visual-contract.json": {
       "bytes": 1119,
@@ -176,15 +176,15 @@
     },
     "package-lock.json": {
       "bytes": 32623,
-      "sha256": "76488591819d6e27230931848ef82c09d0e0d7ef2f7746d61bbe74798495c794"
+      "sha256": "d37d264f15009ee19452ff826dc08a7a144cf4f4d579380b8f44fe62a40a9716"
     },
     "package.json": {
       "bytes": 4908,
-      "sha256": "b5b3cd2f6154b33d14573ee3476e6b4767bd8059f63038a1fe83183877f99dfa"
+      "sha256": "ed99da0cac0532af359bf39c904e194f6bf74642c1d3b5adb0455fb4730d7e0c"
     },
     "public/_headers": {
       "bytes": 2603,
-      "sha256": "30c02a9000f77719a4e2e56f525fc2657a1a1a65e2183f6c24ce9bc97404162c"
+      "sha256": "337a2099be71b234ed045fcb5887afcac58c25b74df375f3aac279add1e4d7b5"
     },
     "public/.well-known/security.txt": {
       "bytes": 230,
@@ -1712,7 +1712,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "73c3703acdd20def8ad828cf7b3989c7ffb5578c6661f14d19df6889ea74aaeb"
+      "sha256": "acfd9240846884079710f2adb94f254b5cff1cf49bc8725b8294e8d37db5ba59"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,
@@ -2412,11 +2412,11 @@
     },
     "public/data/kri/kirkuk-verified-name-corrections.json": {
       "bytes": 16229,
-      "sha256": "ddeb385912c19f79b4ef2d056ec91edead0d95b616db44f24abc7f8a1aaa491b"
+      "sha256": "2a52eec523407b8ac1e570e9846df66c510a40cadb45dcdd2ba095ae7b7a464e"
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "f424ab312136695f11bed2fc160f3752df6c9bead6b6cb5197eebcd7d3511dd0"
+      "sha256": "e695a4037b24debfc845ed1d3245ef7262a31617a5c25b61cbc6c87abb47012b"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -2432,15 +2432,15 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "7b66bf9a7e09bb4549534516ea437c0862a44eb2c6936e1187abbc9719337b54"
+      "sha256": "6d6ad080dc1fcfe936c281d225db6fe0e3712ce869db750e9e20bf9106bb2b34"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "5dba371edf5107e94b56664839004bd4a78278dd5d9fbc82dfebef74b8fc5cea"
+      "sha256": "c3d241cea5df78789e73c78c3c5e738389f43d3943b5731ed2026393f46eac28"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
-      "sha256": "1516e9fa5d75454f3c2c9257ad3327a296503915b517dfde45c4eb90963032f5"
+      "sha256": "d5f42b402f124736d2f0a4a0d82330d4b171e86e7e1e764f2f020abba47b3b98"
     },
     "public/data/kri/kri-districts.geojson": {
       "bytes": 318663,
@@ -2504,7 +2504,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "3004215bfa9ede43033bec5e7e2ec98be16747c92a7159fb18964acfa69e0452"
+      "sha256": "5bfe3b67e05d8b0d51604dd15dc1b1d4635c3a98d94173d6b4ed870713334afe"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2548,7 +2548,7 @@
     },
     "public/data/kri/source-integrity-manifest.json": {
       "bytes": 128475,
-      "sha256": "e784e06a9bc9a58fdd1676ec7e745066e1e7220fce99d0e5ee059536073c98bc"
+      "sha256": "f8172e2cddfde0f11b3e15a8d69d31cc4cfc9729ec06c901dff9451437fb3061"
     },
     "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
       "bytes": 22951,
@@ -3612,11 +3612,11 @@
     },
     "public/manifest.webmanifest": {
       "bytes": 3993,
-      "sha256": "ec8deaa91390776ff12759f9fd5ba7fbae856dc1458eb035bdd37c4175393156"
+      "sha256": "05ffffbb81c9da3ba13641397feb2a7c6682366daf06640682ffb68b7bff2974"
     },
     "public/offline-manifest.json": {
       "bytes": 49704,
-      "sha256": "8e8c9127e2a321565af076d813819d79581c82c762e2855fed83edf7916bcc8f"
+      "sha256": "32502b4c5eab624f2a243e37b1c7e6e90cf0e2de30d63a45b8ac557f91427a61"
     },
     "public/offline-map-state.js": {
       "bytes": 4142,
@@ -3640,7 +3640,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 881,
-      "sha256": "61ab50772b1622d17c4e5f47e0f86dec5b9ce125a72cfd6d17c44ddfa9061bc9"
+      "sha256": "4ba755bb2b04dbf290fb84aac093f36adf568f8c47d61d203ecbb38ac57f51b7"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3671,8 +3671,8 @@
       "sha256": "92da51f61e468ba29ef4a2efd8027bbd1105169e93e2270e614d9f08b1d19a82"
     },
     "release.config.json": {
-      "bytes": 1051,
-      "sha256": "594b8466fd172fa4495f295d54dd3c7e45b04ec28d8bd2c78f29e459f80717e7"
+      "bytes": 1035,
+      "sha256": "376d6f2b88df71ca3e01f02eea3a09b5cac3071f766b8a7d4451fb59e2a3d1df"
     },
     "src/android/local-provider.ts": {
       "bytes": 3902,
@@ -4039,8 +4039,8 @@
       "sha256": "58c294c3ad42f661bffd12900c97161a9b0ba328d9026a3f7253012d713ee00b"
     },
     "src/lib/tutorial-controller.ts": {
-      "bytes": 25291,
-      "sha256": "f75a1483c94deb11a1382d82670394034cfc866b301c4c9fc445ef6d101bdd16"
+      "bytes": 25826,
+      "sha256": "c9a315814eeac6d6a7194b85ad24fae8fd2428aa0db88375db39a5ba191c4ed5"
     },
     "src/lib/tutorial-map-demo-controller.ts": {
       "bytes": 6210,
@@ -4175,20 +4175,20 @@
       "sha256": "237afd54b5046b6c0f9b3eaebd16ca54d119f58a7f386b20c23af00b278b01b5"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 73570,
-      "sha256": "2bbf397c91d9d277be4d8cb0a3f8b170fe8bfa53e5222d4d3279f3806578d883"
+      "bytes": 74769,
+      "sha256": "6212ed1e6349c0f1376f6df90b58f26b2663a17423f063f379c17ff1d99a3a6f"
     },
     "src/styles/network-resilience.css": {
-      "bytes": 1673,
-      "sha256": "50dfe46841c0938ccf33e24f23c5017bf73779975091e210d33e0681b0f18682"
+      "bytes": 1569,
+      "sha256": "03de1db3dcd3f1d3026c84c748d04a4e1f8df993cea0a4334d07d3b34644df11"
     },
     "src/styles/owner-studio.css": {
       "bytes": 30317,
       "sha256": "63bcf74d8bc943d6f9116a9673547491d7ea6b33aebca31b1bfe46950921e30b"
     },
     "src/styles/place-weather.css": {
-      "bytes": 5295,
-      "sha256": "43d0e6c5620b0ca0e54b6ab922700adb7b709dc2296340243a6a46f04b5e0e20"
+      "bytes": 5413,
+      "sha256": "9935ba1fc89c48f6d451464c12d4c2e3ed46bf03c70a065546749d54923c7675"
     },
     "src/styles/platform-data.css": {
       "bytes": 1714,
@@ -4207,16 +4207,16 @@
       "sha256": "27b0f9b4c71f0fe77a49b94c98a14fa447072d134f04af80333034a4f6d6870b"
     },
     "src/styles/runtime-performance.css": {
-      "bytes": 2144,
-      "sha256": "0c1a6b7c22f4b07e1b272f08f9283ae097933f637c5c3777b734ef4b0281590a"
+      "bytes": 2209,
+      "sha256": "65f4a71bfc6b23a237dd326b197df74c3c0b52505566698d07351c07051d512b"
     },
     "src/styles/search-performance.css": {
       "bytes": 983,
       "sha256": "91d5ac5683ccb253489b14cedf5a61b35e57f82f62588cab9114a590fb1887ff"
     },
     "src/styles/support-payment.css": {
-      "bytes": 16854,
-      "sha256": "2fbb94e9439e13082859cb8305f22f6b9bdfbfebcd6d7f5eee840323552104d0"
+      "bytes": 17227,
+      "sha256": "36feb1c95fa44c62d2fee0ea6f69b5925e1bcbeb5986ed775e3834aa3c80b53c"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
@@ -4548,7 +4548,7 @@
     },
     "tools/verify/browser-smoke.py": {
       "bytes": 22775,
-      "sha256": "02c26ba4c105425453b282ac16af73cca2fe25c8474ac3dbd1458b0c871015b7"
+      "sha256": "5f4a83dddecf097881fcf5294d90c5a817e850c1d3f4de01446d1d3d161fb67d"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 17653,
@@ -6564,12 +6564,12 @@
     },
     "vercel.json": {
       "bytes": 8155,
-      "sha256": "81a5f36a5ba33ffce51efe1d5ffa5d416ffbd036e4b61d5dbac9577a915bf64a",
-      "jsonSha256": "0a1880cdd85d50656ccadbab89a8a2c4f0fd3f33bc94b117b9b6767501e62450"
+      "sha256": "5f7332d30c26be6761bcb3f0b872798d0c46136f26e04b1ac3cfb13c2f4ed9c3",
+      "jsonSha256": "6f091302ceccd8c268d2b989fd1a0836c30c35867e69288a3cd54bc5966084fc"
     },
     "vite.config.ts": {
       "bytes": 1648,
-      "sha256": "d559f8c9d06ca02c5d976d9eb9bfdadb3f0a0fc6ac612233a0ef22d751494fe2"
+      "sha256": "6930702a4d4084a73099b4e5e819fd3d0ce0d47bc5aa1e53ff72072d198aed6e"
     }
   }
 }

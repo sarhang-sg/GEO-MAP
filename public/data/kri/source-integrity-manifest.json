@@ -1,19 +1,19 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-10-02-nav-kurd-v10.0.0",
-  "appVersion": "10.0.0",
+  "release": "2026-10-03-nav-kurd-v10.0.1",
+  "appVersion": "10.0.1",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "generatedForDate": "2026-10-02",
+  "generatedForDate": "2026-10-03",
   "fileCount": 758,
   "totalBytes": 131364590,
   "files": {
     "public/data/kri/kirkuk-verified-name-corrections.json": {
       "bytes": 16229,
-      "sha256": "ddeb385912c19f79b4ef2d056ec91edead0d95b616db44f24abc7f8a1aaa491b"
+      "sha256": "2a52eec523407b8ac1e570e9846df66c510a40cadb45dcdd2ba095ae7b7a464e"
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "f424ab312136695f11bed2fc160f3752df6c9bead6b6cb5197eebcd7d3511dd0"
+      "sha256": "e695a4037b24debfc845ed1d3245ef7262a31617a5c25b61cbc6c87abb47012b"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -29,15 +29,15 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "7b66bf9a7e09bb4549534516ea437c0862a44eb2c6936e1187abbc9719337b54"
+      "sha256": "6d6ad080dc1fcfe936c281d225db6fe0e3712ce869db750e9e20bf9106bb2b34"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "5dba371edf5107e94b56664839004bd4a78278dd5d9fbc82dfebef74b8fc5cea"
+      "sha256": "c3d241cea5df78789e73c78c3c5e738389f43d3943b5731ed2026393f46eac28"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
-      "sha256": "1516e9fa5d75454f3c2c9257ad3327a296503915b517dfde45c4eb90963032f5"
+      "sha256": "d5f42b402f124736d2f0a4a0d82330d4b171e86e7e1e764f2f020abba47b3b98"
     },
     "public/data/kri/kri-districts.geojson": {
       "bytes": 318663,
@@ -101,7 +101,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "3004215bfa9ede43033bec5e7e2ec98be16747c92a7159fb18964acfa69e0452"
+      "sha256": "5bfe3b67e05d8b0d51604dd15dc1b1d4635c3a98d94173d6b4ed870713334afe"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2593,7 +2593,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "73c3703acdd20def8ad828cf7b3989c7ffb5578c6661f14d19df6889ea74aaeb"
+      "sha256": "acfd9240846884079710f2adb94f254b5cff1cf49bc8725b8294e8d37db5ba59"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,

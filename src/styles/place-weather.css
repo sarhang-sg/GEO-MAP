@@ -1,10 +1,10 @@
 /* Compact shared Web/Android weather card; retain the original artwork. */
 .place-weather {
-  position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; gap: 2px 8px;
-  align-items: center; width: 100%; max-width: 100%; min-width: 0; margin-top: 7px;
-  padding: 7px 9px 2px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
+  position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; gap: 2px 6px;
+  align-items: center; width: 100%; max-width: 100%; min-width: 0; margin-top: 4px;
+  padding: 6px 8px 2px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
   border: 1px solid var(--nk-border, rgba(132,180,255,.16)); border-radius: 12px;
-  background: linear-gradient(135deg, rgba(49,92,169,.13), rgba(112,67,190,.11));
+  background: var(--nk-elevated, #12243a);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
 }
 .place-weather::before, .place-weather::after { pointer-events: none; }
@@ -14,9 +14,9 @@
 .place-weather__visual img[hidden], .place-weather__loading[hidden] { display: none !important; }
 .place-weather__loading {
   width: 20px; height: 20px; border: 2px solid rgba(159,184,235,.2);
-  border-top-color: #87c8ff; border-radius: 50%; animation: place-weather-spin .8s linear infinite;
+  border-top-color: var(--nk-primary, #2d8cff); border-radius: 50%; animation: place-weather-spin .8s linear infinite;
 }
-.place-weather .place-weather__copy { display: grid; flex: 1 1 0; min-width: 0; gap: 0; text-align: start; }
+.place-weather .place-weather__copy { color: var(--nk-text, #eaf2ff); display: grid; flex: 1 1 0; min-width: 0; gap: 0; text-align: start; }
 .place-weather .place-weather__copy strong {
   color: inherit !important; font: 800 19px/1.15 var(--font-ui) !important;
   letter-spacing: -.02em; white-space: nowrap; text-transform: none !important;
@@ -25,9 +25,9 @@
   color: inherit !important; opacity: .82; font: 600 10px/1.4 var(--font-ui) !important;
   text-transform: none !important; overflow-wrap: anywhere;
 }
-.place-weather .place-weather__copy .place-weather__timestamp { font-size: 8px !important; opacity: .7; }
+.place-weather .place-weather__copy .place-weather__timestamp { font-size: 9px !important; color: var(--nk-muted, #a7b1c2) !important; opacity: 1; }
 .place-weather__timestamp bdi, .place-weather__hour time { direction: ltr; unicode-bidi: isolate; }
-.place-weather__details { flex-basis: 100%; min-width: 0; font: 600 11px/1.6 var(--font-ui); }
+.place-weather__details { flex-basis: 100%; width: 100%; min-width: 0; font: 600 11px/1.6 var(--font-ui); }
 .place-weather__details > summary {
   position: relative; z-index: var(--z-local-content); display: flex; align-items: center; justify-content: space-between;
   gap: 8px; min-height: 44px; box-sizing: border-box; cursor: pointer; list-style: none;
@@ -42,17 +42,17 @@
 }
 .place-weather__details[open] > summary::after { transform: rotate(225deg); }
 .place-weather__details > summary:focus-visible, .place-weather__forecast:focus-visible {
-  outline: 2px solid #80b8ff; outline-offset: 2px; border-radius: 4px;
+  outline: 2px solid var(--nk-primary, #2d8cff); outline-offset: 2px; border-radius: 4px;
 }
 .place-weather__body {
-  max-height: min(150px, 28vh); overflow-y: auto; overflow-x: hidden;
+  max-height: min(124px, 24vh); overflow-y: auto; overflow-x: hidden;
   overscroll-behavior: contain; padding: 2px 1px 6px; scrollbar-width: thin;
 }
 .place-weather__metrics { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 2px 0 7px; }
 .place-weather__metrics span { font: inherit; color: inherit; }
 .place-weather .place-weather__heading { display: block; font: 700 11px/1.6 var(--font-ui); color: inherit; }
 .place-weather__forecast {
-  display: flex; gap: 4px; overflow-x: auto; overscroll-behavior-x: contain;
+  display: flex; min-width: 0; max-width: 100%; gap: 4px; overflow-x: auto; overscroll-behavior-x: contain;
   padding: 6px 0 7px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
 }
 .place-weather__hour { display: grid; flex: 0 0 48px; justify-items: center; gap: 3px; padding: 0 2px; color: inherit; }

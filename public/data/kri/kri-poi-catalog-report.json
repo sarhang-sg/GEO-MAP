@@ -218,8 +218,8 @@
     "brand": "Telecom/payment brand classification requires a matching service context; ordinary schools, fuel stations, cafes and place names are never reclassified only because a person/place name resembles a brand.",
     "boundary": "Canonical operational application boundary; not a legal or cadastral certification."
   },
-  "release": "2026-10-02-nav-kurd-v10.0.0",
-  "app_version": "10.0.0",
+  "release": "2026-10-03-nav-kurd-v10.0.1",
+  "app_version": "10.0.1",
   "audit_history": {
     "strict_context_brand_false_positives_corrected": 109,
     "detailed_transport_security_class_upgrades": 115,
@@ -230,5 +230,5 @@
     "category_icons": "one generated marker asset per taxonomy entry",
     "fallback": "canonical purple dot only if an icon fails to decode"
   },
-  "last_reviewed": "2026-10-02"
+  "last_reviewed": "2026-10-03"
 }

@@ -304,7 +304,7 @@ html[data-ui-mode="light"] :where(.map-note, .map-message, .about-dialog__descri
   .user-private-section__header p, .user-private-message p, .owner-studio__muted,
   .place-detail__description) { color: var(--nk-muted) !important; }
 
-html[data-ui-mode="light"] :where(input, textarea, select) {
+html[data-ui-mode="light"] :where(input:not([type="checkbox"]):not([type="radio"]), textarea, select) {
   border-color: var(--nk-border) !important;
   color: var(--nk-text) !important;
   background: var(--nk-surface) !important;
@@ -751,6 +751,11 @@ html[data-nav-kurd-theme="professional"] .nav-tutorial__matched-icon {
   opacity: 1 !important;
   transform: none !important;
   animation: nav-kurd-tutorial-matched-icon 2.6s ease-in-out infinite !important;
+}
+
+html[data-nav-kurd-theme="professional"] .nav-tutorial__matched-icon--avatar {
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 html[data-nav-kurd-theme="professional"] .nav-tutorial__topline {
@@ -1463,7 +1468,11 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] .user-contrib__ed
    which is missing in older Android WebViews and previously exposed a second
    bordered wrapper around the real place card. */
 .maplibregl-popup.nav-kurd-place-popup {
-  max-width: min(272px, calc(100vw - 36px)) !important;
+  width: min(244px, calc(100vw - 104px));
+  max-width: min(244px, calc(100vw - 104px)) !important;
+}
+html[data-ui-mode="light"] .nav-kurd-place-popup {
+  --nk-muted: var(--premium-muted, #526071);
 }
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-popup-content {
   overflow: visible;
@@ -1474,9 +1483,16 @@ html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-pop
 }
 
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-popup-content > :where(.place-popup, .atlas-place-popup) {
-  overflow: hidden;
-  min-width: 170px;
-  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-height: min(330px, 55vh);
+  max-height: min(330px, 55dvh);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 8px;
   border: 1px solid var(--nk-border);
   border-radius: 16px;
   color: var(--nk-text);
@@ -1488,6 +1504,28 @@ html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup.maplibregl-popu
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip { border-top-color: var(--nk-surface) !important; }
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--nk-surface) !important; }
 html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--nk-surface) !important; }
+
+/* One vertical scroller owns the compact popup; its forecast stays horizontally scrollable. */
+.nav-kurd-place-popup .place-weather__body {
+  max-height: none;
+  overflow: visible;
+}
+
+html[data-nav-kurd-theme] .nav-kurd-place-popup .place-popup--rich > span,
+html[data-nav-kurd-theme] .nav-kurd-place-popup .place-popup--rich > small {
+  color: var(--nk-muted);
+  overflow-wrap: anywhere;
+}
+html[data-nav-kurd-theme] .nav-kurd-place-popup .place-popup__title strong {
+  color: var(--nk-text);
+  overflow-wrap: anywhere;
+}
+html[data-nav-kurd-theme] .nav-kurd-place-popup .place-popup__share {
+  margin-block: 3px;
+  border-color: var(--nk-border);
+  color: var(--nk-text);
+  background: var(--nk-elevated);
+}
 
 .maplibregl-popup.nav-kurd-place-popup .maplibregl-popup-close-button {
   z-index: var(--z-local-raised);

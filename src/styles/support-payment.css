@@ -383,6 +383,16 @@
   box-shadow: 0 0 0 3px rgba(170, 83, 244, 0.18), 0 0 1rem rgba(170, 83, 244, 0.24);
 }
 
+html[data-ui-mode="light"] #supportVisitorPrivacyControl .support-visitors-privacy__choice input[type="checkbox"] {
+  border-color: #c3dbf5;
+  background-color: #f8fafc;
+  box-shadow: none;
+}
+html[data-ui-mode="light"] #supportVisitorPrivacyControl .support-visitors-privacy__choice input[type="checkbox"]:checked {
+  border-color: #ffffff;
+  background-color: #125a9e;
+}
+
 #supportVisitorPrivacyControl .support-visitors-privacy__choice input[type="checkbox"]:focus-visible {
   outline: 3px solid rgba(202, 136, 255, 0.4);
   outline-offset: 3px;

@@ -14,10 +14,10 @@
   width: min(330px, calc(100vw - 32px));
   padding: 12px 14px;
   border-radius: 17px;
-  border-color: rgba(151, 130, 255, .34) !important;
-  background:
-    linear-gradient(145deg, rgba(19, 27, 64, .985), rgba(7, 12, 31, .99)) !important;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255,255,255,.07) !important;
+  border-color: var(--nk-border) !important;
+  color: var(--nk-text);
+  background: var(--nk-surface) !important;
+  box-shadow: var(--nk-shadow) !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   contain: layout paint;
@@ -31,7 +31,7 @@
   width: 42%;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #5da8ff, #8b67ff, #d158ff);
+  background: linear-gradient(90deg, var(--nk-primary), var(--nk-cyan));
   animation: nav-kurd-language-progress 1.05s cubic-bezier(.4,0,.2,1) infinite alternate;
 }
 
@@ -39,8 +39,13 @@
   width: 26px;
   height: 26px;
   border-width: 3px;
-  box-shadow: 0 0 0 1px rgba(155,135,255,.06);
+  border-color: var(--nk-border);
+  border-top-color: var(--nk-primary);
+  border-right-color: var(--nk-cyan);
+  box-shadow: none;
 }
+
+.language-transition__panel small { color: var(--nk-muted); }
 
 @keyframes nav-kurd-language-progress {
   from { transform: translateX(-35%); opacity: .65; }

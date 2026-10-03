@@ -110,13 +110,22 @@ function nextFrame(): Promise<void> { return new Promise((resolve) => window.req
 function timeout(ms: number): Promise<void> { return new Promise((resolve) => window.setTimeout(resolve, ms)); }
 function tutorialVisual(targetSelector: string): string {
   const target = document.querySelector<HTMLElement>(targetSelector);
-  const source = target?.matches("img, svg")
-    ? target
+  // The account glyph is hidden after sign-in. Prefer the loaded avatar,
+  // otherwise copy the glyph as an independent tutorial visual.
+  const avatar = target?.querySelector<HTMLImageElement>("img.user-account-button__avatar:not([hidden])");
+  const source = avatar?.complete && avatar.naturalWidth > 0 ? avatar
+    : target?.matches("img, svg") ? target
     : target?.querySelector<HTMLElement>("img.nav-ui-icon, img.map-button__logo, img.brand-card__logo, svg");
   if (source) {
     const clone = source.cloneNode(true) as HTMLElement;
     clone.removeAttribute("id");
+    clone.removeAttribute("hidden");
+    clone.removeAttribute("style");
     clone.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+    if (source === avatar) {
+      clone.classList.remove("user-account-button__avatar");
+      clone.classList.add("nav-tutorial__matched-icon--avatar");
+    }
     clone.setAttribute("aria-hidden", "true");
     clone.classList.add("nav-tutorial__matched-icon");
     return `<div class="nav-tutorial__visual" aria-hidden="true">${clone.outerHTML}</div>`;
