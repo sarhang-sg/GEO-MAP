@@ -185,7 +185,7 @@ Deno.serve(async (request: Request): Promise<Response> => {
     return json(origin, 500, {
       ok: false,
       code: `ACCOUNT_DELETE_${stage.toUpperCase().replace(/-/g, "_")}`,
-      error: "Account deletion could not be completed safely. Please try again or contact support."
+      error: "Account deletion failed. Try again."
     });
   }
 });

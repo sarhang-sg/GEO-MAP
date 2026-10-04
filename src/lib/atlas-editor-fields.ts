@@ -43,7 +43,7 @@ export const ATLAS_METADATA_FIELDS: readonly AtlasMetadataFieldDefinition[] = [
   { key: "speciality", section: "health", type: "text", label: { ku: "پسپۆڕی", ar: "التخصص", en: "Speciality" }, maxLength: 180 },
   { key: "beds", section: "health", type: "number", label: { ku: "ژمارەی جێگای نەخۆش", ar: "عدد الأسرّة", en: "Beds" } },
   { key: "emergency_service", section: "health", type: "select", label: { ku: "فریاکەوتنی پزیشکی", ar: "خدمة طوارئ", en: "Emergency service" }, options: [option("yes", "بەڵێ", "نعم", "Yes"), option("no", "نەخێر", "لا", "No")] },
-  { key: "ambulance", section: "health", type: "select", label: { ku: "ئەمبولانس", ar: "إسعاف", en: "Ambulance" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "نییە", "غير متوفر", "Not available")] },
+  { key: "ambulance", section: "health", type: "select", label: { ku: "ئەمبولانس", ar: "إسعاف", en: "Ambulance" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "بەردەست نییە", "غير متوفر", "Not available")] },
 
   { key: "education_level", section: "education", type: "text", label: { ku: "ئاستی خوێندن", ar: "المستوى التعليمي", en: "Education level" }, maxLength: 180 },
   { key: "student_capacity", section: "education", type: "number", label: { ku: "توانای قوتابی", ar: "سعة الطلبة", en: "Student capacity" } },
@@ -56,8 +56,8 @@ export const ATLAS_METADATA_FIELDS: readonly AtlasMetadataFieldDefinition[] = [
   { key: "fuel_types", section: "transport", type: "text", label: { ku: "جۆرەکانی سووتەمەنی", ar: "أنواع الوقود", en: "Fuel types" }, maxLength: 180 },
 
   { key: "cuisine", section: "hospitality", type: "text", label: { ku: "جۆری خواردن", ar: "نوع المطبخ", en: "Cuisine" }, maxLength: 180 },
-  { key: "delivery", section: "hospitality", type: "select", label: { ku: "گەیاندن", ar: "التوصيل", en: "Delivery" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "نییە", "غير متوفر", "Not available")] },
-  { key: "takeaway", section: "hospitality", type: "select", label: { ku: "خواردنی بۆ دەرەوە", ar: "طلبات خارجية", en: "Takeaway" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "نییە", "غير متوفر", "Not available")] },
+  { key: "delivery", section: "hospitality", type: "select", label: { ku: "گەیاندن", ar: "التوصيل", en: "Delivery" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "بەردەست نییە", "غير متوفر", "Not available")] },
+  { key: "takeaway", section: "hospitality", type: "select", label: { ku: "خواردنی بۆ دەرەوە", ar: "طلبات خارجية", en: "Takeaway" }, options: [option("yes", "هەیە", "متوفر", "Available"), option("no", "بەردەست نییە", "غير متوفر", "Not available")] },
   { key: "stars", section: "hospitality", type: "number", label: { ku: "ئەستێرە", ar: "النجوم", en: "Stars" } },
   { key: "rooms", section: "hospitality", type: "number", label: { ku: "ژمارەی ژوور", ar: "عدد الغرف", en: "Rooms" } },
 
@@ -117,7 +117,7 @@ const SECTION_LABELS: Record<AtlasEditorSection, Record<Language, string>> = {
   emergency: { ku: "فریاکەوتن", ar: "الطوارئ", en: "Emergency" },
   health: { ku: "زانیاری تەندروستی", ar: "بيانات صحية", en: "Healthcare details" },
   education: { ku: "زانیاری پەروەردە", ar: "بيانات تعليمية", en: "Education details" },
-  transport: { ku: "هاتووچۆ و گواستنەوە", ar: "النقل والحركة", en: "Transport details" },
+  transport: { ku: "هاتوچۆ و گواستنەوە", ar: "النقل والحركة", en: "Transport details" },
   hospitality: { ku: "خواردن و میوانداری", ar: "الطعام والضيافة", en: "Hospitality details" },
   commerce: { ku: "بازرگانی", ar: "التجارة", en: "Commerce details" },
   business: { ku: "خزمەتگوزاری پیشەیی", ar: "الخدمات المهنية", en: "Business details" },

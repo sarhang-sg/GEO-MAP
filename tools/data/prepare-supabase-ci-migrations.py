@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "supabase" / "migrations"
 TARGET = ROOT / "supabase" / "migrations-ci"
 PATTERN = re.compile(r"^(?P<date>\d{8})_(?P<sequence>\d{6})_(?P<name>.+\.sql)$")
+CLI_PATTERN = re.compile(r"^(?P<version>\d{14})_(?P<name>.+\.sql)$")
 
 
 def main() -> int:
@@ -28,13 +29,15 @@ def main() -> int:
     count = 0
     for source in sorted(SOURCE.glob("*.sql")):
         match = PATTERN.fullmatch(source.name)
-        if not match:
+        cli_match = CLI_PATTERN.fullmatch(source.name)
+        if not match and not cli_match:
             raise SystemExit(f"Unsupported migration filename: {source.name}")
-        version = f"{match.group('date')}{match.group('sequence')}"
+        version = f"{match.group('date')}{match.group('sequence')}" if match else cli_match.group('version')
         if version in seen:
             raise SystemExit(f"Duplicate normalized migration version: {version}")
         seen.add(version)
-        shutil.copy2(source, TARGET / f"{version}_{match.group('name')}")
+        name = match.group('name') if match else cli_match.group('name')
+        shutil.copy2(source, TARGET / f"{version}_{name}")
         count += 1
     if count == 0:
         raise SystemExit("No SQL migrations were found.")

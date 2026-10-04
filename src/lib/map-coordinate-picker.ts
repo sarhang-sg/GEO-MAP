@@ -12,7 +12,7 @@ type CoordinatePickerOptions = {
 type PickerCopy = { title: string; body: string; cancel: string };
 
 const COPY: Record<Language, PickerCopy> = {
-  ku: { title: "شوێنەکە لەسەر ماپ هەڵبژێرە", body: "تەنها یەکجار لەسەر خاڵی ڕاست دابگرە؛ پاشان بە خۆکار دەگەڕێیتەوە بۆ فۆڕمەکە.", cancel: "هەڵوەشاندنەوە" },
+  ku: { title: "شوێنەکە لەسەر نەخشە هەڵبژێرە", body: "تەنها یەکجار لەسەر خاڵی ڕاست دابگرە؛ پاشان بە خۆکار دەگەڕێیتەوە بۆ فۆڕمەکە.", cancel: "هەڵوەشاندنەوە" },
   ar: { title: "اختر الموقع على الخريطة", body: "المس النقطة الصحيحة مرة واحدة، ثم ستعود تلقائياً إلى النموذج.", cancel: "إلغاء" },
   en: { title: "Choose the point on the map", body: "Tap the exact point once. You will return to the form automatically.", cancel: "Cancel" }
 };

@@ -147,7 +147,7 @@ function installFetchDiagnostics(): void {
     try {
       const response = await originalFetch!(input, init);
       if (response.status >= 400) {
-        recordRuntimeDiagnostic(`fetch.${method}`, `${response.status} ${response.statusText || "Request failed"} — ${safeUrl(rawUrl)}`, "network");
+        recordRuntimeDiagnostic(`fetch.${method}`, `${response.status} ${response.statusText || "The request didn't go through."} — ${safeUrl(rawUrl)}`, "network");
       }
       return response;
     } catch (error) {
@@ -301,7 +301,7 @@ export function formatRuntimeDiagnosticsText(snapshot: RuntimeDiagnosticsSnapsho
     `[META] App: ${snapshot.app_version}`,
     `[META] Map data: ${snapshot.map_data_version}`,
     `[META] Page: ${snapshot.page}`,
-    `[${snapshot.online ? "OK" : "ERROR"}] Network: ${snapshot.online ? "online" : "offline"} · ${displayValue(snapshot.network.effective_type)} · RTT ${displayValue(snapshot.network.rtt_ms)} ms`,
+    `[${snapshot.online ? "OK" : "Something went wrong"}] Network: ${snapshot.online ? "online" : "offline"} · ${displayValue(snapshot.network.effective_type)} · RTT ${displayValue(snapshot.network.rtt_ms)} ms`,
     `[${snapshot.secure_context ? "OK" : "WARN"}] Secure context: ${displayValue(snapshot.secure_context)}`,
     `[META] Viewport: ${snapshot.viewport.width}×${snapshot.viewport.height} @${snapshot.viewport.dpr} · ${snapshot.display_mode}`,
     `[META] Device: ${snapshot.device.platform} · cores ${displayValue(snapshot.device.hardware_concurrency)} · memory ${displayValue(snapshot.device.device_memory_gb)} GB · touch ${snapshot.device.touch_points}`,
@@ -318,7 +318,7 @@ export function formatRuntimeDiagnosticsText(snapshot: RuntimeDiagnosticsSnapsho
   } else {
     lines.push("", "[META] Recent issues (newest first):");
     snapshot.recent_issues.forEach((issue) => {
-      const label = issue.kind === "warning" ? "WARN" : issue.kind === "manual" ? "INFO" : "ERROR";
+      const label = issue.kind === "warning" ? "WARN" : issue.kind === "manual" ? "INFO" : "Something went wrong";
       lines.push(`[${label}] ${issue.at} · ${issue.scope} · ${issue.message}`);
     });
   }

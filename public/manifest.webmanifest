@@ -66,7 +66,7 @@
   ],
   "shortcuts": [
     {
-      "name": "گەڕان لە ماپ",
+      "name": "گەڕان لە نەخشە",
       "short_name": "گەڕان",
       "description": "گەڕان بۆ شار، گوند، شەقام یان شوێن",
       "url": "./?action=search",
@@ -81,7 +81,7 @@
     {
       "name": "شوێنی من",
       "short_name": "شوێنی من",
-      "description": "شوێنی ئێستا لەسەر ماپ پیشان بدە",
+      "description": "شوێنی ئێستا لەسەر نەخشە پیشان بدە",
       "url": "./?action=locate",
       "icons": [
         {
@@ -94,7 +94,7 @@
     {
       "name": "باشووری کوردستان",
       "short_name": "تەواوی هەرێم",
-      "description": "گەڕانەوە بۆ سنووری ماپ",
+      "description": "گەڕانەوە بۆ سنووری نەخشە",
       "url": "./?action=fit",
       "icons": [
         {
@@ -162,5 +162,5 @@
       "origin": "https://geo-map-two.vercel.app"
     }
   ],
-  "version": "10.0.1"
+  "version": "10.0.2"
 }

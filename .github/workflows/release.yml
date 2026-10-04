@@ -16,6 +16,10 @@ on:
         description: Type DEPLOY to confirm a production Supabase deployment
         required: false
         type: string
+      expected_commit:
+        description: Optional exact commit required by the coordinated updater
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -133,6 +137,7 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
       SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
       NAV_KURD_ALLOWED_ORIGINS: ${{ vars.NAV_KURD_ALLOWED_ORIGINS }}
+      NAV_KURD_EXPECTED_COMMIT: ${{ inputs.expected_commit }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -141,6 +146,10 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
+          if [[ -n "$NAV_KURD_EXPECTED_COMMIT" ]]; then
+            [[ "$NAV_KURD_EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+            test "$GITHUB_SHA" = "$NAV_KURD_EXPECTED_COMMIT"
+          fi
           test -n "$SUPABASE_ACCESS_TOKEN"
           test -n "$SUPABASE_DB_PASSWORD"
           test -n "$SUPABASE_PROJECT_ID"

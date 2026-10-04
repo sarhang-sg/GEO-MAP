@@ -62,7 +62,7 @@ type OpenMeteoResponse = {
 };
 const VALID_CODES = new Set([0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99]);
 const DETAILS = {
-  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینیی کاتژمێرەکانی داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", unavailable: "کەش‌وهەوا بەردەست نییە", retry: "دووبارە هەوڵدان", estimate: "پێشبینیی مۆدێل · دەکرێت بگۆڕێت", rain: "ئەگەری باران" },
+  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینییەکانی کاتژمێرەکانی داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
   ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
   en: { more: "Details & forecast", forecast: "Hourly forecast", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
 };
@@ -178,7 +178,7 @@ const CLEAR_COPY: Record<Language, { day: string; night: string }> = {
 };
 
 const UI_COPY: Record<Language, { loading: string; current: string }> = {
-  ku: { loading: "کەش‌وهەوا…", current: "پلەی گەرمی ئێستا" },
+  ku: { loading: "کەشوھەوا…", current: "پلەی گەرمی ئێستا" },
   ar: { loading: "الطقس…", current: "درجة الحرارة الآن" },
   en: { loading: "Weather…", current: "Current temperature" }
 };
@@ -416,14 +416,14 @@ export class PlaceWeatherService {
       } else {
         const empty = document.createElement("p"); empty.className = "place-weather__empty";
         empty.textContent = language === "en" ? "Hourly forecast is currently unavailable."
-          : language === "ar" ? "توقعات الساعات غير متاحة حالياً." : "پێشبینیی کاتژمێری لە ئێستادا بەردەست نییە.";
+          : language === "ar" ? "توقعات الساعات غير متاحة حالياً." : "پێشبینییەکانی کاتژمێری لەم کاتەدا بەردەست نین.";
         body.append(empty);
       }
       const credit = document.createElement("small"); credit.className = "place-weather__credit";
-      credit.textContent = `Open-Meteo · ${words.estimate} · `;
+      credit.textContent = `Open-Meteo · ${words.estimate} ·`;
       const developerCredit = document.createElement("bdi"); developerCredit.dir = "ltr";
-      developerCredit.textContent = "DEVLOPER: SARHANG SALAH";
-      credit.append(developerCredit); body.append(credit); details.append(body); root.append(details);
+      developerCredit.textContent = "DEVELOPER: SARHANG SALAH";
+      credit.append(" ", developerCredit); body.append(credit); details.append(body); root.append(details);
     } catch {
       if (!root.isConnected) return;
       root.dataset.state = "unavailable"; root.replaceChildren();

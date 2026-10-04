@@ -46,7 +46,7 @@ const COPY: Record<PlaceDetailLanguage, DetailCopy> = {
   en: {
     close: "Close",
     gallery: "Photo gallery",
-    noPhotos: "No photos have been added for this place yet.",
+    noPhotos: "No photos added yet.",
     category: "Category",
     coordinates: "Location",
     viewImage: "Open image",

@@ -43,9 +43,9 @@ function normalizedConnection(connected: boolean): ConnectionStatus {
 
 function connectionLabel(status: ConnectionStatus, language: Language): string {
   if (!status.connected) {
-    return language === "ar" ? "غير متصل" : language === "en" ? "Offline" : "ئۆفلاین";
+    return language === "ar" ? "غير متصل" : language === "en" ? "Offline" : "دەرھێڵ";
   }
-  return language === "ar" ? "متصل" : language === "en" ? "Online" : "ئۆنلاین";
+  return language === "ar" ? "متصل" : language === "en" ? "Online" : "سەرھێڵ";
 }
 
 function formatMegabytes(bytes: number): string {
@@ -144,9 +144,9 @@ function platformCopy(language: Language): PlatformCopy {
     heading: "ڕێکخستنەکانی ئەپی Android",
     network: "تۆڕ",
     storage: "خەزن",
-    clear: "پاککردنەوەی cache ـی کاتی",
-    settings: "کردنەوەی Settings",
-    note: "GPS permission، network status و deep links لە ڕێگەی Android بەڕێوە دەبرێن. پاککردنەوەی cache ـی کاتی پەکی ماپی ئۆفلاین ناسڕێتەوە."
+    clear: "پاککردنەوەی کاشیی کاتی",
+    settings: "کردنەوەی ڕێکخستنەکان",
+    note: "GPS permission، network status و deep links لە ڕێگەی Android بەڕێوە دەبرێن. پاککردنەوەی کاش (Cache) ـی کاتی پەکی نەخشەی دەرھێڵ ناسڕێتەوە."
   };
 }
 

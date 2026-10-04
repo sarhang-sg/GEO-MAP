@@ -8,13 +8,13 @@ function navKurdPreviewHeaders(): Plugin {
     configurePreviewServer(server) {
       server.middlewares.use((request, response, next) => {
         const pathname = (request.url ?? "").split("?", 1)[0];
-        if (pathname === "/downloads/NAV-KURD-10.0.1.apk") {
+        if (pathname === "/downloads/NAV-KURD-10.0.2.apk") {
           // Match the exact Vercel production contract during the real-browser
           // CI run. Vite's MIME table has no .apk entry and otherwise emits an
           // empty Content-Type, causing the intentionally strict client probe
           // to hide a valid signed download only in preview.
           response.setHeader("Content-Type", "application/vnd.android.package-archive");
-          response.setHeader("Content-Disposition", "attachment; filename=\"NAV-KURD-10.0.1.apk\"");
+          response.setHeader("Content-Disposition", "attachment; filename=\"NAV-KURD-10.0.2.apk\"");
           response.setHeader("X-Content-Type-Options", "nosniff");
         }
         next();

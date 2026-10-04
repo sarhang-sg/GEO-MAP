@@ -42,14 +42,14 @@ type DeviceQaPanelOptions = {
 const copy: Record<Language, QaCopy> = {
   ku: {
     title: "تاقیکردنەوەی مۆبایل",
-    subtitle: "Panel ـی شاردراو بۆ QA ـی GPS، zoom، offline و داتای ماپ.",
+    subtitle: "Panel ـی شاردراو بۆ QA ـی GPS، زووم، offline و داتای نەخشە.",
     open: "QA",
     close: "داخستن",
     refresh: "نوێکردنەوە",
     gps: "تاقی GPS بکە",
-    copy: "کۆپی report",
-    copied: "report کۆپی کرا.",
-    noGps: "GPS هێشتا coordinate ـی زۆر نوێی نییە. دووبارە locate بکە."
+    copy: "کۆپی ڕاپۆرت",
+    copied: "ڕاپۆرت کۆپی کرا.",
+    noGps: "GPS هێشتا coordinate ـی زۆر نوێی نییە. دووبارە شوێن دیاری بکە بکە."
   },
   ar: {
     title: "فحص الهاتف",

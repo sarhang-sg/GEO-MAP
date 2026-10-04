@@ -39,7 +39,7 @@ const CATEGORY_COPY: Record<string, Record<Language, string>> = {
   shop: { ku: "فرۆشگا", ar: "متجر", en: "Shop" },
   supermarket: { ku: "مارکێت", ar: "سوق مركزي", en: "Supermarket" },
   market: { ku: "بازاڕ", ar: "سوق", en: "Market" },
-  mall: { ku: "مەوڵ", ar: "مركز تجاري", en: "Mall" },
+  mall: { ku: "مۆڵ", ar: "مركز تجاري", en: "Mall" },
   mosque: { ku: "مزگەوت", ar: "مسجد", en: "Mosque" },
   church: { ku: "کڵێسا", ar: "كنيسة", en: "Church" },
   religious: { ku: "شوێنی ئایینی", ar: "مكان ديني", en: "Religious site" },

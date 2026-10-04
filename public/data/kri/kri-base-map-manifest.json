@@ -1,6 +1,6 @@
 {
-  "release": "10.0.1",
-  "release_id": "2026-10-03-nav-kurd-v10.0.1",
+  "release": "10.0.2",
+  "release_id": "2026-10-03-nav-kurd-v10.0.2",
   "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "format": "PMTiles v3 + production POI GeoJSON/viewport shards + compact multilingual worker search",
   "source_date": "2026-07-13",

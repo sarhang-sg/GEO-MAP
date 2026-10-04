@@ -61,30 +61,30 @@ type Copy = {
 const COPY: Record<StudioLanguage, Copy> = {
   ku: {
     title: "فیدباک و ڕاپۆرتی کێشە",
-    subtitle: "کێشەی ماپ، داتا، چوونەژوورەوە، GPS یان UI بنێرە بۆ NAV KURD.",
+    subtitle: "کێشەی نەخشە، داتا، چوونەژوورەوە، GPS یان UI بنێرە بۆ NAV KURD.",
     close: "داخستن",
     category: "جۆری کێشە",
-    categories: { bug: "گلیچ/هەڵە", data: "داتای ماپ", place: "ناو یان شوێن", search: "گەڕان", login: "چوونەژوورەوە", offline: "ئۆفلاین", gps: "GPS و ڕێنیشاندان", ui: "UI و شاشە", other: "شتی تر" },
+    categories: { bug: "کێشە/هەڵە", data: "داتای نەخشە", place: "ناو یان شوێن", search: "گەڕان", login: "چوونەژوورەوە", offline: "دەرھێڵ", gps: "GPS و ڕێنیشاندان", ui: "UI و شاشە", other: "شتی تر" },
     message: "وردەکاری",
     placeholder: "چی ڕوویدا؟ هەنگاوەکانی دووبارەکردنەوە و ئەنجامی چاوەڕوانکراو بنووسە…",
     diagnostics: "ڕاپۆرتی تەکنیکی لەگەڵی بنێرە",
-    diagnosticsHelp: "ڤێرژن، جۆری وێبگەڕ، قەبارەی شاشە، network و هەڵە نوێیەکان. شوێنی ورد، پاسوۆرد، token یان دەقی تایبەتی کۆ ناکرێتەوە.",
-    previewTitle: "پریڤیوی ڕاستەوخۆی ڕاپۆرت",
-    previewHelp: "ئەم داتایە هەمان ئەوەیە کە کۆپی یان لەگەڵ فیدباک دەنێردرێت.",
+    diagnosticsHelp: "وەشان، جۆری وێبگەڕ، قەبارەی شاشە، network و هەڵە نوێیەکان. شوێنی ورد، تێپەڕوشە، token یان دەقی تایبەتی کۆ ناکرێتەوە.",
+    previewTitle: "پێشاندانی ڕاستەوخۆی ڕاپۆرت",
+    previewHelp: "ئەم زانیارییانە هەمان ئەوانەن کە لەگەڵ ڕاپۆرتەکەدا دەنێردرێن.",
     previewPending: "خەریکە داتای پارێزراوی ئامێر کۆدەکرێتەوە…",
-    collect: "کۆکردنەوەی داتای مۆبایل",
+    collect: "کۆکردنەوەی زانیاریی ئامێر",
     collected: "ڕاپۆرتی مۆبایل نوێ کرایەوە.",
     refresh: "نوێکردنەوە",
     copy: "کۆپیکردنی ڕاپۆرت",
     copied: "ڕاپۆرت کۆپی کرا.",
-    copyFailed: "کۆپیکردنی خۆکار سەرکەوتوو نەبوو؛ دەقەکە هەڵبژێرە و کۆپی بکە.",
+    copyFailed: "کۆپیکردنی خۆکار سەرکەوتوو نەبوو؛ دەقەکە هەڵبژێرە و لەبەری بگرەوە.",
     submit: "ناردنی فیدباک",
     signInSubmit: "بە Google بچۆ ژوورەوە و بنێرە",
     email: "ناردن بە ئیمەیڵ",
     emailHelp: "بۆ زانیاریی زیاتر یان فایلی وێنە، ئیمەیڵ بەکاربهێنە.",
     sent: "فیدباکەکەت نێردرا. سوپاس بۆ یارمەتیدان بە باشترکردنی NAV KURD.",
-    required: "تکایە لانیکەم ٢٠ پیت وردەکاری بنووسە.",
-    unavailable: "خزمەتی ناردنی ناوخۆ ئێستا بەردەست نییە؛ دەتوانیت ڕاپۆرتەکە کۆپی بکەیت یان بە ئیمەیڵ بینێریت.",
+    required: "تکایە لانیکەم ٢٠ پیت بنووسە.",
+    unavailable: "خزمەتی ناردنی ناوخۆ ئێستا بەردەست نییە؛ دەتوانیت ڕاپۆرتەکە لەبەری بگرەوەیت یان بە ئیمەیڵ بینێریت.",
     privacy: "سیاسەتی تایبەتمەندی"
   },
   ar: {
@@ -92,7 +92,7 @@ const COPY: Record<StudioLanguage, Copy> = {
     subtitle: "أرسل مشكلة في الخريطة أو البيانات أو تسجيل الدخول أو GPS أو الواجهة.",
     close: "إغلاق",
     category: "نوع المشكلة",
-    categories: { bug: "خلل/خطأ", data: "بيانات الخريطة", place: "اسم أو مكان", search: "البحث", login: "تسجيل الدخول", offline: "دون اتصال", gps: "GPS والملاحة", ui: "الواجهة والشاشة", other: "أخرى" },
+    categories: { bug: "عذراً، حدث خلل أو خطأ", data: "بيانات الخريطة", place: "اسم أو مكان", search: "البحث", login: "تسجيل الدخول", offline: "دون اتصال", gps: "GPS والملاحة", ui: "الواجهة والشاشة", other: "أخرى" },
     message: "التفاصيل",
     placeholder: "ماذا حدث؟ اكتب خطوات إعادة المشكلة والنتيجة المتوقعة…",
     diagnostics: "إرفاق تقرير تقني",
@@ -178,10 +178,10 @@ export class FeedbackStudio {
     const language = this.options.getLanguage();
     const coordinateLabel = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
     const message = language === "ar"
-      ? `بلاغ طريق عند: ${coordinateLabel}\nنوع المشكلة: ازدحام / طريق مغلق / أعمال طريق / خطر\nالتفاصيل: `
+      ? `بلاغ طريق عند: ${coordinateLabel}\nنوع المشكلة: ازدحام / طريق مغلق / أعمال طريق / خطر\nالتفاصيل:`
       : language === "en"
-        ? `Road report at: ${coordinateLabel}\nIssue type: congestion / closure / roadworks / hazard\nDetails: `
-        : `ڕاپۆرتی ڕێگا لەم شوێنە: ${coordinateLabel}\nجۆری کێشە: قەرەباڵغی / ڕێگای داخراو / چاککردنەوە / مەترسی\nوردەکاری: `;
+        ? `Road report at: ${coordinateLabel}\nIssue type: congestion / closure / roadworks / hazard\nDetails:`
+        : `ڕاپۆرتی ڕێگا لەم شوێنە: ${coordinateLabel}\nجۆری کێشە: قەرەباڵغی / ڕێگای داخراو / چاککردنەوە / مەترسی\nوردەکاری:`;
     try {
       sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ category: "data", message, includeDiagnostics: true }));
     } catch { /* storage may be unavailable */ }

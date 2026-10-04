@@ -31,7 +31,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
       </div>
       <div id="mapOnlineIndicator" class="map-online-indicator" aria-live="polite" title="Online now">
         <span class="map-online-indicator__dot" aria-hidden="true">${navIcon("07")}</span>
-        <span id="mapOnlineIndicatorLabel" class="visually-hidden">ئۆنلاین</span>
+        <span id="mapOnlineIndicatorLabel" class="visually-hidden">سەرھێڵ</span>
         <strong id="mapOnlineIndicatorCount">0</strong>
       </div>
       <button id="brandAboutButton" class="brand-card" type="button" aria-labelledby="brandTitle brandSubtitle brandActionAssistive" aria-controls="aboutDialog" aria-expanded="false">
@@ -81,16 +81,16 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
 
     <section id="mapSheet" class="map-sheet" aria-labelledby="mapTitle" data-sheet-state="expanded">
       <button id="sheetToggle" class="sheet-handle" type="button" aria-expanded="true" aria-controls="sheetContent">
-        <span aria-hidden="true"></span><span id="sheetHandleText" class="sheet-handle__text">وردەکاری ماپ</span>
+        <span aria-hidden="true"></span><span id="sheetHandleText" class="sheet-handle__text">وردەکاری نەخشە</span>
       </button>
       <div id="mapAttributionSlot" class="map-sheet__attribution-slot" aria-live="polite"></div>
       <div class="sheet-header"><div class="sheet-header__copy"><p id="regionEyebrow" class="eyebrow">KURDISTAN REGION</p><h1 id="mapTitle">نەخشەی کوردستان</h1></div><div class="sheet-icon"><img src="${brandLogoSrc}" alt="NAV KURD logo" width="1024" height="1024" /></div></div>
       <div id="sheetContent" class="sheet-content">
-      <p id="mapMessage" class="map-message" role="status">خەریکە داتای ڕاستەقینەی ماپەکە بار دەکرێت.</p>
+      <p id="mapMessage" class="map-message" role="status">خەریکە داتای ڕاستەقینەی نەخشەکە بار دەکرێت.</p>
       <div class="map-stats" role="group" aria-label="Map dataset details"><div><strong id="localityCount">—</strong><span id="localityStatLabel">شوێن</span></div><div><strong id="baseSearchCount">—</strong><span id="baseSearchStatLabel">داتای گەڕان</span></div><div><strong id="ownerPlaceCount">—</strong><span id="ownerPlaceStatLabel">شوێنی زیادکراو</span></div></div>
-      <div class="action-grid"><button id="sheetLocateButton" class="action-card" type="button"><span class="action-card__icon action-card__icon--tracking" aria-hidden="true">${navIcon("06")}</span><span><strong id="locateTitle">شوێنی من</strong><small id="locateSub">شوێنی ئێستا و جوڵە</small></span></button><button id="sheetFitButton" class="action-card" type="button"><span class="action-card__icon" aria-hidden="true">${navIcon("09")}</span><span><strong id="fitTitle">تەواوی هەرێم</strong><small id="fitSub">گەڕانەوە بۆ سنوور</small></span></button><button id="sheetShareLocationButton" class="action-card action-card--native-share" type="button"><span class="action-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m8.3 10.9 7.4-4.6M8.3 13.1l7.4 4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span><strong id="shareLocationTitle">هاوبەشکردنی شوێن</strong><small id="shareLocationSub">لینکی شوێنی ئێستا</small></span></button></div>
+      <div class="action-grid"><button id="sheetLocateButton" class="action-card" type="button"><span class="action-card__icon action-card__icon--tracking" aria-hidden="true">${navIcon("06")}</span><span><strong id="locateTitle">شوێنی من</strong><small id="locateSub">شوێنی ئێستا و جوڵە</small></span></button><button id="sheetFitButton" class="action-card" type="button"><span class="action-card__icon" aria-hidden="true">${navIcon("09")}</span><span><strong id="fitTitle">تەواوی هەرێم</strong><small id="fitSub">گەڕانەوە بۆ سنوور</small></span></button><button id="sheetShareLocationButton" class="action-card action-card--native-share" type="button"><span class="action-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m8.3 10.9 7.4-4.6M8.3 13.1l7.4 4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span><strong id="shareLocationTitle">هاوبەشکردنی شوێن</strong><small id="shareLocationSub">بەستەری شوێنی ئێستا</small></span></button></div>
       <div class="utility-row"><div class="segmented" role="group" aria-label="Language"><button data-language="ku" class="is-active" type="button">کوردی</button><button data-language="ar" type="button">عربي</button><button data-language="en" type="button">EN</button></div><span id="backendState" class="backend-state">داتای ناوخۆیی</span></div>
-      <p id="mapNote" class="map-note">ماپەکە ڕێگا، شەقام، گوند، شار، سنوور و شوێنە گرنگەکانی هەرێمی کوردستان پیشان دەدات.</p>
+      <p id="mapNote" class="map-note">نەخشەکە ڕێگا، شەقام، گوند، شار، سنوور و شوێنە گرنگەکانی هەرێمی کوردستان پیشان دەدات.</p>
       </div>
     </section>
 
@@ -169,7 +169,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
         <section id="nativeAppPanel" class="native-app-panel" aria-labelledby="nativeAppHeading" hidden>
           <div class="native-app-panel__header"><div><p id="nativePlatformEyebrow">NATIVE APP</p><h3 id="nativeAppHeading">ڕێکخستنەکانی ئەپی NAV KURD</h3></div><span id="nativePlatformIcon" aria-hidden="true"><img class="native-app-panel__icon" src="${appUrl("assets/native/info.svg")}" alt="" draggable="false"></span></div>
           <dl class="native-app-panel__status"><div><dt id="nativeConnectionTerm">تۆڕ</dt><dd id="nativeConnectionValue">—</dd></div><div><dt id="nativeStorageTerm">خەزن</dt><dd id="nativeCacheValue">—</dd></div></dl>
-          <div class="native-app-panel__actions"><button id="nativeClearCacheButton" type="button" aria-label="پاککردنەوەی cache ـی کاتی" title="پاککردنەوەی cache ـی کاتی"><img class="native-app-panel__icon" src="${appUrl("assets/native/clear.svg")}" alt="" aria-hidden="true" draggable="false"><span id="nativeClearCacheLabel" class="native-app-panel__action-label">پاککردنەوەی cache ـی کاتی</span></button><button id="nativeOpenSettingsButton" type="button" aria-label="کردنەوەی Settings" title="کردنەوەی Settings"><img class="native-app-panel__icon" src="${appUrl("assets/native/settings.svg")}" alt="" aria-hidden="true" draggable="false"><span id="nativeOpenSettingsLabel" class="native-app-panel__action-label">کردنەوەی Settings</span></button></div>
+          <div class="native-app-panel__actions"><button id="nativeClearCacheButton" type="button" aria-label="پاککردنەوەی کاشیی کاتی" title="پاککردنەوەی کاشیی کاتی"><img class="native-app-panel__icon" src="${appUrl("assets/native/clear.svg")}" alt="" aria-hidden="true" draggable="false"><span id="nativeClearCacheLabel" class="native-app-panel__action-label">پاککردنەوەی کاشیی کاتی</span></button><button id="nativeOpenSettingsButton" type="button" aria-label="کردنەوەی ڕێکخستنەکان" title="کردنەوەی ڕێکخستنەکان"><img class="native-app-panel__icon" src="${appUrl("assets/native/settings.svg")}" alt="" aria-hidden="true" draggable="false"><span id="nativeOpenSettingsLabel" class="native-app-panel__action-label">کردنەوەی ڕێکخستنەکان</span></button></div>
           <p id="nativeAppNote">GPS permission، offline data، safe-area و deep links لە ڕێگەی سیستەمی ئامێرەکەت بەڕێوە دەبرێن.</p>
         </section>
         <div class="about-dialog__utility-actions">
@@ -190,7 +190,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
             <p id="supportSectionEyebrow">SUPPORT NAV KURD</p>
             <h3 id="supportSectionHeading">یارمەتیم بدە</h3>
           </div>
-          <p id="supportSectionIntro" class="support-section__intro">ئەگەر NAV KURD بۆت بەسوود بووە، دەتوانیت بە هاوکاریی داریی، پشتگیریی پڕۆژەکە بکەیت. ئەم یارمەتیدانە یارمەتیم دەدات بۆ باشترکردنی داتای ماپ، زیادکردنی شوێنەکان، GPS، ئۆفلاین و گەشەپێدانی وەشانەکانی داهاتوو.</p>
+          <p id="supportSectionIntro" class="support-section__intro">ئەگەر NAV KURD بۆت بەسوودە، دەتوانیت بە هاوکاریی دارایی پشتگیریمان بکەیت. ئەمەش یارمەتیدەرە بۆ باشترکردنی نەخشە، زیادکردنی شوێن، GPS، دۆخی دەرھێڵ و وەشانەکانی داهاتوو.</p>
           <div class="support-section__groups">
             <details class="support-fold" open>
               <summary class="support-fold__summary"><span id="supportPaymentHeading">پارەدان و یارمەتی</span><small id="supportPaymentSub">فاست‌پەی · بانکی یەکەمی عێراق · سوپەرکیو</small></summary>

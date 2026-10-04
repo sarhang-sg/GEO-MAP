@@ -1807,7 +1807,7 @@ function applyUiLanguage(language: Language): void {
     ? { title: "مشاركة الموقع", sub: "رابط لموقعك الحالي", button: "مشاركة موقعي" }
     : language === "en"
       ? { title: "Share location", sub: "Link to your current location", button: "Share my location" }
-      : { title: "هاوبەشکردنی شوێن", sub: "لینکی شوێنی ئێستا", button: "هاوبەشکردنی شوێنی من" };
+      : { title: "هاوبەشکردنی شوێن", sub: "بەستەری شوێنی ئێستا", button: "هاوبەشکردنی شوێنی من" };
   shareTitle.textContent = copy.title;
   shareSub.textContent = copy.sub;
   shareLocationButton.title = copy.button;

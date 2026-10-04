@@ -6,7 +6,7 @@ type TransitionCopy = Record<TransitionMode, { title: string; body: string }>;
 const COPY: Record<Language, TransitionCopy> = {
   ku: {
     download: { title: "زمانی کوردی ئامادە دەکرێت", body: "داتای پێویست تەنها بۆ یەکەم جار دادەبەزێت." },
-    switch: { title: "زمانی کوردی هەڵبژێردرا", body: "ماپ و گەڕان نوێ دەکرێنەوە." }
+    switch: { title: "زمانی کوردی هەڵبژێردرا", body: "نەخشە و گەڕان نوێ دەکرێنەوە." }
   },
   ar: {
     download: { title: "جارٍ إعداد العربية", body: "سيتم تنزيل البيانات المطلوبة مرة واحدة فقط." },

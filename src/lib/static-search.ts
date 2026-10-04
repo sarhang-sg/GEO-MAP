@@ -123,7 +123,7 @@ const CORE_SEARCH_INTENT_GROUPS: readonly SearchIntentGroup[] = [
   {
     id: "hotel",
     aliases: ["hotel", "motel", "guest house", "هوتێل", "میوانخانە", "فندق", "نزل"],
-    categoryHints: ["hotel", "motel", "هوتێل", "میوانخانە", "فندق", "نزل"]
+    categoryHints: ["hotel", "motel", "هوتێل", "هۆتێل", "میوانخانە", "فندق", "نزل"]
   },
   {
     id: "airport",

@@ -168,7 +168,7 @@ function ownerGoogleIcon(): string {
 function ownerNavigationHistoryCopy(language: StudioLanguage): { title: string; empty: string; clear: string; delete: string; arrived: string; cancelled: string; deleteConfirm: string; clearConfirm: string; deleted: string; cleared: string } {
   if (language === "ar") return { title: "سجل ملاحة المشرف", empty: "لا توجد رحلات محفوظة.", clear: "مسح السجل", delete: "حذف الرحلة", arrived: "وصلت", cancelled: "ملغاة", deleteConfirm: "حذف هذه الرحلة نهائياً من قاعدة البيانات؟", clearConfirm: "حذف سجل ملاحة حساب المشرف بالكامل من قاعدة البيانات؟", deleted: "تم حذف الرحلة.", cleared: "تم مسح سجل الملاحة." };
   if (language === "en") return { title: "Administrator navigation history", empty: "No saved journeys.", clear: "Clear history", delete: "Delete journey", arrived: "Arrived", cancelled: "Cancelled", deleteConfirm: "Permanently delete this journey from the database?", clearConfirm: "Permanently clear the administrator account's navigation history from the database?", deleted: "Journey deleted.", cleared: "Navigation history cleared." };
-  return { title: "مێژووی ڕێنیشاندانی بەڕێوەبەر", empty: "هیچ گەشتێکی تۆمارکراو نییە.", clear: "سڕینەوەی مێژوو", delete: "سڕینەوەی گەشت", arrived: "گەیشتوو", cancelled: "هەڵوەشاوە", deleteConfirm: "دڵنیایت ئەم گەشتە بە هەمیشەیی لە دیتابەیس بسڕیتەوە؟", clearConfirm: "دڵنیایت هەموو مێژووی ڕێنیشاندانی هەژماری بەڕێوەبەر لە دیتابەیس بسڕیتەوە؟", deleted: "گەشتەکە سڕایەوە.", cleared: "مێژووی ڕێنیشاندان پاککرایەوە." };
+  return { title: "مێژووی ڕێنیشاندانی بەڕێوەبەر", empty: "هیچ گەشتێک تۆمار نەکراوە.", clear: "سڕینەوەی مێژوو", delete: "سڕینەوەی گەشت", arrived: "گەیشتوو", cancelled: "هەڵوەشاوە", deleteConfirm: "دڵنیایت ئەم گەشتە بە هەمیشەیی لە داتابەیس بسڕیتەوە؟", clearConfirm: "دڵنیایت هەموو مێژووی ڕێنیشاندانی هەژماری بەڕێوەبەر لە داتابەیس بسڕیتەوە؟", deleted: "گەشتەکە سڕایەوە.", cleared: "مێژووی ڕێنیشاندان پاککرایەوە." };
 }
 
 
@@ -446,7 +446,7 @@ export class OwnerStudio {
       ? { review: "المراجعة", places: "الأماكن", messages: "الرسائل", notifications: "الإشعارات" }
       : language === "en"
         ? { review: "Review", places: "Places", messages: "Messages", notifications: "Notifications" }
-        : { review: "ڕیڤیو", places: "شوێنەکان", messages: "نامەکان", notifications: "ئاگادارکردنەوەکان" };
+        : { review: "پێداچوونەوە", places: "شوێنەکان", messages: "نامەکان", notifications: "ئاگادارکردنەوەکان" };
 
     const renderPlaceRows = (selectedPlaces: AtlasPlace[], reviewMode: boolean, emptyMessage: string): string => selectedPlaces.length
       ? selectedPlaces.map((place) => {
@@ -478,7 +478,7 @@ export class OwnerStudio {
     };
     const categoryLabelForFeedback = (category: AtlasFeedback["category"]): string => {
       const labels: Record<AtlasFeedback["category"], [string, string, string]> = {
-        bug: ["گلیچ/هەڵە", "خلل/خطأ", "Bug/glitch"], data: ["داتای ماپ", "بيانات الخريطة", "Map data"], place: ["ناو/شوێن", "اسم/مكان", "Place/name"], search: ["گەڕان", "البحث", "Search"], login: ["چوونەژوورەوە", "تسجيل الدخول", "Sign-in"], offline: ["ئۆفلاین", "دون اتصال", "Offline"], gps: ["GPS/ڕێنیشاندان", "GPS/الملاحة", "GPS/navigation"], ui: ["UI/شاشە", "الواجهة/الشاشة", "UI/display"], other: ["شتی تر", "أخرى", "Other"]
+        bug: ["کێشە/هەڵە", "عذراً، حدث خلل أو خطأ", "Bug/glitch"], data: ["داتای نەخشە", "بيانات الخريطة", "Map data"], place: ["ناو/شوێن", "اسم/مكان", "Place/name"], search: ["گەڕان", "البحث", "Search"], login: ["چوونەژوورەوە", "تسجيل الدخول", "Sign-in"], offline: ["دەرھێڵ", "دون اتصال", "Offline"], gps: ["GPS/ڕێنیشاندان", "GPS/الملاحة", "GPS/navigation"], ui: ["UI/شاشە", "الواجهة/الشاشة", "UI/display"], other: ["شتی تر", "أخرى", "Other"]
       };
       return labels[category][language === "ar" ? 1 : language === "en" ? 2 : 0];
     };
@@ -517,7 +517,7 @@ export class OwnerStudio {
     const placeEmpty = this.activeListTab === "published" ? copy.noPublishedPlaces : copy.noWorkPlaces;
     const placesPanel = `<section class="owner-private-panel"><div class="owner-studio__toolbar owner-studio__toolbar--actions"><h3>${escapeText(workspaceLabels.places)} <span>${this.places.length}</span></h3><div><button type="button" class="owner-studio__secondary" data-owner-action="refresh">${escapeText(copy.refresh)}</button><button type="button" class="owner-studio__primary" data-owner-action="add">${escapeText(copy.add)}</button></div></div><div class="owner-list-tabs" role="tablist"><button type="button" role="tab" data-owner-action="list-tab" data-id="work" aria-selected="${this.activeListTab === "work" ? "true" : "false"}" class="${this.activeListTab === "work" ? "is-active" : ""}">${escapeText(copy.workTab)} <span>${workPlaces.length}</span></button><button type="button" role="tab" data-owner-action="list-tab" data-id="published" aria-selected="${this.activeListTab === "published" ? "true" : "false"}" class="${this.activeListTab === "published" ? "is-active" : ""}">${escapeText(copy.publishedTab)} <span>${publishedPlaces.length}</span></button></div><div class="owner-studio__list">${renderPlaceRows(placeRows, false, placeEmpty)}</div></section>`;
     const messagesPanel = `<section class="owner-private-panel owner-feedback-section"><h3>${escapeText(workspaceLabels.messages)} <span>${this.feedback.filter((item) => item.status === "new").length}</span></h3><div class="owner-feedback-list">${feedbackRows}</div></section>`;
-    const notificationActions = this.notifications.length ? `<div class="owner-notification-actions">${unreadNotifications ? `<button type="button" data-owner-action="notifications-read-all">${ownerUtilityIcon("readAll")}<span>${escapeText(language === "ar" ? "تحديد الكل كمقروء" : language === "en" ? "Mark all as read" : "هەموویان وەک خوێندراو")}</span></button>` : ""}<button type="button" data-owner-action="notifications-delete-read">${ownerUtilityIcon("trash")}<span>${escapeText(language === "ar" ? "حذف المقروء" : language === "en" ? "Delete read" : "سڕینەوەی خوێندراوەکان")}</span></button></div>` : "";
+    const notificationActions = this.notifications.length ? `<div class="owner-notification-actions">${unreadNotifications ? `<button type="button" data-owner-action="notifications-read-all">${ownerUtilityIcon("readAll")}<span>${escapeText(language === "ar" ? "تحديد الكل كمقروء" : language === "en" ? "Mark all as read" : "هەموویان وەک خوێندراو")}</span></button>` : ""}<button type="button" data-owner-action="notifications-delete-read">${ownerUtilityIcon("trash")}<span>${escapeText(language === "ar" ? "حذف المقروء" : language === "en" ? "Delete read" : "سڕینەوەی ئاگادارکردنەوە خوێندراوەکان")}</span></button></div>` : "";
     const notificationsPanel = `<section class="owner-private-panel owner-notification-section"><h3>${escapeText(workspaceLabels.notifications)} <span>${unreadNotifications}</span></h3>${notificationActions}<div class="owner-studio__list">${notificationRows}</div></section>`;
     const panel = this.activeWorkspaceTab === "places" ? placesPanel : this.activeWorkspaceTab === "messages" ? messagesPanel : this.activeWorkspaceTab === "notifications" ? notificationsPanel : reviewPanel;
     const historyCopy = ownerNavigationHistoryCopy(language);
@@ -1082,7 +1082,7 @@ export class OwnerStudio {
     }
 
     this.mediaUploadProgress = null;
-    this.mediaUploadStatus = this.options.getLanguage() === "ar" ? "جارٍ تجهيز الصورة..." : this.options.getLanguage() === "en" ? "Preparing image..." : "ئامادەکردنی وێنە...";
+    this.mediaUploadStatus = this.options.getLanguage() === "ar" ? "نعمل على تجهيز الصورة..." : this.options.getLanguage() === "en" ? "Preparing image..." : "ئامادەکردنی وێنە...";
     this.mediaCompressionInfo = "";
     this.busy = true;
     this.render();
@@ -1092,7 +1092,7 @@ export class OwnerStudio {
         ? `${(prepared.originalBytes / 1048576).toFixed(2)} MB → ${(prepared.outputBytes / 1048576).toFixed(2)} MB`
         : `${(prepared.outputBytes / 1048576).toFixed(2)} MB`;
       this.mediaUploadProgress = 0;
-      this.mediaUploadStatus = this.options.getLanguage() === "ar" ? "جارٍ رفع الصورة..." : this.options.getLanguage() === "en" ? "Uploading image..." : "بارکردنی وێنە...";
+      this.mediaUploadStatus = this.options.getLanguage() === "ar" ? "جارٍ رفع الصورة..." : this.options.getLanguage() === "en" ? "Uploading image..." : "خەریکی بارکردنی وێنەکەین...";
       this.render();
       const uploaded = await uploadManagedAtlasPhoto(place.id, prepared.file, {
         caption_ku: String(data.get("caption_ku") ?? ""),

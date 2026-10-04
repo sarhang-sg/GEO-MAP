@@ -1,7 +1,7 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-10-03-nav-kurd-v10.0.1",
-  "appVersion": "10.0.1",
+  "release": "2026-10-03-nav-kurd-v10.0.2",
+  "appVersion": "10.0.2",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "generatedForDate": "2026-10-03",
   "fileCount": 758,
@@ -13,7 +13,7 @@
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "e695a4037b24debfc845ed1d3245ef7262a31617a5c25b61cbc6c87abb47012b"
+      "sha256": "e2c15436e1fb746050cd2ddea57c71ef4c0fa554fbac57d701341ff8d42d3c0a"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -29,11 +29,11 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "6d6ad080dc1fcfe936c281d225db6fe0e3712ce869db750e9e20bf9106bb2b34"
+      "sha256": "8b7b67ceb725daca8091cbfe9171523ea0b092e1bd56f78ddc1365e67db65d9b"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "c3d241cea5df78789e73c78c3c5e738389f43d3943b5731ed2026393f46eac28"
+      "sha256": "a8206e7904ebcf79ef311df7cf159e173baefbe307b0eeb91a926534098c7bb9"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
@@ -101,7 +101,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "5bfe3b67e05d8b0d51604dd15dc1b1d4635c3a98d94173d6b4ed870713334afe"
+      "sha256": "c49695cd2d0e88d0aa78983bb523b6819626d676e1db12021be248e4f01cd2b9"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2593,7 +2593,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "acfd9240846884079710f2adb94f254b5cff1cf49bc8725b8294e8d37db5ba59"
+      "sha256": "95c6bfdbfa0de3724d75f2ea5683986e88e9df20fe696b17584b42aa6c491e86"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,

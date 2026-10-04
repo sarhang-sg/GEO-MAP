@@ -78,11 +78,16 @@ package_source() {
 }
 
 case "${1:-help}" in
+  update)
+    nav_installer="$DOWNLOADS/NAV-KURD-10.0.2-WORDING.sh"
+    [[ -f "$nav_installer" ]] || fail "Download NAV-KURD-10.0.2-WORDING.sh into Download first."
+    exec bash "$nav_installer"
+    ;;
   setup) setup ;;
   check) check ;;
   build) build ;;
   package) package_source ;;
   *)
-    printf '%s\n' "Usage: bash TERMUX.sh setup|check|build|package"
+    printf '%s\n' "Usage: bash TERMUX.sh update|setup|check|build|package"
     ;;
 esac
