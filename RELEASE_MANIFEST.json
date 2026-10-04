@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "d355047c6c322d3f819434d6dd220b40033a8e0bccfcff24031544db94401728"
   },
   "fileCount": 1641,
-  "totalBytes": 287344803,
+  "totalBytes": 287344737,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -4043,8 +4043,8 @@
       "sha256": "58c294c3ad42f661bffd12900c97161a9b0ba328d9026a3f7253012d713ee00b"
     },
     "src/lib/tutorial-controller.ts": {
-      "bytes": 25833,
-      "sha256": "2482b364ce230d5992bca029d6a4524faf2afb282e56893da8eb2f28452e67f8"
+      "bytes": 25767,
+      "sha256": "893f8933f5f0af35c4ee4f8d0a68904f7aa18574168552226d5cb90c911bcfb1"
     },
     "src/lib/tutorial-map-demo-controller.ts": {
       "bytes": 6210,
