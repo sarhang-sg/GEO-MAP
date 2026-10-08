@@ -34,6 +34,8 @@ import {
   type GeolocationProvider,
 } from "./native-geolocation";
 
+export type LocationState = "idle" | "acquiring" | "approximate" | "ready" | "denied" | "unavailable" | "timed-out";
+export const LOCATION_STATE_EVENT = "nav-kurd:location-state";
 export type LocationMessageKind = "normal" | "error" | "success";
 
 export type HeadingSource =
@@ -64,7 +66,9 @@ type LiveLocationControllerOptions = {
 };
 
 const INITIAL_FIX_MAX_AGE_MS = 30_000;
-const INITIAL_FIX_MAX_ACCURACY_METERS = 650;
+const INITIAL_FIX_MAX_ACCURACY_METERS = 100_000;
+const PRECISE_FIX_METERS = 650;
+const ACQUISITION_DEADLINE_MS = 14_000;
 const TRACKING_PREFERENCE_KEY = "nav-kurd:gps:active";
 const STALE_WATCH_MS = 22_000;
 
@@ -99,6 +103,8 @@ export class LiveLocationController {
   private watchId: number | null = null;
   private watchWanted = readTrackingPreference();
   private requestInFlight = false;
+  private acquisitionTimer: number | null = null;
+  private locationState: LocationState = "idle";
   private lastPositionAt = 0;
   private orientationPermissionRequested = false;
   private lastAbsoluteOrientationAt = 0;
@@ -196,6 +202,38 @@ export class LiveLocationController {
     this.setFollowEnabled(false);
   }
 
+  get state(): LocationState { return this.locationState; }
+
+  private publishState(state: LocationState): void {
+    const changed = this.locationState !== state;
+    this.locationState = state;
+    this.trackingButtons.forEach((button) => {
+      button.dataset.locationState = state;
+      button.setAttribute("aria-busy", state === "acquiring" ? "true" : "false");
+    });
+    if (changed) document.dispatchEvent(new CustomEvent(LOCATION_STATE_EVENT, { detail: {state, accuracy:this.lastAccuracy} }));
+  }
+
+  private clearAcquisitionTimer(): void {
+    if (this.acquisitionTimer !== null) window.clearTimeout(this.acquisitionTimer);
+    this.acquisitionTimer = null;
+  }
+
+  /** Cancel acquisition and recovery; late browser callbacks cannot restart GPS. */
+  stopTracking(state: LocationState = "idle"): void {
+    this.watchGeneration += 1;
+    this.clearAcquisitionTimer();
+    if (this.watchId !== null) this.geolocation?.clearWatch(this.watchId);
+    this.watchId = null;
+    this.watchWanted = false;
+    this.watchStartedAt = 0;
+    this.requestInFlight = false;
+    this.pendingCameraFocus = false;
+    writeTrackingPreference(false);
+    this.setFollowEnabled(false);
+    this.publishState(state);
+  }
+
   locate(focus = true): void {
     const language = this.getLanguage();
     this.watchWanted = true;
@@ -205,6 +243,7 @@ export class LiveLocationController {
       this.watchWanted = false;
       writeTrackingPreference(false);
       this.setMessage(UI[language].locationUnavailable, "error");
+      this.publishState("unavailable");
       return;
     }
     this.setFollowEnabled(focus);
@@ -218,12 +257,20 @@ export class LiveLocationController {
     if (focus && this.lastCoordinate && Date.now() - this.lastPositionAt <= INITIAL_FIX_MAX_AGE_MS) {
       this.recenter(true);
       this.pendingCameraFocus = false;
-      this.setMessage(UI[language].locationReady, "success");
+      this.publishState(this.lastAccuracy > PRECISE_FIX_METERS ? "approximate" : "ready");
+      if (this.lastAccuracy <= PRECISE_FIX_METERS) this.setMessage(UI[language].locationReady, "success");
     }
     if (this.requestInFlight) return;
     if (this.watchId !== null) return;
     this.requestInFlight = true;
     const requestGeneration = ++this.watchGeneration;
+    this.publishState("acquiring");
+    this.clearAcquisitionTimer();
+    this.acquisitionTimer = window.setTimeout(() => {
+      if (requestGeneration !== this.watchGeneration || !this.requestInFlight) return;
+      this.stopTracking("timed-out");
+      this.setMessage(UI[this.getLanguage()].locationTimeout, "error");
+    }, ACQUISITION_DEADLINE_MS);
 
     const onSuccess = (position: GeolocationPosition): void => {
       if (requestGeneration !== this.watchGeneration || !this.watchWanted) return;
@@ -239,8 +286,11 @@ export class LiveLocationController {
         typeof position.coords.accuracy === "number" &&
         Number.isFinite(position.coords.accuracy)
           ? Math.max(0, position.coords.accuracy)
-          : 999;
+          : Number.POSITIVE_INFINITY;
       const sampleAgeMs = Math.max(0, receivedAt - sampleTimestamp);
+      if (!Number.isFinite(position.coords.longitude) || !Number.isFinite(position.coords.latitude)
+        || Math.abs(position.coords.longitude) > 180 || Math.abs(position.coords.latitude) > 90
+        || !Number.isFinite(rawAccuracy) || rawAccuracy > INITIAL_FIX_MAX_ACCURACY_METERS) return;
 
       // Paint a recent network/cached position immediately, then refine it with
       // the high-accuracy request and watch. The earlier strict 80 m gate forced a
@@ -250,7 +300,6 @@ export class LiveLocationController {
         if (rawAccuracy > INITIAL_FIX_MAX_ACCURACY_METERS) return;
       }
 
-      this.requestInFlight = false;
       if (
         this.shouldRejectDegradedFix(sampleTimestamp, rawAccuracy, receivedAt)
       )
@@ -363,38 +412,32 @@ export class LiveLocationController {
         headingConfidence,
         effectiveSpeed,
       );
+      this.requestInFlight = false;
+      this.clearAcquisitionTimer();
+      this.publishState(rawAccuracy > PRECISE_FIX_METERS ? "approximate" : "ready");
       if (this.pendingCameraFocus && this.followEnabled) {
         this.pendingCameraFocus = false;
         this.recenter(true);
       }
       if (firstFix || explicitRequest || !this.locationReadyAnnounced) {
         this.locationReadyAnnounced = true;
-        this.setMessage(UI[this.getLanguage()].locationReady, "success");
+        if (rawAccuracy <= PRECISE_FIX_METERS) this.setMessage(UI[this.getLanguage()].locationReady, "success");
       }
     };
     const onError = (error: GeolocationPositionError): void => {
       if (requestGeneration !== this.watchGeneration) return;
       const explicitRequest = this.requestInFlight;
       this.requestInFlight = false;
+      this.clearAcquisitionTimer();
       if (error.code === error.PERMISSION_DENIED) {
-        this.watchWanted = false;
-        writeTrackingPreference(false);
-        if (this.watchId !== null) geolocation.clearWatch(this.watchId);
-        this.watchId = null;
-        this.pendingCameraFocus = false;
-        this.setFollowEnabled(false);
+        this.stopTracking("denied");
         this.setMessage(UI[this.getLanguage()].locationDenied, "error");
         return;
       }
       // A failed initial request ends acquisition; an explicit tap can retry.
       // A running navigation watch retains its last valid position.
       if (!this.lastCoordinate) {
-        this.watchWanted = false;
-        writeTrackingPreference(false);
-        if (this.watchId !== null) geolocation.clearWatch(this.watchId);
-        this.watchId = null;
-        this.pendingCameraFocus = false;
-        this.setFollowEnabled(false);
+        this.stopTracking(error.code === error.TIMEOUT ? "timed-out" : "unavailable");
       }
       if (explicitRequest || !this.lastCoordinate) {
         const copy = UI[this.getLanguage()];
@@ -413,11 +456,7 @@ export class LiveLocationController {
       try {
         this.watchId = geolocation.watchPosition(onSuccess, onError, watchOptions);
       } catch {
-        this.requestInFlight = false;
-        this.watchWanted = false;
-        writeTrackingPreference(false);
-        this.pendingCameraFocus = false;
-        this.setFollowEnabled(false);
+        this.stopTracking("unavailable");
         this.setMessage(UI[this.getLanguage()].locationUnavailable, "error");
       }
     }
@@ -483,11 +522,11 @@ export class LiveLocationController {
         ? 15.5
         : this.lastAccuracy <= 400
           ? 14.8
-          : 14.2;
+          : Math.max(5, Math.min(14.2, Math.log2(20_000_000 / Math.max(1, this.lastAccuracy))));
     this.map.easeTo({
       center: this.lastCoordinate,
       zoom: initialCenter
-        ? Math.max(this.map.getZoom(), focusZoom)
+        ? (this.lastAccuracy > PRECISE_FIX_METERS ? focusZoom : Math.max(this.map.getZoom(), focusZoom))
         : this.map.getZoom(),
       duration: initialCenter ? 480 : 220,
       essential: true,
@@ -572,16 +611,7 @@ export class LiveLocationController {
         .then((permission) => {
           permission.addEventListener("change", () => {
             if (permission.state === "denied") {
-              this.watchWanted = false;
-              this.watchGeneration += 1;
-              this.requestInFlight = false;
-              this.pendingCameraFocus = false;
-              writeTrackingPreference(false);
-              if (this.watchId !== null)
-                this.geolocation?.clearWatch(this.watchId);
-              this.watchId = null;
-              this.watchStartedAt = 0;
-              this.setFollowEnabled(false);
+              this.stopTracking("denied");
             } else if (this.watchWanted) recover(true);
           });
         }).catch(() => undefined);

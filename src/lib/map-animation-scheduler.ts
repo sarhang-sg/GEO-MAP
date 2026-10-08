@@ -74,6 +74,7 @@ export class MapAnimationScheduler {
     this.map.on("pitchend", this.onInteractionEnd);
     document.addEventListener("visibilitychange", this.onVisibilityChange, { passive: true });
     document.addEventListener(RUNTIME_PERFORMANCE_MODE_EVENT, this.onPerformanceModeChange);
+    window.addEventListener("nav-kurd:appearance-change", this.onPerformanceModeChange);
     this.syncDiagnostics();
   }
 
@@ -135,6 +136,7 @@ export class MapAnimationScheduler {
     this.map.off("pitchend", this.onInteractionEnd);
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     document.removeEventListener(RUNTIME_PERFORMANCE_MODE_EVENT, this.onPerformanceModeChange);
+    window.removeEventListener("nav-kurd:appearance-change", this.onPerformanceModeChange);
   }
 
   private readonly onInteractionStart = (event: { type?: string; originalEvent?: Event }): void => {
@@ -181,7 +183,9 @@ export class MapAnimationScheduler {
   private runnableTasks(): ScheduledTask[] {
     if (document.hidden) return [];
     const cameraBusy = this.interacting;
-    return [...this.tasks.values()].filter((task) => task.active && !(cameraBusy && task.pauseDuringInteraction));
+    const reducedMotion = document.body?.dataset.motionPreference === "reduced";
+    return [...this.tasks.values()].filter((task) => task.active && !(cameraBusy && task.pauseDuringInteraction)
+      && !(reducedMotion && task.priority === "visual"));
   }
 
   private cancelScheduledTurn(): void {

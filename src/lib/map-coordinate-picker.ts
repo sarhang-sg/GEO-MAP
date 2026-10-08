@@ -54,7 +54,7 @@ export class MapCoordinatePicker {
 
   get active(): boolean { return this.callback !== null; }
 
-  start(onPick: (coordinate: LngLatTuple) => void): void {
+  start(onPick: (coordinate: LngLatTuple) => void, options?: { body?: string }): void {
     if (this.callback) this.cancel(false);
     this.callback = onPick;
     this.completing = false;
@@ -62,7 +62,7 @@ export class MapCoordinatePicker {
     const copy = COPY[this.getLanguage()];
     this.prompt.dir = languageDirection(this.getLanguage());
     this.prompt.querySelector<HTMLElement>("[data-coordinate-picker-title]")!.textContent = copy.title;
-    this.prompt.querySelector<HTMLElement>("[data-coordinate-picker-body]")!.textContent = copy.body;
+    this.prompt.querySelector<HTMLElement>("[data-coordinate-picker-body]")!.textContent = options?.body ?? copy.body;
     this.prompt.querySelector<HTMLButtonElement>("[data-coordinate-picker-cancel]")!.textContent = copy.cancel;
     this.prompt.hidden = false;
     this.mapShell.dataset.coordinatePicker = "active";

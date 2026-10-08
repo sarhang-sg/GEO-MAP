@@ -88,17 +88,17 @@ const TIER_CONFIG: Record<PoiIconTier, {
   padding: (lowPowerProfile: boolean) => number;
 }> = {
   landmark: {
-    minZoom: (lowPowerProfile) => lowPowerProfile ? 10.9 : 10.3,
+    minZoom: () => 9.8,
     sizeStops: [10.3, 0.56, 14, 0.70, 18, 0.82],
     padding: (lowPowerProfile) => lowPowerProfile ? 6 : 4
   },
   community: {
-    minZoom: (lowPowerProfile) => lowPowerProfile ? 12.0 : 11.4,
+    minZoom: () => 11.4,
     sizeStops: [11.4, 0.50, 14, 0.64, 18, 0.76],
     padding: (lowPowerProfile) => lowPowerProfile ? 7 : 5
   },
   local: {
-    minZoom: (lowPowerProfile) => lowPowerProfile ? 13.0 : 12.4,
+    minZoom: () => 12,
     sizeStops: [12.4, 0.46, 15, 0.60, 18, 0.70],
     padding: (lowPowerProfile) => lowPowerProfile ? 8 : 6
   }
@@ -298,7 +298,7 @@ export function installPoiIconController(options: PoiIconControllerOptions): Poi
     return [
       Math.max(0, minZoom - 0.45), BASE_POI_DOT_OPACITY,
       minZoom, ICON_DOT_FALLBACK_OPACITY,
-      minZoom + 0.42, 0
+      minZoom + 0.42, ICON_DOT_FALLBACK_OPACITY
     ];
   };
 
@@ -376,9 +376,9 @@ export function installPoiIconController(options: PoiIconControllerOptions): Poi
         visibility: getPlacesVisible() ? "visible" : "none",
         "icon-image": poiIconImageExpression(tier, definitions) as unknown as string,
         "icon-size": ["interpolate", ["linear"], ["zoom"], z1, s1, z2, s2, z3, s3],
-        "icon-padding": Math.min(3, config.padding(lowPowerProfile)),
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true,
+        "icon-padding": config.padding(lowPowerProfile),
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
         "icon-optional": true,
         "symbol-sort-key": ["coalesce", ["get", "priority"], 0]
       }

@@ -52,8 +52,11 @@ function protocolToSearchText(value: string): string {
 }
 
 function finiteCoordinate(params: URLSearchParams): LngLatTuple | null {
-  const latitude = Number(params.get("lat"));
-  const longitude = Number(params.get("lng") ?? params.get("lon"));
+  const rawLatitude = params.get("lat")?.trim();
+  const rawLongitude = (params.get("lng") ?? params.get("lon"))?.trim();
+  if (!rawLatitude || !rawLongitude) return null;
+  const latitude = Number(rawLatitude);
+  const longitude = Number(rawLongitude);
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
   if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return null;
   return [longitude, latitude];

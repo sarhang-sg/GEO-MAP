@@ -148,7 +148,8 @@ export function summarizeHeadings(
 }
 
 export function clampAccuracy(accuracy = 0): number {
-  return Math.max(15, Math.min(240, accuracy || 30));
+  // Preserve uncertainty; coarse network fixes must never masquerade as GPS.
+  return Number.isFinite(accuracy) && accuracy > 0 ? Math.max(5, Math.min(100_000, accuracy)) : 100_000;
 }
 
 export type StabilizedCoordinateSample = {

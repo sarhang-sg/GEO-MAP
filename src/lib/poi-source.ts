@@ -10,6 +10,9 @@ import { POI_EXCLUDED_SOURCE_IDS } from "./poi-taxonomy-classification";
 export const BASE_POI_SOURCE_ID = "kri-canonical-poi-source";
 export const BASE_POI_SOURCE_LAYER: string | undefined = undefined;
 export const BASE_POI_CLUSTER_LAYER_ID = "kri-poi-clusters";
+// Supercluster expands zoom N at N + 1; keep clusters visible to that boundary.
+export const POI_CLUSTER_MAX_ZOOM = 11;
+export const POI_CLUSTER_EXPANSION_ZOOM = POI_CLUSTER_MAX_ZOOM + 1;
 export const BASE_POI_CLUSTER_COUNT_LAYER_ID = "kri-poi-cluster-count";
 export const BASE_POI_DOT_LAYER_ID = "kri-base-pois";
 export const NATURAL_POI_SOURCE_ID = "kri-natural-poi-source";

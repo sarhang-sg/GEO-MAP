@@ -1,19 +1,19 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-10-03-nav-kurd-v10.0.2",
-  "appVersion": "10.0.2",
+  "release": "2026-10-08-nav-kurd-v10.4.0",
+  "appVersion": "10.4.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "generatedForDate": "2026-10-03",
+  "generatedForDate": "2026-10-08",
   "fileCount": 758,
   "totalBytes": 131364590,
   "files": {
     "public/data/kri/kirkuk-verified-name-corrections.json": {
       "bytes": 16229,
-      "sha256": "2a52eec523407b8ac1e570e9846df66c510a40cadb45dcdd2ba095ae7b7a464e"
+      "sha256": "363b0f0488e882135a29db39f3880db6e588f5ce27b45ecf582bb1996ead96f2"
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "e2c15436e1fb746050cd2ddea57c71ef4c0fa554fbac57d701341ff8d42d3c0a"
+      "sha256": "d4eb5a267834b4da4cd80ee708a58087285f010a85e38170e8a20d3fa9ceee25"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -21,35 +21,35 @@
     },
     "public/data/kri/kri-boundary-line.geojson": {
       "bytes": 73579,
-      "sha256": "25f44750f2a39f59b37620e791c9a7096dbf429952826d4156500381286cc460"
+      "sha256": "d7810a7f49153c7a3ab8981c3782504ca86db59975c107eb908f7a7f180d54af"
     },
     "public/data/kri/kri-boundary.geojson": {
       "bytes": 73546,
-      "sha256": "8debf8cbc62499983a35a16a37a8250cf3bdbd016493c68f2c9859a96651ca71"
+      "sha256": "283078f52b3128701525b78d3ae8beee4ba6320204263135f8c3fc2521fc4fb5"
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "8b7b67ceb725daca8091cbfe9171523ea0b092e1bd56f78ddc1365e67db65d9b"
+      "sha256": "fe39fc79a4a8651d6a215e275051620c4abf352780c4fdd193c821bda949e977"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "a8206e7904ebcf79ef311df7cf159e173baefbe307b0eeb91a926534098c7bb9"
+      "sha256": "d0a9cac854ee3b208ca0ca59c74caae0cfd9fdc38379914d4dea6eee931c4d1d"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
-      "sha256": "d5f42b402f124736d2f0a4a0d82330d4b171e86e7e1e764f2f020abba47b3b98"
+      "sha256": "3443263803705699e8a8431108845385d4860beee465d6633a0cdfda9108af5b"
     },
     "public/data/kri/kri-districts.geojson": {
       "bytes": 318663,
-      "sha256": "124812d8d521721c34352526caf0629ed6c824bf6233f1793592115365c64cc9"
+      "sha256": "f3b776b0f81323b0caf091a77a6c08d96b55d229b187e1c67a71984ea5f25720"
     },
     "public/data/kri/kri-governorates.geojson": {
       "bytes": 146379,
-      "sha256": "6fce6e6e0a9f1b5d45279cca33eebe4229494864499d6cde9e3901cbab7aefd0"
+      "sha256": "6ed983b277d049832d805f6c45a295cb71a6bcb3ff114e1351b7d6df1077cc12"
     },
     "public/data/kri/kri-labels.geojson": {
       "bytes": 10506,
-      "sha256": "e2783677ad4d50548915581837aa020b893d50df0e4d9c6b73303065f7def5e8"
+      "sha256": "8b3f0fd59fd51e2a82bdfbcf79162af4724af37fa9624d75aa2accd56bcdbec1"
     },
     "public/data/kri/kri-localities-cluster-runtime.geojson": {
       "bytes": 127745,
@@ -93,15 +93,15 @@
     },
     "public/data/kri/kri-natural-features.geojson": {
       "bytes": 7963043,
-      "sha256": "a419ef2241833f20afd3ca50cf16e6a03107070b665b558603e576655eb8ca3c"
+      "sha256": "4edbc2c12d4650fbbc750a678af67492d13de915ff4e5294523110b73094aa8f"
     },
     "public/data/kri/kri-outside-mask.geojson": {
       "bytes": 71688,
-      "sha256": "759b92659b1f92781a38933141950c13dc3d47bf170f7901651662d152984b47"
+      "sha256": "59b962d300137c661c3a6ab711077879494c3f2d0b02b4a7d9e64140bcf28c3f"
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "c49695cd2d0e88d0aa78983bb523b6819626d676e1db12021be248e4f01cd2b9"
+      "sha256": "3d55e970ddc3c033fd0f661183aea35ee6f9fb1a83b2475d18773ed161769e89"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -109,11 +109,11 @@
     },
     "public/data/kri/kri-reviewed-poi-corrections.geojson": {
       "bytes": 2338,
-      "sha256": "105700985de7bace03879dca344a3a5b0dae6bef48c65ca29ad4fe90ca58c060"
+      "sha256": "685eddc4f08b8c3a5b641fd384c4a4cea108743e72298c148fb82226c07f312d"
     },
     "public/data/kri/kri-road-labels.geojson": {
       "bytes": 2588748,
-      "sha256": "1e2835718e8b9edcf2123ef39f1c341bc90050d3901d6d3f5650e5b813e98edf"
+      "sha256": "5244d0315564d5227b324526b0ce0753648ce5f2d5d637f47c7942b4ce23e01f"
     },
     "public/data/kri/kri-roads.pmtiles": {
       "bytes": 4352351,
@@ -137,11 +137,11 @@
     },
     "public/data/kri/kri-security-features.geojson": {
       "bytes": 66137,
-      "sha256": "2722947c7547bcefdee167824d04cf01b07174972bb9d4a427f245555f6ef680"
+      "sha256": "4a3781c2f13afa54e3d4752cb744cd7a662406ebd58adc5af23c101a05bf8b5d"
     },
     "public/data/kri/kri-viewport-poi-shards-manifest.json": {
       "bytes": 317941,
-      "sha256": "14e4dfa0a193a9acd8df7a4ae579a088279d80249162a3700943e144dd717db4"
+      "sha256": "02110c22af9e9b5c7e4e2c9c477ebe4339dea2ae8b8f6dd2b3c422475a035bce"
     },
     "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
       "bytes": 22951,
@@ -965,167 +965,167 @@
     },
     "public/data/kri/viewport-poi-shards/natural/10/638/398.json": {
       "bytes": 119597,
-      "sha256": "79582f6c7892c0cea870ff1739d7075d69f6486e2d8a2c6276893b10e07763ad"
+      "sha256": "847ed53868fc4b50eaa276751ec5198beb3d00128ca13972d1378db7f4437de2"
     },
     "public/data/kri/viewport-poi-shards/natural/10/638/399.json": {
       "bytes": 147017,
-      "sha256": "79edcd9add11d0e1ef135e470c90deb0c8b84a0e00a257b68100970921733806"
+      "sha256": "239127ff8a1741e0d85cf983e4c461917ff3761bc9780d6a275c8145636ad44a"
     },
     "public/data/kri/viewport-poi-shards/natural/10/638/400.json": {
       "bytes": 302817,
-      "sha256": "ba8c524f0162801e902fd7912bba901a4459f3f9f1ebc1814162f32e83f7ff75"
+      "sha256": "aeaef991b940a6d74bcd144f533f8e3b8b2f31526cae163a7710c380d3d1ae78"
     },
     "public/data/kri/viewport-poi-shards/natural/10/638/401.json": {
       "bytes": 88990,
-      "sha256": "bade33a7d3cc57141310b9f224cbd7b10510b60ae49f9f5557f7812016b29f63"
+      "sha256": "8ef34d11b9b20c936a68c9297ed867f7adbaeb2e6ad061fd092637f10f0bdb29"
     },
     "public/data/kri/viewport-poi-shards/natural/10/639/398.json": {
       "bytes": 244084,
-      "sha256": "62144476f3549ada765717676e38fefb73e0d883d6d2ff274b2db0bd1ba05189"
+      "sha256": "65ebc52e9d7f4a31a2b5287c4cdade58463d865068b5e419d2fad6b0eb1bf114"
     },
     "public/data/kri/viewport-poi-shards/natural/10/639/399.json": {
       "bytes": 230344,
-      "sha256": "431a9dc5fe2075596f5422cc3f8864b8cde62d88b78be1edf3ebd7eec88400d8"
+      "sha256": "4f2c11f06776a161a42ef072341bc8a4379910a64a50601b2ec77848d051312f"
     },
     "public/data/kri/viewport-poi-shards/natural/10/639/400.json": {
       "bytes": 201768,
-      "sha256": "52890e05a73204d2c5c26408318846aa4b66011d079e6eac10021bd7c72f1262"
+      "sha256": "32183106f34c71e1aaac9de743277f4840684fcdf0a7ef800f556015e57967b1"
     },
     "public/data/kri/viewport-poi-shards/natural/10/639/401.json": {
       "bytes": 101428,
-      "sha256": "7042663a6f6e6816cb35d4af22dcabd64b60548a66acb14ebe8e3b8837b55f0f"
+      "sha256": "1d7e4a4a72aca846530384a96aee7034da5b747b789a3143f30cd0073de4d930"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/402.json": {
       "bytes": 325142,
-      "sha256": "4236472a4b3cb68d8c582c2cfa9167b770db60ffbe3ba5c16f0ca5da5a896782"
+      "sha256": "2431b2dc2d713f0cdfae6c39b8335064c40f4d6beccdd6152f244cb773a35840"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/403.json": {
       "bytes": 221183,
-      "sha256": "d742f6c7282cb65dc2d4441cbbc6fe302d172ed6e70ec8e746af27cd50183c48"
+      "sha256": "86c69083e2a80aadb893b33f936f9e0767a3b853f20674241564038a09bbc18e"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/404.json": {
       "bytes": 308253,
-      "sha256": "0767d9dbe9c5c35d55c758b104aae8f1e31164db8a26e0ff44fc9f281d8a573c"
+      "sha256": "09793c74df3e07e4843ecbf5d37742cdd490947db448a2d16e5b89735ae4c939"
     },
     "public/data/kri/viewport-poi-shards/natural/10/640/405.json": {
       "bytes": 211259,
-      "sha256": "f09ff77a9e134f55eeb48e1a64e025c48207bf95f2bb90c524dee101e0941d8d"
+      "sha256": "8dc67e41134a1c31cea9fab2d844b316ea1fa5f68b00f0370e8081ecc5c4adf5"
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/402.json": {
       "bytes": 187638,
-      "sha256": "536bdee8aa0de4a3a23d1dc973040d10f8dac3c8137ba3d28a62a8a0d76b8b17"
+      "sha256": "cf3f29ad2384e1bd58a28c23c6fa9ca1f7927dd945b2b0ccd685e834230883bf"
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/403.json": {
       "bytes": 234229,
-      "sha256": "42bf1694e98fcf49f3523fa31528425aad0a4d51cb1f7f82dfe9255e66d7c170"
+      "sha256": "3b71375d32b392ca7e3062ef58a010fe1bee15ce66572ebad7beaa704455bb30"
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/404.json": {
       "bytes": 108798,
-      "sha256": "1e6fefd27cb9f112556234bc340b93568f34672bbbb15c52320d662e3cc7f3a8"
+      "sha256": "0187cd1b01327210296099a91e043b69272829674aa03dd3bf3ac76459cb45e7"
     },
     "public/data/kri/viewport-poi-shards/natural/10/641/405.json": {
       "bytes": 164140,
-      "sha256": "06645976ce09347c7ead11216021b779f3072227c007086619083fb86eb531e9"
+      "sha256": "76ca08087c75f79c7c7604273a360548b95e42846a39159d302f5cf5bf257043"
     },
     "public/data/kri/viewport-poi-shards/natural/8/157/100.json": {
       "bytes": 179485,
-      "sha256": "04599359eda9760ea110811b643df9954444a4cc4ead7e227209b5e498e08a5e"
+      "sha256": "b0bbc37143170b29cf7a28a1520e714b3f2bba27a6417d2118d9264638e8ae34"
     },
     "public/data/kri/viewport-poi-shards/natural/8/157/99.json": {
       "bytes": 13612,
-      "sha256": "b7526574bca7c962680d866ad857ad85aeafdc13363f3e95187d2b69b2242d2c"
+      "sha256": "be020747fb524e1ca298587551ed912441f62a6f68afb9834d2406921f56dee9"
     },
     "public/data/kri/viewport-poi-shards/natural/8/158/100.json": {
       "bytes": 431072,
-      "sha256": "408cb10212b02ca03d8394f25c08447ce5ea9967305835276424cfe90a504d12"
+      "sha256": "ae0255ba8e9e9345ac2d513ec289ea18f4446346d59140c330ddc6475c5ff74f"
     },
     "public/data/kri/viewport-poi-shards/natural/8/158/101.json": {
       "bytes": 45385,
-      "sha256": "9ec8f4999f03ec0ce80c76612b21acfef3482b8201c0c6a67e157756e60a261c"
+      "sha256": "b494e494acd277b38f18cda954b98ba273b692a10c4de0600c0a05eac9840f6a"
     },
     "public/data/kri/viewport-poi-shards/natural/8/159/102.json": {
       "bytes": 13734,
-      "sha256": "8c67926a2319b135dd925c865d3e2fe9d5f61632aedfaabe68af7a4be80cc850"
+      "sha256": "75b0b5dafcb9664a21408e9f2d4c0abfa0de3406775531729a88fbef2ab044a5"
     },
     "public/data/kri/viewport-poi-shards/natural/8/160/102.json": {
       "bytes": 96554,
-      "sha256": "a9d0808e8ee7e4e14787e276ebc674cab1ae6ba23b97c4dfd4e68f49408c2cad"
+      "sha256": "07c7fbb28f2b677ef4c66923e4ff032ad7dde9c681c57311d9a1bb963d3e0ad9"
     },
     "public/data/kri/viewport-poi-shards/natural/8/160/99.json": {
       "bytes": 10624,
-      "sha256": "af307d9e1ad0b5a40ccf501ec3ccd126f9c2565a3fb483e1511c1c9b2da88d23"
+      "sha256": "63215ce59b44f561941fcc99bd551fea1a736570c153bb02bea5fac2af79a038"
     },
     "public/data/kri/viewport-poi-shards/natural/9/316/198.json": {
       "bytes": 38273,
-      "sha256": "1602f7ff208b9d77d276ee774372ca67d09268b9cd22470a023b21fb6792732c"
+      "sha256": "e8b9306edc47844deab8e71d576befc5773cf759a3629c8d0a1aa9bd0f6c0887"
     },
     "public/data/kri/viewport-poi-shards/natural/9/316/199.json": {
       "bytes": 247981,
-      "sha256": "88cc4cf1b7f3024c0fbd0d9bc1d0ee63f1fc8e7fa56d22ac5d37ec2d6161f580"
+      "sha256": "f365f85aa65f5879a78cb84a7e81f432d9ad75a09c94e32d7b6ef74ba7ebf461"
     },
     "public/data/kri/viewport-poi-shards/natural/9/317/198.json": {
       "bytes": 146115,
-      "sha256": "8b416f67d3c070b2d61adc3961b51dddae23dc9fb9ee0a1c7af37ebd191921e8"
+      "sha256": "fabb6f584fe3de7dacae694324f1b0a6db06091ff7639e5ef65873131001db4d"
     },
     "public/data/kri/viewport-poi-shards/natural/9/317/199.json": {
       "bytes": 309264,
-      "sha256": "119268edef2971156377d66e77cc1554f8d6872ca6df1f50737ac66753169ffd"
+      "sha256": "34b864661a8544ee5eff7b7f94e14a6eb155e28a2d1d3ab9bc56dd76cbd7d44c"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/198.json": {
       "bytes": 111279,
-      "sha256": "568d4c5edccd80db60055b672f1d0373effb405f32db2c9c4b5a56940af5514f"
+      "sha256": "1bc6858f9e5aea85df07f656f178425e9e4c506d0acac4c8c546528bae8b58f4"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/199.json": {
       "bytes": 403041,
-      "sha256": "94d37a46194c1fbd3606383568bf92ea5094d62e7b0997692489c878dd23b1ed"
+      "sha256": "31457e1a394f29fdf08e2cc6b2e8473dc57809cf1feb26565e728276e076ba7a"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/200.json": {
       "bytes": 269130,
-      "sha256": "d876945f42bab602c5cb88eb970c421d459c5b08cd3f8fcabf92b407690920ab"
+      "sha256": "06dab9938de087e16aa3a6dabfef2cb975bcb0e8af564c5720f3149fa4b54ca6"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/201.json": {
       "bytes": 253611,
-      "sha256": "ab3d8fafbc883a2793b7fe46ec28b451f9236d17e63cf5085f005e695d06a9a5"
+      "sha256": "633c143691566d8f10e76c846fb7e16be2ed61fa303b2dc8a5bb3e3e5b925492"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/202.json": {
       "bytes": 202722,
-      "sha256": "e6c129233e2e680621ec60fbb1b1ddeee9a928ea2dcf856d0fb5e9cd53383727"
+      "sha256": "9074d206be8e7b2525fc035d7f7288abe1d76ddfad11e0b6f6359fce1fa8b2c0"
     },
     "public/data/kri/viewport-poi-shards/natural/9/318/203.json": {
       "bytes": 4674,
-      "sha256": "dcbe790a3018f9edee011e60dd0a295091ca05bf1b31ccf34cbced27c6688933"
+      "sha256": "e9e9a9eb33eb7f80332a147fc33bbb20a6559a3fe0512df291a82b4c4f81a5fb"
     },
     "public/data/kri/viewport-poi-shards/natural/9/319/201.json": {
       "bytes": 426087,
-      "sha256": "5ac8571b8c6ec66a22ffd0a9db3145317d5a833b7dd3eca8a3edaf0201bb48ec"
+      "sha256": "89f849961004f65c2fe9032900d626c0c6c407746afb236e7a7759aa129ff99d"
     },
     "public/data/kri/viewport-poi-shards/natural/9/319/202.json": {
       "bytes": 310365,
-      "sha256": "b88127ad569eb4d4a3f700f5592d226d349ecfe12da616fcc1e4b1839799e0b3"
+      "sha256": "d1664c99ef8704742723db22095bfaa9b71d4cb2ced58743c6b314580c8a9026"
     },
     "public/data/kri/viewport-poi-shards/natural/9/319/203.json": {
       "bytes": 220852,
-      "sha256": "49bfa043d2cff1a2e006000e681233e0930deb59aa971687a87cc8327202db58"
+      "sha256": "3546e6f1717b556bc4b846ce03944a395442f4553474a39922801e63e9674b1b"
     },
     "public/data/kri/viewport-poi-shards/natural/9/320/200.json": {
       "bytes": 160961,
-      "sha256": "91c1b3fe805c4afdee0de36f2989dd4622c49cea7bce4157ab2f9426f3a9f360"
+      "sha256": "be3b1b90a9716390e4a7db69b91297e470b6803e203777cc64ff5d61d23f54e8"
     },
     "public/data/kri/viewport-poi-shards/natural/9/320/203.json": {
       "bytes": 386816,
-      "sha256": "53e74c06be0bec03ef9e67f5aefcd962f68bb516a7358688f0f91d6e23d03772"
+      "sha256": "7838c0db8873d8de7a8322d4389f1f6dd6b42dda3e4562411ba7d4c03770b4ba"
     },
     "public/data/kri/viewport-poi-shards/natural/9/321/201.json": {
       "bytes": 205052,
-      "sha256": "44c25785bee245b085a300c97eeb25896c2b706098d42aa68b8c3b6718daae5c"
+      "sha256": "c0c9b03f570138468d52592783ae0fc81cfbf19a5e7581e93f1845a37ac4ec19"
     },
     "public/data/kri/viewport-poi-shards/natural/9/321/202.json": {
       "bytes": 272907,
-      "sha256": "5490bebfeaee4c463bccde7d05373b75d745751f7bf431623f23aeba771b2325"
+      "sha256": "63954c927b3955b0269ce3e51908287128b0a6191446288dd3172a69cd5990ef"
     },
     "public/data/kri/viewport-poi-shards/natural/9/321/203.json": {
       "bytes": 12409,
-      "sha256": "914bf5cad4047d7bb0faf7efe1fd4451ac06b2d9a7f9b05b131b4fd8e76e8e3b"
+      "sha256": "7df5ed49d832aaf36c80113cec90be4d11af1b0873e1dd177f55be9b5cc67469"
     },
     "public/assets/icons/atlas/academy.svg": {
       "bytes": 1266,
@@ -1325,7 +1325,7 @@
     },
     "public/assets/icons/atlas/bundle.json": {
       "bytes": 663131,
-      "sha256": "86be5a4fea0e47f5f64b0a6f0d36f3afb65d050adf4ebd28b07b5635d6d8ce6c"
+      "sha256": "594e5ce5ff44c31f11d34e736021144b619996a5e7ea5af16b83d2886a1d5d68"
     },
     "public/assets/icons/atlas/bus_station.svg": {
       "bytes": 1335,
@@ -1793,7 +1793,7 @@
     },
     "public/assets/icons/atlas/groups-manifest.json": {
       "bytes": 19604,
-      "sha256": "8b373f079bd8b4bcff762af939869c696efde6a03d2263f3ea3b71de5da35c17"
+      "sha256": "aac6325a647b210ef4afad28773a786ba8b17d9d65a3bc88cab3283618dc4da7"
     },
     "public/assets/icons/atlas/groups/border_route.json": {
       "bytes": 22161,
@@ -2113,7 +2113,7 @@
     },
     "public/assets/icons/atlas/manifest.json": {
       "bytes": 95228,
-      "sha256": "caa23df66c45809511c7771d661b3f888a46e67286730381d9cdad7c23fa9924"
+      "sha256": "789050af4edfd8243d614cd8603a487facbb78ee1f5f9312dfecaa13f06b1df2"
     },
     "public/assets/icons/atlas/market.svg": {
       "bytes": 1313,
@@ -2593,7 +2593,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "95c6bfdbfa0de3724d75f2ea5683986e88e9df20fe696b17584b42aa6c491e86"
+      "sha256": "381941a588615463133199fc17b06342b3b4274501817d9013d1ad1aed95fe90"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,

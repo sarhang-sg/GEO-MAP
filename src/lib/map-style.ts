@@ -2,7 +2,7 @@ import type { FeatureCollection } from "geojson";
 import type { StyleSpecification } from "maplibre-gl";
 import type { SatelliteSource } from "./satellite";
 import type { MapMode } from "./types";
-import { BASE_POI_CLUSTER_COUNT_LAYER_ID, BASE_POI_CLUSTER_LAYER_ID, BASE_POI_DOT_LAYER_ID, BASE_POI_DOT_OPACITY, BASE_POI_SOURCE_ID, NAMED_POI_FILTER, NATURAL_POI_DOT_LAYER_ID, NATURAL_POI_SOURCE_ID, REVIEWED_POI_DOT_LAYER_ID, REVIEWED_POI_SOURCE_ID, SECURITY_POI_DOT_LAYER_ID, SECURITY_POI_SOURCE_ID } from "./poi-source";
+import { POI_CLUSTER_MAX_ZOOM, POI_CLUSTER_EXPANSION_ZOOM, BASE_POI_CLUSTER_COUNT_LAYER_ID, BASE_POI_CLUSTER_LAYER_ID, BASE_POI_DOT_LAYER_ID, BASE_POI_DOT_OPACITY, BASE_POI_SOURCE_ID, NAMED_POI_FILTER, NATURAL_POI_DOT_LAYER_ID, NATURAL_POI_SOURCE_ID, REVIEWED_POI_DOT_LAYER_ID, REVIEWED_POI_SOURCE_ID, SECURITY_POI_DOT_LAYER_ID, SECURITY_POI_SOURCE_ID } from "./poi-source";
 import { dataAssetUrl } from "./release";
 
 export type StaticCoverageSources = {
@@ -54,16 +54,16 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
   // previous viewport-specific thresholds made mobile look broken while desktop looked fine.
   const siteMinZoom = options.lowPowerProfile ? 10.2 : 9.6;
   const buildingMinZoom = options.lowPowerProfile ? 13.6 : 13.2;
-  const localRoadMinZoom = satellite ? 13.35 : 12.85;
+  const localRoadMinZoom = satellite ? 12.5 : 12;
   const tertiaryRoadMinZoom = 7.25;
   const majorRoadMinZoom = 5.0;
-  const poiMinZoom = options.lowPowerProfile ? 10.6 : 10.0;
+  const poiMinZoom = 9.8;
   const roadOpacity = satellite ? 0.92 : 0.98;
 
   const sources: StyleSpecification["sources"] = {
     "kri-vector": { type: "vector", url: options.vectorSourceUrls?.base ?? `pmtiles://${options.pmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
     "kri-road-vector": { type: "vector", url: options.vectorSourceUrls?.roads ?? `pmtiles://${options.roadsPmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
-    [BASE_POI_SOURCE_ID]: { type: "geojson", data: options.deferBasePoiData ? EMPTY_POINT_COLLECTION : dataAssetUrl("data/kri/kri-pois-render.geojson"), attribution: "© OpenStreetMap contributors", cluster: true, clusterMaxZoom: options.lowPowerProfile ? 12 : 13, clusterRadius: options.lowPowerProfile ? 68 : 54, clusterMinPoints: 3 },
+    [BASE_POI_SOURCE_ID]: { type: "geojson", data: options.deferBasePoiData ? EMPTY_POINT_COLLECTION : dataAssetUrl("data/kri/kri-pois-render.geojson"), attribution: "© OpenStreetMap contributors", cluster: true, clusterMaxZoom: POI_CLUSTER_MAX_ZOOM, clusterRadius: options.lowPowerProfile ? 68 : 54, clusterMinPoints: 3 },
     "kri-mask-source": { type: "geojson", data: sourceData("data/kri/kri-outside-mask.geojson", options.coverage?.mask) },
     "kri-boundary-source": { type: "geojson", data: sourceData("data/kri/kri-boundary.geojson", options.coverage?.boundary) },
     "kri-boundary-line-source": { type: "geojson", data: sourceData("data/kri/kri-boundary-line.geojson", options.coverage?.boundaryLine) },
@@ -150,8 +150,8 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
     { id: "kri-road-major-casing", type: "line", source: "kri-road-vector", "source-layer": "streets", minzoom: majorRoadMinZoom, filter: ["match", ["get", "class"], ["motorway", "trunk"], true, false], layout: { "line-cap": "round", "line-join": "round", visibility: options.basemapVisible ? "visible" : "none" }, paint: { "line-color": night ? "#6c4f3a" : "#9d6f40", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 1.05, 10, 2.65, 14, 5.15], "line-opacity": 0.9 } },
     { id: "kri-road-major", type: "line", source: "kri-road-vector", "source-layer": "streets", minzoom: majorRoadMinZoom, filter: ["match", ["get", "class"], ["motorway", "trunk"], true, false], layout: { "line-cap": "round", "line-join": "round", visibility: options.basemapVisible ? "visible" : "none" }, paint: { "line-color": palette.major, "line-width": ["interpolate", ["linear"], ["zoom"], 5, 0.62, 10, 1.58, 14, 3.72], "line-opacity": 1 } },
     { id: "kri-bridges", type: "line", source: "kri-road-vector", "source-layer": "bridges", minzoom: 9.4, layout: { "line-cap": "round", "line-join": "round", visibility: options.basemapVisible ? "visible" : "none" }, paint: { "line-color": "#ffe098", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.45, 14, 2.4], "line-opacity": 0.9 } },
-    { id: BASE_POI_CLUSTER_LAYER_ID, type: "circle", source: BASE_POI_SOURCE_ID, minzoom: options.lowPowerProfile ? 8.8 : 8.2, maxzoom: options.lowPowerProfile ? 12.05 : 12.65, filter: ["has", "point_count"], layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-color": ["step", ["get", "point_count"], "#2789F5", 20, "#2D8CFF", 100, "#3DA7FF", 500, "#4CCBFF"], "circle-radius": ["step", ["get", "point_count"], 10, 20, 14, 100, 18, 500, 23], "circle-stroke-color": night ? "#07111F" : "#FFFFFF", "circle-stroke-width": 1.3, "circle-opacity": 0.88 } },
-    { id: BASE_POI_CLUSTER_COUNT_LAYER_ID, type: "symbol", source: BASE_POI_SOURCE_ID, minzoom: options.lowPowerProfile ? 8.8 : 8.2, maxzoom: options.lowPowerProfile ? 12.05 : 12.65, filter: ["has", "point_count"], layout: { visibility: options.placesVisible ? "visible" : "none", "text-field": ["get", "point_count_abbreviated"], "text-size": 10.5, "text-allow-overlap": true }, paint: { "text-color": "#10142f", "text-halo-color": "rgba(255,255,255,0.45)", "text-halo-width": 0.4 } },
+    { id: BASE_POI_CLUSTER_LAYER_ID, type: "circle", source: BASE_POI_SOURCE_ID, minzoom: options.lowPowerProfile ? 8.8 : 8.2, maxzoom: POI_CLUSTER_EXPANSION_ZOOM, filter: ["has", "point_count"], layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-color": ["step", ["get", "point_count"], "#2789F5", 20, "#2D8CFF", 100, "#3DA7FF", 500, "#4CCBFF"], "circle-radius": ["step", ["get", "point_count"], 10, 20, 14, 100, 18, 500, 23], "circle-stroke-color": night ? "#07111F" : "#FFFFFF", "circle-stroke-width": 1.3, "circle-opacity": 0.88 } },
+    { id: BASE_POI_CLUSTER_COUNT_LAYER_ID, type: "symbol", source: BASE_POI_SOURCE_ID, minzoom: options.lowPowerProfile ? 8.8 : 8.2, maxzoom: POI_CLUSTER_EXPANSION_ZOOM, filter: ["has", "point_count"], layout: { visibility: options.placesVisible ? "visible" : "none", "text-field": ["get", "point_count_abbreviated"], "text-size": 10.5, "text-allow-overlap": true }, paint: { "text-color": "#10142f", "text-halo-color": "rgba(255,255,255,0.45)", "text-halo-width": 0.4 } },
     { id: BASE_POI_DOT_LAYER_ID, type: "circle", source: BASE_POI_SOURCE_ID, minzoom: poiMinZoom, filter: ["all", ["!", ["has", "point_count"]], NAMED_POI_FILTER], layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.15, 12, 2.15, 14, 3.25], "circle-color": palette.poi, "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 0.9, "circle-opacity": BASE_POI_DOT_OPACITY } },
     { id: NATURAL_POI_DOT_LAYER_ID, type: "circle", source: NATURAL_POI_SOURCE_ID, minzoom: poiMinZoom, filter: NAMED_POI_FILTER, layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.15, 12, 2.15, 14, 3.25], "circle-color": palette.poi, "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 0.9, "circle-opacity": BASE_POI_DOT_OPACITY } },
     { id: SECURITY_POI_DOT_LAYER_ID, type: "circle", source: SECURITY_POI_SOURCE_ID, minzoom: Math.max(9.2, poiMinZoom - 0.8), filter: NAMED_POI_FILTER, layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 1.4, 12, 2.6, 14, 3.8], "circle-color": "#e08a73", "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 1.0, "circle-opacity": BASE_POI_DOT_OPACITY } },

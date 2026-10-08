@@ -6,6 +6,7 @@ import { labelKey, languageValue, placeRank, pointKind } from "./geo-format";
 import { localizeNameValue } from "./map-language";
 import type { AdministrativeLabelFeature, Language, LocalityFeature, RoadLabelFeature } from "./types";
 import type { LngLatTuple } from "./location";
+import { mapViewportSize } from "./map-viewport";
 import { yieldToMainThread } from "./performance";
 
 type LabelControllerOptions = {
@@ -82,10 +83,9 @@ export class LabelController {
   }
 
   private captureFrameContext(): void {
-    const canvas = this.map.getCanvas();
-    const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
-    this.frameWidth = Math.max(1, canvas.width / pixelRatio);
-    this.frameHeight = Math.max(1, canvas.height / pixelRatio);
+    const viewport = mapViewportSize(this.map);
+    this.frameWidth = viewport.width;
+    this.frameHeight = viewport.height;
     this.frameZoom = this.map.getZoom();
     this.frameCompact = this.isMobileViewport() || this.lowPowerProfile;
   }
@@ -319,7 +319,7 @@ export class LabelController {
       return;
     }
     const zoom = this.map.getZoom();
-    const roadLabelMinZoom = this.isMobileViewport() || this.lowPowerProfile ? 10.6 : 9.4;
+    const roadLabelMinZoom = 9.4;
     if (zoom < roadLabelMinZoom) {
       this.roadLabelMarkers.forEach((marker) => marker.remove());
       this.roadLabelMarkers.clear();

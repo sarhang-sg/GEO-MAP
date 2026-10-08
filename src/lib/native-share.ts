@@ -1,3 +1,4 @@
+import { copyText } from "./clipboard";
 import type { LngLatTuple } from "./location";
 import { browserEnv } from "./runtime-env";
 
@@ -38,24 +39,6 @@ export function locationDeepLink(options: ShareLocationOptions): string {
   return url.toString();
 }
 
-async function clipboardFallback(value: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    const input = document.createElement("textarea");
-    input.value = value;
-    input.setAttribute("readonly", "");
-    input.style.position = "fixed";
-    input.style.opacity = "0";
-    document.body.append(input);
-    input.select();
-    const copied = document.execCommand("copy");
-    input.remove();
-    return copied;
-  }
-}
-
 export async function shareMapLocation(options: ShareLocationOptions): Promise<boolean> {
   const title = options.title?.trim() || "NAV KURD";
   const text = options.text?.trim() || `${title}\n${options.coordinate[1].toFixed(6)}, ${options.coordinate[0].toFixed(6)}`;
@@ -73,14 +56,14 @@ export async function shareMapLocation(options: ShareLocationOptions): Promise<b
       await navigator.share({ title, text, url });
       return true;
     }
-    return clipboardFallback(`${text}\n${url}`);
+    return copyText(`${text}\n${url}`);
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError" && window.__NAV_KURD_FLUTTER__ !== true) return false;
     const fallback = new URL(CANONICAL_APP_URL);
     fallback.searchParams.set("action", "coordinate");
     fallback.searchParams.set("lng", options.coordinate[0].toFixed(6));
     fallback.searchParams.set("lat", options.coordinate[1].toFixed(6));
-    return clipboardFallback(`${text}\n${fallback.toString()}`);
+    return copyText(`${text}\n${fallback.toString()}`);
   }
 }
 

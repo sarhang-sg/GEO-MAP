@@ -33,15 +33,17 @@ for (const native of [false,true]) {
     localCoreEnabled:native,
     nativeBoolean:()=>false,
     saveNativeBoolean(){},
-    window:{__NAV_KURD_FLUTTER__:native},
-    localStorage:{setItem(){}},
+    window:{__NAV_KURD_FLUTTER__:native,setTimeout(){return 1;},clearTimeout(){}},
+    document:{dispatchEvent(){}},CustomEvent:class {constructor(type,options){this.type=type;this.detail=options.detail;}},
+    localStorage:{setItem(){},removeItem(){}},
     Date,
     UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied'}}
   }, 'LiveLocationController');
   const controller = Object.create(gps.LiveLocationController.prototype);
   Object.assign(controller, {geolocation:{watchPosition(fn){calls++;callback=fn;return 1;},getCurrentPosition(){oneShots++;},clearWatch(){}},getLanguage:()=> 'en',watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,locationReadyAnnounced:false,
     setFollowEnabled(value){this.followEnabled=value;},setMessage(){},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,
-    show(coordinate){this.lastCoordinate=coordinate;},recenter(){if(this.followEnabled) centers++;}
+    trackingButtons:[],acquisitionTimer:null,locationState:'idle',
+    show(coordinate,_heading,accuracy){this.lastCoordinate=coordinate;this.lastAccuracy=accuracy;},recenter(){if(this.followEnabled) centers++;}
   });
   controller.locate(); controller.locate();
   assert.equal(calls,1);assert.equal(oneShots,0);

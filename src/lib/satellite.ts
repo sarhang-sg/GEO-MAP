@@ -17,12 +17,8 @@ export type SatelliteSource =
       probeUrls: readonly string[];
     };
 
-/**
- * MapTiler's documented raster satellite dataset is satellite-v2 and its
- * direct XYZ endpoint uses a .jpg suffix. Earlier NAV KURD releases used
- * satellite-v4 as a direct XYZ path without the suffix; MapTiler answered 404
- * for every tile and MapLibre repeatedly exposed the light vector underlay.
- */
+// Keep the stable default, but let a configured dataset publish its own tile
+// format, native resolution and zoom limits through TileJSON.
 const STABLE_MAPTILER_DATASET_ID = "satellite-v2";
 const SENTINEL2_MIN_ZOOM = 5;
 const SENTINEL2_MAX_NATIVE_ZOOM = 13;
@@ -41,9 +37,7 @@ function secureUrl(value: string): string | null {
 
 function resolveMapTilerId(value: string): string {
   const normalized = clean(value).toLowerCase();
-  // satellite-v3/v4 are accepted as historical configuration aliases, but the
-  // public raster dataset endpoint used by the app is the stable v2 dataset.
-  if (!normalized || /^satellite-v[234]$/.test(normalized)) return STABLE_MAPTILER_DATASET_ID;
+  if (!normalized) return STABLE_MAPTILER_DATASET_ID;
   return /^[a-z0-9][a-z0-9._-]{1,63}$/.test(normalized) ? normalized : STABLE_MAPTILER_DATASET_ID;
 }
 
@@ -69,20 +63,19 @@ function sentinelTemplate(): string {
   return `${appBasePath()}api/sentinel2?z={z}&x={x}&y={y}&day=${sentinelCacheDay()}`;
 }
 
-function mapTilerTileTemplate(key: string, tilesetId: string): string {
+function mapTilerTileJson(key: string, tilesetId: string): string {
   const id = resolveMapTilerId(tilesetId);
-  // The .jpg extension is required by the direct raster dataset endpoint.
-  return `https://api.maptiler.com/tiles/${encodeURIComponent(id)}/{z}/{x}/{y}.jpg?key=${encodeURIComponent(key)}`;
+  return `https://api.maptiler.com/tiles/${encodeURIComponent(id)}/tiles.json?key=${encodeURIComponent(key)}`;
 }
 
 function stableMapTilerSource(key: string, configuredId: string): {
   primary: RasterSatelliteSource;
   probes: readonly string[];
 } {
-  const template = mapTilerTileTemplate(key, configuredId);
+  const url = mapTilerTileJson(key, configuredId);
   return {
-    primary: { kind: "template", url: template, minzoom: 0, maxzoom: 22, tileSize: 256 },
-    probes: [concreteProbeUrl(template)]
+    primary: { kind: "tilejson", url },
+    probes: [url]
   };
 }
 
@@ -159,25 +152,38 @@ function tileJsonProbeTemplate(payload: unknown): string | null {
 }
 
 async function probeUrl(url: string): Promise<boolean> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8_000);
   try {
-    const response = await fetch(url, { method: "GET", cache: "force-cache", mode: "cors" });
+    const response = await fetch(url, { method: "GET", cache: "force-cache", mode: "cors", signal: controller.signal });
     if (!response.ok) return false;
     const contentType = (response.headers.get("content-type") || "").toLowerCase();
     if (contentType.includes("image/")) return true;
     if (!contentType.includes("json")) return false;
     const template = tileJsonProbeTemplate(await response.json());
     if (!template) return false;
-    const tile = await fetch(concreteProbeUrl(template), { method: "GET", cache: "force-cache", mode: "cors" });
+    const tile = await fetch(concreteProbeUrl(template), { method: "GET", cache: "force-cache", mode: "cors", signal: controller.signal });
     return tile.ok && (tile.headers.get("content-type") || "").toLowerCase().includes("image/");
   } catch {
     return false;
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
+const probeCache = new Map<string, { until: number; result: Promise<boolean> }>();
 export async function validateSatelliteSource(source: SatelliteSource): Promise<boolean> {
   if (!source.enabled) return false;
   for (const url of source.probeUrls) {
-    if (await probeUrl(url)) return true;
+    let cached = probeCache.get(url);
+    if (!cached || cached.until < Date.now()) {
+      if (probeCache.size >= 8) probeCache.delete(probeCache.keys().next().value!);
+      cached = { until: Date.now() + 5 * 60_000, result: probeUrl(url) };
+      probeCache.set(url, cached);
+      // Failed probes can recover shortly after connectivity returns.
+      void cached.result.then(ok => { if (!ok && probeCache.get(url) === cached) cached!.until = Date.now() + 15_000; });
+    }
+    if (await cached.result) return true;
   }
   return false;
 }

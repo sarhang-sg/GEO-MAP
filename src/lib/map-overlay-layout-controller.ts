@@ -90,7 +90,14 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
         "--nav-kurd-mobile-control-size", "--nav-kurd-mobile-side-gap", "--nav-kurd-actions-max-height",
         "--nav-kurd-sheet-bottom", "--nav-kurd-sheet-collapsed-bottom", "--nav-kurd-sheet-visibility-lift"
       ]);
-      mapActions.classList.remove("is-sheet-bounded");
+      // Desktop sheets grow with translated text and accessibility fonts too.
+      // Measure only on layout changes, never on map render/zoom frames.
+      const rail = mapActions.getBoundingClientRect();
+      const sheet = mapSheet.getBoundingClientRect();
+      const overlaps = sheet.width > 0 && sheet.height > 0 && sheet.left < rail.right && sheet.right > rail.left;
+      const bottom = overlaps ? Math.min(viewport.height - 16, sheet.top - 12) : viewport.height - 16;
+      setPixelProperty(mapShell, "--nav-kurd-actions-max-height", Math.max(88, bottom - rail.top));
+      mapActions.classList.add("is-sheet-bounded");
     }
   };
 
@@ -112,6 +119,9 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
   window.visualViewport?.addEventListener("scroll", onViewportChange, { passive: true });
   mapSheet.addEventListener("transitionrun", onSheetTransition, { passive: true });
   mapSheet.addEventListener("transitionend", onSheetTransition, { passive: true });
+  const sizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(refresh);
+  sizeObserver?.observe(mapSheet);
+  window.addEventListener("nav-kurd:appearance-change", onViewportChange);
   refresh();
 
   return {
@@ -127,6 +137,8 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
       window.visualViewport?.removeEventListener("scroll", onViewportChange);
       mapSheet.removeEventListener("transitionrun", onSheetTransition);
       mapSheet.removeEventListener("transitionend", onSheetTransition);
+      sizeObserver?.disconnect();
+      window.removeEventListener("nav-kurd:appearance-change", onViewportChange);
       removeProperties(mapShell, [
         "--nav-kurd-visual-viewport-height", "--nav-kurd-mobile-control-size", "--nav-kurd-mobile-side-gap",
         "--nav-kurd-actions-max-height", "--nav-kurd-sheet-bottom", "--nav-kurd-sheet-collapsed-bottom",

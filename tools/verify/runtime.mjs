@@ -62,7 +62,10 @@ assert(/destroy:\s*\(\)\s*=>\s*\{[\s\S]*?persist\(\);[\s\S]*?destroyed\s*=\s*tru
 assert(!main.includes("window.location.reload()"), "Document reload remains in the app runtime.");
 assert(scheduler.includes("NORMAL_FRAME_BUDGET_MS") && scheduler.includes("CONSTRAINED_FRAME_BUDGET_MS") && scheduler.includes('task.priority === "visual"') && scheduler.includes("this.activeGestures.size > 0"), "Central animation/gesture frame budgeting is missing.");
 assert(overlay.includes("requestAnimationFrame") && !overlay.includes("setInterval"), "Overlay layout is not event-coalesced.");
-assert(!overlay.includes("getBoundingClientRect") && !overlay.includes("ResizeObserver"), "Overlay layout still forces rendered-box measurement.");
+// Sheet bounds are needed for desktop translated/accessibility layouts.
+// Reads remain resize/transition-coalesced and must never follow map frames.
+assert(overlay.includes("ResizeObserver(refresh)") && overlay.includes("sizeObserver?.disconnect()")
+  && !/map\.on\(["'](?:render|move|zoom)/u.test(overlay), "Overlay layout measurement escaped its resize/transition lifecycle.");
 assert(!/observe\(card\)/u.test(tutorial) && tutorial.includes("targetInfo") && tutorial.includes("cardRect"), "Tutorial layout is not target-only/coalesced.");
 assert(presence.includes('status === "CHANNEL_ERROR" || status === "TIMED_OUT"') && presence.includes('setState(navigator.onLine ? "connecting" : "offline")'), "Realtime transient recovery can publish a false offline state.");
 assert(!presence.includes('| "error"') && !presence.includes('setState("error")'), "Realtime presence still exposes an unreachable false-red error state.");

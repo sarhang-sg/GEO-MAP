@@ -18,6 +18,7 @@ import { resolveSatelliteSource, validateSatelliteSource } from "./lib/satellite
 import { buildKriMapStyle } from "./lib/map-style";
 import { applyKriStyleState } from "./lib/map-style-state";
 import type { LngLatTuple } from "./lib/location";
+import { installNavigationPreferences } from "./lib/navigation-preferences";
 import { LiveLocationController } from "./lib/live-location-controller";
 import { renderAppShell } from "./lib/app-shell";
 import { installSelectionAndImageLocks, query } from "./lib/dom";
@@ -428,6 +429,7 @@ class KurdistanAtlasController {
         mapExperience.setFocusCoordinate(coordinate);
       }
     });
+    installNavigationPreferences({map:this.map,shell:mapShell,location:this.liveLocation,picker:this.coordinatePicker,getLanguage:()=>this.language,setMessage});
     this.routing = new RoutingController({
       map: this.map,
       animationScheduler: this.animationScheduler,
@@ -1740,7 +1742,7 @@ let mapControlsIdleTimer: number | null = null;
 
 function mapControlsAutoHideSuspended(): boolean {
   return document.hidden || Boolean(document.querySelector(
-    ".nav-tutorial:not([hidden]):not(.is-minimized), .about-dialog:not([hidden]), .user-contribution-studio:not([hidden]), .owner-studio:not([hidden]), .feedback-studio:not([hidden]), .place-detail:not([hidden])"
+    "dialog[open], .map-actions:focus-within, .location-recovery:not([hidden]), .nav-tutorial:not([hidden]):not(.is-minimized), .about-dialog:not([hidden]), .user-contribution-studio:not([hidden]), .owner-studio:not([hidden]), .feedback-studio:not([hidden]), .place-detail:not([hidden])"
   ));
 }
 
@@ -1757,6 +1759,12 @@ function revealMapControls(): void {
 
 function armMapControlsIdle(): void {
   if (mapControlsIdleTimer !== null) window.clearTimeout(mapControlsIdleTimer);
+  mapControlsIdleTimer = null;
+  // Controls stay discoverable by default; auto-hide is an explicit preference.
+  if (document.body.dataset.controlsPreference !== "auto") {
+    revealMapControls();
+    return;
+  }
   mapControlsIdleTimer = window.setTimeout(() => {
     mapControlsIdleTimer = null;
     if (mapControlsAutoHideSuspended()) {
@@ -1766,6 +1774,8 @@ function armMapControlsIdle(): void {
     setMapControlsIdle(true);
   }, MAP_CONTROLS_IDLE_DELAY_MS);
 }
+
+window.addEventListener("nav-kurd:appearance-change", () => armMapControlsIdle());
 
 function noteMapInteraction(): void {
   revealMapControls();

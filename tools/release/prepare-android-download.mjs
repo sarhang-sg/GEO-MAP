@@ -27,7 +27,7 @@ if (metadata.packageName !== "com.navkurd.app") {
 }
 
 metadata.versionCode = release.androidVersionCode;
-metadata.publishedAt = `${release.releaseDate}T00:00:00Z`;
+// Publication time belongs to the verified binary, not an unbuilt source release.
 
 async function sha256(path) {
   const hash = createHash("sha256");
@@ -73,12 +73,14 @@ if (!apkInfo && metadata.artifact) {
       || artifact.signingCertificateSha256 !== "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246") {
     throw new Error("Published Android artifact does not match this release/signing identity.");
   }
+  metadata.publishedAt ||= `${release.releaseDate}T00:00:00Z`;
   metadata.directApkAvailable = true;
   metadata.directApkUrl = artifact.url;
   metadata.apkBytes = artifact.bytes;
   metadata.apkSha256 = artifact.sha256;
   console.log(`Published signed Android download bound to ${release.appVersion}.`);
 } else if (!apkInfo) {
+  metadata.publishedAt = null;
   metadata.directApkAvailable = false;
   metadata.directApkUrl = null;
   delete metadata.apkBytes;
@@ -89,6 +91,7 @@ if (!apkInfo && metadata.artifact) {
     throw new Error(`Android release size is unsafe: ${apkInfo.size} bytes.`);
   }
   await assertApkContainer(apkPath, apkInfo.size);
+  metadata.publishedAt ||= `${release.releaseDate}T00:00:00Z`;
   metadata.directApkAvailable = true;
   metadata.directApkUrl = `/downloads/${apkName}`;
   metadata.apkBytes = apkInfo.size;

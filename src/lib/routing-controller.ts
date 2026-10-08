@@ -1,3 +1,5 @@
+import {routeManeuvers,nextManeuver,maneuverLabel,maneuverArrow,type ProviderStep,type Maneuver} from "./route-maneuvers";
+import {escapeText} from "./geo-format";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { FeatureCollection, LineString, Point } from "geojson";
@@ -32,7 +34,7 @@ type OsrmRoute = {
   distance?: number;
   duration?: number;
   geometry?: LineString;
-  legs?: Array<{ summary?: string }>;
+  legs?: Array<{ summary?: string; steps?:ProviderStep[] }>;
 };
 
 type OsrmResponse = {
@@ -54,7 +56,7 @@ type MapboxRoute = {
   distance?: number;
   duration?: number;
   geometry?: LineString;
-  legs?: Array<{ summary?: string; annotation?: MapboxLegAnnotation }>;
+  legs?: Array<{ summary?: string; annotation?: MapboxLegAnnotation; steps?:ProviderStep[] }>;
 };
 
 type MapboxResponse = {
@@ -108,7 +110,7 @@ const OSRM_BASE_URL = (import.meta.env.VITE_KRI_ROUTING_BASE_URL?.trim() || "htt
 const MAPBOX_BASE_URL = "https://api.mapbox.com/directions/v5";
 const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_KRI_MAPBOX_ACCESS_TOKEN?.trim() || "";
 const ROUTING_PROFILE = import.meta.env.VITE_KRI_ROUTING_PROFILE?.trim() || (ROUTING_PROVIDER === "mapbox" ? "driving-traffic" : "driving");
-const ROUTE_REFRESH_MS = Math.max(4_000, Number(import.meta.env.VITE_KRI_ROUTE_REFRESH_SECONDS || 8) * 1000);
+const ROUTE_REFRESH_MS = Math.max(60_000, Number(import.meta.env.VITE_KRI_ROUTE_REFRESH_SECONDS || 90) * 1000);
 const ROUTE_REROUTE_METERS = Math.max(8, Number(import.meta.env.VITE_KRI_ROUTE_REROUTE_METERS || 25));
 const ROUTE_REQUEST_TIMEOUT_MS = 9_000;
 const ROUTE_FAILURE_RETRY_MS = 12_000;
@@ -231,6 +233,8 @@ type RouteProgressMeasurement = {
   offRouteMeters: number;
 };
 
+const routeLengths = new WeakMap<readonly LngLatTuple[], { lengths: number[]; total: number }>();
+
 function flattenedRouteCoordinates(features: RouteFeatureCollection["features"]): LngLatTuple[] {
   const coordinates: LngLatTuple[] = [];
   for (const feature of features) {
@@ -250,13 +254,19 @@ export function measureRouteProgress(coordinate: LngLatTuple, routeCoordinates: 
   const earthRadius = 6_371_008.8;
   const radians = Math.PI / 180;
   const cosLatitude = Math.max(0.2, Math.cos(coordinate[1] * radians));
-  let totalMeters = 0;
-  const segmentLengths: number[] = [];
-  for (let index = 0; index < routeCoordinates.length - 1; index += 1) {
-    const length = distanceMeters(routeCoordinates[index], routeCoordinates[index + 1]);
-    segmentLengths.push(length);
-    totalMeters += length;
+  let cached = routeLengths.get(routeCoordinates);
+  if (!cached) {
+    const lengths: number[] = [];
+    let total = 0;
+    for (let index = 0; index < routeCoordinates.length - 1; index += 1) {
+      const length = distanceMeters(routeCoordinates[index], routeCoordinates[index + 1]);
+      lengths.push(length);
+      total += length;
+    }
+    cached = { lengths, total };
+    routeLengths.set(routeCoordinates, cached);
   }
+  const { lengths: segmentLengths, total: totalMeters } = cached;
   if (!Number.isFinite(totalMeters) || totalMeters <= 0) return null;
 
   let bestOffRoute = Number.POSITIVE_INFINITY;
@@ -321,6 +331,8 @@ export class RoutingController {
   private readonly getLocationSnapshot: () => LiveLocationDiagnosticSnapshot;
   private readonly setMessage: (message: string, kind?: "normal" | "error" | "success") => void;
   private readonly requestLocation: () => void;
+  private maneuvers: Maneuver[] = [];
+  private offRouteSamples = 0;
   private readonly isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   private readonly onRouteVisualChange: () => void;
   private readonly onRouteStateChange: (active: boolean) => void;
@@ -592,6 +604,7 @@ export class RoutingController {
 
     if (!this.navigating) return;
     const accuracy = Math.max(0, snapshot.accuracyMeters || 0);
+    if (accuracy > 200 || accuracy <= 0) return;
     const arrivalThreshold = Math.max(20, Math.min(55, accuracy + 14));
     if (distanceMeters(snapshot.coordinate, this.destination) <= arrivalThreshold) {
       this.finishNavigationAtDestination();
@@ -606,17 +619,20 @@ export class RoutingController {
       return;
     }
 
-    this.updateLiveRemainingMetrics(snapshot);
+    const measurement = measureRouteProgress(snapshot.coordinate, this.routeCoordinates);
+    this.updateLiveRemainingMetrics(snapshot, measurement);
     if (this.routeRequestInFlight) return;
 
     const moved = this.lastRouteOrigin ? distanceMeters(this.lastRouteOrigin, snapshot.coordinate) : Infinity;
     const elapsed = now - this.lastRouteAt;
-    if (moved >= ROUTE_REROUTE_METERS || elapsed >= ROUTE_REFRESH_MS) this.scheduleRouteRefresh(240, false);
+    const offRoute = measurement && measurement.offRouteMeters > Math.max(ROUTE_REROUTE_METERS, accuracy * 1.8 + 25);
+    this.offRouteSamples = offRoute ? this.offRouteSamples + 1 : 0;
+    const trafficRefresh = ROUTING_PROVIDER === "mapbox" && moved >= 100 && elapsed >= ROUTE_REFRESH_MS;
+    if ((this.offRouteSamples >= 3 && elapsed >= 8_000) || trafficRefresh) this.scheduleRouteRefresh(240, false);
   }
 
-  private updateLiveRemainingMetrics(snapshot: LiveLocationDiagnosticSnapshot): void {
+  private updateLiveRemainingMetrics(snapshot: LiveLocationDiagnosticSnapshot, measurement: RouteProgressMeasurement | null): void {
     if (!snapshot.coordinate || this.routeCoordinates.length < 2 || this.routeProviderDistance <= 0 || this.routeProviderDuration <= 0) return;
-    const measurement = measureRouteProgress(snapshot.coordinate, this.routeCoordinates);
     if (!measurement) return;
     const accuracy = Math.max(0, snapshot.accuracyMeters || 0);
     const credibleOffRouteLimit = Math.max(55, Math.min(180, accuracy * 1.8 + 28));
@@ -721,6 +737,8 @@ export class RoutingController {
     this.routeProviderDistance = 0;
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
+    this.maneuvers = [];
+    this.offRouteSamples = 0;
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -789,6 +807,8 @@ export class RoutingController {
     this.routeProviderDistance = 0;
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
+    this.maneuvers = [];
+    this.offRouteSamples = 0;
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -855,7 +875,7 @@ export class RoutingController {
     hud.hidden = true;
     hud.setAttribute("role", "status");
     hud.setAttribute("aria-live", "polite");
-    hud.innerHTML = `<span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5c2.1-4.3 4.6-6.5 7.5-6.5 2.6 0 4.5-1.9 6.5-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="5" cy="18.5" r="2" stroke="currentColor" stroke-width="1.8"/><path d="m17 4 2-1 1 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><strong data-navigation-distance>—</strong></span>
+    hud.innerHTML = `<div class="route-maneuver" data-route-maneuver hidden></div><span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5c2.1-4.3 4.6-6.5 7.5-6.5 2.6 0 4.5-1.9 6.5-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="5" cy="18.5" r="2" stroke="currentColor" stroke-width="1.8"/><path d="m17 4 2-1 1 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><strong data-navigation-distance>—</strong></span>
       <span class="route-navigation-hud__divider" aria-hidden="true"></span>
       <span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong data-navigation-duration>—</strong></span>
       <small data-navigation-destination></small>`;
@@ -869,6 +889,8 @@ export class RoutingController {
     this.routeProviderDistance = 0;
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
+    this.maneuvers = [];
+    this.offRouteSamples = 0;
     this.routeData = emptyRoute();
     (this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined)?.setData(this.routeData);
     this.stopRouteAnimation();
@@ -894,6 +916,8 @@ export class RoutingController {
     this.routeProviderDistance = 0;
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
+    this.maneuvers = [];
+    this.offRouteSamples = 0;
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -943,7 +967,7 @@ export class RoutingController {
     }
 
     const snapshot = this.getLocationSnapshot();
-    if (!snapshot.coordinate) {
+    if (!snapshot.coordinate || snapshot.accuracyMeters > 650) {
       if (announce) this.setMessage(UI[this.getLanguage()].routeNeedLocation, "error");
       this.requestLocation();
       return;
@@ -1060,6 +1084,7 @@ export class RoutingController {
       alternatives: "false",
       geometries: "geojson",
       overview: "full",
+      steps: "true",
       access_token: MAPBOX_ACCESS_TOKEN
     });
     params.set("annotations", annotations);
@@ -1082,6 +1107,7 @@ export class RoutingController {
       if (response.code !== "Ok" || !route?.geometry || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) {
         return response.code === "NoRoute" || response.code === "NoSegment" ? "no-route" : "unavailable";
       }
+      this.maneuvers = routeManeuvers(route.legs);
       this.commitRoute(origin, destination, route.distance || 0, route.duration || 0, routeFeaturesFromMapbox(route), response.waypoints, response.waypoints?.[1]?.name || route.legs?.[0]?.summary);
       return "success";
     } catch (error) {
@@ -1094,7 +1120,7 @@ export class RoutingController {
     const coordinatePath = `${origin[0]},${origin[1]};${destination[0]},${destination[1]}`;
     const params = new URLSearchParams({
       alternatives: "false",
-      steps: "false",
+      steps: "true",
       geometries: "geojson",
       overview: "full",
       annotations: "duration,distance",
@@ -1108,6 +1134,7 @@ export class RoutingController {
       if (response.code !== "Ok" || !route?.geometry || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) {
         return response.code === "NoRoute" || response.code === "NoSegment" ? "no-route" : "unavailable";
       }
+      this.maneuvers = routeManeuvers(route.legs);
       this.commitRoute(origin, destination, route.distance || 0, route.duration || 0, routeFeaturesFromGeometry(route.geometry, route.distance || 0, route.duration || 0, "unknown"), response.waypoints, response.waypoints?.[1]?.name || route.legs?.[0]?.summary);
       return "success";
     } catch (error) {
@@ -1264,6 +1291,16 @@ export class RoutingController {
       return;
     }
     const language = this.getLanguage();
+    const next = nextManeuver(this.maneuvers, this.routeProviderDistance - this.lastDistance);
+    const maneuver = this.navigationHud.querySelector<HTMLElement>("[data-route-maneuver]");
+    if (maneuver) {
+      maneuver.hidden = !next;
+      if (next) {
+        const distance = formatDistance(Math.max(0, next.atMeters - (this.routeProviderDistance - this.lastDistance)), language);
+        const content = `${maneuverArrow(next)}<div><strong>${escapeText(maneuverLabel(next, language))} · ${escapeText(distance)}</strong><small>${escapeText(next.name)}</small></div>`;
+        if (maneuver.innerHTML !== content) maneuver.innerHTML = content;
+      }
+    }
     this.navigationHudDistance.textContent = formatDistance(this.lastDistance, language);
     this.navigationHudDuration.textContent = formatDuration(this.lastDuration, language);
     this.navigationHudDestination.textContent = this.destinationName || UI[language].routeDestination;

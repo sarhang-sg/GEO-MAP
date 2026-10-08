@@ -62,6 +62,7 @@ import { ownerName } from "./geo-format";
 import { atlasMarkerAssetUrl } from "./atlas-marker-catalog";
 import { prepareAtlasImage } from "./atlas-image-processor";
 import { restoreClampedScroll } from "./mobile-dialog-layout";
+import { copyText } from "./clipboard";
 import { appUrl } from "./app-url";
 import { dialogCloseIcon } from "./dialog-close-icon";
 import { loadSynchronizedNavigationHistory, removePendingNavigationHistory } from "./navigation-history-store";
@@ -490,11 +491,12 @@ export class OwnerStudio {
       const date = new Date(item.updated_at || item.created_at).toLocaleString(language === "ar" ? "ar-IQ" : language === "en" ? "en-GB" : "ckb-IQ");
       return `<article class="owner-feedback" data-status="${escapeText(item.status)}">
         <div class="owner-feedback__heading"><strong>${escapeText(categoryLabelForFeedback(item.category))}</strong><span>${escapeText(feedbackStatus(item.status))}</span></div>
-        <p>${escapeText(item.message)}</p>
+        <p data-text-selectable="true">${escapeText(item.message)}</p>
         <small>${escapeText(date)} · ${escapeText(item.app_version)} · ${escapeText(item.map_data_version)}</small>
         <label class="owner-feedback__note"><span>${escapeText(noteLabel)}</span><textarea data-owner-feedback-note data-id="${escapeText(item.id)}" maxlength="1200">${escapeText(item.admin_note ?? "")}</textarea></label>
-        <details><summary>${escapeText(deviceReportLabel)}</summary><pre>${escapeText(JSON.stringify(item.diagnostics, null, 2))}</pre></details>
+        <details><summary>${escapeText(deviceReportLabel)}</summary><pre data-text-selectable="true">${escapeText(JSON.stringify(item.diagnostics, null, 2))}</pre></details>
         <div class="owner-feedback__actions">
+          <button type="button" data-owner-action="feedback-copy" data-id="${escapeText(item.id)}">${escapeText(language === "en" ? "Copy report" : language === "ar" ? "نسخ التقرير" : "کۆپیکردنی ڕاپۆرت")}</button>
           <button type="button" data-owner-action="feedback-save" data-id="${escapeText(item.id)}">${escapeText(saveNoteLabel)}</button>
           ${item.status !== "in_progress" ? `<button type="button" data-owner-action="feedback-in_progress" data-id="${escapeText(item.id)}">${escapeText(feedbackStatus("in_progress"))}</button>` : ""}
           ${item.status !== "resolved" ? `<button type="button" data-owner-action="feedback-resolved" data-id="${escapeText(item.id)}">${escapeText(feedbackStatus("resolved"))}</button>` : ""}
@@ -752,6 +754,25 @@ export class OwnerStudio {
         await this.options.onPlacesChanged();
         this.setMessage(decision === "approve" ? copy.approvedReviewSuccess : copy.rejectedReviewSuccess, "success");
       }, "list");
+      return;
+    }
+    if (action === "feedback-copy" && id) {
+      const report = this.feedback.find((item) => item.id === id);
+      if (!report) return;
+      const note = this.host.querySelector<HTMLTextAreaElement>(`[data-owner-feedback-note][data-id="${CSS.escape(id)}"]`)?.value ?? report.admin_note ?? "";
+      const copied = await copyText(JSON.stringify({ id: report.id, category: report.category,
+        status: report.status, created_at: report.created_at, message: report.message, admin_note: note,
+        app_version: report.app_version, map_data_version: report.map_data_version, diagnostics: report.diagnostics }, null, 2));
+      const language = this.options.getLanguage();
+      const button = this.host.querySelector<HTMLButtonElement>(`[data-owner-action="feedback-copy"][data-id="${CSS.escape(id)}"]`);
+      // Copy must not rerender and erase an unsaved reply.
+      if (button) {
+        const original = button.textContent;
+        button.textContent = copied
+          ? (language === "en" ? "Copied" : language === "ar" ? "تم النسخ" : "کۆپی کرا")
+          : (language === "en" ? "Select and copy the text" : language === "ar" ? "حدد النص وانسخه" : "دەقەکە هەڵبژێرە و کۆپی بکە");
+        window.setTimeout(() => { if (button.isConnected) button.textContent = original; }, 3000);
+      }
       return;
     }
     if (action === "feedback-save" && id) {

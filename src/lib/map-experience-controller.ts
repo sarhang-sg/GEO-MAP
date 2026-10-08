@@ -1,3 +1,4 @@
+import { mapViewportSize } from "./map-viewport";
 import type { Map as MapLibreMap } from "maplibre-gl";
 
 type MapExperienceOptions = {
@@ -69,10 +70,7 @@ export function installMapExperienceController(options: MapExperienceOptions): M
     const projected = map.project(focusCoordinate);
     // MapLibre already keeps the canvas backing size current. Reading it avoids
     // clientWidth/clientHeight, which can force layout while a gesture is active.
-    const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
-    const canvas = map.getCanvas();
-    const width = Math.max(1, canvas.width / pixelRatio);
-    const height = Math.max(1, canvas.height / pixelRatio);
+    const { width, height } = mapViewportSize(map);
     const padding = 90;
     const inView = projected.x >= -padding && projected.x <= width + padding && projected.y >= -padding && projected.y <= height + padding;
     if (!inView) {

@@ -72,15 +72,15 @@ package_source() {
   mkdir -p "$DOWNLOADS"
   python3 tools/release/package-release.py \
     --output-dir "$DOWNLOADS" \
-    --name NAV-KURD-10.0.0-WEB-SOURCE.zip \
-    --root-name NAV-KURD-10.0.0-WEB
+    --name NAV-KURD-10.4.0-WEB-SOURCE.zip \
+    --root-name NAV-KURD-10.4.0-WEB
   log "Source ZIP and checksums saved in Android Download"
 }
 
 case "${1:-help}" in
   update)
-    nav_installer="$DOWNLOADS/NAV-KURD-10.0.2-WORDING.sh"
-    [[ -f "$nav_installer" ]] || fail "Download NAV-KURD-10.0.2-WORDING.sh into Download first."
+    nav_installer="$DOWNLOADS/NAV-KURD-10.4.0-UPDATE.sh"
+    [[ -f "$nav_installer" ]] || fail "Download NAV-KURD-10.4.0-UPDATE.sh into Download first."
     exec bash "$nav_installer"
     ;;
   setup) setup ;;

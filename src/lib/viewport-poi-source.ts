@@ -169,6 +169,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
   let generation = 0;
   let destroyed = false;
   let lastLeafSignature = "";
+  let residentLeaves: ViewportPoiLeaf[] = [];
   let activeBatchAborter: AbortController | null = null;
   let currentSnapshot: ViewportPoiSnapshot = {
     state: "idle",
@@ -418,11 +419,18 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     if (map.getZoom() + 0.001 < dataset.runtime_minzoom) return;
 
     const leaves = viewportLeaves();
+    const required = new Set(leaves.map((leaf) => leaf.key));
+    let records = leaves.reduce((sum, leaf) => sum + leaf.records, 0);
+    for (const leaf of residentLeaves) {
+      if (required.has(leaf.key) || !shardCache.has(leaf.key)) continue;
+      if (leaves.length >= maxViewportShards + 6 || records + leaf.records > (lowPowerProfile ? 18000 : 32000)) break;
+      leaves.push(leaf); records += leaf.records;
+    }
     announceLeafIcons(leaves);
     // MapLibre owns per-feature/layer zoom visibility. Keeping source identity
     // independent of fractional zoom avoids remove/re-add cluster work when a
     // user zooms out and immediately returns to the same view.
-    const signature = leaves.map((leaf) => leaf.key).join(",");
+    const signature = leaves.map((leaf) => leaf.key).sort().join(",");
     if (signature === lastLeafSignature && currentSnapshot.state === "ready") return;
     const refreshGeneration = ++generation;
     activeBatchAborter?.abort();
@@ -462,6 +470,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     if (loadedByKey.size > 0 && committedFeatures.size === 0) {
       const cachedLoaded = orderedLoaded();
       const cachedBuilt = buildCollection(cachedLoaded);
+      residentLeaves = cachedLoaded.map((entry) => entry.leaf);
       await setData(cachedBuilt.collection);
       if (destroyed || refreshGeneration !== generation) return;
       const iconIds = new Set(currentSnapshot.iconIds);
@@ -491,6 +500,10 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     }
 
     const built = buildCollection(loaded);
+    // Retain loaded leaves before the asynchronous worker transaction. A gesture
+    // can change generation while that transaction is in flight; its data still
+    // reaches the worker and must not be removed by the following zoom subset.
+    residentLeaves = loaded.map((entry) => entry.leaf);
     await setData(built.collection);
     if (destroyed || refreshGeneration !== generation) return;
     const iconIds = new Set(currentSnapshot.iconIds);

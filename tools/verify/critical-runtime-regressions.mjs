@@ -12,16 +12,17 @@ function load(path, globals, exports) {
   return context.api;
 }
 function gpsHarness() {
-  const watches=[], moves=[], messages=[];
-  const gps=load('src/lib/live-location-controller.ts',{localCoreEnabled:false,nativeBoolean:()=>false,saveNativeBoolean(){},distanceMeters:()=>0,Date,window:{performance:{now:()=>10000}},localStorage:{setItem(){},removeItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable'}}},'LiveLocationController');
+  const watches=[], moves=[], messages=[], timers=new Map(); let timerId=0;
+  const gps=load('src/lib/live-location-controller.ts',{localCoreEnabled:false,nativeBoolean:()=>false,saveNativeBoolean(){},distanceMeters:()=>0,Date,window:{performance:{now:()=>10000},setTimeout(fn){timers.set(++timerId,fn);return timerId;},clearTimeout(id){timers.delete(id);}},document:{dispatchEvent(){}},CustomEvent:class {constructor(type,options){this.type=type;this.detail=options.detail;}},localStorage:{setItem(){},removeItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable'}}},'LiveLocationController');
   const c=Object.create(gps.LiveLocationController.prototype);
   Object.assign(c,{watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,lastAccuracy:120,
     geolocation:{watchPosition(success,error,options){watches.push({success,error,options,active:true});return watches.length;},clearWatch(id){watches[id-1].active=false;},getCurrentPosition(){throw Error('Duplicate one-shot request');}},
     getLanguage:()=> 'en',setFollowEnabled(value){this.followEnabled=value;},setMessage(m){messages.push(m);},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,
-    show(coordinate){this.lastCoordinate=coordinate;},recenter(){moves.push(this.lastCoordinate);}
+    trackingButtons:[],acquisitionTimer:null,locationState:'idle',
+    show(coordinate,_heading,accuracy){this.lastCoordinate=coordinate;this.lastAccuracy=accuracy;},recenter(){moves.push(this.lastCoordinate);}
   });
   const fix=(watch=watches.at(-1),age=0)=>watch.success({timestamp:Date.now()-age,coords:{longitude:44.2,latitude:36.2,accuracy:120,speed:0}});
-  return {c,gps,watches,moves,messages,fix};
+  return {c,gps,watches,moves,messages,fix,timers};
 }
 
 {
@@ -205,6 +206,24 @@ for (const code of [1,2,3]) {
   h.c.locate();assert.equal(h.moves.length,2);assert.equal(h.watches.length,2);
 }
 console.log('PASS GPS first feedback, 1000 repeated taps share one request, distinct provider outcomes, retry, stale callbacks/cache, success/cached focus and manual-pan state');
+{
+  const h=gpsHarness();h.c.locate();
+  assert.equal(h.c.state,'acquiring');assert.equal(h.timers.size,1);
+  const first=h.watches[0];
+  [...h.timers.values()][0]();
+  assert.equal(h.c.state,'timed-out');assert.equal(first.active,false);assert.equal(h.timers.size,0);
+  h.fix(first);assert.equal(h.moves.length,0,'Deadline must invalidate late provider success');
+  h.c.locate();h.c.stopTracking();h.fix();
+  assert.equal(h.c.state,'idle');assert.equal(h.moves.length,0);assert.equal(h.timers.size,0);
+  h.c.locate();
+  h.watches.at(-1).success({timestamp:Date.now(),coords:{longitude:44,latitude:36,accuracy:12000,speed:0}});
+  assert.equal(h.c.state,'approximate');assert.equal(h.c.lastAccuracy,12000);assert.equal(h.timers.size,0);
+  assert.equal(h.moves.length,1);assert.ok(!h.messages.includes('ready'),'Coarse network positions must not be announced as precise GPS');
+  h.c.stopTracking();h.c.lastCoordinate=null;h.c.locate();
+  h.watches.at(-1).success({timestamp:Date.now(),coords:{longitude:NaN,latitude:36,accuracy:20,speed:0}});
+  assert.equal(h.c.state,'acquiring');assert.equal(h.moves.length,1);
+  console.log('PASS GPS silent-provider deadline, explicit cancel, late callbacks, honest coarse accuracy and invalid coordinates');
+}
 {
   const h=gpsHarness();const listeners=new Set();const camera=[];
   Object.assign(h.c,{lastCoordinate:[44,36],finishCameraMove(){h.c.programmaticMove=false;},map:{stop(){},off(_,fn){listeners.delete(fn);},once(_,fn){listeners.add(fn);},getZoom:()=>8,easeTo(options){camera.push(options);for(const fn of listeners)fn();listeners.clear();},isMoving:()=>false}});
