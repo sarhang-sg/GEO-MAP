@@ -11,7 +11,8 @@
 - Add desktop shortcuts and mouse guidance. Scroll the control rail when the information card occupies its space.
 - Render real provider turn, U-turn, roundabout and arrival instructions. Filter inaccurate navigation fixes and reduce unnecessary rerouting/traffic refreshes.
 - Add report copying in the owner dashboard, including the unsaved reply and diagnostic details.
-- Correct desktop loading-art sizing and honor reduced-motion preferences.
+- Render the startup loader before downloading the main map module. Keep the operational progress line active under reduced motion, with a still, readable title.
+- Bound the fatal-startup retry wait and keep loading/error text synchronized in all three languages.
 - Respect the configured satellite tileset and use its provider metadata and bounded probe timeouts.
 - Ship the same interface in Android with a clearer widget clock, quieter seasonal artwork and bounded artwork caches.
 - Update active account notifications when language changes, preserve dismissed notifications, and reschedule daily weather at local morning time.

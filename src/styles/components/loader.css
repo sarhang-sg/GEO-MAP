@@ -1,4 +1,4 @@
-/* NAV KURD 10.0.0 boot loader, adapted from the user-supplied Uiverse loader. */
+/* NAV KURD boot loader, adapted from the user-supplied Uiverse loader. */
 .map-loading {
   position: fixed;
   inset: 0;
@@ -162,7 +162,8 @@
 .map-loading__title { font: 800 clamp(20px, 4vw, 28px)/1.5 var(--font-ui); }
 .map-loading__message { font: 600 15px/1.8 var(--font-ui); }
 .map-loading__message[hidden] { display: none; }
-.map-loading[data-phase="failed"] { overflow: auto; touch-action: pan-y; }
+.map-loading[data-phase="failed"],
+.map-loading[data-phase="retry"] { overflow: auto; touch-action: pan-y; }
 .map-loading__retry[hidden] { display: none !important; }
 .map-loading__retry:focus-visible { outline: 2px solid #75d7ff; outline-offset: 3px; }
 .map-loading__retry:disabled { cursor: wait; opacity: .58; }
@@ -186,6 +187,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .map-loading__slice b,
-  .map-loading__line::after { animation-duration: 4s; }
+  /* Keep the title legible; override the global .01ms accessibility rule only
+     for the small operational progress line, never for decorative movement. */
+  .map-loading__slice b { animation: none !important; transform: none; }
+  .map-loading[data-phase="loading"] .map-loading__line::after {
+    animation: nav-kurd-loading-wobble 4s steps(12, end) infinite !important;
+  }
+}
+
+body[data-motion-preference="reduced"] .map-loading__slice b { animation: none !important; transform: none; }
+body[data-motion-preference="reduced"] .map-loading[data-phase="loading"] .map-loading__line::after {
+  animation: nav-kurd-loading-wobble 4s steps(12, end) infinite !important;
 }

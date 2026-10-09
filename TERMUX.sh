@@ -79,8 +79,8 @@ package_source() {
 
 case "${1:-help}" in
   update)
-    nav_installer="$DOWNLOADS/NAV-KURD-10.4.0-UPDATE.sh"
-    [[ -f "$nav_installer" ]] || fail "Download NAV-KURD-10.4.0-UPDATE.sh into Download first."
+    nav_installer="$DOWNLOADS/NAV-KURD-10.4.0-UPDATE-R2.sh"
+    [[ -f "$nav_installer" ]] || fail "Download NAV-KURD-10.4.0-UPDATE-R2.sh into Download first."
     exec bash "$nav_installer"
     ;;
   setup) setup ;;

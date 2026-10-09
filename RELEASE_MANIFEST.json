@@ -11,8 +11,8 @@
     "packageDefinitionSha256": "8aa62f44d0ea2b2e95b844700996ddcb50151355ca3b3ce549a542dc04dce8ba",
     "lockRootDefinitionSha256": "8f1240f5ef5f9ff738592fbf4f64a8fe93eca89a2f5ddca6d9ebc51d24705aa4"
   },
-  "fileCount": 1648,
-  "totalBytes": 287387236,
+  "fileCount": 1649,
+  "totalBytes": 287393747,
   "files": {
     ".env.example": {
       "bytes": 2921,
@@ -167,8 +167,8 @@
       "sha256": "182ef83a943c312e8b64e277215d619441dcf1d64f534790fd5e22bf75d58199"
     },
     "docs/RELEASE_10.4.0.md": {
-      "bytes": 2516,
-      "sha256": "16905d5e5573743d3a4f3606bb2c1e166929f9f1721b4a9da67008c1c9d7e4eb"
+      "bytes": 2705,
+      "sha256": "24e880f09d75acb118557fd5d7b814507e06e53038a347dca46f7a8c0a2adc28"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
@@ -3675,8 +3675,8 @@
       "sha256": "1995374f9a4065765fb57c88504d563d6282c974723f0f24209b45ccc0a970a1"
     },
     "README.md": {
-      "bytes": 5866,
-      "sha256": "de936db47574a0eaf2dfd442d649c6da3d67f3144862f250c2c0cccdac3284c4"
+      "bytes": 5869,
+      "sha256": "a9f5f4cfc01660c73a682c4a60cf1349b38542983be9bdeb02dc820478766e31"
     },
     "release.config.json": {
       "bytes": 1052,
@@ -3695,8 +3695,8 @@
       "sha256": "a460ada93227473a5dc1781a13af473e97058359d49ad773c42a540f466626bf"
     },
     "src/bootstrap.ts": {
-      "bytes": 5677,
-      "sha256": "641c9cc278d4b91905023047e74cc29cd183a38be9dd5545095053c7ffbc8941"
+      "bytes": 6609,
+      "sha256": "b656ca449c2576733cbb9f25a972a521f2cc4b2a25418b7dfb333e551154c5fa"
     },
     "src/lib/active-static-poi-icons.ts": {
       "bytes": 3327,
@@ -3715,8 +3715,8 @@
       "sha256": "1544baf2a0816ec7df9d13ea43e07b69ae62e9e0c879b6706255447f5a46279c"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 26560,
-      "sha256": "cf98b1b5809a66852d4fefe2d42f1cf0a60aa2ea3d1c5c4ba65f4f232d9402cc"
+      "bytes": 25939,
+      "sha256": "04d1c81e089fa3a954666b5bb2965e0fc360f120637fa312cd703363beb0e45e"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -3821,6 +3821,10 @@
     "src/lib/live-location-layers.ts": {
       "bytes": 5977,
       "sha256": "594b931b206c80eaa6d4ede113fefffb0b31072635fa09ad6daa6325f1b699fc"
+    },
+    "src/lib/loading-view.ts": {
+      "bytes": 806,
+      "sha256": "3c6ecd2f4c5425861e2d69fc7c80cc6bb384c1699b676d308daca7815abc23c2"
     },
     "src/lib/locality-language-pack.ts": {
       "bytes": 10941,
@@ -4075,8 +4079,8 @@
       "sha256": "18feb5591b7f9c0b34d1697ab30b409bf9654cde7c06c26d12595aec5b87acaf"
     },
     "src/lib/ui-language.ts": {
-      "bytes": 8333,
-      "sha256": "c3de26b87e8810c2a27c0d2845b0a03b3dd9d7e1ee36b9270895cf03079c326f"
+      "bytes": 8419,
+      "sha256": "35f5d28e8edb8944a8b7bae95466cafb885f5112e9c6111cce528e52ed4789a2"
     },
     "src/lib/ui-shell-controller.ts": {
       "bytes": 2555,
@@ -4091,8 +4095,8 @@
       "sha256": "0cd772c62ffbe72dddc2d571a60be92286043a60b5be756bb9e545729551a015"
     },
     "src/main.ts": {
-      "bytes": 107246,
-      "sha256": "fd25e1ad3cfe388068cbc7bdfdd851ac03cfa2c118157cd6727e67228d4df7de"
+      "bytes": 107321,
+      "sha256": "de59647f995a45ea15a33e705d92f4773b6b5a658aa98c23c765204cb8aae210"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4119,8 +4123,8 @@
       "sha256": "7ddcd8364c9b44de756ae7feaf7281fcd5218cac261ba7203b86b1cda6201a0c"
     },
     "src/styles/components/loader.css": {
-      "bytes": 6897,
-      "sha256": "c1afed16998b94904e599a0f40d2ae4314b298611e01edd8505f46f641f74dad"
+      "bytes": 7513,
+      "sha256": "7874f3ae356ba0881373a7e676ccde0a2c44dbd033d930109aef9eb7bf5acd91"
     },
     "src/styles/components/map-control-rail.css": {
       "bytes": 4789,
@@ -4399,8 +4403,8 @@
       "sha256": "fe52c30114e364943afe9198e93c47716d79d534f984b7fddfae2b49378998a2"
     },
     "TERMUX.sh": {
-      "bytes": 3224,
-      "sha256": "f6ead4305e3abccbe8c3a771e2f04db1a8ff7580459a17898e8dbe1f331e94f1"
+      "bytes": 3230,
+      "sha256": "85974d9d560a38f9bfbc47a198b0ee33d8418c31b7f31f9e60f1f67defeac9ba"
     },
     "tools/android/build-runtime.mjs": {
       "bytes": 4119,
@@ -4579,8 +4583,8 @@
       "sha256": "94de3794f79c5f572681b6b128a307e2968eea76ceccbf537a997a3c1239e7f4"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 22775,
-      "sha256": "ce09a3a0668f55055b84adea9dfe968121d2a259ff9a6b2f89aeaada47d04595"
+      "bytes": 25341,
+      "sha256": "f5f14ad871d7f77b661a34f565f23a9db1c77b90a9e2307c3999c229edce6fca"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 19264,
@@ -4615,8 +4619,8 @@
       "sha256": "721c76f2038d881bfc0619dca20a6433fc1fe8f1833f995f907e8d3ac1036f67"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 19307,
-      "sha256": "efa7347f26d09c6b9b883f09e3618023fa0e04f6f12add8003e70f3448ea5333"
+      "bytes": 19443,
+      "sha256": "d25d3e5aae7abf84717ba208b1afb19e3f0e768338da0eb63a5c74fe9b8d0853"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 4557,
@@ -4647,8 +4651,8 @@
       "sha256": "f78579e97476668d162e61721218a199e5bed5c7100b6a4233341f72cc49ae41"
     },
     "tools/verify/v104-regressions.mjs": {
-      "bytes": 7138,
-      "sha256": "504641b4de6a6f5e64f198c04ef56ba263a7cd69c4456b542bbcd846df6c22e1"
+      "bytes": 8855,
+      "sha256": "59a2663cff20631dd6c4f29ad7ced4ee336b5a79bc2ec9c94699284607b43336"
     },
     "tsconfig.json": {
       "bytes": 694,

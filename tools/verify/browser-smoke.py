@@ -30,6 +30,43 @@ def wait_for_server(timeout: float = 30.0) -> None:
     raise RuntimeError(f"preview server did not become ready: {last_error}")
 
 
+def verify_startup_loader(browser) -> None:
+    # Hold the heavy module: the progress surface must already be visible and
+    # moving, including desktop accessibility settings that disable decoration.
+    for motion in ("no-preference", "reduce"):
+        context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion=motion)
+        page = context.new_page()
+        held = []
+        page.route("**/assets/main-*.js", lambda route: held.append(route))
+        try:
+            page.goto(BASE_URL, wait_until="domcontentloaded", timeout=30_000)
+            page.locator(".map-loading__word").wait_for(state="visible", timeout=10_000)
+            assert held, "The heavy map module was not intercepted"
+            assert page.locator("#mapLoading").count() == 1
+            assert page.locator("#map").count() == 0
+            first = page.evaluate("""() => {
+              const element = document.querySelector('.map-loading__line');
+              return getComputedStyle(element, '::after').transform;
+            }""")
+            page.wait_for_timeout(650)
+            state = page.evaluate("""() => {
+              const line = getComputedStyle(document.querySelector('.map-loading__line'), '::after');
+              const word = getComputedStyle(document.querySelector('.map-loading__slice b'));
+              return { transform: line.transform, iterations: line.animationIterationCount, word: word.transform };
+            }""")
+            assert state["iterations"] == "infinite", f"Startup progress stopped: {state}"
+            assert state["transform"] != first, f"Startup progress did not advance: {state}"
+            if motion == "reduce":
+                assert state["word"] == "none", "Reduced motion must keep the title still"
+        finally:
+            # Resolve intercepted requests before closing their context; leaving
+            # the route pending leaks Playwright's route-handler task.
+            for route in held:
+                route.abort()
+            context.close()
+    print("PASS desktop startup progress before map download, normal and reduced motion")
+
+
 def main() -> int:
     if not (ROOT / "dist/index.html").is_file():
         raise SystemExit("dist/index.html is missing; run npm run build:vercel first.")
@@ -52,6 +89,7 @@ def main() -> int:
             if chromium_path:
                 launch_args["executable_path"] = chromium_path
             browser = playwright.chromium.launch(**launch_args)
+            verify_startup_loader(browser)
             context = browser.new_context(
                 viewport={"width": 390, "height": 844},
                 locale="ku",
@@ -220,6 +258,13 @@ def main() -> int:
             }
             if unreadable_light_ink:
                 raise AssertionError(f"light control icons do not use canonical dark ink: {unreadable_light_ink}")
+            # The contrast probe focused search, which intentionally hides the
+            # mobile sheet. Exercise the real dismissal path before opening it.
+            page.locator("#placeSearch").press("Escape")
+            page.wait_for_function(
+                "() => !document.querySelector('.map-shell')?.classList.contains('has-open-search')",
+                timeout=10_000,
+            )
             first_language_button = page.locator('button[data-language="en"]')
             if not first_language_button.is_visible():
                 sheet_toggle = page.locator("#sheetToggle")

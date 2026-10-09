@@ -110,12 +110,13 @@ export function applyMapUiLanguage(options: MapUiLanguageOptions): void {
   query<HTMLButtonElement>("#threeDButton").title = copy.toggle3D;
   query<HTMLButtonElement>("#threeDButton").setAttribute("aria-label", copy.toggle3D);
   const loadingRoot = document.querySelector<HTMLElement>("#mapLoading");
-  const loadingText = loadingRoot?.querySelector<HTMLElement>("small");
+  const loadingText = loadingRoot?.querySelector<HTMLElement>(".map-loading__message");
   const loadingRetry = document.querySelector<HTMLButtonElement>("#mapLoadingRetry");
   if (loadingText) {
     const phase = loadingRoot?.dataset.phase;
     const offline = document.querySelector<HTMLElement>(".map-shell")?.dataset.networkState === "offline" || navigator.onLine === false;
     loadingText.textContent = phase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard;
+    loadingRoot?.setAttribute("aria-label", loadingText.textContent);
   }
   if (loadingRetry) loadingRetry.textContent = copy.loadingRetry;
   backendState.textContent = isAtlasBackendConfigured ? copy.connected : copy.localBase;

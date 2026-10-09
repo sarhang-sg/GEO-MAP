@@ -1,5 +1,8 @@
 import { UI, languageDirection } from "./lib/i18n";
 import { readAppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
+import { loadingMarkup } from "./lib/loading-view";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./styles.css";
 
 declare global {
   interface Window {
@@ -41,18 +44,25 @@ function renderHandoffFallback(target: string): void {
   document.body.append(link);
 }
 
+async function settleBeforeRetry<T>(operation: Promise<T>, timeoutMs: number): Promise<T | undefined> {
+  let timer: number | undefined;
+  try {
+    return await Promise.race([
+      operation.catch(() => undefined),
+      new Promise<undefined>((resolve) => { timer = window.setTimeout(() => resolve(undefined), timeoutMs); })
+    ]);
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
 async function updateWorkerBeforeRetry(): Promise<void> {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
   const worker = navigator.serviceWorker;
   if (!worker.controller) return;
-  const registration = await worker.getRegistration().catch(() => undefined);
+  const registration = await settleBeforeRetry(worker.getRegistration(), 1500);
   if (!registration) return;
-  let updateTimer: number | undefined;
-  await Promise.race([
-    registration.update().then(() => undefined).catch(() => undefined),
-    new Promise<void>((resolve) => { updateTimer = window.setTimeout(resolve, 45_000); })
-  ]);
-  window.clearTimeout(updateTimer);
+  await settleBeforeRetry(registration.update(), 5000);
   const waiting = registration.waiting;
   if (waiting) {
     const url = new URL(waiting.scriptURL);
@@ -65,7 +75,7 @@ async function updateWorkerBeforeRetry(): Promise<void> {
     let timer: number;
     const onChange = () => { window.clearTimeout(timer); worker.removeEventListener("controllerchange", onChange); resolve(); };
     worker.addEventListener("controllerchange", onChange, { once: true });
-    timer = window.setTimeout(onChange, 45_000);
+    timer = window.setTimeout(onChange, 2000);
   });
 }
 
@@ -103,6 +113,7 @@ function renderStartupFailure(error: unknown): void {
   // connectivity change, or while a healthy map is running. Keep all stored data.
   retry.addEventListener("click", () => {
     retry.disabled = true;
+    retry.textContent = copy.loadingCard;
     const reloadDocument = () => window.location.reload();
     if (rendererUnavailable || typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
       reloadDocument();
@@ -122,6 +133,17 @@ if (handoffTarget) {
   renderHandoffFallback(handoffTarget);
   window.location.replace(handoffTarget);
 } else {
+  // Render before fetching/evaluating the map graph. A slow module download
+  // must not leave an empty desktop window. The main shell then owns the same
+  // shared composition; its readiness gate still controls final dismissal.
+  const app = document.getElementById("app");
+  if (app) {
+    app.innerHTML = loadingMarkup();
+    let language: keyof typeof UI = "ku";
+    try { language = readAppLifecycleSnapshot()?.language ?? "ku"; } catch { /* default */ }
+    const surface = document.getElementById("mapLoading");
+    surface?.setAttribute("aria-label", UI[language].loadingCard);
+  }
   void import("./main").catch((error: unknown) => {
     console.error("NAV KURD startup failed", error);
     renderStartupFailure(error);

@@ -4,6 +4,26 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {stripTypeScriptTypes} from 'node:module';
 const root=new URL('../../',import.meta.url);
+{
+ const source=fs.readFileSync(new URL('src/bootstrap.ts',root),'utf8').split('const handoffTarget =')[0].replace(/^import[^\n]+\n/gm,'');
+ for(const stalled of ['registration','update','activation','none']){
+  let now=0,sequence=0,done=false;const timers=new Map(),listeners=new Map();
+  const registration={update:()=>stalled==='update'?new Promise(()=>{}):Promise.resolve(),waiting:{scriptURL:'https://example.test/sw.js',postMessage(){}},installing:null};
+  if(stalled==='none')registration.waiting=null;
+  const worker={controller:{},getRegistration:()=>stalled==='registration'?new Promise(()=>{}):Promise.resolve(registration),addEventListener:(name,callback)=>listeners.set(name,callback),removeEventListener:name=>listeners.delete(name)};
+  const context=vm.createContext({URL,navigator:{serviceWorker:worker},window:{location:{origin:'https://example.test'},setTimeout:(callback,ms)=>{const id=++sequence;timers.set(id,{callback,at:now+ms});return id;},clearTimeout:id=>timers.delete(id)}});
+  vm.runInContext(stripTypeScriptTypes(source,{mode:'transform'})+'\nglobalThis.retry=updateWorkerBeforeRetry;',context);
+  const completion=context.retry().then(()=>{done=true;});
+  for(let step=0;step<6&&!done;step++){
+   for(let flush=0;flush<20;flush++)await Promise.resolve();
+   if(done)break;
+   assert.ok(timers.size,'A stalled worker request needs an owned deadline');
+   const [id,timer]=[...timers].sort((a,b)=>a[1].at-b[1].at)[0];timers.delete(id);now=timer.at;timer.callback();
+  }
+  await completion;assert.ok(now<=8500);assert.equal(timers.size,0);assert.equal(listeners.size,0);
+ }
+ console.log('PASS startup retry bounds stalled worker discovery/update/activation and cleans timers/listeners');
+}
 function load(path,globals,exports){
  const code=fs.readFileSync(new URL(path,root),'utf8').replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm,'');
  const context=vm.createContext(globals);

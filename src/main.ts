@@ -2,8 +2,6 @@ import {NativeOfflineMapPack} from "./android/offline-map-pack";
 import {initializeLocalPreferences,flushNativePreferences} from "./android/ui-preferences";
 import {coreStatistics,localCoreEnabled,NativeSearchProvider} from './android/local-provider';
 import "./pwa-register";
-import "maplibre-gl/dist/maplibre-gl.css";
-import "./styles.css";
 
 import * as maplibregl from "maplibre-gl";
 import type { LngLatBoundsLike, Map as MapLibreMap, PropertyValueSpecification, StyleSpecification } from "maplibre-gl";
@@ -2008,6 +2006,7 @@ function syncMapLoadingCopy(): void {
   const offline = mapShell.dataset.networkState === "offline" || navigator.onLine === false;
   mapLoading.dataset.phase = mapLoadingPhase;
   mapLoading.setAttribute("role", mapLoadingPhase === "retry" ? "alert" : "status");
+  mapLoading.setAttribute("aria-label", mapLoadingPhase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard);
   mapLoading.dir = languageDirection(currentLanguage());
   if (loadingText) {
     loadingText.textContent = mapLoadingPhase === "retry" ? copy.mapLoadError : offline ? copy.loadingOffline : copy.loadingCard;
