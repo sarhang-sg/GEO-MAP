@@ -1,5 +1,7 @@
-import {routeManeuvers,nextManeuver,maneuverLabel,maneuverArrow,type ProviderStep,type Maneuver} from "./route-maneuvers";
-import {escapeText} from "./geo-format";
+import { measureRouteProgress, routeSlice, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
+export { measureRouteProgress } from "./route-progress";
+import {routeManeuvers,nextManeuver,type ProviderStep,type Maneuver} from "./route-maneuvers";
+import { RouteGuidanceOverlay } from "./route-guidance-overlay";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { FeatureCollection, LineString, Point } from "geojson";
@@ -226,15 +228,6 @@ function routeFeaturesFromMapbox(route: MapboxRoute): RouteFeatureCollection["fe
   }];
 }
 
-type RouteProgressMeasurement = {
-  totalMeters: number;
-  progressedMeters: number;
-  remainingMeters: number;
-  offRouteMeters: number;
-};
-
-const routeLengths = new WeakMap<readonly LngLatTuple[], { lengths: number[]; total: number }>();
-
 function flattenedRouteCoordinates(features: RouteFeatureCollection["features"]): LngLatTuple[] {
   const coordinates: LngLatTuple[] = [];
   for (const feature of features) {
@@ -248,81 +241,6 @@ function flattenedRouteCoordinates(features: RouteFeatureCollection["features"])
   return coordinates;
 }
 
-/** Measure progress along the actual route polyline, not screen pixels. */
-export function measureRouteProgress(coordinate: LngLatTuple, routeCoordinates: readonly LngLatTuple[]): RouteProgressMeasurement | null {
-  if (routeCoordinates.length < 2) return null;
-  const earthRadius = 6_371_008.8;
-  const radians = Math.PI / 180;
-  const cosLatitude = Math.max(0.2, Math.cos(coordinate[1] * radians));
-  let cached = routeLengths.get(routeCoordinates);
-  if (!cached) {
-    const lengths: number[] = [];
-    let total = 0;
-    for (let index = 0; index < routeCoordinates.length - 1; index += 1) {
-      const length = distanceMeters(routeCoordinates[index], routeCoordinates[index + 1]);
-      lengths.push(length);
-      total += length;
-    }
-    cached = { lengths, total };
-    routeLengths.set(routeCoordinates, cached);
-  }
-  const { lengths: segmentLengths, total: totalMeters } = cached;
-  if (!Number.isFinite(totalMeters) || totalMeters <= 0) return null;
-
-  let bestOffRoute = Number.POSITIVE_INFINITY;
-  let bestProgress = 0;
-  let cumulative = 0;
-  for (let index = 0; index < routeCoordinates.length - 1; index += 1) {
-    const start = routeCoordinates[index];
-    const end = routeCoordinates[index + 1];
-    const segmentLength = segmentLengths[index];
-    if (segmentLength <= 0) continue;
-    const ax = (start[0] - coordinate[0]) * radians * earthRadius * cosLatitude;
-    const ay = (start[1] - coordinate[1]) * radians * earthRadius;
-    const bx = (end[0] - coordinate[0]) * radians * earthRadius * cosLatitude;
-    const by = (end[1] - coordinate[1]) * radians * earthRadius;
-    const dx = bx - ax;
-    const dy = by - ay;
-    const denominator = dx * dx + dy * dy;
-    const fraction = denominator > 0 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / denominator)) : 0;
-    const nearestX = ax + fraction * dx;
-    const nearestY = ay + fraction * dy;
-    const offRoute = Math.hypot(nearestX, nearestY);
-    const progress = cumulative + segmentLength * fraction;
-    // At self-intersections prefer the furthest credible progress so remaining
-    // distance does not jump backwards when the GPS fix sits on two segments.
-    if (offRoute < bestOffRoute - 0.5 || (Math.abs(offRoute - bestOffRoute) <= 0.5 && progress > bestProgress)) {
-      bestOffRoute = offRoute;
-      bestProgress = progress;
-    }
-    cumulative += segmentLength;
-  }
-
-  return {
-    totalMeters,
-    progressedMeters: Math.max(0, Math.min(totalMeters, bestProgress)),
-    remainingMeters: Math.max(0, totalMeters - bestProgress),
-    offRouteMeters: bestOffRoute
-  };
-}
-
-function connectedRouteFeatures(
-  features: RouteFeatureCollection["features"],
-  origin: LngLatTuple,
-  destination: LngLatTuple
-): RouteFeatureCollection["features"] {
-  if (!features.length) return features;
-  return features.map((feature, index) => {
-    const coordinates = feature.geometry.coordinates.map((coordinate) => [coordinate[0], coordinate[1]] as LngLatTuple);
-    if (!coordinates.length) return feature;
-    if (index === 0 && distanceMeters(origin, coordinates[0]) > 2) coordinates.unshift([origin[0], origin[1]]);
-    if (index === features.length - 1 && distanceMeters(coordinates[coordinates.length - 1], destination) > 2) {
-      coordinates.push([destination[0], destination[1]]);
-    }
-    return { ...feature, geometry: { ...feature.geometry, coordinates } };
-  });
-}
-
 export class RoutingController {
   private readonly map: MapLibreMap;
   private readonly mapShell: HTMLElement;
@@ -332,7 +250,11 @@ export class RoutingController {
   private readonly setMessage: (message: string, kind?: "normal" | "error" | "success") => void;
   private readonly requestLocation: () => void;
   private maneuvers: Maneuver[] = [];
-  private offRouteSamples = 0;
+  private readonly rerouteConfirmation = new RerouteConfirmation();
+  private readonly guidance: RouteGuidanceOverlay;
+  private progressMeters = 0;
+  private progressAt = 0;
+  private lastRouteLineProgress = -1;
   private readonly isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   private readonly onRouteVisualChange: () => void;
   private readonly onRouteStateChange: (active: boolean) => void;
@@ -386,6 +308,7 @@ export class RoutingController {
 
   constructor(options: RoutingControllerOptions) {
     this.map = options.map;
+    this.guidance = new RouteGuidanceOverlay(this.map);
     this.mapShell = options.mapShell;
     this.routeButton = options.routeButton;
     this.getLanguage = options.getLanguage;
@@ -459,8 +382,8 @@ export class RoutingController {
       }
       this.setDestination(coordinate, UI[this.getLanguage()].routeDestination);
     });
-    window.addEventListener("online", () => this.scheduleRouteRefresh(280, false), { passive: true });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) this.scheduleRouteRefresh(320, false); });
+    window.addEventListener("online", () => this.refreshAfterConnectionRecovery(), { passive: true });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) this.refreshAfterConnectionRecovery(); });
     this.refreshLanguage();
   }
 
@@ -569,6 +492,7 @@ export class RoutingController {
   installLayers(): void {
     if (!this.map.getSource(ROUTE_SOURCE)) this.map.addSource(ROUTE_SOURCE, { type: "geojson", data: this.routeData, lineMetrics: true });
     if (!this.map.getSource(DESTINATION_SOURCE)) this.map.addSource(DESTINATION_SOURCE, { type: "geojson", data: this.pointData });
+    this.guidance.ensureLayers();
     const beforeLocation = this.map.getLayer("location-accuracy-fill") ? "location-accuracy-fill" : undefined;
     if (!this.map.getLayer(ROUTE_LAYER_GLOW)) this.map.addLayer({ id: ROUTE_LAYER_GLOW, type: "line", source: ROUTE_SOURCE, layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#2d8cff", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 6.8, 8, 8.4, 13, 11.2, 17, 14.4], "line-opacity": 0.16, "line-blur": 1.35 } }, beforeLocation);
     if (!this.map.getLayer(ROUTE_LAYER_CASING)) this.map.addLayer({ id: ROUTE_LAYER_CASING, type: "line", source: ROUTE_SOURCE, layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#07091a", "line-width": ["interpolate", ["linear"], ["zoom"], 5, 4.6, 8, 5.9, 13, 8.0, 17, 10.4], "line-opacity": 0.92 } }, beforeLocation);
@@ -604,9 +528,9 @@ export class RoutingController {
 
     if (!this.navigating) return;
     const accuracy = Math.max(0, snapshot.accuracyMeters || 0);
-    if (accuracy > 200 || accuracy <= 0) return;
-    const arrivalThreshold = Math.max(20, Math.min(55, accuracy + 14));
-    if (distanceMeters(snapshot.coordinate, this.destination) <= arrivalThreshold) {
+    if (accuracy > 200 || accuracy <= 0 || (snapshot.sampledAt && Date.now() - snapshot.sampledAt > 10_000)) return;
+    const arrivalThreshold = Math.max(12, Math.min(28, accuracy + 8));
+    if (accuracy <= 30 && this.lastDistance <= arrivalThreshold * 1.5 && distanceMeters(snapshot.coordinate, this.destination) <= arrivalThreshold) {
       this.finishNavigationAtDestination();
       return;
     }
@@ -619,37 +543,51 @@ export class RoutingController {
       return;
     }
 
-    const measurement = measureRouteProgress(snapshot.coordinate, this.routeCoordinates);
-    this.updateLiveRemainingMetrics(snapshot, measurement);
+    const elapsedFix = this.progressAt ? Math.min(15, (now - this.progressAt) / 1000) : 1;
+    const reliableHeading = snapshot.headingConfidence >= 0.65 && snapshot.speedMetersPerSecond >= 1.5
+      && (snapshot.headingSource === "gps-course" || snapshot.headingSource === "movement-course") ? snapshot.headingDegrees : null;
+    const measurement = measureRouteProgress(snapshot.coordinate, this.routeCoordinates, {
+      previousMeters: this.progressMeters,
+      maxAdvanceMeters: Math.max(35, snapshot.speedMetersPerSecond * elapsedFix * 1.8 + accuracy * 2),
+      heading: reliableHeading, accuracy
+    });
+    if (!measurement) return;
+    const threshold = Math.max(this.travelMode === "walking" ? 14 : ROUTE_REROUTE_METERS, Math.min(75, accuracy * 1.3 + 8));
+    const backwards = this.progressAt > 0 && measurement.progressedMeters < this.progressMeters - Math.max(30, accuracy * 2);
+    const offRoute = measurement.offRouteMeters > threshold || backwards;
+    const confirmed = this.rerouteConfirmation.update({ offRoute, coordinate: snapshot.coordinate, accuracy,
+      now, timestamp: snapshot.sampledAt ?? Date.now(), lastRequestAt: this.lastRouteAttemptAt });
+    if (!offRoute && accuracy <= 60) this.updateLiveRemainingMetrics(snapshot, measurement);
+    else this.guidance.clear();
     if (this.routeRequestInFlight) return;
-
     const moved = this.lastRouteOrigin ? distanceMeters(this.lastRouteOrigin, snapshot.coordinate) : Infinity;
-    const elapsed = now - this.lastRouteAt;
-    const offRoute = measurement && measurement.offRouteMeters > Math.max(ROUTE_REROUTE_METERS, accuracy * 1.8 + 25);
-    this.offRouteSamples = offRoute ? this.offRouteSamples + 1 : 0;
-    const trafficRefresh = ROUTING_PROVIDER === "mapbox" && moved >= 100 && elapsed >= ROUTE_REFRESH_MS;
-    if ((this.offRouteSamples >= 3 && elapsed >= 8_000) || trafficRefresh) this.scheduleRouteRefresh(240, false);
+    const trafficRefresh = ROUTING_PROVIDER === "mapbox" && moved >= 100 && now - this.lastRouteAt >= ROUTE_REFRESH_MS;
+    if (confirmed || (!offRoute && trafficRefresh)) this.scheduleRouteRefresh(180, false);
   }
 
-  private updateLiveRemainingMetrics(snapshot: LiveLocationDiagnosticSnapshot, measurement: RouteProgressMeasurement | null): void {
-    if (!snapshot.coordinate || this.routeCoordinates.length < 2 || this.routeProviderDistance <= 0 || this.routeProviderDuration <= 0) return;
-    if (!measurement) return;
-    const accuracy = Math.max(0, snapshot.accuracyMeters || 0);
-    const credibleOffRouteLimit = Math.max(55, Math.min(180, accuracy * 1.8 + 28));
-    if (measurement.offRouteMeters > credibleOffRouteLimit) return;
-
-    const geometryScale = this.routeProviderDistance / measurement.totalMeters;
-    const measuredRemaining = Math.max(0, Math.min(this.routeProviderDistance, measurement.remainingMeters * geometryScale));
-    // GPS noise must not make the remaining distance oscillate upward. A true
-    // detour is handled by the normal route refresh and receives a new route.
-    const nextDistance = this.lastDistance > 0 ? Math.min(this.lastDistance, measuredRemaining) : measuredRemaining;
-    const nextDuration = this.routeProviderDistance > 0
-      ? this.routeProviderDuration * (nextDistance / this.routeProviderDistance)
-      : this.lastDuration;
-    if (Math.abs(this.lastDistance - nextDistance) < 0.8 && Math.abs(this.lastDuration - nextDuration) < 0.8) return;
-    this.lastDistance = nextDistance;
-    this.lastDuration = Math.max(0, nextDuration);
+  private updateLiveRemainingMetrics(snapshot: LiveLocationDiagnosticSnapshot, measurement: RouteProgressMeasurement): void {
+    if (!snapshot.coordinate || this.routeProviderDistance <= 0 || this.routeProviderDuration <= 0) return;
+    this.progressMeters = Math.max(this.progressMeters, measurement.progressedMeters);
+    this.progressAt = window.performance.now();
+    const ratio = Math.max(0, 1 - this.progressMeters / measurement.totalMeters);
+    this.lastDistance = this.routeProviderDistance * ratio;
+    this.lastDuration = this.routeProviderDuration * ratio;
+    this.renderActiveRouteLine();
     this.renderPanel();
+  }
+
+  private renderActiveRouteLine(force = false): void {
+    const source = this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    if (!source) return;
+    if (!this.navigating || this.routeCoordinates.length < 2 || !this.routeData.features.length) {
+      if (force) source.setData(this.routeData);
+      return;
+    }
+    if (!force && Math.abs(this.lastRouteLineProgress - this.progressMeters) < 1.5) return;
+    const coordinates = routeSlice(this.routeCoordinates, this.progressMeters);
+    source.setData({ type: "FeatureCollection", features: coordinates.length >= 2
+      ? [{ ...this.routeData.features[0], geometry: { type: "LineString", coordinates } }] : [] });
+    this.lastRouteLineProgress = this.progressMeters;
   }
 
   refreshLanguage(): void {
@@ -738,7 +676,9 @@ export class RoutingController {
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
     this.maneuvers = [];
-    this.offRouteSamples = 0;
+    this.rerouteConfirmation.reset();
+    this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
+    this.guidance.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -786,6 +726,7 @@ export class RoutingController {
     this.requestLocation();
     this.startRouteAnimation();
     this.startDestinationAnimation();
+    this.updateLocation(snapshot);
     this.renderPanel();
     this.renderNavigationHud();
     this.setMessage(UI[this.getLanguage()].routeStarted, "success");
@@ -808,7 +749,9 @@ export class RoutingController {
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
     this.maneuvers = [];
-    this.offRouteSamples = 0;
+    this.rerouteConfirmation.reset();
+    this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
+    this.guidance.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -875,7 +818,7 @@ export class RoutingController {
     hud.hidden = true;
     hud.setAttribute("role", "status");
     hud.setAttribute("aria-live", "polite");
-    hud.innerHTML = `<div class="route-maneuver" data-route-maneuver hidden></div><span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5c2.1-4.3 4.6-6.5 7.5-6.5 2.6 0 4.5-1.9 6.5-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="5" cy="18.5" r="2" stroke="currentColor" stroke-width="1.8"/><path d="m17 4 2-1 1 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><strong data-navigation-distance>—</strong></span>
+    hud.innerHTML = `<span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18.5c2.1-4.3 4.6-6.5 7.5-6.5 2.6 0 4.5-1.9 6.5-6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="5" cy="18.5" r="2" stroke="currentColor" stroke-width="1.8"/><path d="m17 4 2-1 1 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><strong data-navigation-distance>—</strong></span>
       <span class="route-navigation-hud__divider" aria-hidden="true"></span>
       <span class="route-navigation-hud__metric"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3.2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong data-navigation-duration>—</strong></span>
       <small data-navigation-destination></small>`;
@@ -890,7 +833,9 @@ export class RoutingController {
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
     this.maneuvers = [];
-    this.offRouteSamples = 0;
+    this.rerouteConfirmation.reset();
+    this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
+    this.guidance.clear();
     this.routeData = emptyRoute();
     (this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined)?.setData(this.routeData);
     this.stopRouteAnimation();
@@ -917,7 +862,9 @@ export class RoutingController {
     this.routeProviderDuration = 0;
     this.routeCoordinates = [];
     this.maneuvers = [];
-    this.offRouteSamples = 0;
+    this.rerouteConfirmation.reset();
+    this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
+    this.guidance.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -935,6 +882,14 @@ export class RoutingController {
     this.startDestinationAnimation();
     this.renderPendingPanel();
     void this.calculateRoute(true);
+  }
+
+  private refreshAfterConnectionRecovery(): void {
+    if (!this.destination || this.routeRequestInFlight || document.hidden || navigator.onLine === false) return;
+    const now = window.performance.now();
+    if (this.hasRenderedRoute() && now - this.lastRouteAt < ROUTE_REFRESH_MS) return;
+    if (this.lastRouteAttemptAt > 0 && now - this.lastRouteAttemptAt < 3_000) return;
+    this.scheduleRouteRefresh(280, false);
   }
 
   private scheduleRouteRefresh(delayMs: number, announce: boolean): void {
@@ -1145,7 +1100,10 @@ export class RoutingController {
 
   private commitRoute(origin: LngLatTuple, destination: LngLatTuple, distance: number, duration: number, features: RouteFeatureCollection["features"], waypoints: RouteWaypoint[] | undefined, roadName: unknown): void {
     if (!this.destination || !this.sameCoordinate(this.destination, destination)) return;
-    const connectedFeatures = connectedRouteFeatures(features, origin, destination);
+    // Keep the provider road geometry; never invent straight driving segments to an off-road pin.
+    const connectedFeatures = features;
+    this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
+    this.rerouteConfirmation.reset(); this.guidance.clear();
     this.lastRouteOrigin = origin;
     this.lastRouteAt = window.performance.now();
     this.lastDistance = distance;
@@ -1153,9 +1111,18 @@ export class RoutingController {
     this.routeProviderDistance = distance;
     this.routeProviderDuration = duration;
     this.routeCoordinates = flattenedRouteCoordinates(connectedFeatures);
+    const total = measureRouteProgress(this.routeCoordinates[0] ?? origin, this.routeCoordinates)?.totalMeters ?? 0;
+    for (const step of this.maneuvers) {
+      const expected = distance > 0 ? step.atMeters / distance * total : 0;
+      if (step.coordinate) {
+        const projection = measureRouteProgress(step.coordinate, this.routeCoordinates, { previousMeters: expected, maxAdvanceMeters: 25 });
+        if (projection && projection.offRouteMeters <= 50) step.atMeters = projection.progressedMeters;
+        else step.atMeters = expected;
+      } else step.atMeters = expected;
+    }
     this.nearestRoad = normalizedRoadName(roadName, this.getLanguage());
     this.updateRouteSource(connectedFeatures, waypoints);
-    if (this.navigating) this.startRouteAnimation();
+    if (this.navigating) { this.startRouteAnimation(); this.updateLocation(this.getLocationSnapshot()); }
     else this.stopRouteAnimation();
     this.startDestinationAnimation();
     this.renderPanel();
@@ -1187,16 +1154,14 @@ export class RoutingController {
     if (this.destination) features.push(pointFeature(this.destination, "destination"));
     if (this.pendingDestination) features.push(pointFeature(this.pendingDestination, "candidate"));
     this.pointData = { type: "FeatureCollection", features: [...features, ...preserved] };
-    const routeSource = this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined;
     const pointSource = this.map.getSource(DESTINATION_SOURCE) as maplibregl.GeoJSONSource | undefined;
-    routeSource?.setData(this.routeData);
+    this.renderActiveRouteLine(true);
     pointSource?.setData(this.pointData);
   }
 
   private renderExistingRoute(): void {
-    const routeSource = this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined;
     const pointSource = this.map.getSource(DESTINATION_SOURCE) as maplibregl.GeoJSONSource | undefined;
-    routeSource?.setData(this.routeData);
+    this.renderActiveRouteLine(true);
     pointSource?.setData(this.pointData);
     this.syncRouteVisualState();
     if (this.routeData.features.length > 0) {
@@ -1209,6 +1174,7 @@ export class RoutingController {
 
   private clearRouteLineOnly(): void {
     this.routeData = emptyRoute();
+    this.guidance.clear();
     const routeSource = this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined;
     routeSource?.setData(this.routeData);
     this.stopRouteAnimation();
@@ -1288,19 +1254,15 @@ export class RoutingController {
   private renderNavigationHud(): void {
     if (!this.navigating || !this.destination) {
       this.navigationHud.hidden = true;
+      this.guidance.clear();
       return;
     }
     const language = this.getLanguage();
-    const next = nextManeuver(this.maneuvers, this.routeProviderDistance - this.lastDistance);
-    const maneuver = this.navigationHud.querySelector<HTMLElement>("[data-route-maneuver]");
-    if (maneuver) {
-      maneuver.hidden = !next;
-      if (next) {
-        const distance = formatDistance(Math.max(0, next.atMeters - (this.routeProviderDistance - this.lastDistance)), language);
-        const content = `${maneuverArrow(next)}<div><strong>${escapeText(maneuverLabel(next, language))} · ${escapeText(distance)}</strong><small>${escapeText(next.name)}</small></div>`;
-        if (maneuver.innerHTML !== content) maneuver.innerHTML = content;
-      }
-    }
+    const next = nextManeuver(this.maneuvers, this.progressMeters);
+    if (!this.rerouteConfirmation.pending) this.guidance.update(next, this.routeCoordinates, next?.atMeters ?? 0,
+      next ? next.atMeters - this.progressMeters : Infinity, language,
+      formatDistance(Math.max(0, (next?.atMeters ?? 0) - this.progressMeters), language));
+    else this.guidance.clear();
     this.navigationHudDistance.textContent = formatDistance(this.lastDistance, language);
     this.navigationHudDuration.textContent = formatDuration(this.lastDuration, language);
     this.navigationHudDestination.textContent = this.destinationName || UI[language].routeDestination;

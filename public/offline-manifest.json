@@ -1,6 +1,6 @@
 {
   "schema": "NAV KURD Offline Runtime Manifest v2",
-  "release": "10.4.0",
+  "release": "10.4.1",
   "assets": [
     {
       "path": "assets/icons/atlas/groups-manifest.json",

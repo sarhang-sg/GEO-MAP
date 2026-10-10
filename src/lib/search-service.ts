@@ -207,6 +207,20 @@ export class SearchService {
     return this.mergeChoices([...owners, ...bases, ...locals]);
   }
 
+  /** Weather uses locality names/admin metadata only, without loading POI shards. */
+  async searchWeatherLocalities(term: string): Promise<LocalityFeature[]> {
+    const language = this.getLanguage();
+    if (term.trim().length < 2) return [];
+    if (localCoreEnabled) {
+      const result = await nativeLocalities(term, language, false);
+      return language === this.getLanguage() ? result.choices.flatMap(choice => choice.type === "local" ? [choice.feature] : []) : [];
+    }
+    await this.warmLocalities();
+    if (language !== this.getLanguage()) return [];
+    const index = this.localityIndexes.get(language) ?? this.quickIndexes.get(language);
+    return index ? this.searchLocalities(this.prepareQuery(term), index).flatMap(choice => choice.type === "local" ? [choice.feature] : []) : [];
+  }
+
   private async searchNative(term:string,quick:boolean):Promise<SearchChoice[]> {
     const language=this.getLanguage(),query=this.prepareQuery(term);
     if(query.phrase.length<2&&query.tokens.length===0)return [];

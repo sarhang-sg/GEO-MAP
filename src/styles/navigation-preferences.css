@@ -32,14 +32,30 @@ body[data-font-preference="system"] { --font-arabic: Tahoma,Arial,sans-serif; --
 body[data-font-preference="system"][data-language="en"] { --font-ui: var(--font-latin); --font-map-label: var(--font-latin); }
 body[data-text-size="large"] :is(.locality-label,.road-label,.administrative-label) { font-size: 15px; }
 body[data-text-size="large"] :is(.place-popup,.place-detail,.map-sheet,.navigation-preferences,.location-recovery) { font-size: 16px; }
-body[data-accent] :is(.search-card input,.navigation-preferences select,.owner-studio input) { accent-color: var(--nav-user-accent,#2789f5); }
-body[data-accent] .map-shell :is(.owner-studio__primary,.route-panel__start,.nav-tutorial__next) { background: var(--nav-user-accent,#2789f5); color: #fff; }
 body[data-motion-preference="reduced"] .map-shell :is(.map-edge-frame,.map-focus-vignette,.feedback-quick-button__pulse,.brand-card__aura) { animation: none !important; transition: none !important; }
 .owner-feedback [data-text-selectable="true"] { user-select: text; -webkit-user-select: text; white-space: pre-wrap; overflow-wrap: anywhere; }
-.route-maneuver { display: flex; align-items: center; gap: 10px; min-width: 0; flex-basis: 100%; padding: 8px 0; }
-.route-maneuver > svg { flex: 0 0 38px; width: 38px; height: 38px; }
-.route-maneuver > div { display: grid; min-width: 0; }
-.route-maneuver small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px; }
-.route-navigation-hud:has(.route-maneuver:not([hidden])) { flex-wrap: wrap; }
 @media (max-width: 420px) { .navigation-preferences dl { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .location-recovery[data-state="acquiring"] p::before { animation: none; border-style: dotted; } }
+
+.weather-directory { width: min(840px, calc(100vw - 28px)); }
+.weather-directory input[type="search"] { box-sizing: border-box; width: 100%; min-height: 46px; padding: 9px 12px; border: 1px solid var(--nk-border,#7891ad66); border-radius: 12px; background: var(--nk-elevated,var(--surface)); color: inherit; font: inherit; }
+.weather-directory__content { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 16px; }
+.weather-directory__list { max-height: 52dvh; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.weather-directory .weather-directory__place { width: 100%; display: grid; gap: 2px; margin-bottom: 7px; text-align: start; }
+.weather-directory__place small { color: var(--ink); opacity: .8; font-size: 11px; }
+.weather-directory input::placeholder { color: var(--ink) !important; opacity: .7; }
+.weather-directory__place[aria-pressed="true"] { border-color: var(--nk-primary,#2d8cff); background: var(--nk-elevated,#204369); }
+.weather-directory__details { min-width: 0; }
+.weather-directory__details h3 { margin: 0 0 4px; color: inherit; font-size: 18px; }
+.weather-directory .weather-directory__path, .weather-directory .weather-directory__status { font-size: 12px; margin: 8px 0 12px; }
+.weather-directory .place-weather__body { max-height: 30dvh; }
+.weather-directory .place-weather__copy strong { font-size: 27px !important; }
+.weather-directory .place-weather__visual, .weather-directory .place-weather__visual img { width: 44px; height: 44px; }
+.weather-directory .place-weather__details { font-size: 13px; }
+.weather-directory .place-weather__copy small { color: var(--ink) !important; opacity: .8; font-size: 12px !important; }
+.weather-directory .place-weather__copy .place-weather__timestamp { color: var(--ink) !important; font-size: 11px !important; }
+.route-map-guidance { max-width: min(250px,68vw); border: 1px solid var(--nk-border,#7691b4); border-radius: 10px; padding: 5px 10px; background: var(--nk-surface,#071a30); color: var(--nk-text,#fff); box-shadow: 0 3px 12px #0004; font: 700 12px/1.5 var(--font-ui); text-align: center; pointer-events: none; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .weather-directory__content { grid-template-columns: minmax(0,1fr); }
+  .weather-directory__list { max-height: 25dvh; }
+}

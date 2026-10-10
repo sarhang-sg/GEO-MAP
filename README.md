@@ -30,8 +30,8 @@ NAV KURD is a polished MapLibre-based mapping platform focused on South Kurdista
 
 | Field | Value |
 |---|---|
-| Application | `10.4.0` |
-| Release | `2026-10-08-nav-kurd-v10.4.0` |
+| Application | `10.4.1` |
+| Release | `2026-10-09-nav-kurd-v10.4.1` |
 | Map edition | `2027` |
 | Map data | `2026-07-22-nav-kurd-systematic-dedupe-2027` |
 | Cache schema | `91` |
@@ -109,13 +109,13 @@ A downloaded pack becomes usable only after all configured files pass size, head
 - CSP, HSTS, frame denial, MIME protection and bounded permissions are defined in hosting configuration.
 - Sensitive local files, signing credentials, caches, dependencies and build output are excluded from source packages.
 
-See [10.4.0 release notes](docs/RELEASE_10.4.0.md), [Security](docs/SECURITY.md),
+See [10.4.1 release notes](docs/RELEASE.md), [Security](docs/SECURITY.md),
 [Architecture](docs/ARCHITECTURE.md), [Data](docs/DATA.md),
 [Offline](docs/OFFLINE.md) and [Deployment](docs/DEPLOYMENT.md).
 
 ## Termux and coordinated deployment
 
-Run the supplied `NAV-KURD-10.4.0-UPDATE-R2.sh` in Termux. It verifies both repository baselines before any push, updates Android through the established signing workflow, downloads only the verified APK, and then updates the web release through the existing Vercel Git integration. Interrupted downloads resume. Unexpected remote commits stop the update. See the release-kit README for the read-only `--verify-only` option.
+Run the supplied `NAV-KURD-10.4.1-UPDATE.sh` in Termux. It verifies both repository baselines before any push, updates Android through the established signing workflow, downloads only the verified APK, and then updates the web release through the existing Vercel Git integration. Interrupted downloads resume. Unexpected remote commits stop the update. See the release-kit README for the read-only `--verify-only` option.
 
 For a local Web build, extract the flat Web source ZIP into a private directory under the Termux home directory and use `bash TERMUX.sh setup`, `bash TERMUX.sh check` and `bash TERMUX.sh build`. Shared Android storage does not support the symlinks needed by node_modules. Local builds need the project's public VITE configuration; private server secrets stay in the existing deployment environment.
 

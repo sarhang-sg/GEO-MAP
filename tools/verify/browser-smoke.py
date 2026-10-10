@@ -52,12 +52,13 @@ def verify_startup_loader(browser) -> None:
             state = page.evaluate("""() => {
               const line = getComputedStyle(document.querySelector('.map-loading__line'), '::after');
               const word = getComputedStyle(document.querySelector('.map-loading__slice b'));
-              return { transform: line.transform, iterations: line.animationIterationCount, word: word.transform };
+              return { transform: line.transform, iterations: line.animationIterationCount, word: word.transform, wordIterations: word.animationIterationCount, wordDuration: word.animationDuration };
             }""")
             assert state["iterations"] == "infinite", f"Startup progress stopped: {state}"
             assert state["transform"] != first, f"Startup progress did not advance: {state}"
             if motion == "reduce":
-                assert state["word"] == "none", "Reduced motion must keep the title still"
+                assert all(value == "infinite" for value in state["wordIterations"].split(", ")), "The original sliced loader must keep advancing"
+                assert all(value == "4s" for value in state["wordDuration"].split(", ")), "Reduced motion slows the loader"
         finally:
             # Resolve intercepted requests before closing their context; leaving
             # the route pending leaks Playwright's route-handler task.
@@ -150,7 +151,7 @@ def main() -> int:
                 else:
                     direct_probe = page.evaluate(
                     """async expected => {
-                      const response = await fetch('/downloads/NAV-KURD-10.4.0.apk', {
+                      const response = await fetch('/downloads/NAV-KURD-10.4.1.apk', {
                         method: 'HEAD', cache: 'no-store', redirect: 'error'
                       });
                       return {

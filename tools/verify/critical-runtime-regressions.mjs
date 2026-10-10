@@ -18,7 +18,7 @@ function gpsHarness() {
   Object.assign(c,{watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,lastAccuracy:120,
     geolocation:{watchPosition(success,error,options){watches.push({success,error,options,active:true});return watches.length;},clearWatch(id){watches[id-1].active=false;},getCurrentPosition(){throw Error('Duplicate one-shot request');}},
     getLanguage:()=> 'en',setFollowEnabled(value){this.followEnabled=value;},setMessage(m){messages.push(m);},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,
-    trackingButtons:[],acquisitionTimer:null,locationState:'idle',
+    trackingButtons:[],acquisitionTimer:null,locationState:'idle',map:{getLayer:()=>null},
     show(coordinate,_heading,accuracy){this.lastCoordinate=coordinate;this.lastAccuracy=accuracy;},recenter(){moves.push(this.lastCoordinate);}
   });
   const fix=(watch=watches.at(-1),age=0)=>watch.success({timestamp:Date.now()-age,coords:{longitude:44.2,latitude:36.2,accuracy:120,speed:0}});

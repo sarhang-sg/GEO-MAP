@@ -71,6 +71,7 @@ type ViewportPoiSourceOptions = {
   sourceId: string;
   datasetId: ViewportPoiDatasetId;
   manifestUrl?: string;
+  minimumVisibleZoom?: number;
   diagnosticsHost?: HTMLElement;
   lowPowerProfile: boolean;
   getVisible: () => boolean;
@@ -416,7 +417,7 @@ export function installViewportPoiSourceController(options: ViewportPoiSourceOpt
     // Keep the current source resident while layers are below their display
     // threshold. Zooming back in is therefore instant and does not re-send or
     // re-parse the same data.
-    if (map.getZoom() + 0.001 < dataset.runtime_minzoom) return;
+    if (map.getZoom() + 0.001 < (options.minimumVisibleZoom ?? dataset.runtime_minzoom)) return;
 
     const leaves = viewportLeaves();
     const required = new Set(leaves.map((leaf) => leaf.key));

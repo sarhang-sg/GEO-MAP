@@ -55,19 +55,19 @@ const TIER_CONFIG: Record<AtlasMarkerTier, {
 }> = {
   landmark: {
     layerId: "atlas-place-marker-landmark",
-    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 9.1 : 8.65) : (lowPowerProfile ? 7.4 : 6.85),
+    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 7.4 : 7.0) : (lowPowerProfile ? 7.15 : 6.85),
     sizeStops: [7, 0.50, 13, 0.68, 18, 0.86],
     padding: (lowPowerProfile) => lowPowerProfile ? 6 : 4
   },
   community: {
     layerId: "atlas-place-marker-community",
-    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 10.2 : 9.7) : (lowPowerProfile ? 8.9 : 8.35),
+    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 8.9 : 8.5) : (lowPowerProfile ? 8.65 : 8.35),
     sizeStops: [8.5, 0.46, 14, 0.63, 18, 0.78],
     padding: (lowPowerProfile) => lowPowerProfile ? 7 : 5
   },
   local: {
     layerId: "atlas-place-marker-local",
-    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 11.8 : 11.2) : (lowPowerProfile ? 10.5 : 9.8),
+    minZoom: (mobile, lowPowerProfile) => mobile ? (lowPowerProfile ? 10.7 : 10.2) : (lowPowerProfile ? 10.5 : 9.8),
     sizeStops: [10, 0.42, 14.5, 0.57, 18, 0.70],
     padding: (lowPowerProfile) => lowPowerProfile ? 8 : 6
   }
@@ -156,12 +156,17 @@ export function installAtlasMarkerIconController(options: AtlasMarkerIconControl
       restoreFallback();
       return;
     }
-    map.setPaintProperty(FALLBACK_LAYER_ID, "circle-opacity", [
-      "case",
-      ["in", ["get", "category"], ["literal", profiles.map((profile) => profile.id)]],
-      0,
-      1
-    ] as unknown as number);
+    // Keep a visible, clickable dot until the category's icon can appear.
+    // Collision-hidden symbols retain a quiet fallback even above that zoom.
+    const tiers = (["landmark", "community", "local"] as const).map((tier) => ({
+      zoom: TIER_CONFIG[tier].minZoom(isMobileViewport(), lowPowerProfile),
+      ids: profiles.filter((profile) => profile.tier === tier).map((profile) => profile.id)
+    }));
+    const stops = tiers.flatMap(({ zoom }) => [
+      zoom,
+      ["case", ["in", ["get", "category"], ["literal", tiers.filter((tier) => tier.zoom <= zoom).flatMap((tier) => tier.ids)]], 0.2, 1]
+    ]);
+    map.setPaintProperty(FALLBACK_LAYER_ID, "circle-opacity", ["step", ["zoom"], 1, ...stops] as unknown as number);
   };
 
   const makeLayer = (tier: AtlasMarkerTier, profiles: readonly AtlasMarkerProfile[]): SymbolLayerSpecification => {

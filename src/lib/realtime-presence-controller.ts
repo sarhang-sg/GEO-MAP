@@ -80,6 +80,7 @@ export function installRealtimePresenceController(options: RealtimePresenceContr
   let channel: RealtimeChannel | null = null;
   let activePresenceKey: string | null = null;
   let connectInFlight: Promise<void> | null = null;
+  let disconnectInFlight: Promise<void> | null = null;
   let identityRefreshInFlight: Promise<void> | null = null;
   let state: PresenceConnectionState = atlasSupabase ? "connecting" : "disabled";
   let onlineCount = 0;
@@ -144,22 +145,28 @@ export function installRealtimePresenceController(options: RealtimePresenceContr
 
   const currentPresenceKey = (): string => `${viewerKey}:${tabKey}`;
 
-  const disconnect = async (): Promise<void> => {
+  const disconnect = (): Promise<void> => {
+    // An online event can arrive before the offline unsubscribe has finished.
+    // Wait for that removal before requesting the same topic again: Supabase
+    // reuses registered channels and rejects presence listeners after subscribe.
+    if (disconnectInFlight) return disconnectInFlight;
     const previous = channel;
     channel = null;
     activePresenceKey = null;
-    if (!previous || !atlasSupabase) return;
-    try { await previous.untrack(); } catch { /* best effort */ }
-    try {
-      await atlasSupabase.removeChannel(previous);
-    } catch {
-      // A timed-out unsubscribe can leave the topic in RealtimeClient.channels.
-      // `channel(topic)` would then reuse that joined instance and reject new
-      // presence callbacks. Hard teardown is safe because this instance has
-      // already been detached from the controller above.
-    } finally {
-      previous.teardown();
-    }
+    const client = atlasSupabase;
+    if (!previous || !client) return Promise.resolve();
+    disconnectInFlight = (async () => {
+      try {
+        // Leaving the channel also removes its presence. A separate untrack
+        // would wait for a network acknowledgement while the device is offline.
+        await client.removeChannel(previous);
+      } catch {
+        // Teardown releases a timed-out channel and its reconnect timers.
+      } finally {
+        previous.teardown();
+      }
+    })().finally(() => { disconnectInFlight = null; });
+    return disconnectInFlight;
   };
 
   const connect = async (): Promise<void> => {
@@ -193,7 +200,7 @@ export function installRealtimePresenceController(options: RealtimePresenceContr
       const epoch = ++joinEpoch;
       setState("connecting");
       await disconnect();
-      if (destroyed || epoch !== joinEpoch || desiredKey !== currentPresenceKey()) return;
+      if (destroyed || !navigator.onLine || epoch !== joinEpoch || desiredKey !== currentPresenceKey()) return;
 
       const nextChannel = atlasSupabase.channel(CHANNEL_TOPIC, {
         config: { presence: { key: desiredKey } }
@@ -230,7 +237,11 @@ export function installRealtimePresenceController(options: RealtimePresenceContr
             scheduleReconnect();
           }
         });
-    })().finally(() => {
+    })().catch(() => {
+      if (destroyed) return;
+      setState(navigator.onLine ? "connecting" : "offline");
+      scheduleReconnect(true);
+    }).finally(() => {
       connectInFlight = null;
     });
 

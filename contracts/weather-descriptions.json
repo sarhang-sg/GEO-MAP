@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "source": "https://open-meteo.com/en/docs#weathervariables",
+  "clearDay": {
+    "ku": "خۆرەتاو",
+    "ar": "مشمس",
+    "en": "Sunny"
+  },
+  "unavailable": {
+    "ku": "کەشوھەوا بەردەست نییە.",
+    "ar": "الطقس غير متاح",
+    "en": "Weather unavailable"
+  },
+  "codes": {
+    "0": {
+      "kind": "clear",
+      "ku": "ئاسمانی ڕوون",
+      "ar": "سماء صافية",
+      "en": "Clear sky"
+    },
+    "1": {
+      "kind": "mainly-clear",
+      "ku": "بە زۆری ئاسمان ڕوونە",
+      "ar": "صحو غالباً",
+      "en": "Mainly clear"
+    },
+    "2": {
+      "kind": "partly-cloudy",
+      "ku": "نیمچە هەوراو",
+      "ar": "غائم جزئياً",
+      "en": "Partly cloudy"
+    },
+    "3": {
+      "kind": "cloudy",
+      "ku": "ئاسمان هەور دایپۆشیوە",
+      "ar": "ملبد بالغيوم",
+      "en": "Overcast"
+    },
+    "45": {
+      "kind": "fog",
+      "ku": "تەم",
+      "ar": "ضباب",
+      "en": "Fog"
+    },
+    "48": {
+      "kind": "fog",
+      "ku": "تەمی سەهۆڵبەندوو",
+      "ar": "ضباب متجمد",
+      "en": "Depositing rime fog"
+    },
+    "51": {
+      "kind": "drizzle",
+      "ku": "نمەبارانی سووک",
+      "ar": "رذاذ خفيف",
+      "en": "Light drizzle"
+    },
+    "53": {
+      "kind": "drizzle",
+      "ku": "نمەبارانی مامناوەند",
+      "ar": "رذاذ متوسط",
+      "en": "Moderate drizzle"
+    },
+    "55": {
+      "kind": "drizzle",
+      "ku": "نمەبارانی چڕ",
+      "ar": "رذاذ كثيف",
+      "en": "Dense drizzle"
+    },
+    "56": {
+      "kind": "freezing-rain",
+      "ku": "نمەبارانی بەستووی سووک",
+      "ar": "رذاذ متجمد خفيف",
+      "en": "Light freezing drizzle"
+    },
+    "57": {
+      "kind": "freezing-rain",
+      "ku": "نمەبارانی بەستووی چڕ",
+      "ar": "رذاذ متجمد كثيف",
+      "en": "Dense freezing drizzle"
+    },
+    "61": {
+      "kind": "rain",
+      "ku": "بارانی سووک",
+      "ar": "مطر خفيف",
+      "en": "Light rain"
+    },
+    "63": {
+      "kind": "rain",
+      "ku": "بارانی مامناوەند",
+      "ar": "مطر متوسط",
+      "en": "Moderate rain"
+    },
+    "65": {
+      "kind": "rain",
+      "ku": "بارانی توند",
+      "ar": "مطر غزير",
+      "en": "Heavy rain"
+    },
+    "66": {
+      "kind": "freezing-rain",
+      "ku": "بارانی بەستووی سووک",
+      "ar": "مطر متجمد خفيف",
+      "en": "Light freezing rain"
+    },
+    "67": {
+      "kind": "freezing-rain",
+      "ku": "بارانی بەستووی توند",
+      "ar": "مطر متجمد غزير",
+      "en": "Heavy freezing rain"
+    },
+    "71": {
+      "kind": "snow",
+      "ku": "بەفری سووک",
+      "ar": "ثلوج خفيفة",
+      "en": "Light snow"
+    },
+    "73": {
+      "kind": "snow",
+      "ku": "بەفری مامناوەند",
+      "ar": "ثلوج متوسطة",
+      "en": "Moderate snow"
+    },
+    "75": {
+      "kind": "snow",
+      "ku": "بەفری توند",
+      "ar": "ثلوج كثيفة",
+      "en": "Heavy snow"
+    },
+    "77": {
+      "kind": "snow",
+      "ku": "دەنکەبەفر",
+      "ar": "حبيبات ثلج",
+      "en": "Snow grains"
+    },
+    "80": {
+      "kind": "showers",
+      "ku": "بارانی پچڕپچڕی سووک",
+      "ar": "زخات مطر خفيفة",
+      "en": "Light rain showers"
+    },
+    "81": {
+      "kind": "showers",
+      "ku": "بارانی پچڕپچڕی مامناوەند",
+      "ar": "زخات مطر متوسطة",
+      "en": "Moderate rain showers"
+    },
+    "82": {
+      "kind": "showers",
+      "ku": "بارانی پچڕپچڕی زۆر توند",
+      "ar": "زخات مطر شديدة جداً",
+      "en": "Violent rain showers"
+    },
+    "85": {
+      "kind": "snow",
+      "ku": "بەفری پچڕپچڕی سووک",
+      "ar": "زخات ثلج خفيفة",
+      "en": "Light snow showers"
+    },
+    "86": {
+      "kind": "snow",
+      "ku": "بەفری پچڕپچڕی توند",
+      "ar": "زخات ثلج كثيفة",
+      "en": "Heavy snow showers"
+    },
+    "95": {
+      "kind": "thunderstorm",
+      "ku": "هەورەگرمە و بروسکە",
+      "ar": "عاصفة رعدية",
+      "en": "Thunderstorm"
+    },
+    "96": {
+      "kind": "hail",
+      "ku": "هەورەگرمە لەگەڵ تەرزەی سووک",
+      "ar": "عاصفة رعدية مع برد خفيف",
+      "en": "Thunderstorm with light hail"
+    },
+    "99": {
+      "kind": "hail",
+      "ku": "هەورەگرمە لەگەڵ تەرزەی توند",
+      "ar": "عاصفة رعدية مع برد كثيف",
+      "en": "Thunderstorm with heavy hail"
+    }
+  }
+}

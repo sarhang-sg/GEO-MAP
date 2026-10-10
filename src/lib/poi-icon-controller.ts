@@ -88,13 +88,13 @@ const TIER_CONFIG: Record<PoiIconTier, {
   padding: (lowPowerProfile: boolean) => number;
 }> = {
   landmark: {
-    minZoom: () => 9.8,
-    sizeStops: [10.3, 0.56, 14, 0.70, 18, 0.82],
+    minZoom: () => 8.5,
+    sizeStops: [8.5, 0.50, 14, 0.70, 18, 0.82],
     padding: (lowPowerProfile) => lowPowerProfile ? 6 : 4
   },
   community: {
-    minZoom: () => 11.4,
-    sizeStops: [11.4, 0.50, 14, 0.64, 18, 0.76],
+    minZoom: () => 10.4,
+    sizeStops: [10.4, 0.46, 14, 0.64, 18, 0.76],
     padding: (lowPowerProfile) => lowPowerProfile ? 7 : 5
   },
   local: {

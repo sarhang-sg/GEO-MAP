@@ -238,10 +238,10 @@ export class LabelController {
       [Math.min(KRI_BOUNDS[1][0], bounds.getEast() + 0.18), Math.min(KRI_BOUNDS[1][1], bounds.getNorth() + 0.12)]
     );
     const compact = this.isMobileViewport() || this.lowPowerProfile;
-    const minimumRank = zoom < 7.6 ? 100 : zoom < 9.2 ? 90 : zoom < 10.8 ? 80 : zoom < 13 ? 55 : 45;
+    const minimumRank = zoom < 6.9 ? 100 : zoom < 9.2 ? 90 : zoom < 10.8 ? 80 : zoom < 13 ? 55 : 45;
     const maxLabels = compact
-      ? (zoom < 7.6 ? 12 : zoom < 9.2 ? 10 : zoom < 10.8 ? 18 : zoom < 13 ? 30 : 48)
-      : (zoom < 7.6 ? 14 : zoom < 9.2 ? 16 : zoom < 10.8 ? 28 : zoom < 13 ? 46 : 72);
+      ? (zoom < 6.9 ? 12 : zoom < 9.2 ? 10 : zoom < 10.8 ? 18 : zoom < 13 ? 30 : 48)
+      : (zoom < 6.9 ? 14 : zoom < 9.2 ? 16 : zoom < 10.8 ? 28 : zoom < 13 ? 46 : 72);
     const seenNames = new Set<string>();
     const selected: LocalityFeature[] = [];
     const selectedIds = new Set<string>();
@@ -260,7 +260,7 @@ export class LabelController {
       const name = languageValue(feature.properties, language);
       const nameKey = labelKey(name);
       if (!nameKey || seenNames.has(nameKey)) return;
-      const reserved = zoom < 7.6 && placeRank(feature.properties.place) >= 100
+      const reserved = zoom < 6.9 && placeRank(feature.properties.place) >= 100
         ? this.reserveLowZoomCityLabel(coordinate, [name])
         : this.reserveVisualLabel(coordinate, [name]);
       if (!reserved) return;

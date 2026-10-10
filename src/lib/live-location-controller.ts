@@ -29,6 +29,7 @@ import {
   type StabilizedCoordinateSample,
 } from "./location";
 import type { Language } from "./types";
+import type { MapAnimationHandle, MapAnimationScheduler } from "./map-animation-scheduler";
 import {
   getGeolocationProvider,
   type GeolocationProvider,
@@ -55,6 +56,7 @@ export type LiveLocationDiagnosticSnapshot = {
   headingSource: HeadingSource;
   headingConfidence: number;
   speedMetersPerSecond: number;
+  sampledAt?: number;
 };
 
 type LiveLocationControllerOptions = {
@@ -63,6 +65,7 @@ type LiveLocationControllerOptions = {
   setMessage: (message: string, kind?: LocationMessageKind) => void;
   trackingButtons: readonly HTMLElement[];
   onLocationUpdate?: (snapshot: LiveLocationDiagnosticSnapshot) => void;
+  animationScheduler?: MapAnimationScheduler;
 };
 
 const INITIAL_FIX_MAX_AGE_MS = 30_000;
@@ -88,6 +91,7 @@ function writeTrackingPreference(active: boolean): void {
 
 /** Owns GPS state, follow mode and MapLibre location sources/layers. */
 export class LiveLocationController {
+  private readonly pulse: MapAnimationHandle | undefined;
   private readonly map: MapLibreMap;
   private readonly getLanguage: () => Language;
   private readonly setMessage: (
@@ -157,6 +161,15 @@ export class LiveLocationController {
 
   constructor(options: LiveLocationControllerOptions) {
     this.map = options.map;
+    this.pulse = options.animationScheduler?.register({ id: "live-location-pulse", priority: "visual", intervalMs: 130, pauseDuringInteraction: true,
+      run: (now) => {
+        if (!this.watchWanted || !this.lastCoordinate) return false;
+        if (!this.map.getLayer("location-pulse")) return;
+        const phase = (now % 2200) / 2200;
+        this.map.setPaintProperty("location-pulse", "circle-radius", 10 + phase * 14);
+        this.map.setPaintProperty("location-pulse", "circle-opacity", 0.2 * (1 - phase));
+        return true;
+      } });
     this.getLanguage = options.getLanguage;
     this.setMessage = options.setMessage;
     this.trackingButtons = options.trackingButtons;
@@ -190,6 +203,7 @@ export class LiveLocationController {
       headingSource: this.lastHeadingSource,
       headingConfidence: this.lastHeadingConfidence,
       speedMetersPerSecond: this.lastSpeed,
+      sampledAt: this.lastAcceptedPositionTimestamp,
     };
   }
 
@@ -221,6 +235,8 @@ export class LiveLocationController {
 
   /** Cancel acquisition and recovery; late browser callbacks cannot restart GPS. */
   stopTracking(state: LocationState = "idle"): void {
+    this.pulse?.stop();
+    if (this.map.getLayer("location-pulse")) this.map.setPaintProperty("location-pulse", "circle-opacity", 0);
     this.watchGeneration += 1;
     this.clearAcquisitionTimer();
     if (this.watchId !== null) this.geolocation?.clearWatch(this.watchId);
@@ -449,7 +465,7 @@ export class LiveLocationController {
     const watchOptions: PositionOptions = {
       enableHighAccuracy: true,
       timeout: 10_000,
-      maximumAge: 15_000,
+      maximumAge: 2_000,
     };
     this.watchStartedAt = Date.now();
     if (this.watchId === null) {
@@ -463,7 +479,7 @@ export class LiveLocationController {
   }
 
   updateLayers(): void {
-    if (!this.map.isStyleLoaded()) {
+    if (!this.map.getStyle()?.layers) {
       this.scheduleVisualRestore();
       return;
     }
@@ -480,7 +496,9 @@ export class LiveLocationController {
           this.lastAccuracy,
         )
       : emptyLocationPointCollection();
+    if (!liveLocationLayersReady(this.map)) this.lastRenderedAccuracyCoordinate = null;
     ensureLiveLocationLayers(this.map, pointData, accuracyData);
+    if (this.watchWanted && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) this.pulse?.start();
     const accuracySource = this.map.getSource(LOCATION_ACCURACY_SOURCE) as
       | maplibregl.GeoJSONSource
       | undefined;
@@ -955,7 +973,7 @@ export class LiveLocationController {
     this.restoreFrame = window.requestAnimationFrame(() => {
       this.restoreFrame = window.requestAnimationFrame(() => {
         this.restoreFrame = null;
-        if (!this.map.isStyleLoaded()) return;
+        if (!this.map.getStyle()?.layers) return;
         this.updateLayers();
       });
     });

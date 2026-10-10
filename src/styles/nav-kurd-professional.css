@@ -1992,3 +1992,142 @@ html[data-nav-kurd-theme="professional"] .map-shell.is-navigating :where(.topbar
   visibility:hidden!important; opacity:0!important; pointer-events:none!important;
 }
 .map-shell.is-navigating .maplibregl-ctrl-compass { display:none!important; }
+
+/* One optional color palette for the complete interface. Original preserves
+   the approved appearance; map imagery and semantic warnings keep their colors. */
+html[data-accent="blue"] {
+  --user-primary: #1769c7; --user-deep: #104a99; --user-bright: #4db4ff;
+  --user-bg: #081827; --user-surface: #0c2036; --user-elevated: #15314e;
+  --user-border: #365779; --user-text: #f6faff; --user-muted: #bdd0e5;
+  --user-light-bg: #e9f2ff; --user-light-surface: #f3f8ff;
+  --user-light-elevated: #e3efff; --user-light-border: #b9cde5;
+  --user-light-text: #10283f; --user-light-muted: #405a74;
+}
+html[data-accent="teal"] {
+  --user-primary: #006d65; --user-deep: #004c4a; --user-bright: #44d8bf;
+  --user-bg: #071b1c; --user-surface: #0b2425; --user-elevated: #123736;
+  --user-border: #2c5b59; --user-text: #f0fffb; --user-muted: #b6d6ce;
+  --user-light-bg: #e7f6ef; --user-light-surface: #f0fcf8;
+  --user-light-elevated: #daf2ea; --user-light-border: #a9d5c8;
+  --user-light-text: #102f2c; --user-light-muted: #355f56;
+}
+html[data-accent="amber"] {
+  --user-primary: #875000; --user-deep: #633900; --user-bright: #ffd184;
+  --user-bg: #1f180f; --user-surface: #2a2117; --user-elevated: #3b3020;
+  --user-border: #67533a; --user-text: #fff9ed; --user-muted: #dfceb3;
+  --user-light-bg: #f7f0df; --user-light-surface: #fffaef;
+  --user-light-elevated: #f8edcf; --user-light-border: #d9c49c;
+  --user-light-text: #342716; --user-light-muted: #655139;
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) {
+  --nk-bg: var(--user-bg); --nk-surface: var(--user-surface);
+  --nk-elevated: var(--user-elevated); --nk-border: var(--user-border);
+  --nk-text: var(--user-text); --nk-muted: var(--user-muted);
+  --nk-primary: var(--user-primary); --nk-brand: var(--user-primary); --nk-cyan: var(--user-bright);
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"])[data-ui-mode="light"] {
+  --nk-bg: var(--user-light-bg); --nk-surface: var(--user-light-surface);
+  --nk-elevated: var(--user-light-elevated); --nk-border: var(--user-light-border);
+  --nk-text: var(--user-light-text); --nk-muted: var(--user-light-muted);
+}
+html[data-accent]:not([data-accent="original"]),
+html[data-accent]:not([data-accent="original"]) .map-shell {
+  --nav-user-accent: var(--user-primary);
+  --premium-ink-0: var(--nk-bg); --premium-ink-1: var(--nk-surface); --premium-ink-2: var(--nk-elevated);
+  --premium-glass: var(--nk-surface); --premium-glass-strong: var(--nk-surface);
+  --premium-stroke: var(--nk-border); --premium-stroke-strong: var(--user-primary);
+  --premium-text: var(--nk-text); --premium-muted: var(--nk-muted);
+  --premium-purple: var(--user-primary); --premium-purple-deep: var(--user-deep);
+  --premium-violet: var(--user-bright); --premium-blue: var(--user-primary); --premium-cyan: var(--user-bright);
+  --premium-gradient: linear-gradient(135deg, var(--user-deep), var(--user-primary));
+  --premium-gradient-soft: linear-gradient(135deg, var(--nk-surface), var(--nk-elevated));
+  --premium-border-gradient: linear-gradient(115deg, var(--user-primary), var(--user-bright));
+  --map-violet: var(--user-primary); --map-violet-bright: var(--user-bright);
+  --map-blue: var(--user-primary); --map-cyan: var(--user-bright);
+  --map-panel-border: var(--premium-border-gradient);
+  --nk-aurora-blue: var(--user-primary); --nk-aurora-violet: var(--user-primary);
+  --nk-aurora-pink: var(--user-bright); --nk-aurora-cyan: var(--user-bright);
+  --nk-aurora-surface: var(--nk-surface); --nk-aurora-surface-strong: var(--nk-surface);
+  --nk-aurora-stroke: var(--nk-border); --nk-aurora-stroke-active: var(--user-primary);
+  --nk-aurora-gradient: var(--premium-gradient); --nk-aurora-gradient-soft: var(--premium-gradient-soft);
+}
+
+/* These surfaces previously carried independent literal light/dark colors. */
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
+  .map-sheet, .search-card, .brand-card, .style-picker, .round-button, .map-button,
+  .maplibregl-ctrl-group, .maplibregl-popup-content, .place-popup,
+  .about-dialog__panel, .about-dialog__scroll, .about-dialog__brand, .about-dialog__close-row,
+  .owner-studio__panel, .owner-studio__scroll, .owner-studio__header,
+  .user-contrib__panel, .user-contrib__content, .user-contrib__header,
+  .feedback-studio__panel, .feedback-studio__scroll, .feedback-studio__panel > header,
+  .place-detail__panel, .place-detail__content, .route-panel, .route-navigation-hud,
+  .route-destination-prompt, .navigation-preferences, .location-recovery,
+  .offline-map-pack, .android-download, .native-app-panel, .support-section,
+  .support-fold, .support-method, .nav-tutorial__card, .map-status, .map-online-indicator,
+  .android-release-promo__panel, .android-release-promo__card) {
+  color: var(--nk-text) !important;
+  background: var(--nk-surface) !important;
+  border-color: var(--nk-border) !important;
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
+  .weather-card, .place-weather, .weather-inline, .nav-weather, .search-results, .search-result,
+  .about-dialog__meta > div, .map-stats > div, .action-card, .backend-state,
+  .user-account-card, .user-account-private, .owner-private-panel, .owner-place-row,
+  .owner-feedback, .owner-notification, .user-notification, .user-private-message,
+  .user-contrib__form-section, .user-choice-trigger, .user-choice__list, .nav-tutorial__visual,
+  .support-person, .support-section__consent, .route-panel__modes,
+  .user-navigation-history, .user-navigation-history__item,
+  input:not([type="checkbox"]):not([type="radio"]):not(#placeSearch), textarea, select) {
+  color: var(--nk-text) !important;
+  background: var(--nk-elevated) !important;
+  border-color: var(--nk-border) !important;
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
+  .navigation-preferences, .location-recovery) {
+  --surface: var(--nk-surface); --ink: var(--nk-text); --muted: var(--nk-muted);
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
+  .owner-studio__primary, .user-contrib__primary, .route-panel__start, .nav-tutorial__next,
+  .map-loading__retry, .android-download__button, .android-download__primary, .Download-button, .place-popup__share,
+  .about-dialog__primary, .user-contrib__add, .user-contrib__submit, .user-contrib__google,
+  .user-legal-accept button, .owner-publishing__publish, .owner-media__file-button,
+  .route-destination-prompt__actions .is-primary,
+  .segmented button.is-active, .style-choice.is-active, .route-panel__modes button.is-active,
+  .round-button[aria-pressed="true"], .map-button[aria-pressed="true"]) {
+  color: #fff !important;
+  background: var(--premium-gradient) !important;
+  border-color: var(--user-primary) !important;
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(.nav-tutorial__progress-track span, .language-transition__bar span, .offline-map-pack__track > span) {
+  background: linear-gradient(90deg, var(--user-primary), var(--user-bright)) !important;
+}
+html[data-accent]:not([data-accent="original"]) :is(input[type="checkbox"], input[type="radio"], progress) {
+  accent-color: var(--user-primary);
+}
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) .maplibregl-popup-tip {
+  border-top-color: var(--nk-surface); border-bottom-color: var(--nk-surface);
+}
+html[data-accent]:not([data-accent="original"]) .map-loading {
+  color: var(--nk-text);
+  background: linear-gradient(180deg, var(--nk-elevated), var(--nk-bg));
+}
+html[data-accent]:not([data-accent="original"]) .map-loading__word {
+  --text-color: var(--nk-text); --shadow-color: var(--nk-muted);
+}
+html[data-accent]:not([data-accent="original"]) :is(.map-loading__equation, .map-loading__title, .map-loading__message) { color: var(--nk-text); }
+
+/* Preserve the original loader geometry and typography under font/text options. */
+body[data-font-preference="system"] .map-loading__word { font-family: "NAVKurd Latin", "Red Hat Display", Inter, "Segoe UI", Arial, sans-serif; }
+body[data-text-size="large"] .map-shell :is(
+  .about-dialog__description, .about-dialog__utility-actions, .navigation-preferences__fields,
+  .place-popup__description, .place-detail__content, .user-contrib__form-section,
+  .owner-studio__form, .feedback-studio form, .location-recovery p) { font-size: 1.08rem; }
+body[data-text-size="large"] .map-shell :is(button, input, textarea, select):not(.round-button):not(.map-button):not(.dialog-close-button) { font-size: max(1em, 15px); }
+body[data-motion-preference="reduced"] .map-shell :is(
+  .nav-tutorial__halo, .nav-tutorial__visual, .round-button, .map-button,
+  .map-sheet, .about-dialog__panel, .search-card, .style-picker) {
+  animation: none !important; transition-duration: .01ms !important;
+}
+.appearance-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.appearance-button svg { width: 22px; height: 22px; flex: 0 0 22px; }
+.navigation-preferences__reset { margin-top: 16px; }

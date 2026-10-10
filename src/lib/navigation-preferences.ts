@@ -3,40 +3,21 @@ import { LOCATION_STATE_EVENT, type LiveLocationController, type LocationState }
 import type { MapCoordinatePicker } from "./map-coordinate-picker";
 import type { Language } from "./types";
 import { escapeText } from "./geo-format";
+import { APPEARANCE_VALUES as VALID, DEFAULT_APPEARANCE, applyAppearance, readAppearance, saveAppearance, type AppearancePreferences as Preferences } from "./appearance-state";
 
 const COPY = {
-  ku: { title:"ڕووکار و کۆنترۆڵ", controls:"دوگمەکانی نەخشە", visible:"هەمیشە دیار", hideAuto:"شاردنەوەی خۆکار", close:"داخستن", font:"فۆنت", brand:"فۆنتی NAV KURD", system:"فۆنتی ئامێر", size:"قەبارەی نووسین", normal:"ئاسایی", large:"گەورەتر", color:"ڕەنگی دیارخەر", blue:"شین", teal:"سەوزی ئاوی", amber:"زەردی تۆخ", motion:"جووڵە", auto:"بەپێی ئامێر", reduced:"جووڵەی کەم", quality:"کوالێتی ڕەسمکردن", economy:"پاشەکەوتی وزە", sharp:"وردتر", help:"ڕێنمایی ماوس و کیبۆرد", mouse:"بۆ جووڵاندنی نەخشە ڕایبکێشە؛ بە سکڕۆڵ نزیک و دوور بکەوە. Ctrl و ڕاکێشان بۆ سووڕاندن؛ Shift و ڕاکێشان بۆ زوومی ناوچەیەک. کلیکی ڕاست یان دەستڕاگرتن بۆ هەڵبژاردنی مەبەست.", keys:["گەڕان","شوێنی من","گۆڕینی دۆخی نەخشە","نیشاندانی هەموو ناوچەکە","نزیک و دوورکردنەوە","ڕێنمایی"], acquiring:"گەڕان بۆ شوێنی تۆ…", approximate:"شوێنی نزیکەیی؛ وردی نزیکەی", denied:"دەستگەیشتن بە شوێن ڕەت کراوەتەوە. لە ڕێکخستنی براوسەر ڕێگەی پێ بدە.", unavailable:"شوێن نەدۆزرایەوە. کۆمپیوتەر GPSی مۆبایلی هۆتسپۆت بەکار ناهێنێت.", retry:"هەوڵدانەوە", stop:"ڕاگرتن", choose:"شوێن لە نەخشە هەڵبژێرە", chosen:"شوێنی هەڵبژێردراو؛ شوێنی پشتڕاستکراوەی GPS نییە.", satellite:"وێنەی سەتەلایت ڕاستەوخۆ نییە. بەروار و وردی بەپێی دابینکەر و ناوچە دەگۆڕێت؛ زوومی زیاتر وێنەی تازە دروست ناکات." },
-  ar: { title:"المظهر والتحكم", controls:"أزرار الخريطة", visible:"ظاهرة دائماً", hideAuto:"إخفاء تلقائي", close:"إغلاق", font:"الخط", brand:"خط NAV KURD", system:"خط الجهاز", size:"حجم النص", normal:"عادي", large:"أكبر", color:"لون التمييز", blue:"أزرق", teal:"فيروزي", amber:"كهرماني", motion:"الحركة", auto:"تلقائي حسب الجهاز", reduced:"حركة أقل", quality:"جودة العرض", economy:"توفير الطاقة", sharp:"تفاصيل أعلى", help:"الماوس ولوحة المفاتيح", mouse:"اسحب لتحريك الخريطة، ومرّر للتكبير والتصغير. Ctrl مع السحب للتدوير؛ Shift مع السحب لتكبير منطقة. انقر بزر الماوس الأيمن أو اضغط مطولاً لاختيار الوجهة.", keys:["بحث","موقعي","تبديل نمط الخريطة","عرض المنطقة","تكبير وتصغير","مساعدة"], acquiring:"جارٍ تحديد موقعك…", approximate:"موقع تقريبي؛ دقة نحو", denied:"تم رفض إذن الموقع. اسمح به من إعدادات المتصفح.", unavailable:"تعذر تحديد الموقع. اتصال نقطة الاتصال لا ينقل GPS الهاتف إلى الكمبيوتر.", retry:"حاول مجدداً", stop:"إيقاف", choose:"اختر موقعاً على الخريطة", chosen:"موقع اخترته يدوياً، وليس موقع GPS مؤكداً.", satellite:"صور الأقمار الصناعية ليست مباشرة. تاريخها ودقتها يختلفان حسب المزود والمنطقة؛ التكبير لا يضيف صوراً أحدث." },
-  en: { title:"Appearance & controls", controls:"Map controls", visible:"Always visible", hideAuto:"Auto-hide", close:"Close", font:"Font", brand:"NAV KURD font", system:"Device font", size:"Text size", normal:"Standard", large:"Larger", color:"Accent color", blue:"Blue", teal:"Teal", amber:"Amber", motion:"Motion", auto:"Device adaptive", reduced:"Reduced motion", quality:"Rendering quality", economy:"Battery saver", sharp:"Sharper", help:"Mouse & keyboard", mouse:"Drag to pan; scroll to zoom. Ctrl + drag to rotate; Shift + drag to zoom to an area. Right-click or long-press to choose a destination.", keys:["Search","My location","Map mode","Fit region","Zoom","Help"], acquiring:"Finding your location…", approximate:"Approximate location; accuracy about", denied:"Location permission was denied. Allow it in your browser settings.", unavailable:"Location unavailable. A hotspot connection does not share the phone’s GPS with a computer.", retry:"Retry", stop:"Stop", choose:"Choose on map", chosen:"Manually selected point; not a verified GPS position.", satellite:"Satellite imagery is not live. Capture date and resolution vary by provider and area; zooming cannot create newer imagery." }
+  ku: { title:"ڕووکار و کۆنترۆڵ", controls:"دوگمەکانی نەخشە", visible:"هەمیشە دیار", hideAuto:"شاردنەوەی خۆکار", close:"داخستن", font:"فۆنت", brand:"فۆنتی NAV KURD", system:"فۆنتی ئامێر", size:"قەبارەی نووسین", normal:"ئاسایی", large:"گەورەتر", color:"ڕەنگی گشتی", original:"ڕەنگی سەرەتایی", reset:"گەڕاندنەوەی ڕووکار بۆ سەرەتا", blue:"شین", teal:"سەوزی ئاوی", amber:"زەردی تۆخ", motion:"جووڵە", auto:"بەپێی ئامێر", reduced:"جووڵەی کەم", quality:"کوالێتی ڕەسمکردن", economy:"پاشەکەوتی وزە", sharp:"وردتر", help:"ڕێنمایی ماوس و کیبۆرد", mouse:"بۆ جووڵاندنی نەخشە ڕایبکێشە؛ بە سکڕۆڵ نزیک و دوور بکەوە. Ctrl و ڕاکێشان بۆ سووڕاندن؛ Shift و ڕاکێشان بۆ زوومی ناوچەیەک. کلیکی ڕاست یان دەستڕاگرتن بۆ هەڵبژاردنی مەبەست.", keys:["گەڕان","شوێنی من","گۆڕینی دۆخی نەخشە","نیشاندانی هەموو ناوچەکە","نزیک و دوورکردنەوە","ڕێنمایی"], acquiring:"گەڕان بۆ شوێنی تۆ…", approximate:"شوێنی نزیکەیی؛ وردی نزیکەی", denied:"دەستگەیشتن بە شوێن ڕەت کراوەتەوە. لە ڕێکخستنی براوسەر ڕێگەی پێ بدە.", unavailable:"شوێن نەدۆزرایەوە. کۆمپیوتەر GPSی مۆبایلی هۆتسپۆت بەکار ناهێنێت.", retry:"هەوڵدانەوە", stop:"ڕاگرتن", choose:"شوێن لە نەخشە هەڵبژێرە", chosen:"شوێنی هەڵبژێردراو؛ شوێنی پشتڕاستکراوەی GPS نییە.", satellite:"وێنەی سەتەلایت ڕاستەوخۆ نییە. بەروار و وردی بەپێی دابینکەر و ناوچە دەگۆڕێت؛ زوومی زیاتر وێنەی تازە دروست ناکات." },
+  ar: { title:"المظهر والتحكم", controls:"أزرار الخريطة", visible:"ظاهرة دائماً", hideAuto:"إخفاء تلقائي", close:"إغلاق", font:"الخط", brand:"خط NAV KURD", system:"خط الجهاز", size:"حجم النص", normal:"عادي", large:"أكبر", color:"ألوان الواجهة", original:"الألوان الأصلية", reset:"استعادة المظهر الافتراضي", blue:"أزرق", teal:"فيروزي", amber:"كهرماني", motion:"الحركة", auto:"تلقائي حسب الجهاز", reduced:"حركة أقل", quality:"جودة العرض", economy:"توفير الطاقة", sharp:"تفاصيل أعلى", help:"الماوس ولوحة المفاتيح", mouse:"اسحب لتحريك الخريطة، ومرّر للتكبير والتصغير. Ctrl مع السحب للتدوير؛ Shift مع السحب لتكبير منطقة. انقر بزر الماوس الأيمن أو اضغط مطولاً لاختيار الوجهة.", keys:["بحث","موقعي","تبديل نمط الخريطة","عرض المنطقة","تكبير وتصغير","مساعدة"], acquiring:"جارٍ تحديد موقعك…", approximate:"موقع تقريبي؛ دقة نحو", denied:"تم رفض إذن الموقع. اسمح به من إعدادات المتصفح.", unavailable:"تعذر تحديد الموقع. اتصال نقطة الاتصال لا ينقل GPS الهاتف إلى الكمبيوتر.", retry:"حاول مجدداً", stop:"إيقاف", choose:"اختر موقعاً على الخريطة", chosen:"موقع اخترته يدوياً، وليس موقع GPS مؤكداً.", satellite:"صور الأقمار الصناعية ليست مباشرة. تاريخها ودقتها يختلفان حسب المزود والمنطقة؛ التكبير لا يضيف صوراً أحدث." },
+  en: { title:"Appearance & controls", controls:"Map controls", visible:"Always visible", hideAuto:"Auto-hide", close:"Close", font:"Font", brand:"NAV KURD font", system:"Device font", size:"Text size", normal:"Standard", large:"Larger", color:"Interface colors", original:"Original colors", reset:"Reset appearance", blue:"Blue", teal:"Teal", amber:"Amber", motion:"Motion", auto:"Device adaptive", reduced:"Reduced motion", quality:"Rendering quality", economy:"Battery saver", sharp:"Sharper", help:"Mouse & keyboard", mouse:"Drag to pan; scroll to zoom. Ctrl + drag to rotate; Shift + drag to zoom to an area. Right-click or long-press to choose a destination.", keys:["Search","My location","Map mode","Fit region","Zoom","Help"], acquiring:"Finding your location…", approximate:"Approximate location; accuracy about", denied:"Location permission was denied. Allow it in your browser settings.", unavailable:"Location unavailable. A hotspot connection does not share the phone’s GPS with a computer.", retry:"Retry", stop:"Stop", choose:"Choose on map", chosen:"Manually selected point; not a verified GPS position.", satellite:"Satellite imagery is not live. Capture date and resolution vary by provider and area; zooming cannot create newer imagery." }
 };
-
-type Preferences = { controls:"visible"|"auto"; font:"brand"|"system"; size:"normal"|"large"; accent:"blue"|"teal"|"amber"; motion:"auto"|"reduced"; quality:"auto"|"economy"|"sharp" };
-const DEFAULT:Preferences = {controls:"visible",font:"brand",size:"normal",accent:"blue",motion:"auto",quality:"auto"};
-const STORAGE = "nav-kurd:appearance:v1";
-const VALID = {controls:["visible","auto"],font:["brand","system"],size:["normal","large"],accent:["blue","teal","amber"],motion:["auto","reduced"],quality:["auto","economy","sharp"]};
-function readPreferences():Preferences {
-  const value={...DEFAULT};
-  try {
-    const stored=JSON.parse(localStorage.getItem(STORAGE)||"{}");
-    for(const key of Object.keys(VALID) as Array<keyof Preferences>) {
-      if(VALID[key].includes(stored?.[key])) Object.assign(value,{[key]:stored[key]});
-    }
-  } catch { /* Storage is optional. */ }
-  return value;
-}
 
 export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTMLElement; location:LiveLocationController; picker:MapCoordinatePicker; getLanguage:()=>Language; setMessage:(text:string)=>void}):void {
   const {map,shell,location,picker,getLanguage,setMessage}=options;
-  const preferences=readPreferences();
+  const preferences=readAppearance();
   const baselineRatio=map.getPixelRatio();
   let degraded=false;
   const apply=():void=>{
-    document.body.dataset.controlsPreference=preferences.controls;
-    document.body.dataset.fontPreference=preferences.font;
-    document.body.dataset.textSize=preferences.size;
-    document.body.dataset.motionPreference=preferences.motion;
-    document.body.dataset.accent=preferences.accent;
-    shell.style.setProperty("--nav-user-accent",{blue:"#2789f5",teal:"#008c83",amber:"#ad6400"}[preferences.accent]);
+    applyAppearance(preferences);
     const ratio=preferences.quality==="economy" ? Math.min(1,baselineRatio) : preferences.quality==="sharp" ? Math.min(2,window.devicePixelRatio||1) : degraded ? Math.min(1,baselineRatio) : baselineRatio;
     if(map.getPixelRatio()!==ratio) map.setPixelRatio(ratio);
     shell.dataset.qualityPreference=preferences.quality;
@@ -48,28 +29,36 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
     if(preferences.quality==="auto") apply();
   });
   const button=document.createElement("button");
-  button.id="appearanceButton"; button.className="round-button"; button.type="button";
-  button.innerHTML='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-  const actions=shell.querySelector(".map-actions");
-  actions?.insertBefore(button,actions.querySelector(".map-actions__toggle")??actions.firstChild);
+  button.id="appearanceButton"; button.className="about-dialog__utility-button appearance-button"; button.type="button";
+  button.innerHTML='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span></span>';
+  shell.querySelector(".about-dialog__utility-actions")?.prepend(button);
   const dialog=document.createElement("dialog");
   dialog.className="navigation-preferences"; dialog.setAttribute("aria-labelledby","navigationPreferencesTitle"); shell.append(dialog);
   const render=():void=>{
     const c=COPY[getLanguage()]; button.title=c.title; button.setAttribute("aria-label",c.title);
+    button.querySelector("span")!.textContent=c.title;
     dialog.dir=getLanguage()==="en"?"ltr":"rtl";
     const select=(key:keyof Preferences,label:string,entries:Array<[string,string]>)=>`<label><span>${escapeText(label)}</span><select data-preference="${key}">${entries.map(([value,text])=>`<option value="${value}" ${preferences[key]===value?"selected":""}>${escapeText(text)}</option>`).join("")}</select></label>`;
-    dialog.innerHTML=`<header><h2 id="navigationPreferencesTitle">${escapeText(c.title)}</h2><button type="button" data-close>${escapeText(c.close)}</button></header><div class="navigation-preferences__fields">${select("font",c.font,[["brand",c.brand],["system",c.system]])}${select("size",c.size,[["normal",c.normal],["large",c.large]])}${select("accent",c.color,[["blue",c.blue],["teal",c.teal],["amber",c.amber]])}${select("motion",c.motion,[["auto",c.auto],["reduced",c.reduced]])}${select("quality",c.quality,[["auto",c.auto],["economy",c.economy],["sharp",c.sharp]])}${select("controls",c.controls,[["visible",c.visible],["auto",c.hideAuto]])}</div><details open><summary>${escapeText(c.help)}</summary><p>${escapeText(c.mouse)}</p><dl>${["/ · Ctrl K","L","M","F","+ / −","?"].map((key,i)=>`<div><dt><kbd>${key}</kbd></dt><dd>${escapeText(c.keys[i])}</dd></div>`).join("")}</dl></details><p class="navigation-preferences__note">${escapeText(c.satellite)}</p>`;
+    dialog.innerHTML=`<header><h2 id="navigationPreferencesTitle">${escapeText(c.title)}</h2><button type="button" data-close>${escapeText(c.close)}</button></header><div class="navigation-preferences__fields">${select("font",c.font,[["brand",c.brand],["system",c.system]])}${select("size",c.size,[["normal",c.normal],["large",c.large]])}${select("accent",c.color,[["original",c.original],["blue",c.blue],["teal",c.teal],["amber",c.amber]])}${select("motion",c.motion,[["auto",c.auto],["reduced",c.reduced]])}${select("quality",c.quality,[["auto",c.auto],["economy",c.economy],["sharp",c.sharp]])}${select("controls",c.controls,[["visible",c.visible],["auto",c.hideAuto]])}</div><button type="button" class="navigation-preferences__reset" data-reset>${escapeText(c.reset)}</button><details open><summary>${escapeText(c.help)}</summary><p>${escapeText(c.mouse)}</p><dl>${["/ · Ctrl K","L","M","F","+ / −","?"].map((key,i)=>`<div><dt><kbd>${key}</kbd></dt><dd>${escapeText(c.keys[i])}</dd></div>`).join("")}</dl></details><p class="navigation-preferences__note">${escapeText(c.satellite)}</p>`;
     dialog.querySelector("[data-close]")?.addEventListener("click",()=>dialog.close());
+    dialog.querySelector("[data-reset]")?.addEventListener("click",()=>{
+      Object.assign(preferences,DEFAULT_APPEARANCE);saveAppearance(preferences);apply();render();
+      dialog.querySelector<HTMLButtonElement>("[data-reset]")?.focus();
+    });
   };
-  const open=():void=>{render();if(!dialog.open)dialog.showModal();};
+  const open=():void=>{previousFocus=document.activeElement as HTMLElement|null;render();if(!dialog.open)dialog.showModal();};
   button.addEventListener("click",open);
-  dialog.addEventListener("close",()=>button.focus({preventScroll:true}));
+  let previousFocus:HTMLElement|null=null;
+  dialog.addEventListener("close",()=>{
+    const target=previousFocus?.getClientRects().length?previousFocus:document.getElementById("brandAboutButton");
+    target?.focus({preventScroll:true});
+  });
   dialog.addEventListener("change",event=>{
     const target=event.target as HTMLSelectElement;
     const key=target.dataset.preference as keyof Preferences;
     if(!key||!VALID[key]?.includes(target.value))return;
     Object.assign(preferences,{[key]:target.value});
-    try{localStorage.setItem(STORAGE,JSON.stringify(preferences));}catch{ /* optional storage */ }
+    saveAppearance(preferences);
     apply();
   });
   const status=document.createElement("section");

@@ -187,7 +187,7 @@ export function stabilizeCoordinateSample(
         : Math.max(2.5, Math.min(12, accuracyMeters * 0.16));
   if (distance <= gpsJitterThreshold)
     return { coordinate: previous, rejectedJump: false };
-  if (interactionLocked && distance <= Math.max(28, gpsJitterThreshold * 1.8)) {
+  if (interactionLocked && finiteSpeed < 0.8 && accuracyMeters > 20 && distance <= Math.max(28, gpsJitterThreshold * 1.8)) {
     return { coordinate: previous, rejectedJump: false };
   }
 
@@ -209,6 +209,9 @@ export function stabilizeCoordinateSample(
       return { coordinate: previous, rejectedJump: true };
   }
 
+  // Accurate motion is already filtered by the receiver. Smoothing it again
+  // moves the puck/route origin behind the user, particularly while walking.
+  if (finiteSpeed >= 0.8 && accuracyMeters <= 25) return { coordinate: incoming, rejectedJump: false };
   if (distance <= 90) {
     const amount =
       finiteSpeed >= 8 ? 0.9 :

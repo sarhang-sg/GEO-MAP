@@ -1,6 +1,6 @@
 {
   "name": "nav-kurd",
-  "version": "10.4.0",
+  "version": "10.4.1",
   "private": true,
   "type": "module",
   "description": "Mobile-first Kurdistan map with multilingual search, GPS navigation, satellite context, local PMTiles data and owner-managed places.",

@@ -1,6 +1,6 @@
 const OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast";
 const OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
-const UPSTREAM_USER_AGENT = "NAV-KURD-Weather-Proxy/10.4.0";
+const UPSTREAM_USER_AGENT = "NAV-KURD-Weather-Proxy/10.4.1";
 const REQUEST_TIMEOUT_MS = 4500;
 const AIR_QUALITY_TIMEOUT_MS = 3200;
 const FRESH_TTL_MS = 10 * 60 * 1000;

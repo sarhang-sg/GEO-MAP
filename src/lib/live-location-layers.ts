@@ -12,6 +12,7 @@ export const LOCATION_ACCURACY_LAYER_IDS = [
 ] as const;
 
 export const LOCATION_PUCK_LAYER_IDS = [
+  "location-pulse",
   "location-direction-arrow",
   "location-dot"
 ] as const;
@@ -92,7 +93,7 @@ export function ensureLiveLocationLayers(
   pointData: FeatureCollection<Point, LocationPointProperties> = emptyLocationPointCollection(),
   accuracyData: FeatureCollection<Polygon> = emptyAccuracyCollection()
 ): void {
-  if (!map.isStyleLoaded()) return;
+  if (!map.getStyle()?.layers) return;
   let layerGraphChanged = false;
 
   if (!map.getSource(LOCATION_ACCURACY_SOURCE)) {
@@ -127,6 +128,11 @@ export function ensureLiveLocationLayers(
         "line-opacity": 0.38
       }
     });
+    layerGraphChanged = true;
+  }
+  if (!map.getLayer("location-pulse")) {
+    map.addLayer({ id: "location-pulse", type: "circle", source: LOCATION_POINT_SOURCE,
+      paint: { "circle-color": "#66baff", "circle-radius": 10, "circle-opacity": 0, "circle-pitch-alignment": "map" } });
     layerGraphChanged = true;
   }
   if (!map.getLayer("location-direction-arrow")) {

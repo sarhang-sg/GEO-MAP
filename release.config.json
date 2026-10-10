@@ -1,13 +1,13 @@
 {
-  "appVersion": "10.4.0",
-  "androidVersionCode": 100400,
-  "releaseId": "2026-10-08-nav-kurd-v10.4.0",
-  "releaseDate": "2026-10-08",
+  "appVersion": "10.4.1",
+  "androidVersionCode": 100401,
+  "releaseId": "2026-10-09-nav-kurd-v10.4.1",
+  "releaseDate": "2026-10-09",
   "mapEdition": "2027",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "cacheSchemaVersion": 91,
   "offlinePackVersion": "2027.13",
-  "serviceWorkerRelease": "10.4.0",
+  "serviceWorkerRelease": "10.4.1",
   "offlineMapFiles": [
     {
       "id": "base",
@@ -25,8 +25,8 @@
     }
   ],
   "offlineRuntimeBytes": 53011521,
-  "releaseLabel": "NAV KURD 10.4 — adaptive map rendering, recoverable GPS, desktop controls and clear route guidance",
+  "releaseLabel": "NAV KURD 10.4.1 \u2014 restored sliced loader, complete UI themes, continuous route and stable map recovery",
   "uiTheme": "midnight-kurd",
-  "hardeningDate": "2026-10-08",
-  "hardeningRelease": "10.4.0"
+  "hardeningDate": "2026-10-09",
+  "hardeningRelease": "10.4.1"
 }

@@ -1,6 +1,7 @@
 import { UI, languageDirection } from "./lib/i18n";
 import { readAppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
 import { loadingMarkup } from "./lib/loading-view";
+import { applyAppearance, readAppearance } from "./lib/appearance-state";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./styles.css";
 
@@ -128,6 +129,7 @@ function renderStartupFailure(error: unknown): void {
 }
 
 const handoffTarget = androidOAuthHandoffUrl();
+applyAppearance(readAppearance());
 if (handoffTarget) {
   window.__NAV_KURD_AUTH_HANDOFF__ = true;
   renderHandoffFallback(handoffTarget);
@@ -140,7 +142,11 @@ if (handoffTarget) {
   if (app) {
     app.innerHTML = loadingMarkup();
     let language: keyof typeof UI = "ku";
-    try { language = readAppLifecycleSnapshot()?.language ?? "ku"; } catch { /* default */ }
+    try {
+      const saved = readAppLifecycleSnapshot();
+      language = saved?.language ?? "ku";
+      if (saved) document.documentElement.dataset.uiMode = saved.mapMode === "street" ? "light" : "dark";
+    } catch { /* default */ }
     const surface = document.getElementById("mapLoading");
     surface?.setAttribute("aria-label", UI[language].loadingCard);
   }

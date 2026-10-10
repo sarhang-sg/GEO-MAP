@@ -42,7 +42,9 @@ export function installPremiumShellController(options: PremiumShellOptions): Pre
     if (event.target === aboutDialog) closeAbout();
   });
   document.addEventListener("keydown", (event) => {
-    if (aboutDialog.hidden) return;
+    // A native settings dialog opened from About owns Escape and Tab until it
+    // closes. Do not dismiss or focus the About surface underneath it.
+    if (aboutDialog.hidden || document.querySelector("dialog[open]")) return;
     if (event.key === "Escape") {
       closeAbout();
       return;
@@ -50,7 +52,7 @@ export function installPremiumShellController(options: PremiumShellOptions): Pre
     if (event.key !== "Tab") return;
     const focusable = Array.from(aboutDialog.querySelectorAll<HTMLElement>(
       'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )).filter((element) => !element.hidden);
+    )).filter((element) => element.getClientRects().length > 0 && !element.closest("[hidden], [inert]"));
     if (focusable.length === 0) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];

@@ -37,6 +37,11 @@ export class OwnerPlacesController {
   private refreshTimer: number | null = null;
   private refreshPromise: Promise<void> | null = null;
   private refreshQueued = false;
+  private queuedForceRefresh = false;
+  private lastSuccessfulRefreshAt = 0;
+  private lastPlacesSignature = "";
+  private lastMapSignature = "";
+  private lastMapSource: GeoJSONSource | undefined;
 
   constructor(options: OwnerPlacesControllerOptions) {
     this.map = options.map;
@@ -72,6 +77,7 @@ export class OwnerPlacesController {
       type: "FeatureCollection",
       features: this.places
         .filter((place) => hasPublicName(place) && Number.isFinite(place.longitude) && Number.isFinite(place.latitude))
+        .sort((a, b) => a.id.localeCompare(b.id))
         .map((place) => {
           const marker = atlasMarkerProfile(place.category);
           return {
@@ -99,8 +105,15 @@ export class OwnerPlacesController {
     return this.places.find((place) => place.id === normalizedId) ?? null;
   }
 
-  async refresh(): Promise<void> {
+  async refresh({ onlyIfStale = false }: { onlyIfStale?: boolean } = {}): Promise<void> {
     if (this.refreshPromise) return this.refreshPromise;
+    // Network recovery and short background trips can arrive repeatedly. Keep
+    // fresh content and its cluster index; realtime/user changes bypass this TTL.
+    if (onlyIfStale && this.lastSuccessfulRefreshAt > 0 && Date.now() - this.lastSuccessfulRefreshAt < 60_000) {
+      this.updateMapSource();
+      return;
+    }
+    if (typeof navigator !== "undefined" && navigator.onLine === false) return;
     const task = this.performRefresh().finally(() => {
       if (this.refreshPromise !== task) return;
       this.refreshPromise = null;
@@ -126,28 +139,36 @@ export class OwnerPlacesController {
     try {
       const nextPlaces = await loadPublishedAtlasPlaces();
       this.places = nextPlaces.filter(hasPublicName);
+      this.lastSuccessfulRefreshAt = Date.now();
       this.countElement.textContent = new Intl.NumberFormat("en-US").format(this.places.length);
       this.setBackendState(UI[language].connected, "connected");
       this.updateMapSource();
-      this.onPlacesChanged?.(this.places);
+      const signature = JSON.stringify([...this.places].sort((a, b) => a.id.localeCompare(b.id)));
+      if (signature !== this.lastPlacesSignature) {
+        this.lastPlacesSignature = signature;
+        this.onPlacesChanged?.(this.places);
+      }
     } catch (error) {
       // Keep the last good owner-place collection visible; a temporary Supabase/network
       // failure must never clear the map or break static KRI data.
       this.setBackendState(UI[language].ownerBackendOffline, "error");
       this.onWarning?.(atlasErrorMessage(error, UI[language].ownerBackendOffline));
-      this.updateMapSource();
     }
   }
 
-  queueRefresh(delayMs = 650): void {
+  queueRefresh(delayMs = 650, { onlyIfStale = false }: { onlyIfStale?: boolean } = {}): void {
+    this.queuedForceRefresh ||= !onlyIfStale;
     if (this.refreshTimer) window.clearTimeout(this.refreshTimer);
     this.refreshTimer = window.setTimeout(() => {
       this.refreshTimer = null;
+      const force = this.queuedForceRefresh;
+      this.queuedForceRefresh = false;
       if (this.refreshPromise) {
-        this.refreshQueued = true;
+        // Only a real data-change event needs a follow-up to an in-flight fetch.
+        this.refreshQueued ||= force;
         return;
       }
-      void this.refresh();
+      void this.refresh({ onlyIfStale: !force });
     }, delayMs);
   }
 
@@ -158,6 +179,12 @@ export class OwnerPlacesController {
 
   private updateMapSource(): void {
     const source = this.map.getSource(this.sourceId) as GeoJSONSource | undefined;
-    source?.setData(this.collection());
+    if (!source) return;
+    const collection = this.collection();
+    const signature = JSON.stringify(collection);
+    if (source === this.lastMapSource && signature === this.lastMapSignature) return;
+    source.setData(collection);
+    this.lastMapSource = source;
+    this.lastMapSignature = signature;
   }
 }

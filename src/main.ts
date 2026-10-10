@@ -61,6 +61,7 @@ import { installMapOverlayLayoutController, type MapOverlayLayoutController } fr
 import { installMapLeftControlRail } from "./lib/map-left-control-rail";
 import { installPwaLaunchIntentHandler } from "./lib/pwa-launch-intent";
 import { PwaMapFileController } from "./lib/pwa-file-handler";
+import { installWeatherDirectory } from "./lib/weather-directory";
 import { PlaceWeatherService } from "./lib/place-weather";
 import { installRuntimeDiagnostics, recordRuntimeDiagnostic } from "./lib/runtime-diagnostics";
 import { installSupportHub } from "./lib/support-hub";
@@ -405,6 +406,7 @@ class KurdistanAtlasController {
       map: this.map,
       sourceId: NATURAL_POI_SOURCE_ID,
       datasetId: "natural",
+      minimumVisibleZoom: 8.5,
       diagnosticsHost: mapShell,
       lowPowerProfile: this.lowPowerProfile,
       getVisible: () => this.placesVisible,
@@ -418,6 +420,7 @@ class KurdistanAtlasController {
     this.normalizeAttributionCard();
     this.liveLocation = new LiveLocationController({
       map: this.map,
+      animationScheduler: this.animationScheduler,
       getLanguage: () => this.language,
       setMessage,
       trackingButtons: [locateButton, sheetLocateButton],
@@ -489,6 +492,8 @@ class KurdistanAtlasController {
       getOwnerPlaces: () => this.ownerPlaces.getItems(),
       searchStatic: (term, language, limit) => this.searchWorker.search(term, language, limit)
     });
+    installWeatherDirectory({ shell: mapShell, getLanguage: () => this.language, getLocalities: () => this.localities,
+      search: term => this.searchService.searchWeatherLocalities(term), service: this.weather });
     this.deviceQa = installDeviceQaPanel({
       map: this.map,
       mapShell,
@@ -1049,7 +1054,7 @@ class KurdistanAtlasController {
       return;
     }
     this.lastSoftRefreshAt = now;
-    this.ownerPlaces.queueRefresh(delayMs);
+    this.ownerPlaces.queueRefresh(delayMs, { onlyIfStale: true });
     this.ownerPlaces.setLanguageStatus();
     if (!this.isSearchIndexReady()) void this.loadSearchMetadata();
     this.queueLabels();
@@ -1079,9 +1084,6 @@ class KurdistanAtlasController {
     this.map.triggerRepaint();
   }
 
-  private attachWeather(container: HTMLElement, coordinate: LngLatTuple): void {
-    container.append(this.weather.createBadge(coordinate, this.language));
-  }
 
   /**
    * Keep the existing popup visuals while choosing an anchor that opens into
@@ -1183,7 +1185,6 @@ class KurdistanAtlasController {
     content.dir = languageDirection(this.language);
     content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(props.place))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([kind, district, governorate].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
-    this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
   }
 
@@ -1206,7 +1207,6 @@ class KurdistanAtlasController {
     content.dir = languageDirection(this.language);
     content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(markerCategory))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([category, address].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
-    this.attachWeather(content, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
     return true;
   }
@@ -1225,7 +1225,6 @@ class KurdistanAtlasController {
     content.innerHTML = `${cover ? `<img class="atlas-place-popup__cover" src="${escapeText(cover)}" alt="${escapeText(caption || ownerName(place, this.language))}" loading="lazy">` : ""}<div class="atlas-place-popup__body"><div class="atlas-place-popup__identity"><span class="atlas-place-popup__text"><strong>${escapeText(ownerName(place, this.language))}</strong><small>${escapeText(categoryValue(place.category, this.language, UI[this.language].place))}</small></span><img class="atlas-place-popup__marker" src="${escapeText(markerIcon)}" alt="" aria-hidden="true"></div>${caption ? `<p class="atlas-place-popup__caption">${escapeText(caption)}</p>` : ""}${description ? `<p class="atlas-place-popup__description">${escapeText(description)}</p>` : ""}</div>`;
     const ownerPopupBody = content.querySelector<HTMLElement>(".atlas-place-popup__body") ?? content;
     this.appendShareAction(ownerPopupBody, coordinate, ownerName(place, this.language));
-    this.attachWeather(ownerPopupBody, coordinate);
     this.openPlacePopup(coordinate, content, { offset: 16, closeButton: true, maxWidth: "310px" });
     placeDetail.open(place);
   }
@@ -1259,7 +1258,6 @@ class KurdistanAtlasController {
       const title = localizedStaticName(choice.item, this.language);
       content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(choice.item.k))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText(localizedStaticCategory(choice.item, this.language, choice.item.k === "street" ? UI[this.language].street : UI[this.language].place))}</span>`;
       this.appendShareAction(content, coordinate, title);
-      this.attachWeather(content, coordinate);
       this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "280px" });
     }
   }
@@ -1489,7 +1487,7 @@ class KurdistanAtlasController {
     this.overlayLayout.refresh();
     this.routing.restoreVisualState();
     this.liveLocation.restoreVisualState();
-    if (this.mapMode === "satellite") {
+    if (this.mapMode === "satellite" && !this.satelliteSourceHealthy) {
       this.resetSatelliteHealthCycle();
       this.applySatelliteFallback(Boolean(satelliteSource.enabled && (satelliteSource.fallbackSource || satelliteSource.detailSource)));
       setMessage(UI[this.language].satelliteLoading, "normal");

@@ -1,3 +1,4 @@
+import { weatherCodeKind, weatherCodeLabel, type WeatherCondition } from "./weather-codes";
 import { coreCall, localCoreEnabled } from "../android/local-provider";
 import type { LngLatTuple } from "./location";
 import type { Language } from "./types";
@@ -13,25 +14,6 @@ const REQUEST_TIMEOUT_MS = 6000;
 const STALE_TTL_MS = 10 * 60 * 60 * 1000;
 const CACHE_KEY = "nav-kurd:weather:v3";
 const MAX_CACHE_ENTRIES = 240;
-
-type WeatherCondition =
-  | "clear"
-  | "partly-cloudy"
-  | "cloudy"
-  | "fog"
-  | "drizzle"
-  | "rain"
-  | "freezing-rain"
-  | "snow"
-  | "showers"
-  | "thunderstorm"
-  | "hail"
-  | "dust"
-  | "dust-rain"
-  | "strong-wind"
-  | "tornado"
-  | "hot"
-  | "cold";
 
 type ForecastHour = { at: number; temperature: number; weatherCode: number; isDay: boolean; chance: number | null };
 
@@ -62,9 +44,9 @@ type OpenMeteoResponse = {
 };
 const VALID_CODES = new Set([0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99]);
 const DETAILS = {
-  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینییەکانی کاتژمێرەکانی داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
-  ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
-  en: { more: "Details & forecast", forecast: "Hourly forecast", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
+  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینییەکانی کاتژمێرەکانی داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", dust: "خۆڵی هەوا", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
+  ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", dust: "الغبار", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
+  en: { more: "Details & forecast", forecast: "Hourly forecast", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", dust: "Dust", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
 };
 function weatherTime(value: unknown, offset = 0): number | null {
   if (typeof value === "number" && Number.isFinite(value) && value > 0) return value * 1000;
@@ -110,131 +92,26 @@ function decodeReading(payload: OpenMeteoResponse): WeatherReading {
     apparent: optionalNumber(payload.current?.apparent_temperature) };
 }
 
-const DUST_THRESHOLD = 50;
-const STRONG_WIND_KMH = 40;
-const STRONG_GUST_KMH = 60;
-
-const CONDITION_COPY: Record<Language, Record<Exclude<WeatherCondition, "clear">, string>> = {
-  ku: {
-    "partly-cloudy": "نیمچە هەوراوی",
-    cloudy: "هەوراوی",
-    fog: "تەم",
-    drizzle: "نمەباران",
-    rain: "باران",
-    "freezing-rain": "بارانی بەستوو",
-    snow: "بەفر",
-    showers: "بارانی پچڕپچڕ",
-    thunderstorm: "برووسکە و باران",
-    hail: "تەرزە و برووسکە",
-    dust: "خۆڵ و تۆز",
-    "dust-rain": "بارانی خۆڵاوی",
-    "strong-wind": "بای بەهێز",
-    tornado: "گێژەڵووکە و ڕەشەبا",
-    hot: "گەرمێکی توند",
-    cold: "سەرمای توند"
-  },
-  ar: {
-    "partly-cloudy": "غائم جزئياً",
-    cloudy: "غائم",
-    fog: "ضباب",
-    drizzle: "رذاذ",
-    rain: "مطر",
-    "freezing-rain": "مطر متجمد",
-    snow: "ثلج",
-    showers: "زخات مطر",
-    thunderstorm: "عاصفة رعدية",
-    hail: "برد وعاصفة رعدية",
-    dust: "غبار",
-    "dust-rain": "مطر محمل بالغبار",
-    "strong-wind": "رياح قوية",
-    tornado: "إعصار قمعي ورياح شديدة",
-    hot: "حر شديد",
-    cold: "برد قارس"
-  },
-  en: {
-    "partly-cloudy": "Partly cloudy",
-    cloudy: "Cloudy",
-    fog: "Fog",
-    drizzle: "Drizzle",
-    rain: "Rain",
-    "freezing-rain": "Freezing rain",
-    snow: "Snow",
-    showers: "Rain showers",
-    thunderstorm: "Thunderstorm",
-    hail: "Thunderstorm with hail",
-    dust: "Dusty",
-    "dust-rain": "Dusty rain",
-    "strong-wind": "Strong wind",
-    tornado: "Tornado and severe wind",
-    hot: "Extreme heat",
-    cold: "Extreme cold"
-  }
-};
-
-const CLEAR_COPY: Record<Language, { day: string; night: string }> = {
-  ku: { day: "خۆرەتاو", night: "ئاسمانی ڕوون" },
-  ar: { day: "مشمس", night: "سماء صافية" },
-  en: { day: "Sunny", night: "Clear sky" }
-};
-
 const UI_COPY: Record<Language, { loading: string; current: string }> = {
   ku: { loading: "کەشوھەوا…", current: "پلەی گەرمی ئێستا" },
   ar: { loading: "الطقس…", current: "درجة الحرارة الآن" },
   en: { loading: "Weather…", current: "Current temperature" }
 };
 
-function baseWeatherCondition(code: number): WeatherCondition {
-  if (code === 19) return "tornado";
-  if (code === 0) return "clear";
-  if (code === 1 || code === 2) return "partly-cloudy";
-  if (code === 3) return "cloudy";
-  if (code === 45 || code === 48) return "fog";
-  if (code >= 51 && code <= 55) return "drizzle";
-  if (code === 56 || code === 57 || code === 66 || code === 67) return "freezing-rain";
-  if (code >= 61 && code <= 65) return "rain";
-  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return "snow";
-  if (code >= 80 && code <= 82) return "showers";
-  if (code >= 96 && code <= 99) return "hail";
-  if (code === 95) return "thunderstorm";
-  return "cloudy";
-}
-
-function weatherCondition(reading: WeatherReading): WeatherCondition {
-  const base = baseWeatherCondition(reading.weatherCode);
-  if (base === "tornado") return base;
-  const dusty = reading.dust !== null && reading.dust >= DUST_THRESHOLD;
-  if (dusty && ["drizzle", "rain", "freezing-rain", "showers"].includes(base)) {
-    return "dust-rain";
-  }
-  if (dusty && ["clear", "partly-cloudy", "cloudy"].includes(base)) return "dust";
-  const strongWind = (reading.windSpeed ?? 0) >= STRONG_WIND_KMH
-    || (reading.windGusts ?? 0) >= STRONG_GUST_KMH;
-  if (strongWind && ["clear", "partly-cloudy", "cloudy"].includes(base)) return "strong-wind";
-  if (reading.temperature >= 42 && ["clear", "partly-cloudy", "cloudy"].includes(base)) return "hot";
-  if (reading.temperature <= -5 && ["clear", "partly-cloudy", "cloudy"].includes(base)) return "cold";
-  return base;
-}
-
-function weatherConditionLabel(condition: WeatherCondition, isDay: boolean, language: Language): string {
-  if (condition === "clear") return CLEAR_COPY[language][isDay ? "day" : "night"];
-  return CONDITION_COPY[language][condition];
-}
+function baseWeatherCondition(code: number): WeatherCondition { return weatherCodeKind(code); }
+function weatherCondition(reading: WeatherReading): WeatherCondition { return baseWeatherCondition(reading.weatherCode); }
 
 function weatherIconAsset(condition: WeatherCondition, isDay: boolean): string {
-  const fileName = condition === "clear"
+  const fileName = (condition === "clear" || condition === "mainly-clear")
     ? isDay ? "clear-day.svg" : "clear-night.svg"
     : condition === "partly-cloudy"
       ? isDay ? "partly-cloudy-day.svg" : "partly-cloudy-night.svg"
-      : condition === "drizzle" || condition === "showers" || condition === "dust-rain"
+      : condition === "drizzle" || condition === "showers"
         ? "rain.svg"
         : condition === "freezing-rain"
           ? "freezing-rain.svg"
         : condition === "hail"
           ? "hail.svg"
-          : condition === "dust"
-            ? "dust.svg"
-            : condition === "strong-wind"
-              ? "wind.svg"
           : `${condition}.svg`;
   return `${import.meta.env.BASE_URL}assets/weather/${fileName}`;
 }
@@ -370,7 +247,7 @@ export class PlaceWeatherService {
       if (!root.isConnected) return;
       const condition = weatherCondition(reading);
       const temperature = roundTemperature(reading.temperature, language);
-      const conditionLabel = weatherConditionLabel(condition, reading.isDay, language);
+      const conditionLabel = weatherCodeLabel(reading.weatherCode, reading.isDay, language);
       const expanded = root.querySelector<HTMLDetailsElement>(".place-weather__details")?.open ?? false;
       root.replaceChildren(...Array.from(buildWeatherBadge(language).children));
       const image = root.querySelector<HTMLImageElement>(".place-weather__visual img")!;
@@ -394,7 +271,8 @@ export class PlaceWeatherService {
       const metricValues = [
         reading.apparent !== null ? `${words.feels} ${roundTemperature(reading.apparent, language)}` : "",
         reading.humidity !== null && reading.humidity >= 0 && reading.humidity <= 100 ? `${words.humidity} ${Math.round(reading.humidity)}%` : "",
-        reading.windSpeed !== null && reading.windSpeed >= 0 ? `${words.wind} ${Math.round(reading.windSpeed)} km/h` : ""
+        reading.windSpeed !== null && reading.windSpeed >= 0 ? `${words.wind} ${Math.round(reading.windSpeed)} km/h` : "",
+        reading.dust !== null && reading.dust >= 0 ? `${words.dust} ${Math.round(reading.dust)} µg/m³` : ""
       ];
       for (const value of metricValues.filter(Boolean)) { const chip = document.createElement("span"); chip.textContent = value; metrics.append(chip); }
       if (metrics.childElementCount) body.append(metrics);
@@ -406,7 +284,7 @@ export class PlaceWeatherService {
           const cell = document.createElement("div"); cell.className = "place-weather__hour";
           const time = document.createElement("time"); time.dateTime = new Date(hour.at).toISOString(); time.textContent = clock(hour.at, reading.timezone, language);
           const icon = document.createElement("img"); const kind = baseWeatherCondition(hour.weatherCode);
-          icon.src = weatherIconAsset(kind, hour.isDay); icon.alt = weatherConditionLabel(kind, hour.isDay, language); icon.loading = "lazy"; icon.width = 28; icon.height = 28;
+          icon.src = weatherIconAsset(kind, hour.isDay); icon.alt = weatherCodeLabel(hour.weatherCode, hour.isDay, language); icon.loading = "lazy"; icon.width = 28; icon.height = 28;
           const value = document.createElement("strong"); value.textContent = roundTemperature(hour.temperature, language);
           cell.append(time, icon, value);
           if (hour.chance !== null) { const chance = document.createElement("small"); chance.textContent = `${Math.round(hour.chance)}%`; chance.title = words.rain; cell.append(chance); }

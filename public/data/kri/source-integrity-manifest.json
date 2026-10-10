@@ -1,9 +1,9 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-10-08-nav-kurd-v10.4.0",
-  "appVersion": "10.4.0",
+  "release": "2026-10-09-nav-kurd-v10.4.1",
+  "appVersion": "10.4.1",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "generatedForDate": "2026-10-08",
+  "generatedForDate": "2026-10-09",
   "fileCount": 758,
   "totalBytes": 131364590,
   "files": {
@@ -2593,7 +2593,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "381941a588615463133199fc17b06342b3b4274501817d9013d1ad1aed95fe90"
+      "sha256": "f2c525efb51fd3095bd8c19de8da114bd17bfd7518e8401f406d1cbccadefcd3"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,
