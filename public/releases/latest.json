@@ -4,9 +4,19 @@
   "minimumVersion": "9.1.0",
   "packageName": "com.navkurd.app",
   "minimumAndroid": 24,
-  "directApkAvailable": false,
-  "directApkUrl": null,
+  "directApkAvailable": true,
+  "directApkUrl": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v10.4.1/NAV-KURD-10.4.1.apk",
   "apkPureUrl": "https://apkpure.com/nav-kurd/com.navkurd.app/download",
-  "publishedAt": null,
-  "artifact": null
+  "publishedAt": "2026-10-10T05:30:57Z",
+  "artifact": {
+    "version": "10.4.1",
+    "versionCode": 100401,
+    "url": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v10.4.1/NAV-KURD-10.4.1.apk",
+    "bytes": 157878742,
+    "sha256": "6da65a0041e57cd4c44bce29abb38be6621064291775e7f1602d9dcf591c3f17",
+    "signingCertificateSha256": "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246",
+    "gitCommit": "988b774b10b36fe8b9e22237deb40c4ea858f8ed"
+  },
+  "apkBytes": 157878742,
+  "apkSha256": "6da65a0041e57cd4c44bce29abb38be6621064291775e7f1602d9dcf591c3f17"
 }
