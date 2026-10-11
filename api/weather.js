@@ -1,6 +1,6 @@
 const OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast";
 const OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
-const UPSTREAM_USER_AGENT = "NAV-KURD-Weather-Proxy/10.4.1";
+const UPSTREAM_USER_AGENT = "NAV-KURD-Weather-Proxy/10.4.2";
 const REQUEST_TIMEOUT_MS = 4500;
 const AIR_QUALITY_TIMEOUT_MS = 3200;
 const FRESH_TTL_MS = 10 * 60 * 1000;
@@ -95,7 +95,7 @@ async function fetchUpstream(latitude, longitude) {
   url.searchParams.set("timezone", "auto");
 
   url.searchParams.set("hourly", "temperature_2m,weather_code,is_day,precipitation_probability,wind_speed_10m");
-  url.searchParams.set("forecast_hours", "12");
+  url.searchParams.set("forecast_hours", "25");
   url.searchParams.set("timeformat", "unixtime");
   const airQualityPromise = fetchAirQuality(latitude, longitude);
   let lastError = null;
@@ -129,12 +129,12 @@ async function fetchUpstream(latitude, longitude) {
       try { new Intl.DateTimeFormat("en", { timeZone: timezone }).format(0); }
       catch { throw new Error("weather-invalid-timezone"); }
       const hourly = { time: [], temperature_2m: [], weather_code: [], is_day: [], precipitation_probability: [], wind_speed_10m: [] };
-      for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 24); i += 1) {
+      for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 48); i += 1) {
         const at = finiteNumber(payload.hourly.time[i]);
         const temp = finiteNumber(payload.hourly.temperature_2m?.[i]);
         const code = finiteNumber(payload.hourly.weather_code?.[i]);
         const day = finiteNumber(payload.hourly.is_day?.[i]);
-        if (at === null || at * 1000 <= Date.now() || at * 1000 > Date.now() + 10 * 3600000
+        if (at === null || at * 1000 <= Date.now() || at * 1000 > Date.now() + 24 * 3600000
           || (hourly.time.length && at <= hourly.time.at(-1)) || temp === null || temp < -90 || temp > 65
           || !validCodes.has(code) || (day !== 0 && day !== 1)) continue;
         hourly.time.push(at); hourly.temperature_2m.push(temp); hourly.weather_code.push(code); hourly.is_day.push(day);

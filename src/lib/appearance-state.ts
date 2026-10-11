@@ -3,7 +3,7 @@ export type AppearancePreferences = {
   controls: "visible" | "auto";
   font: "brand" | "system";
   size: "normal" | "large";
-  accent: "original" | "blue" | "teal" | "amber";
+  accent: "original" | "blue" | "teal" | "amber" | "purple" | "pink" | "red";
   motion: "auto" | "reduced";
   quality: "auto" | "economy" | "sharp";
 };
@@ -13,7 +13,7 @@ export const DEFAULT_APPEARANCE: AppearancePreferences = {
 };
 export const APPEARANCE_VALUES = {
   controls: ["visible", "auto"], font: ["brand", "system"], size: ["normal", "large"],
-  accent: ["original", "blue", "teal", "amber"], motion: ["auto", "reduced"], quality: ["auto", "economy", "sharp"]
+  accent: ["original", "blue", "teal", "amber", "purple", "pink", "red"], motion: ["auto", "reduced"], quality: ["auto", "economy", "sharp"]
 };
 const STORAGE = "nav-kurd:appearance:v1";
 

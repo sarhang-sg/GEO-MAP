@@ -11,3 +11,19 @@ export function weatherCodeLabel(code: number, isDay: boolean, language: Languag
   if (code === 0 && isDay) return descriptions.clearDay[language];
   return codes[String(code)]?.[language] ?? descriptions.unavailable[language];
 }
+
+/** Descriptive context, not an official weather alert or a replacement for WMO. */
+export function weatherContext(temperature: number | null, wind: number | null, gusts: number | null, language: Language): string[] {
+  const labels: string[] = [], t = descriptions.contextThresholds, c = descriptions.context;
+  const add = (key: keyof typeof c): void => { labels.push(c[key][language]); };
+  if (temperature !== null && Number.isFinite(temperature)) {
+    if (temperature <= t.extremeColdC) add("extremeCold");
+    else if (temperature <= t.coldC) add("cold");
+    else if (temperature < t.coolC) add("cool");
+    else if (temperature >= t.extremeHeatC) add("extremeHeat");
+    else if (temperature >= t.hotC) add("hot");
+  }
+  if (wind !== null && Number.isFinite(wind) && wind >= t.strongWindKmh) add("strongWind");
+  else if (gusts !== null && Number.isFinite(gusts) && gusts >= t.strongGustsKmh) add("gusts");
+  return labels;
+}

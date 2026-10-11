@@ -59,3 +59,19 @@ body[data-motion-preference="reduced"] .map-shell :is(.map-edge-frame,.map-focus
   .weather-directory__content { grid-template-columns: minmax(0,1fr); }
   .weather-directory__list { max-height: 25dvh; }
 }
+
+/* Weather: visible summaries, one expanded forecast, shared palette tokens. */
+.weather-directory .weather-directory__place { display:flex; align-items:center; gap:12px; min-height:76px; }
+.weather-directory__label { display:grid; gap:3px; min-width:0; flex:1; }
+.weather-directory__reading { display:flex; align-items:center; gap:4px; min-width:83px; justify-content:flex-end; font-size:16px; font-weight:700; }
+.weather-directory__observed { font-size:10px!important; color:var(--nk-muted); }
+.weather-directory__details { padding:14px; border:1px solid var(--nk-border,#7891ad66); border-radius:18px; background:linear-gradient(150deg,var(--nk-surface,var(--surface)),var(--nk-elevated,var(--surface))); }
+.weather-directory .place-weather { padding:14px; border-radius:14px; }
+.weather-directory .place-weather__details { margin-top:12px; }
+.weather-directory .place-weather__body { max-height:36dvh; }
+.weather-directory .place-weather__hour { flex:0 0 58px; padding:8px 4px; border-radius:10px; background:var(--nk-elevated,var(--surface)); }
+.place-weather__day { font-size:10px; color:var(--nk-muted); white-space:nowrap; }
+.weather-directory .place-weather__metrics span { padding:5px 8px; border:1px solid var(--nk-border,#7891ad55); border-radius:9px; }
+.weather-list-button svg { width:30px; height:25px; }
+.place-popup__weather-open { width:100%; min-height:44px; margin-top:6px; padding:8px; border:1px solid var(--nk-border,#7891ad66); border-radius:10px; color:var(--nk-text); background:var(--nk-elevated); font:inherit; cursor:pointer; }
+@media(max-width:600px) { .weather-directory__details { padding:10px; } .weather-directory .place-weather__body { max-height:none; } }

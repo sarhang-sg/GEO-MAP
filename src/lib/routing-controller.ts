@@ -556,7 +556,9 @@ export class RoutingController {
     const backwards = this.progressAt > 0 && measurement.progressedMeters < this.progressMeters - Math.max(30, accuracy * 2);
     const offRoute = measurement.offRouteMeters > threshold || backwards;
     const confirmed = this.rerouteConfirmation.update({ offRoute, coordinate: snapshot.coordinate, accuracy,
-      now, timestamp: snapshot.sampledAt ?? Date.now(), lastRequestAt: this.lastRouteAttemptAt });
+      now, timestamp: snapshot.sampledAt ?? Date.now(), lastRequestAt: this.lastRouteAttemptAt,
+      decisive: accuracy <= 20 && snapshot.speedMetersPerSecond >= 3
+        && (measurement.offRouteMeters > Math.max(threshold * 1.8, accuracy * 3) || backwards) });
     if (!offRoute && accuracy <= 60) this.updateLiveRemainingMetrics(snapshot, measurement);
     else this.guidance.clear();
     if (this.routeRequestInFlight) return;
@@ -847,6 +849,12 @@ export class RoutingController {
     }
   }
 
+  previewDestination(coordinate: LngLatTuple, label: string): void {
+    if (!Number.isFinite(coordinate[0]) || !Number.isFinite(coordinate[1]) || Math.abs(coordinate[0]) > 180 || Math.abs(coordinate[1]) > 90) return;
+    this.cancelDestinationPrompt();
+    this.setDestination(coordinate, label);
+  }
+
   private setDestination(coordinate: LngLatTuple, label: string): void {
     if (this.arrivalPanelTimer !== null) window.clearTimeout(this.arrivalPanelTimer);
     this.arrivalPanelTimer = null;
@@ -1029,7 +1037,7 @@ export class RoutingController {
     profile: string,
     constrained: boolean
   ): Promise<RouteAttemptStatus> {
-    const accuracy = Math.max(60, Math.min(250, Math.round((snapshot.accuracyMeters || 30) * 2.5)));
+    const accuracy = Math.max(25, Math.min(150, Math.round((snapshot.accuracyMeters || 30) * 2)));
     const coordinatePath = `${origin[0]},${origin[1]};${destination[0]},${destination[1]}`;
     const trafficProfile = profile === "mapbox/driving-traffic";
     const annotations = trafficProfile
@@ -1049,7 +1057,8 @@ export class RoutingController {
       && snapshot.headingDegrees !== null
       && Number.isFinite(snapshot.headingDegrees)
       && (snapshot.headingSource === "gps-course" || snapshot.headingSource === "movement-course")
-      && snapshot.headingConfidence >= 0.5
+      && snapshot.headingConfidence >= 0.65
+      && snapshot.speedMetersPerSecond >= 2.5
       && snapshot.accuracyMeters > 0
       && snapshot.accuracyMeters <= 45;
     if (reliableHeading) params.set("bearings", `${Math.round(snapshot.headingDegrees!)},90;`);

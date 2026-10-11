@@ -69,18 +69,21 @@ export function routeSlice(route: readonly LngLatTuple[], start: number, end = I
     .filter((point, i, all) => i === 0 || distanceMeters(all[i - 1], point) > 0.05);
 }
 
-/** Three independent fixes and a short dwell reject GPS drift at junctions. */
+/** Independent moving fixes reject drift; decisive accurate departures can reroute sooner. */
 export class RerouteConfirmation {
   private since = 0; private samples = 0; private first: LngLatTuple | null = null; private lastTimestamp = 0;
-  reset(): void { this.since = 0; this.samples = 0; this.first = null; this.lastTimestamp = 0; }
-  update(input: { offRoute: boolean; coordinate: LngLatTuple; accuracy: number; now: number; timestamp: number; lastRequestAt: number }): boolean {
+  private decisiveSamples = 0;
+  reset(): void { this.decisiveSamples = 0; this.since = 0; this.samples = 0; this.first = null; this.lastTimestamp = 0; }
+  update(input: { offRoute: boolean; coordinate: LngLatTuple; accuracy: number; now: number; timestamp: number; lastRequestAt: number; decisive?: boolean }): boolean {
     if (!input.offRoute || input.accuracy > 60) { this.reset(); return false; }
     if (input.timestamp <= this.lastTimestamp) return false;
     this.lastTimestamp = input.timestamp;
     if (!this.samples) { this.since = input.now; this.first = input.coordinate; }
     this.samples++;
-    return this.samples >= 3 && input.now - this.since >= 1800 && input.now - input.lastRequestAt >= 6000
-      && this.first !== null && distanceMeters(this.first, input.coordinate) >= Math.max(8, input.accuracy * 0.5);
+    this.decisiveSamples = input.decisive && input.accuracy <= 20 ? this.decisiveSamples + 1 : 0;
+    const decisive = this.decisiveSamples >= 2;
+    return this.samples >= (decisive ? 2 : 3) && input.now - this.since >= (decisive ? 1200 : 1800) && input.now - input.lastRequestAt >= 6000
+      && this.first !== null && distanceMeters(this.first, input.coordinate) >= Math.max(decisive ? 12 : 8, input.accuracy * 0.5);
   }
   get pending(): boolean { return this.samples >= 2; }
 }

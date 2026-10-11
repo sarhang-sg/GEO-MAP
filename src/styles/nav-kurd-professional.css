@@ -354,7 +354,8 @@ html[data-ui-mode="satellite"] :where(.map-sheet, .search-card, .brand-card,
 @media (max-width: 700px) {
   .map-actions__toggle,
   .map-actions > #userAccountButton,
-  .map-actions > #locateButton { display: inline-flex !important; }
+  .map-actions > #locateButton,
+  .map-actions > #weatherListButton { display: inline-flex !important; }
   .map-shell:not(.map-actions-expanded) .map-actions > :where(.style-picker, #baseMapButton,
     #layersButton, #placesButton, #ownerStudioButton, #routePinButton,
     #shareLocationButton, #fitButton) { display: none !important; }
@@ -2004,7 +2005,7 @@ html[data-accent="blue"] {
   --user-light-text: #10283f; --user-light-muted: #405a74;
 }
 html[data-accent="teal"] {
-  --user-primary: #006d65; --user-deep: #004c4a; --user-bright: #44d8bf;
+  --user-primary: #246c42; --user-deep: #164a2d; --user-bright: #80dda0;
   --user-bg: #071b1c; --user-surface: #0b2425; --user-elevated: #123736;
   --user-border: #2c5b59; --user-text: #f0fffb; --user-muted: #b6d6ce;
   --user-light-bg: #e7f6ef; --user-light-surface: #f0fcf8;
@@ -2131,3 +2132,59 @@ body[data-motion-preference="reduced"] .map-shell :is(
 .appearance-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
 .appearance-button svg { width: 22px; height: 22px; flex: 0 0 22px; }
 .navigation-preferences__reset { margin-top: 16px; }
+
+html[data-accent="purple"] {
+  --user-primary: #7040b0;
+  --user-deep: #4b287c;
+  --user-bright: #c099ff;
+  --user-bg: #171023;
+  --user-surface: #231732;
+  --user-elevated: #322046;
+  --user-border: #58406e;
+  --user-text: #fcf7ff;
+  --user-muted: #d3c0e5;
+  --user-light-bg: #f2eafa;
+  --user-light-surface: #fcf7ff;
+  --user-light-elevated: #ecddf7;
+  --user-light-border: #ceb6df;
+  --user-light-text: #321c45;
+  --user-light-muted: #604174;
+}
+
+html[data-accent="pink"] {
+  --user-primary: #ab2760;
+  --user-deep: #781c49;
+  --user-bright: #ff9ec6;
+  --user-bg: #24131e;
+  --user-surface: #331b2b;
+  --user-elevated: #47273b;
+  --user-border: #71495f;
+  --user-text: #fff6fb;
+  --user-muted: #e6c4d6;
+  --user-light-bg: #fbeaf3;
+  --user-light-surface: #fff7fb;
+  --user-light-elevated: #f7dfea;
+  --user-light-border: #e2b9cb;
+  --user-light-text: #451c30;
+  --user-light-muted: #78435b;
+}
+
+html[data-accent="red"] {
+  --user-primary: #b12d39;
+  --user-deep: #7c1e2a;
+  --user-bright: #ffaaa8;
+  --user-bg: #261416;
+  --user-surface: #351c21;
+  --user-elevated: #482a30;
+  --user-border: #775057;
+  --user-text: #fff8f6;
+  --user-muted: #e7c8c9;
+  --user-light-bg: #fbece9;
+  --user-light-surface: #fff8f6;
+  --user-light-elevated: #f7e0df;
+  --user-light-border: #dfb7b7;
+  --user-light-text: #471f26;
+  --user-light-muted: #78464b;
+}
+
+html[data-nav-kurd-theme] .brand-card__logo { border-radius:20%; overflow:hidden; }

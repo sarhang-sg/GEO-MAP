@@ -30,13 +30,13 @@ def align_geo(path:Path, per_feature=True):
     payload=normalize_active_policy(json.loads(path.read_text(encoding='utf-8')))
     payload['version']=VERSION
     if isinstance(payload.get('metadata'),dict):
-        payload['metadata']['version']=VERSION; payload['metadata']['last_reviewed']=DATE
+        payload['metadata']['version']=VERSION
+        # App releases do not constitute a geographic data review.
         if 'language_policy' in payload['metadata']: payload['metadata']['language_policy']=POLICY
     if per_feature:
         for feature in payload.get('features',[]):
             props=feature.get('properties') or {}
             props['data_release']=VERSION
-            if 'last_reviewed' in props: props['last_reviewed']=DATE
             if 'language_policy' in props: props['language_policy']=POLICY
     write(path,payload)
 

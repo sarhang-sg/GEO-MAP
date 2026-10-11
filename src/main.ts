@@ -61,7 +61,7 @@ import { installMapOverlayLayoutController, type MapOverlayLayoutController } fr
 import { installMapLeftControlRail } from "./lib/map-left-control-rail";
 import { installPwaLaunchIntentHandler } from "./lib/pwa-launch-intent";
 import { PwaMapFileController } from "./lib/pwa-file-handler";
-import { installWeatherDirectory } from "./lib/weather-directory";
+import { installWeatherDirectory, type WeatherDirectory } from "./lib/weather-directory";
 import { PlaceWeatherService } from "./lib/place-weather";
 import { installRuntimeDiagnostics, recordRuntimeDiagnostic } from "./lib/runtime-diagnostics";
 import { installSupportHub } from "./lib/support-hub";
@@ -251,6 +251,7 @@ class KurdistanAtlasController {
   private readonly tutorialMapDemo: TutorialMapDemoController;
   private readonly overlayLayout: MapOverlayLayoutController;
   private readonly weather = new PlaceWeatherService();
+  private readonly weatherDirectory: WeatherDirectory;
   private layers: KriLayers | null = null;
   private localities: LocalityFeature[] = [];
   private localityById = new Map<string, LocalityFeature>();
@@ -454,6 +455,7 @@ class KurdistanAtlasController {
         this.syncPrimaryMapSurfaces();
       },
       onNavigationStateChange: (active) => {
+        this.liveLocation.setNavigationActive(active);
         this.syncPrimaryMapSurfaces();
         if (active) setMapControlsIdle(true);
         else revealMapControls();
@@ -492,7 +494,7 @@ class KurdistanAtlasController {
       getOwnerPlaces: () => this.ownerPlaces.getItems(),
       searchStatic: (term, language, limit) => this.searchWorker.search(term, language, limit)
     });
-    installWeatherDirectory({ shell: mapShell, getLanguage: () => this.language, getLocalities: () => this.localities,
+    this.weatherDirectory = installWeatherDirectory({ shell: mapShell, getLanguage: () => this.language, getLocalities: () => this.localities,
       search: term => this.searchService.searchWeatherLocalities(term), service: this.weather });
     this.deviceQa = installDeviceQaPanel({
       map: this.map,
@@ -1185,6 +1187,12 @@ class KurdistanAtlasController {
     content.dir = languageDirection(this.language);
     content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(props.place))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([kind, district, governorate].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
     this.appendShareAction(content, coordinate, title);
+    if (["city", "state", "province"].includes(props.place ?? "")) {
+      content.append(this.weather.createBadge(coordinate, this.language));
+      const forecast = document.createElement("button"); forecast.type = "button"; forecast.className = "place-popup__weather-open";
+      forecast.textContent = this.language === "en" ? "Next 24 hours" : this.language === "ar" ? "توقعات الساعات الـ24 القادمة" : "پێشبینیی ٢٤ کاتژمێری داهاتوو";
+      forecast.addEventListener("click", () => this.weatherDirectory.open(feature)); content.append(forecast);
+    }
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
   }
 
@@ -1244,6 +1252,15 @@ class KurdistanAtlasController {
   }
 
   focusSearch(choice: SearchChoice): void {
+    const snapshot = this.liveLocation.diagnosticSnapshot();
+    if (snapshot.watching && snapshot.coordinate && snapshot.accuracyMeters > 0 && snapshot.accuracyMeters <= 150
+      && snapshot.sampledAt && Date.now() - snapshot.sampledAt >= 0 && Date.now() - snapshot.sampledAt <= 30_000) {
+      const destination: LngLatTuple = choice.type === "local" ? choice.feature.geometry.coordinates.slice(0, 2) as LngLatTuple
+        : choice.type === "owner" ? [choice.place.longitude, choice.place.latitude] : [choice.item.x, choice.item.y];
+      const title = choice.type === "local" ? languageValue(choice.feature.properties, this.language)
+        : choice.type === "owner" ? ownerName(choice.place, this.language) : localizedStaticName(choice.item, this.language);
+      this.routing.previewDestination(destination, title);
+    }
     this.collapseSheetForMapFocus();
     if (choice.type === "local") { this.focusLocality(choice.feature); return; }
     this.beginManualMapFocus();

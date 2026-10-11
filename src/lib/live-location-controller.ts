@@ -116,6 +116,8 @@ export class LiveLocationController {
   private watchdogTimer = 0;
   private locationReadyAnnounced = false;
   private followEnabled = false;
+  private navigationActive = false;
+  setNavigationActive(active: boolean): void { this.navigationActive = active; }
   private pendingCameraFocus = false;
   private watchGeneration = 0;
   private readonly finishCameraMove = (): void => { this.programmaticMove = false; };
@@ -528,7 +530,7 @@ export class LiveLocationController {
   recenter(initialCenter = false): void {
     if (!this.lastCoordinate) return;
     const now = window.performance.now();
-    if (!initialCenter && now - this.lastRecenterAt <= 2600) return;
+    if (!initialCenter && now - this.lastRecenterAt <= 250) return;
     this.lastRecenterAt = now;
     this.map.stop();
     this.map.off("moveend", this.finishCameraMove);
@@ -541,8 +543,15 @@ export class LiveLocationController {
         : this.lastAccuracy <= 400
           ? 14.8
           : Math.max(5, Math.min(14.2, Math.log2(20_000_000 / Math.max(1, this.lastAccuracy))));
+    const course = this.navigationActive && this.lastAccuracy <= 40 && this.lastSpeed >= 2.5
+      && this.lastHeadingConfidence >= 0.65 && (this.lastHeadingSource === "gps-course" || this.lastHeadingSource === "movement-course")
+      ? this.lastHeading : null;
+    const bearing = this.map.getBearing();
+    const change = course === null ? 0 : Math.abs(((course - bearing + 540) % 360) - 180);
     this.map.easeTo({
       center: this.lastCoordinate,
+      bearing: course !== null && change >= 3 ? course : bearing,
+      offset: this.navigationActive ? [0, Math.min(100, this.map.getContainer().clientHeight * 0.12)] : [0, 0],
       zoom: initialCenter
         ? (this.lastAccuracy > PRECISE_FIX_METERS ? focusZoom : Math.max(this.map.getZoom(), focusZoom))
         : this.map.getZoom(),

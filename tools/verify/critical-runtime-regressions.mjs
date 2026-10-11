@@ -226,7 +226,7 @@ console.log('PASS GPS first feedback, 1000 repeated taps share one request, dist
 }
 {
   const h=gpsHarness();const listeners=new Set();const camera=[];
-  Object.assign(h.c,{lastCoordinate:[44,36],finishCameraMove(){h.c.programmaticMove=false;},map:{stop(){},off(_,fn){listeners.delete(fn);},once(_,fn){listeners.add(fn);},getZoom:()=>8,easeTo(options){camera.push(options);for(const fn of listeners)fn();listeners.clear();},isMoving:()=>false}});
+  Object.assign(h.c,{lastCoordinate:[44,36],finishCameraMove(){h.c.programmaticMove=false;},map:{stop(){},off(_,fn){listeners.delete(fn);},once(_,fn){listeners.add(fn);},getZoom:()=>8,getBearing:()=>0,getContainer:()=>({clientHeight:800}),easeTo(options){camera.push(options);for(const fn of listeners)fn();listeners.clear();},isMoving:()=>false}});
   for(let i=0;i<200;i++)h.gps.LiveLocationController.prototype.recenter.call(h.c,true);
   assert.equal(listeners.size,0);assert.equal(h.c.programmaticMove,false);assert.equal(camera[0].zoom,15.5);assert.equal(camera[0].duration,480);
   console.log('PASS actual camera method centers/zooms smoothly with no accumulated moveend listeners');

@@ -47,7 +47,9 @@ const COPY: Record<TutorialLanguage, TutorialCopy> = {
       { title: "GPS و ئاراستەی ڕاستەوخۆ", body: "ڕێگە بە هەستەوەرەکانی شوێن و ئاراستە بدە بۆ نوێکردنەوەی ڕاستەوخۆی شوێن، وردی و ئاراستەی مۆبایلەکەت." },
       { title: "ئامراز و لایەرەکانی نەخشە", body: "لایەرەکان، شوێنەکان، شێوازی پیشاندان و کۆنترۆڵە زیادەکان لەم پەنێڵە بەڕێوە ببە؛ تەنها ئەوەی پێویستتە چالاک بکە." },
       { title: "دیاریکردنی خاڵ و زیادکردنی شوێن", body: "دوگمەی پین هەڵبژێرە، دواتر خاڵەکە لەسەر نەخشە دیاری بکە. دەتوانیت وەک مەبەست بەکاری بهێنیت یان شوێنێکی نوێ بە زانیاری و ئایکۆنی گونجاو زیاد بکەیت." },
-      { title: "شێوازەکان، سەتەلایت و 3D", body: "نێوان ڕێگا، شەو و سەتەلایت بگۆڕە و دیمەنی 3D چالاک بکە. هەڵبژاردەکانت دەپارێزرێن و لە کردنەوەی داهاتوودا دەگەڕێنەوە." }
+      { title: "شێوازەکان، سەتەلایت و 3D", body: "نێوان ڕێگا، شەو و سەتەلایت بگۆڕە و دیمەنی 3D چالاک بکە. هەڵبژاردەکانت دەپارێزرێن و لە کردنەوەی داهاتوودا دەگەڕێنەوە." },
+      {"title": "کەش‌وهەوای شوێنەکانت ببینە", "body": "لە لیستی کەش‌وهەوادا شار یان گوندێک بدۆزەوە. پلەی گەرمی و دۆخی ئاسمان لە تەنیشت ناوەکەی دەبینیت؛ هەڵیبژێرە بۆ پێشبینیی ٢٤ کاتژمێری داهاتوو. خاڵە گەورەکانی شارەکانیش کەش‌وهەوا پیشان دەدەن."},
+      {"title": "نەخشەکە بە دڵی خۆت ڕێک بخە", "body": "لە ناساندن ← ڕووکار و کۆنترۆڵ، ڕەنگ، فۆنت و قەبارەی نووسین هەڵبژێرە. کوالێتی خۆکار لەگەڵ ئامێرەکەت دەگونجێت؛ بۆ پاشەکەوتی باتری دەتوانیت جووڵە و وردی کەم بکەیتەوە. هەڵبژاردەکانت دەپارێزرێن."}
     ]
   },
   ar: {
@@ -60,7 +62,9 @@ const COPY: Record<TutorialLanguage, TutorialCopy> = {
       { title: "GPS واتجاه مباشر", body: "اسمح بالموقع ومستشعرات الاتجاه لتحديث موضعك ودقته واتجاه الهاتف مباشرة. تتحسن البوصلة بعيداً عن المعادن والأغطية المغناطيسية." },
       { title: "أدوات وطبقات الخريطة", body: "أدر الطبقات والأماكن وأنماط العرض والأدوات الإضافية من هذه اللوحة، وفعّل ما تحتاجه فقط." },
       { title: "تحديد نقطة وإضافة مكان", body: "اختر زر الدبوس ثم حدد النقطة على الخريطة. استخدمها كوجهة أو أضف مكاناً جديداً بمعلوماته وأيقونته المناسبة." },
-      { title: "الأنماط والقمر الصناعي و3D", body: "بدّل بين الطرق والليل والقمر الصناعي وفعّل العرض ثلاثي الأبعاد. تحفظ اختياراتك تلقائياً للتشغيلات التالية." }
+      { title: "الأنماط والقمر الصناعي و3D", body: "بدّل بين الطرق والليل والقمر الصناعي وفعّل العرض ثلاثي الأبعاد. تحفظ اختياراتك تلقائياً للتشغيلات التالية." },
+      {"title": "تعرّف على طقس أماكنك", "body": "ابحث عن مدينة أو قرية في قائمة الطقس. تظهر الحرارة وحالة السماء بجانب الاسم؛ اختر المكان لعرض توقعات الساعات الـ24 القادمة. نقاط المدن الكبيرة تعرض الطقس أيضاً."},
+      {"title": "اضبط الخريطة كما تحب", "body": "من التعريف ← المظهر والتحكم، اختر ألوان الواجهة والخط وحجم النص. تتكيف الجودة التلقائية مع جهازك، ويمكنك تقليل الحركة والتفاصيل لتوفير البطارية. تُحفظ اختياراتك."}
     ]
   },
   en: {
@@ -73,7 +77,9 @@ const COPY: Record<TutorialLanguage, TutorialCopy> = {
       { title: "Live GPS & device direction", body: "Allow location and orientation sensors to update your position, accuracy, and phone direction live. Compass accuracy improves away from metal and magnetic cases." },
       { title: "Map tools & layers", body: "Manage layers, places, display modes, and additional controls here. Keep only the tools you need enabled." },
       { title: "Pick a point or add a place", body: "Choose the pin tool, then select a point on the map. Use it as a destination or add a new place with the appropriate details and icon." },
-      { title: "Styles, Satellite & 3D", body: "Switch among Roads, Night, and Satellite, and enable the 3D view. Your choices are saved automatically for future launches." }
+      { title: "Styles, Satellite & 3D", body: "Switch among Roads, Night, and Satellite, and enable the 3D view. Your choices are saved automatically for future launches." },
+      {"title": "Weather for your places", "body": "Find a city or village in the weather list. Each visible row shows its temperature and sky condition. Select a place for the next 24 hours. Large city dots also open weather."},
+      {"title": "Make the map feel like yours", "body": "In About → Appearance & controls, choose interface colors, font and text size. Automatic quality adapts to your device; reduce motion and detail to save battery. Your choices are saved."}
     ]
   }
 };
@@ -88,7 +94,9 @@ const TARGETS: readonly TutorialTargetSpec[] = [
   { selector: "#locateButton" },
   { selector: "#actionsToggleButton" },
   { selector: "#routePinButton", expandActions: true, demo: "pin", padding: 8 },
-  { selector: ".style-picker", expandActions: true, demo: "modes3d", padding: 8 }
+  { selector: ".style-picker", expandActions: true, demo: "modes3d", padding: 8 },
+  { selector: "#weatherListButton", expandActions: true, padding: 8 },
+  { selector: "#appearanceButton", openAbout: true, allowTargetScroll: true, padding: 8 }
 ] as const;
 const EDGE_GAP = 10;
 const TARGET_CARD_GAP = 16;

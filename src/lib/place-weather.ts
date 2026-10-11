@@ -1,4 +1,4 @@
-import { weatherCodeKind, weatherCodeLabel, type WeatherCondition } from "./weather-codes";
+import { weatherCodeKind, weatherCodeLabel, weatherContext, type WeatherCondition } from "./weather-codes";
 import { coreCall, localCoreEnabled } from "../android/local-provider";
 import type { LngLatTuple } from "./location";
 import type { Language } from "./types";
@@ -12,7 +12,7 @@ const WEATHER_API_BASE_URL = safeUrl(configuredWeatherUrl)?.protocol === "https:
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 6000;
 const STALE_TTL_MS = 10 * 60 * 60 * 1000;
-const CACHE_KEY = "nav-kurd:weather:v3";
+const CACHE_KEY = "nav-kurd:weather:v4";
 const MAX_CACHE_ENTRIES = 240;
 
 type ForecastHour = { at: number; temperature: number; weatherCode: number; isDay: boolean; chance: number | null };
@@ -44,9 +44,9 @@ type OpenMeteoResponse = {
 };
 const VALID_CODES = new Set([0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99]);
 const DETAILS = {
-  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینییەکانی کاتژمێرەکانی داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", dust: "خۆڵی هەوا", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
-  ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", dust: "الغبار", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
-  en: { more: "Details & forecast", forecast: "Hourly forecast", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", dust: "Dust", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
+  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینیی ٢٤ کاتژمێری داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", dust: "خۆڵی هەوا", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
+  ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات الـ24 القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", dust: "الغبار", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
+  en: { more: "Details & forecast", forecast: "Next 24 hours", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", dust: "Dust", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
 };
 function weatherTime(value: unknown, offset = 0): number | null {
   if (typeof value === "number" && Number.isFinite(value) && value > 0) return value * 1000;
@@ -74,13 +74,13 @@ function decodeReading(payload: OpenMeteoResponse): WeatherReading {
     throw new Error("weather-invalid-current");
   }
   const hours: ForecastHour[] = [];
-  for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 24); i++) {
+  for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 48); i++) {
     const at = weatherTime(payload.hourly?.time?.[i], payload.utc_offset_seconds);
     const temp = optionalNumber(payload.hourly?.temperature_2m?.[i]);
     const code = optionalNumber(payload.hourly?.weather_code?.[i]);
     const isDay = optionalNumber(payload.hourly?.is_day?.[i]);
     const chance = optionalNumber(payload.hourly?.precipitation_probability?.[i]);
-    if (at === null || at <= Date.now() || at > Date.now() + 10 * 3600000 || (hours.length && at <= hours[hours.length - 1].at)
+    if (at === null || at <= Date.now() || at > Date.now() + 24 * 3600000 || (hours.length && at <= hours[hours.length - 1].at)
       || temp === null || temp < -90 || temp > 65 || code === null || !VALID_CODES.has(code) || (isDay !== 0 && isDay !== 1)) continue;
     hours.push({ at, temperature: temp, weatherCode: code, isDay: isDay === 1,
       chance: chance !== null && chance >= 0 && chance <= 100 ? chance : null });
@@ -202,20 +202,30 @@ export class PlaceWeatherService {
       }
     });
   }
-  createBadge(coordinate: LngLatTuple, language: Language): HTMLElement {
+  createBadge(coordinate: LngLatTuple, language: Language, options: { expanded?: boolean } = {}): HTMLElement {
     const root = buildWeatherBadge(language);
+    root.dataset.expanded = String(options.expanded === true);
     for (const element of this.badges.keys()) if (!element.isConnected) this.badges.delete(element);
     this.badges.set(root, { coordinate, language });
     while (this.badges.size > 8) this.badges.delete(this.badges.keys().next().value!);
     void this.populate(root, coordinate, language);
     return root;
   }
+  async summary(coordinate: LngLatTuple, language: Language): Promise<{temperature: string; condition: string; icon: string; observed: string; stale: boolean}> {
+    if (!validCoordinate(coordinate)) throw new Error("weather-invalid-coordinate");
+    const reading = await this.current(coordinate), copy = DETAILS[language];
+    return { temperature: roundTemperature(reading.temperature, language),
+      condition: weatherCodeLabel(reading.weatherCode, reading.isDay, language),
+      icon: weatherIconAsset(weatherCondition(reading), reading.isDay),
+      observed: `${copy.updated} ${clock(reading.observedAt, reading.timezone, language)}${reading.stale ? ` · ${copy.cached}` : ""}`,
+      stale: reading.stale };
+  }
   private hydrate(): Promise<void> {
     return this.hydration ??= (async () => {
       try {
-        const raw: unknown = localCoreEnabled ? await coreCall("preference", { key: "weatherForecastCache" }) : JSON.parse(localStorage.getItem(CACHE_KEY) ?? "null");
+        const raw: unknown = localCoreEnabled ? await coreCall("preference", { key: "weatherForecastCache24h" }) : JSON.parse(localStorage.getItem(CACHE_KEY) ?? "null");
         if (!Array.isArray(raw)) return;
-        for (const item of raw.slice(0, 10)) {
+        for (const item of raw.slice(0, 40)) {
           if (!Array.isArray(item) || typeof item[0] !== "string" || !/^-?\d+\.\d{3},-?\d+\.\d{3}$/.test(item[0])) continue;
           const entry = item[1] as CacheEntry;
           const v = entry?.value;
@@ -224,7 +234,7 @@ export class PlaceWeatherService {
             || !Array.isArray(v.hours) || !Number.isFinite(entry.expiresAt)) continue;
           clock(v.observedAt, v.timezone, "en");
           v.hours = v.hours.filter((h) => Number.isFinite(h.at) && Number.isFinite(h.temperature) && VALID_CODES.has(h.weatherCode)
-            && typeof h.isDay === "boolean" && (h.chance === null || (typeof h.chance === "number" && h.chance >= 0 && h.chance <= 100))).slice(0, 10);
+            && typeof h.isDay === "boolean" && (h.chance === null || (typeof h.chance === "number" && h.chance >= 0 && h.chance <= 100))).slice(0, 24);
           this.cache.set(item[0], entry);
         }
       } catch { /* Optional cache never blocks live weather or map startup. */ }
@@ -234,8 +244,8 @@ export class PlaceWeatherService {
     if (this.saveTimer !== null) window.clearTimeout(this.saveTimer);
     this.saveTimer = window.setTimeout(() => {
       this.saveTimer = null;
-      const entries = [...this.cache].filter(([,v]) => Date.now() - v.value.observedAt < STALE_TTL_MS).slice(-10);
-      if (localCoreEnabled) void coreCall("setPreference", { key: "weatherForecastCache", value: entries }).catch(() => undefined);
+      const entries = [...this.cache].filter(([,v]) => Date.now() - v.value.observedAt < STALE_TTL_MS).slice(localCoreEnabled ? -16 : -40);
+      if (localCoreEnabled) void coreCall("setPreference", { key: "weatherForecastCache24h", value: entries }).catch(() => undefined);
       else { try { localStorage.setItem(CACHE_KEY, JSON.stringify(entries)); } catch { /* Storage can be full or disabled. */ } }
     }, 250);
   }
@@ -248,7 +258,7 @@ export class PlaceWeatherService {
       const condition = weatherCondition(reading);
       const temperature = roundTemperature(reading.temperature, language);
       const conditionLabel = weatherCodeLabel(reading.weatherCode, reading.isDay, language);
-      const expanded = root.querySelector<HTMLDetailsElement>(".place-weather__details")?.open ?? false;
+      const expanded = root.querySelector<HTMLDetailsElement>(".place-weather__details")?.open ?? (root.dataset.expanded === "true");
       root.replaceChildren(...Array.from(buildWeatherBadge(language).children));
       const image = root.querySelector<HTMLImageElement>(".place-weather__visual img")!;
       image.src = weatherIconAsset(condition, reading.isDay); image.hidden = false;
@@ -269,6 +279,7 @@ export class PlaceWeatherService {
       const body = document.createElement("div"); body.className = "place-weather__body";
       const metrics = document.createElement("div"); metrics.className = "place-weather__metrics";
       const metricValues = [
+        ...weatherContext(reading.temperature, reading.windSpeed, reading.windGusts, language),
         reading.apparent !== null ? `${words.feels} ${roundTemperature(reading.apparent, language)}` : "",
         reading.humidity !== null && reading.humidity >= 0 && reading.humidity <= 100 ? `${words.humidity} ${Math.round(reading.humidity)}%` : "",
         reading.windSpeed !== null && reading.windSpeed >= 0 ? `${words.wind} ${Math.round(reading.windSpeed)} km/h` : "",
@@ -276,7 +287,7 @@ export class PlaceWeatherService {
       ];
       for (const value of metricValues.filter(Boolean)) { const chip = document.createElement("span"); chip.textContent = value; metrics.append(chip); }
       if (metrics.childElementCount) body.append(metrics);
-      const hours = reading.hours.filter((h) => h.at > Date.now() && h.at <= Date.now() + 10 * 3600000);
+      const hours = reading.hours.filter((h) => h.at > Date.now() && h.at <= Date.now() + 24 * 3600000);
       if (hours.length) {
         const title = document.createElement("strong"); title.className = "place-weather__heading"; title.textContent = words.forecast; body.append(title);
         const row = document.createElement("div"); row.className = "place-weather__forecast"; row.dir = "ltr"; row.tabIndex = 0; row.setAttribute("aria-label", words.forecast);
@@ -286,7 +297,11 @@ export class PlaceWeatherService {
           const icon = document.createElement("img"); const kind = baseWeatherCondition(hour.weatherCode);
           icon.src = weatherIconAsset(kind, hour.isDay); icon.alt = weatherCodeLabel(hour.weatherCode, hour.isDay, language); icon.loading = "lazy"; icon.width = 28; icon.height = 28;
           const value = document.createElement("strong"); value.textContent = roundTemperature(hour.temperature, language);
-          cell.append(time, icon, value);
+          const day = document.createElement("small"); day.className = "place-weather__day";
+          const locale = language === "en" ? "en-GB" : language === "ar" ? "ar-IQ" : "ckb-IQ";
+          day.textContent = new Intl.DateTimeFormat(locale, { timeZone: reading.timezone, weekday: "short" }).format(hour.at);
+          time.title = new Intl.DateTimeFormat(locale, { timeZone: reading.timezone, dateStyle: "full", timeStyle: "short" }).format(hour.at);
+          cell.append(day, time, icon, value);
           if (hour.chance !== null) { const chance = document.createElement("small"); chance.textContent = `${Math.round(hour.chance)}%`; chance.title = words.rain; cell.append(chance); }
           row.append(cell);
         }
@@ -314,7 +329,7 @@ export class PlaceWeatherService {
   private async current(coordinate: LngLatTuple): Promise<WeatherReading> {
     await this.hydrate();
     const key = coordinateKey(coordinate); const cached = this.cache.get(key); const now = Date.now();
-    if (cached && cached.expiresAt > now && !cached.value.stale) return navigator.onLine === false ? { ...cached.value, stale: true } : cached.value;
+    if (cached && cached.expiresAt > now) return navigator.onLine === false ? { ...cached.value, stale: true } : cached.value;
     const retained = cached && now - cached.value.observedAt <= STALE_TTL_MS ? { ...cached.value, stale: true } : null;
     if (navigator.onLine === false) { if (retained) return retained; throw new Error("weather-offline"); }
     const pending = this.inflight.get(key); if (pending) return pending;
@@ -329,7 +344,7 @@ export class PlaceWeatherService {
     url.searchParams.set("latitude", latitude.toFixed(5)); url.searchParams.set("longitude", longitude.toFixed(5));
     url.searchParams.set("current", "temperature_2m,is_day,weather_code,wind_speed_10m,wind_gusts_10m,relative_humidity_2m,apparent_temperature");
     url.searchParams.set("hourly", "temperature_2m,weather_code,is_day,precipitation_probability");
-    url.searchParams.set("forecast_hours", "12"); url.searchParams.set("timeformat", "unixtime");
+    url.searchParams.set("forecast_hours", "25"); url.searchParams.set("timeformat", "unixtime");
     url.searchParams.set("temperature_unit", "celsius"); url.searchParams.set("wind_speed_unit", "kmh"); url.searchParams.set("timezone", "auto");
     const controller = new AbortController(); const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {

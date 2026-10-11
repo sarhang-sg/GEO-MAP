@@ -167,7 +167,8 @@ export function queryRenderedSymbols(styleLayers: {[_: string]: StyleLayer},
     const renderedSymbols = collisionIndex.queryRenderedSymbols(queryGeometry);
     const bucketQueryData: RetainedQueryData[] = [];
     for (const bucketInstanceId of Object.keys(renderedSymbols).map(Number)) {
-        bucketQueryData.push(retainedQueryData[bucketInstanceId]);
+        const retained = retainedQueryData[bucketInstanceId];
+        if (retained) bucketQueryData.push(retained);
     }
     bucketQueryData.sort(sortTilesIn);
 

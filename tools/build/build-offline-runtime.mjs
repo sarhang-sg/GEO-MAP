@@ -58,8 +58,9 @@ for (const assetPath of directBuildAssets) {
 }
 // The bootstrap imports main dynamically. Its static imports, stylesheet and
 // MapLibre worker must be available before an offline/slow-network startup.
-const mainEntry = generatedAssets.find((path) => /^assets\/main-[A-Za-z0-9_-]{6,}\.js$/u.test(path));
-if (!mainEntry) throw new Error("Main module is absent from the production build.");
+const mainEntries = generatedAssets.filter((path) => /^assets\/main-[A-Za-z0-9_-]{6,}\.js$/u.test(path));
+if (mainEntries.length !== 1) throw new Error("Expected exactly one current main module; clean the production build output.");
+const [mainEntry] = mainEntries;
 await addStaticModuleDependencies(mainEntry, requiredBuildAssets);
 for (const path of generatedAssets) {
   if (path.endsWith(".css") || /^assets\/maplibre-gl-worker-[A-Za-z0-9_-]{6,}\.js$/u.test(path)) {

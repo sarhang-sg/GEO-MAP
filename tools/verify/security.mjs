@@ -54,6 +54,14 @@ for (const field of ["dependencies", "devDependencies"]) {
   const locked = lockRoot?.[field] ?? {};
   assert(JSON.stringify(declared) === JSON.stringify(locked), `package-lock root ${field} differs from package.json.`);
   for (const [name, range] of Object.entries(declared)) {
+    if (name === "maplibre-gl" && range === "file:vendor/maplibre-gl") {
+      const vendor = await readJson("vendor/maplibre-gl/package.json");
+      assert(vendor.version === "6.6.0-navkurd.2" && vendor.private === true, "Unexpected local map engine identity.");
+      assert(lock.packages["node_modules/maplibre-gl"]?.link === true && lock.packages["node_modules/maplibre-gl"]?.resolved === "vendor/maplibre-gl", "Map engine must link to its reviewed source.");
+      assert(lock.packages["vendor/maplibre-gl"]?.version === vendor.version, "Local map engine lock mismatch.");
+      // Exact source and production module hashes are checked by verify:release.
+      continue;
+    }
     assert(typeof range === "string" && !/^(?:latest|\*|file:|git(?:\+|:)|https?:)/iu.test(range), `Unpinned or non-registry dependency declaration: ${name}@${range}`);
   }
 }
@@ -66,4 +74,4 @@ for (const [path, entry] of Object.entries(lock.packages ?? {})) {
 
 const env = await readText(".env.example");
 assert(!/SUPABASE_SERVICE_ROLE|SERVICE_ROLE_KEY/u.test(env), "Service-role secrets must not be exposed to the client environment.");
-console.log(`PASS security: hardened headers/CSP, locked registry dependencies, ${new Set(publicTables).size} RLS tables, ${securityDefiners} SECURITY DEFINER functions with bounded search paths, no committed secrets.`);
+console.log(`PASS security: hardened headers/CSP, locked registry dependencies and manifest-pinned local map engine, ${new Set(publicTables).size} RLS tables, ${securityDefiners} SECURITY DEFINER functions with bounded search paths, no committed secrets.`);

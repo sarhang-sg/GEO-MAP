@@ -220,11 +220,14 @@ export class FeatureIndex {
         ) => boolean | number): void {
 
         const layerIDs = this.bucketLayerIDs[bucketIndex];
-        if (filterLayerIDs && !layerIDs.some(id => filterLayerIDs.has(id)))
+        if (!layerIDs || (filterLayerIDs && !layerIDs.some(id => filterLayerIDs.has(id))))
             return;
 
         const sourceLayerName = this.sourceLayerCoder.decode(sourceLayerIndex);
         const sourceLayer = this.vtLayers[sourceLayerName];
+        // Placement may still refer to the preceding tile revision while new
+        // source data is installed. Never decode an index from another revision.
+        if (!sourceLayer || !Number.isInteger(featureIndex) || featureIndex < 0 || featureIndex >= sourceLayer.length) return;
         const feature = sourceLayer.feature(featureIndex);
 
         if (filter.needGeometry) {

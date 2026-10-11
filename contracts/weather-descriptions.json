@@ -180,5 +180,51 @@
       "ar": "عاصفة رعدية مع برد كثيف",
       "en": "Thunderstorm with heavy hail"
     }
+  },
+  "context": {
+    "extremeCold": {
+      "ku": "سەرمای توند",
+      "ar": "برد شديد",
+      "en": "Very cold"
+    },
+    "cold": {
+      "ku": "سەرما",
+      "ar": "بارد",
+      "en": "Cold"
+    },
+    "cool": {
+      "ku": "فێنک",
+      "ar": "لطيف البرودة",
+      "en": "Cool"
+    },
+    "hot": {
+      "ku": "گەرم",
+      "ar": "حار",
+      "en": "Hot"
+    },
+    "extremeHeat": {
+      "ku": "گەرمای توند",
+      "ar": "حر شديد",
+      "en": "Very hot"
+    },
+    "strongWind": {
+      "ku": "بای بەهێز",
+      "ar": "رياح قوية",
+      "en": "Strong wind"
+    },
+    "gusts": {
+      "ku": "تەپەبای بەهێز",
+      "ar": "هبّات قوية",
+      "en": "Strong gusts"
+    }
+  },
+  "contextThresholds": {
+    "extremeColdC": -10,
+    "coldC": 5,
+    "coolC": 16,
+    "hotC": 32,
+    "extremeHeatC": 40,
+    "strongWindKmh": 40,
+    "strongGustsKmh": 60
   }
 }

@@ -1,3 +1,4 @@
+import { WEATHER_ENTRY_ICON } from "./weather-entry-icon";
 import { coreCall, localCoreEnabled } from "../android/local-provider";
 import { languageValue, districtValue, governorateValue, categoryValue, placeRank } from "./geo-format";
 import type { LocalityFeature, Language } from "./types";
@@ -9,18 +10,31 @@ const COPY = {
   ar: { title: "قائمة الطقس", search: "ابحث عن مدينة أو محافظة أو قضاء أو ناحية أو قرية", close: "إغلاق", loading: "تحميل الأماكن…", empty: "لم يتم العثور على مكان؛ اكتب اسماً أدق.", choose: "اختر مكاناً لعرض الطقس وتوقعات الساعات القادمة.", place: "مكان", ready: "أماكن", unavailable: "قائمة الأماكن غير متاحة. حاول مجدداً.", retry: "إعادة المحاولة" },
   en: { title: "Weather list", search: "Search city, governorate, district, subdistrict or village", close: "Close", loading: "Loading places…", empty: "No places found; try a more specific name.", choose: "Choose a place for weather and the hourly forecast.", place: "Place", ready: "places", unavailable: "The place list is unavailable. Please retry.", retry: "Retry" }
 };
-const WEATHER_ICON = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M9 1v2M2 8H0m4-5 1.5 1.5M14 3l-1.5 1.5M5 18h12a4 4 0 0 0 0-8 5 5 0 0 0-9-1 4.5 4.5 0 0 0-3 9Zm4 3v1m6-1v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+export type WeatherDirectory = { open: (feature?: LocalityFeature) => void };
 export function installWeatherDirectory(options: {
   shell: HTMLElement; getLanguage: () => Language; getLocalities: () => LocalityFeature[];
   search: (term: string) => Promise<LocalityFeature[]>; service: PlaceWeatherService;
-}): void {
+}): WeatherDirectory {
   const button = document.createElement("button"); button.type = "button"; button.id = "weatherListButton";
-  button.className = "round-button weather-list-button"; button.innerHTML = WEATHER_ICON;
-  options.shell.querySelector(".map-actions")?.append(button);
+  button.className = "round-button weather-list-button"; button.innerHTML = WEATHER_ENTRY_ICON;
+  const actions = options.shell.querySelector(".map-actions");
+  const locate = actions?.querySelector("#locateButton");
+  if (locate) locate.after(button); else actions?.prepend(button);
   const dialog = document.createElement("dialog"); dialog.id = "weatherDirectory";
   dialog.className = "navigation-preferences weather-directory"; dialog.setAttribute("aria-labelledby", "weatherDirectoryTitle");
   options.shell.append(dialog);
   let generation = 0, timer = 0, input: HTMLInputElement, list: HTMLElement, details: HTMLElement, status: HTMLElement;
+  let selected: LocalityFeature | undefined;
+  let summaryGeneration = 0, activeRequests = 0;
+  let observer: IntersectionObserver | null = null;
+  const queue: Array<() => Promise<void>> = [];
+  const pump = (): void => {
+    while (dialog.open && activeRequests < 2 && queue.length) {
+      const task = queue.shift()!; activeRequests++;
+      void task().finally(() => { activeRequests--; pump(); });
+    }
+  };
+  const stopSummaries = (): void => { summaryGeneration++; observer?.disconnect(); observer = null; queue.length = 0; };
   let nativeDefaults: { language: Language; rows: LocalityFeature[] } | null = null;
   const defaults = async (): Promise<LocalityFeature[]> => {
     const language = options.getLanguage();
@@ -33,17 +47,21 @@ export function installWeatherDirectory(options: {
     return options.getLocalities().filter(feature => ["city", "town"].includes(feature.properties.place ?? ""));
   };
   const choose = (feature: LocalityFeature): void => {
+    selected = feature;
     const language = options.getLanguage(), name = languageValue(feature.properties, language);
     const title = document.createElement("h3"); title.textContent = name;
     const path = document.createElement("p"); path.className = "weather-directory__path";
     path.textContent = [...new Set([districtValue(feature.properties, language), governorateValue(feature.properties, language)].filter(Boolean))].join(" · ");
     details.replaceChildren(title, path);
-    details.append(options.service.createBadge(feature.geometry.coordinates.slice(0, 2) as LngLatTuple, language));
+    details.append(options.service.createBadge(feature.geometry.coordinates.slice(0, 2) as LngLatTuple, language, { expanded: true }));
     details.hidden = false;
     for (const row of list.querySelectorAll<HTMLButtonElement>("button[data-place-id]")) row.setAttribute("aria-pressed", String(row.dataset.placeId === feature.properties.id));
     details.scrollIntoView({ block: "nearest", behavior: "instant" });
   };
   const showRows = (rows: LocalityFeature[], isDefault: boolean): void => {
+    stopSummaries();
+    const batch = summaryGeneration;
+    const pending = new Map<Element, () => Promise<void>>();
     const language = options.getLanguage(), copy = COPY[language];
     const unique = new Map(rows.map(feature => [feature.properties.id, feature]));
     const candidates = [...unique.values()];
@@ -52,16 +70,42 @@ export function installWeatherDirectory(options: {
     const fragment = document.createDocumentFragment();
     for (const feature of visible) {
       const row = document.createElement("button"); row.type = "button"; row.className = "weather-directory__place";
-      row.dataset.placeId = feature.properties.id; row.setAttribute("aria-pressed", "false");
+      row.dataset.placeId = feature.properties.id; row.setAttribute("aria-pressed", String(selected?.properties.id === feature.properties.id));
       const name = document.createElement("strong"); name.textContent = languageValue(feature.properties, language);
       const context = document.createElement("small");
       context.textContent = [...new Set([categoryValue(feature.properties.place, language, copy.place),
         String(feature.properties[`admin_subdistrict_${language}`] ?? ""), districtValue(feature.properties, language), governorateValue(feature.properties, language)].filter(Boolean))].join(" · ");
-      row.append(name, context); row.addEventListener("click", () => choose(feature)); fragment.append(row);
+      const label = document.createElement("span"); label.className = "weather-directory__label"; label.append(name, context);
+      const observed = document.createElement("small"); observed.className = "weather-directory__observed"; label.append(observed);
+      const reading = document.createElement("span"); reading.className = "weather-directory__reading";
+      const icon = document.createElement("img"); icon.width = 30; icon.height = 30; icon.alt = ""; icon.hidden = true;
+      const temperature = document.createElement("bdi"); temperature.textContent = "—"; reading.append(icon, temperature);
+      row.append(label, reading); row.addEventListener("click", () => choose(feature)); fragment.append(row);
+      pending.set(row, async () => {
+        if (batch !== summaryGeneration || !dialog.open || !row.isConnected) return;
+        row.setAttribute("aria-busy", "true");
+        try {
+          const weather = await options.service.summary(feature.geometry.coordinates.slice(0, 2) as LngLatTuple, language);
+          if (batch !== summaryGeneration || !dialog.open || !row.isConnected) return;
+          temperature.textContent = weather.temperature; icon.src = weather.icon; icon.alt = weather.condition; icon.hidden = false;
+          observed.textContent = weather.observed; row.title = `${name.textContent} · ${weather.condition} · ${weather.temperature}`;
+        } catch { if (batch === summaryGeneration) reading.title = language === "en" ? "Weather unavailable" : language === "ar" ? "الطقس غير متاح" : "کەش‌وهەوا بەردەست نییە"; }
+        finally { row.removeAttribute("aria-busy"); }
+      });
     }
     list.replaceChildren(fragment); status.textContent = visible.length ? `${visible.length} ${copy.ready}` : copy.empty;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(entries => {
+        for (const entry of entries) if (entry.isIntersecting) {
+          const task = pending.get(entry.target); if (task) { pending.delete(entry.target); queue.push(task); observer?.unobserve(entry.target); }
+        }
+        pump();
+      }, { root: list, rootMargin: "40px" });
+      for (const row of pending.keys()) observer.observe(row);
+    } else { queue.push(...pending.values()); pump(); }
   };
   const search = async (): Promise<void> => {
+    stopSummaries();
     const serial = ++generation, copy = COPY[options.getLanguage()], term = input.value.trim(); status.textContent = copy.loading;
     try {
       const rows = term.length >= 2 ? await options.search(term) : await defaults();
@@ -75,6 +119,7 @@ export function installWeatherDirectory(options: {
     }
   };
   const render = (): void => {
+    stopSummaries();
     const copy = COPY[options.getLanguage()]; button.title = copy.title; button.setAttribute("aria-label", copy.title);
     dialog.dir = options.getLanguage() === "en" ? "ltr" : "rtl";
     dialog.replaceChildren();
@@ -82,7 +127,7 @@ export function installWeatherDirectory(options: {
     title.id = "weatherDirectoryTitle"; title.textContent = copy.title; close.type = "button"; close.textContent = copy.close;
     close.addEventListener("click", () => dialog.close()); header.append(title, close);
     input = document.createElement("input"); input.type = "search"; input.placeholder = copy.search; input.setAttribute("aria-label", copy.search); input.autocomplete = "off";
-    input.addEventListener("input", () => { generation++; window.clearTimeout(timer); timer = window.setTimeout(() => { void search(); }, 220); });
+    input.addEventListener("input", () => { generation++; stopSummaries(); window.clearTimeout(timer); timer = window.setTimeout(() => { void search(); }, 220); });
     status = document.createElement("p"); status.className = "weather-directory__status"; status.setAttribute("role", "status");
     list = document.createElement("div"); list.className = "weather-directory__list";
     details = document.createElement("section"); details.className = "weather-directory__details"; details.setAttribute("aria-live", "polite");
@@ -90,8 +135,13 @@ export function installWeatherDirectory(options: {
     const content = document.createElement("div"); content.className = "weather-directory__content"; content.append(list, details);
     dialog.append(header, input, status, content);
   };
-  button.addEventListener("click", () => { render(); dialog.showModal(); void search(); input.focus(); });
-  dialog.addEventListener("close", () => { generation++; window.clearTimeout(timer); details.replaceChildren(); button.focus(); });
-  window.addEventListener("nav-kurd:language-change", () => { render(); if (dialog.open) void search(); });
+  const open = (feature?: LocalityFeature): void => {
+    selected = feature; render(); if (!dialog.open) dialog.showModal();
+    if (feature) choose(feature); void search(); input.focus();
+  };
+  button.addEventListener("click", () => open());
+  dialog.addEventListener("close", () => { generation++; stopSummaries(); window.clearTimeout(timer); details.replaceChildren(); button.focus(); });
+  window.addEventListener("nav-kurd:language-change", () => { render(); if (dialog.open) { if (selected) choose(selected); void search(); } });
   render();
+  return { open };
 }
