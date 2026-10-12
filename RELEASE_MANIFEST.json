@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "35da1c353f0cafaec15fa2d78c7accde401a5421b35b55c4337d4826028e0cb1"
   },
   "fileCount": 1667,
-  "totalBytes": 289403872,
+  "totalBytes": 289404402,
   "files": {
     ".env.example": {
       "bytes": 2921,
@@ -3691,8 +3691,8 @@
       "sha256": "a460ada93227473a5dc1781a13af473e97058359d49ad773c42a540f466626bf"
     },
     "src/bootstrap.ts": {
-      "bytes": 6861,
-      "sha256": "726049ac7ef0edb70ecdd350ed328e73a75d1c7ef2d97434df32ef4ec5e6ef80"
+      "bytes": 7181,
+      "sha256": "d2c73225b407f5e6261cb9887908ce2b9c038d8c1bcb783ac6c363effb948032"
     },
     "src/data/road-hazards.json": {
       "bytes": 86018,
@@ -4623,8 +4623,8 @@
       "sha256": "623d8a860703996af9266edbc30d2219f723e210b7f19c3db54e6685240f1bf8"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 19433,
-      "sha256": "c4d505e80fb22ffc18cca3ee2a8d38a736158e20f335afffbbbce2b310f75981"
+      "bytes": 19643,
+      "sha256": "fc5090cf20a73489d3d6c5aa8cd7fd89745ffc2d1a90b7800694bdcf1bfe6727"
     },
     "tools/verify/data.py": {
       "bytes": 9700,

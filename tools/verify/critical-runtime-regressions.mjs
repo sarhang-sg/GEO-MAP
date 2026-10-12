@@ -121,14 +121,19 @@ function gpsHarness() {
     }
   }
   for (const language of ['ku', 'ar', 'en']) {
-    for (const name of ['MapRendererUnavailableError', 'GPUInitializationError', 'Error']) {
-      const renderer = name !== 'Error';
+    for (const [name, detail, renderer] of [
+      ['MapRendererUnavailableError', 'No renderer', true],
+      ['GPUInitializationError', 'No GPU', true],
+      ['Error', 'MapLibre could not initialize its WebGL2 renderer', true],
+      ['Error', 'WebGL2 style request failed', false],
+      ['Error', '<img src=x onerror=alert(1)>', false],
+    ]) {
       const app = new Element();
       let reloads = 0;
       const document = { createElement: () => new Element(), getElementById: () => app, body: app };
       const context = vm.createContext({ Error, UI, languageDirection, document, readAppLifecycleSnapshot: () => ({ language }), window: { location: { reload() { reloads++; } } } });
       vm.runInContext(stripTypeScriptTypes(recoverySource, { mode: 'transform' }) + '\nglobalThis.recover = renderStartupFailure;', context);
-      const error = new Error('<img src=x onerror=alert(1)>');
+      const error = new Error(detail);
       error.name = name;
       context.recover(error);
       const surface = app.children[0];
@@ -152,7 +157,7 @@ function gpsHarness() {
   assert.ok(main.indexOf('if (!this.map.dragPan)') < main.indexOf('this.animationScheduler ='), 'partial map must be rejected before installing controllers');
   assert.ok(source.includes('"./main").catch('), 'module evaluation failures must reach the startup boundary');
   assert.ok(main.includes('visualWait.abort();'), 'critical initialization failure must cancel the competing frame wait');
-  console.log('PASS localized startup recovery for both renderer APIs, safe text, explicit first-tap retry and partial-map guard');
+  console.log('PASS localized startup recovery for typed and bundled renderer failures, safe text, explicit first-tap retry and partial-map guard');
 }
 
 {
