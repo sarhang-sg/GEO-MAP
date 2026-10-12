@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "35da1c353f0cafaec15fa2d78c7accde401a5421b35b55c4337d4826028e0cb1"
   },
   "fileCount": 1667,
-  "totalBytes": 289403241,
+  "totalBytes": 289403872,
   "files": {
     ".env.example": {
       "bytes": 2921,
@@ -3643,8 +3643,8 @@
       "sha256": "1cd9ad24030feb9942fcde7041ceae1be30073e127b8bc68cc528e23aa82b5dc"
     },
     "public/releases/latest.json": {
-      "bytes": 311,
-      "sha256": "c64de74d98f13389dce1fc3b4146727a8b767ce8fe0c8a3ca3c5d6f8cb819848"
+      "bytes": 942,
+      "sha256": "8a5864565df0d33efec8c2d0d855fa45b08ef5571fcffdeb3e6cb83aa8851687"
     },
     "public/robots.txt": {
       "bytes": 78,
