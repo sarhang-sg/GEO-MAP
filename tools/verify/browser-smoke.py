@@ -151,7 +151,7 @@ def main() -> int:
                 else:
                     direct_probe = page.evaluate(
                     """async expected => {
-                      const response = await fetch('/downloads/NAV-KURD-10.4.2.apk', {
+                      const response = await fetch('/downloads/NAV-KURD-10.4.3.apk', {
                         method: 'HEAD', cache: 'no-store', redirect: 'error'
                       });
                       return {

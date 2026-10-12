@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Production methods with controlled providers; no claim of on-device timing.
+import { navigationTracking } from "./navigation-harness.mjs";
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
@@ -7,7 +8,7 @@ import { stripTypeScriptTypes } from 'node:module';
 const root = new URL('../../', import.meta.url);
 function load(path, globals, exports) {
   const source = fs.readFileSync(new URL(path, root),'utf8').replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm,'');
-  const context=vm.createContext(globals);
+  const context=vm.createContext({...navigationTracking,...globals});
   vm.runInContext(stripTypeScriptTypes(source,{mode:'transform'}).replace(/\bexport /g,'')+`\nglobalThis.api={${exports}}`,context);
   return context.api;
 }

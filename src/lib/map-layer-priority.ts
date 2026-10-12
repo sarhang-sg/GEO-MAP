@@ -1,3 +1,4 @@
+import { ROAD_HAZARD_LAYER_ID } from "./road-hazards";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { ATLAS_MARKER_LAYER_IDS } from "./atlas-marker-icon-controller";
 import { LOCATION_ACCURACY_LAYER_IDS, LOCATION_PUCK_LAYER_IDS } from "./live-location-layers";
@@ -17,6 +18,7 @@ export const DYNAMIC_VISUAL_LAYER_ORDER = [
   ...LOCATION_ACCURACY_LAYER_IDS,
   ...ALL_POI_ICON_LAYER_IDS,
   ...ATLAS_MARKER_LAYER_IDS,
+  ROAD_HAZARD_LAYER_ID,
   ...ROUTE_RENDER_LAYER_IDS,
   ...ROUTE_GUIDANCE_LAYER_IDS,
   ...ROUTE_DESTINATION_LAYER_IDS,

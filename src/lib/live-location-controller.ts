@@ -1,3 +1,4 @@
+import { MovementCourseTracker, trustedTravelCourse, followCameraBearing, type TravelMode } from "./navigation-tracking";
 import {localCoreEnabled} from "../android/local-provider";
 import {nativeBoolean,saveNativeBoolean} from "../android/ui-preferences";
 import * as maplibregl from "maplibre-gl";
@@ -12,7 +13,6 @@ import {
 import {
   accuracyCircleFeature,
   applyScreenOrientation,
-  bearingBetween,
   blendCoordinate,
   blendHeading,
   clampAccuracy,
@@ -117,7 +117,15 @@ export class LiveLocationController {
   private locationReadyAnnounced = false;
   private followEnabled = false;
   private navigationActive = false;
-  setNavigationActive(active: boolean): void { this.navigationActive = active; }
+  private navigationMode: TravelMode = "car";
+  private initialNavigationBearing: number | null = null;
+  private readonly movementCourse = new MovementCourseTracker();
+  setNavigationActive(active: boolean, mode: TravelMode = "car", initialBearing: number | null = null): void {
+    if (active !== this.navigationActive || mode !== this.navigationMode) this.movementCourse.reset();
+    this.initialNavigationBearing = active && !this.navigationActive ? initialBearing : null;
+    this.navigationActive = active;
+    this.navigationMode = mode;
+  }
   private pendingCameraFocus = false;
   private watchGeneration = 0;
   private readonly finishCameraMove = (): void => { this.programmaticMove = false; };
@@ -238,6 +246,7 @@ export class LiveLocationController {
   /** Cancel acquisition and recovery; late browser callbacks cannot restart GPS. */
   stopTracking(state: LocationState = "idle"): void {
     this.pulse?.stop();
+    this.movementCourse?.reset();
     if (this.map.getLayer("location-pulse")) this.map.setPaintProperty("location-pulse", "circle-opacity", 0);
     this.watchGeneration += 1;
     this.clearAcquisitionTimer();
@@ -374,13 +383,10 @@ export class LiveLocationController {
       const effectiveSpeed =
         reportedSpeed === null
           ? calculatedSpeed
-          : Math.max(reportedSpeed, calculatedSpeed * 0.75);
+          : reportedSpeed;
       const course = this.resolveCourseHeading(
         position,
-        previousRawCoordinate,
         incomingCoordinate,
-        rawMovedMeters,
-        rawElapsedMs,
         effectiveSpeed,
         rawAccuracy,
       );
@@ -543,19 +549,21 @@ export class LiveLocationController {
         : this.lastAccuracy <= 400
           ? 14.8
           : Math.max(5, Math.min(14.2, Math.log2(20_000_000 / Math.max(1, this.lastAccuracy))));
-    const course = this.navigationActive && this.lastAccuracy <= 40 && this.lastSpeed >= 2.5
-      && this.lastHeadingConfidence >= 0.65 && (this.lastHeadingSource === "gps-course" || this.lastHeadingSource === "movement-course")
-      ? this.lastHeading : null;
-    const bearing = this.map.getBearing();
-    const change = course === null ? 0 : Math.abs(((course - bearing + 540) % 360) - 180);
+    const course = this.navigationActive ? trustedTravelCourse({
+      headingDegrees: this.lastHeading, headingSource: this.lastHeadingSource, headingConfidence: this.lastHeadingConfidence,
+      accuracyMeters: this.lastAccuracy, speedMetersPerSecond: this.lastSpeed,
+    }, this.navigationMode) : null;
+    const starting = initialCenter && this.navigationActive && this.lastAccuracy <= 50 ? this.initialNavigationBearing : null;
+    const bearing = followCameraBearing(this.map.getBearing(), course ?? starting);
+    if (initialCenter) this.initialNavigationBearing = null;
     this.map.easeTo({
       center: this.lastCoordinate,
-      bearing: course !== null && change >= 3 ? course : bearing,
+      bearing,
       offset: this.navigationActive ? [0, Math.min(100, this.map.getContainer().clientHeight * 0.12)] : [0, 0],
       zoom: initialCenter
         ? (this.lastAccuracy > PRECISE_FIX_METERS ? focusZoom : Math.max(this.map.getZoom(), focusZoom))
         : this.map.getZoom(),
-      duration: initialCenter ? 480 : 220,
+      duration: initialCenter ? 480 : this.navigationActive ? 420 : 220,
       essential: true,
     });
     if (!this.map.isMoving()) {
@@ -850,10 +858,7 @@ export class LiveLocationController {
 
   private resolveCourseHeading(
     position: GeolocationPosition,
-    previousRawCoordinate: LngLatTuple | null,
     incomingCoordinate: LngLatTuple,
-    movedMeters: number,
-    elapsedMs: number,
     speed: number,
     accuracy: number,
   ): {
@@ -861,6 +866,7 @@ export class LiveLocationController {
     source: "gps-course" | "movement-course";
     confidence: number;
   } | null {
+    const movement = this.movementCourse.update(incomingCoordinate, position.timestamp || Date.now(), accuracy, speed, this.navigationMode);
     const reportedHeading =
       typeof position.coords.heading === "number" &&
       Number.isFinite(position.coords.heading)
@@ -874,24 +880,7 @@ export class LiveLocationController {
       return { heading: reportedHeading, source: "gps-course", confidence };
     }
 
-    const movementThreshold = Math.max(3.5, Math.min(16, accuracy * 0.24));
-    const elapsedIsUseful =
-      Number.isFinite(elapsedMs) && elapsedMs >= 250 && elapsedMs <= 10_000;
-    if (
-      !previousRawCoordinate ||
-      !elapsedIsUseful ||
-      movedMeters < movementThreshold ||
-      speed < 0.45 ||
-      accuracy > 85
-    )
-      return null;
-    const heading = bearingBetween(previousRawCoordinate, incomingCoordinate);
-    if (heading === null) return null;
-    const confidence = Math.max(
-      0.5,
-      Math.min(0.96, movedMeters / Math.max(12, accuracy * 0.8)),
-    );
-    return { heading, source: "movement-course", confidence };
+    return movement ? { ...movement, source: "movement-course" } : null;
   }
 
   private courseHeadingLocked(now = Date.now()): boolean {

@@ -1,3 +1,4 @@
+import { ROAD_HAZARD_SOURCE_ID, ROAD_HAZARD_DATA, roadHazardLayer } from "./road-hazards";
 import type { FeatureCollection } from "geojson";
 import type { StyleSpecification } from "maplibre-gl";
 import type { SatelliteSource } from "./satellite";
@@ -61,6 +62,7 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
   const roadOpacity = satellite ? 0.92 : 0.98;
 
   const sources: StyleSpecification["sources"] = {
+    [ROAD_HAZARD_SOURCE_ID]: { type: "geojson", data: ROAD_HAZARD_DATA, attribution: "© OpenStreetMap contributors" },
     "kri-vector": { type: "vector", url: options.vectorSourceUrls?.base ?? `pmtiles://${options.pmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
     "kri-road-vector": { type: "vector", url: options.vectorSourceUrls?.roads ?? `pmtiles://${options.roadsPmtilesUrl}`, attribution: "© OpenStreetMap contributors" },
     [BASE_POI_SOURCE_ID]: { type: "geojson", data: options.deferBasePoiData ? EMPTY_POINT_COLLECTION : dataAssetUrl("data/kri/kri-pois-render.geojson"), attribution: "© OpenStreetMap contributors", cluster: true, clusterMaxZoom: POI_CLUSTER_MAX_ZOOM, clusterRadius: options.lowPowerProfile ? 68 : 54, clusterMinPoints: 3 },
@@ -156,6 +158,8 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
     { id: NATURAL_POI_DOT_LAYER_ID, type: "circle", source: NATURAL_POI_SOURCE_ID, minzoom: poiMinZoom, filter: NAMED_POI_FILTER, layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.15, 12, 2.15, 14, 3.25], "circle-color": palette.poi, "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 0.9, "circle-opacity": BASE_POI_DOT_OPACITY } },
     { id: SECURITY_POI_DOT_LAYER_ID, type: "circle", source: SECURITY_POI_SOURCE_ID, minzoom: Math.max(9.2, poiMinZoom - 0.8), filter: NAMED_POI_FILTER, layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 1.4, 12, 2.6, 14, 3.8], "circle-color": "#e08a73", "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 1.0, "circle-opacity": BASE_POI_DOT_OPACITY } },
     { id: REVIEWED_POI_DOT_LAYER_ID, type: "circle", source: REVIEWED_POI_SOURCE_ID, minzoom: poiMinZoom, filter: NAMED_POI_FILTER, layout: { visibility: options.placesVisible ? "visible" : "none" }, paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.2, 12, 2.25, 14, 3.4], "circle-color": palette.poi, "circle-stroke-color": night ? "#0b1426" : "#fff", "circle-stroke-width": 1.0, "circle-opacity": BASE_POI_DOT_OPACITY } },
+
+    roadHazardLayer(options.placesVisible),
 
     // The outside mask is slightly translucent so neighboring terrain remains readable without letting outside map data dominate the KRI + Kirkuk coverage.
     { id: "kri-mask", type: "fill", source: "kri-mask-source", paint: { "fill-color": satellite ? "#0a1624" : night ? "#08111e" : "#0b1420", "fill-opacity": satellite ? 0.88 : night ? 0.93 : 0.90 } },

@@ -1,3 +1,4 @@
+import { navigationProfile, type TravelMode } from "./navigation-tracking";
 import { bearingBetween, distanceMeters, shortestHeadingDelta, type LngLatTuple } from "./location";
 
 export type RouteProgressMeasurement = {
@@ -74,16 +75,19 @@ export class RerouteConfirmation {
   private since = 0; private samples = 0; private first: LngLatTuple | null = null; private lastTimestamp = 0;
   private decisiveSamples = 0;
   reset(): void { this.decisiveSamples = 0; this.since = 0; this.samples = 0; this.first = null; this.lastTimestamp = 0; }
-  update(input: { offRoute: boolean; coordinate: LngLatTuple; accuracy: number; now: number; timestamp: number; lastRequestAt: number; decisive?: boolean }): boolean {
-    if (!input.offRoute || input.accuracy > 60) { this.reset(); return false; }
-    if (input.timestamp <= this.lastTimestamp) return false;
+  update(input: { offRoute: boolean; coordinate: LngLatTuple; accuracy: number; now: number; timestamp: number; lastRequestAt: number; decisive?: boolean; mode?: TravelMode }): boolean {
+    const profile = navigationProfile(input.mode);
+    if (!input.offRoute || !Number.isFinite(input.accuracy) || input.accuracy <= 0 || input.accuracy > profile.maxAccuracy
+      || !input.coordinate.every(Number.isFinite)) { this.reset(); return false; }
+    if (!Number.isFinite(input.now) || !Number.isFinite(input.timestamp) || input.timestamp <= this.lastTimestamp) return false;
+    if (this.lastTimestamp && input.timestamp - this.lastTimestamp > 10_000) this.reset();
     this.lastTimestamp = input.timestamp;
     if (!this.samples) { this.since = input.now; this.first = input.coordinate; }
     this.samples++;
     this.decisiveSamples = input.decisive && input.accuracy <= 20 ? this.decisiveSamples + 1 : 0;
     const decisive = this.decisiveSamples >= 2;
-    return this.samples >= (decisive ? 2 : 3) && input.now - this.since >= (decisive ? 1200 : 1800) && input.now - input.lastRequestAt >= 6000
-      && this.first !== null && distanceMeters(this.first, input.coordinate) >= Math.max(decisive ? 12 : 8, input.accuracy * 0.5);
+    return this.samples >= (decisive ? 2 : 3) && input.now - this.since >= (decisive ? profile.decisiveDwell : profile.dwell) && input.now - input.lastRequestAt >= 6000
+      && this.first !== null && distanceMeters(this.first, input.coordinate) >= Math.max(decisive ? profile.decisiveMovement : profile.movement, input.accuracy * 0.5);
   }
   get pending(): boolean { return this.samples >= 2; }
 }

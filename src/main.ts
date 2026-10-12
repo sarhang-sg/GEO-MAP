@@ -1,3 +1,4 @@
+import { roadHazardDetails } from "./lib/road-hazards";
 import {NativeOfflineMapPack} from "./android/offline-map-pack";
 import {initializeLocalPreferences,flushNativePreferences} from "./android/ui-preferences";
 import {coreStatistics,localCoreEnabled,NativeSearchProvider} from './android/local-provider';
@@ -454,8 +455,8 @@ class KurdistanAtlasController {
         }
         this.syncPrimaryMapSurfaces();
       },
-      onNavigationStateChange: (active) => {
-        this.liveLocation.setNavigationActive(active);
+      onNavigationStateChange: (active, mode, initialBearing) => {
+        this.liveLocation.setNavigationActive(active, mode, initialBearing);
         this.syncPrimaryMapSurfaces();
         if (active) setMapControlsIdle(true);
         else revealMapControls();
@@ -1202,7 +1203,8 @@ class KurdistanAtlasController {
     const sourceClass = stringProperty(properties, ["fclass", "class", "type", "amenity", "shop", "tourism", "leisure", "office", "healthcare", "historic", "natural"]);
     const sourceCategory = stringProperty(properties, ["category"]);
     const markerCategory = poiIconIdForProperties(properties) ?? (sourceClass || sourceCategory);
-    const category = categoryValue(markerCategory, this.language, UI[this.language].category);
+    const road = roadHazardDetails(properties.road_hazard, this.language);
+    const category = road?.label ?? categoryValue(markerCategory, this.language, UI[this.language].category);
     const exactTitle = localizedPoiName(properties, this.language);
     // A POI can carry a verified name only in another source language. It must
     // not become an unclickable visible marker: use the localized category as a
@@ -1214,6 +1216,16 @@ class KurdistanAtlasController {
     content.className = "place-popup place-popup--rich";
     content.dir = languageDirection(this.language);
     content.innerHTML = `<div class="place-popup__title"><img src="${escapeText(atlasMarkerAssetUrl(markerCategory))}" alt="" aria-hidden="true"><strong>${escapeText(title)}</strong></div><span>${escapeText([category, address].filter(Boolean).join(" • "))}</span><small>${escapeText(coordinateLabel(coordinate))}</small>`;
+    if (road) {
+      const symbol = document.createElement("span");
+      symbol.setAttribute("aria-hidden", "true");
+      Object.assign(symbol.style, { background: road.color, width: "18px", height: "18px", borderRadius: "50%", border: "2px solid #102139", flexShrink: "0" });
+      content.querySelector(".place-popup__title img")?.replaceWith(symbol);
+      const source = document.createElement("small");
+      const label = this.language === "ku" ? "تۆماری نەخشە" : this.language === "ar" ? "سجل الخريطة" : "Map record";
+      source.textContent = `${label}: OpenStreetMap${properties.source_date ? ` · ${String(properties.source_date).slice(0, 10)}` : ""}`;
+      content.append(source);
+    }
     this.appendShareAction(content, coordinate, title);
     this.openPlacePopup(coordinate, content, { offset: 14, closeButton: false, maxWidth: "300px" });
     return true;

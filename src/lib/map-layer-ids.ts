@@ -32,6 +32,7 @@ export const DYNAMIC_SOURCE_IDS = [
 export const ADMINISTRATIVE_LAYER_IDS = ["kri-districts", "kri-governorates"] as const;
 
 export const PLACE_VISIBILITY_LAYER_IDS = [
+  "kri-road-hazards",
   "kri-base-pois",
   "kri-base-poi-icons-landmark",
   "kri-base-poi-icons-community",

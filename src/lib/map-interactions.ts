@@ -1,3 +1,4 @@
+import { ROAD_HAZARD_LAYER_ID } from "./road-hazards";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap, MapMouseEvent, PointLike } from "maplibre-gl";
 import type { AtlasPlace } from "./atlas-places";
@@ -67,11 +68,18 @@ export function installMapInteractions(options: MapInteractionOptions): void {
     return original instanceof Event && handledOriginalEvents.has(original);
   };
 
+  map.on("click", ROAD_HAZARD_LAYER_ID, (event) => {
+    if (coordinatePickerActive() || wasHandled(event)) return;
+    const feature = event.features?.[0];
+    if (feature?.geometry?.type === "Point" && showBasePoiPopup(feature as unknown as BasePoiFeature)) markHandled(event);
+  });
+  setPointerCursor(map, ROAD_HAZARD_LAYER_ID);
+
   const localityClusterLayers = ["kri-locality-clusters-z7", "kri-locality-clusters-z8", "kri-locality-clusters-z9"] as const;
   for (const layerId of localityClusterLayers) {
     if (!map.getLayer(layerId)) continue;
     map.on("click", layerId, (event) => {
-      if (coordinatePickerActive()) return;
+      if (coordinatePickerActive() || wasHandled(event)) return;
       const feature = event.features?.[0] ?? map.queryRenderedFeatures(event.point, { layers: [layerId] })[0];
       if (!feature?.geometry || feature.geometry.type !== "Point") return;
       markHandled(event);
@@ -84,7 +92,7 @@ export function installMapInteractions(options: MapInteractionOptions): void {
 
   if (map.getLayer(BASE_POI_CLUSTER_LAYER_ID)) {
     map.on("click", BASE_POI_CLUSTER_LAYER_ID, (event) => {
-    if (coordinatePickerActive()) return;
+    if (coordinatePickerActive() || wasHandled(event)) return;
       const feature = map.queryRenderedFeatures(event.point, { layers: [BASE_POI_CLUSTER_LAYER_ID] })[0];
       const clusterId = feature?.properties?.cluster_id as number | undefined;
       const source = map.getSource(BASE_POI_SOURCE_ID) as maplibregl.GeoJSONSource | undefined;
@@ -99,7 +107,7 @@ export function installMapInteractions(options: MapInteractionOptions): void {
   LOCALITY_INTERACTIVE_LAYER_IDS.forEach((layerId) => {
     setPointerCursor(map, layerId);
     map.on("click", layerId, (event) => {
-    if (coordinatePickerActive()) return;
+    if (coordinatePickerActive() || wasHandled(event)) return;
       const feature = event.features?.[0] as LocalityFeature | undefined;
       if (feature?.geometry?.type !== "Point") return;
       markHandled(event);
@@ -108,7 +116,7 @@ export function installMapInteractions(options: MapInteractionOptions): void {
   });
 
   map.on("click", "atlas-place-clusters", (event) => {
-    if (coordinatePickerActive()) return;
+    if (coordinatePickerActive() || wasHandled(event)) return;
     const feature = map.queryRenderedFeatures(event.point, { layers: ["atlas-place-clusters"] })[0];
     const clusterId = feature?.properties?.cluster_id as number | undefined;
     const source = map.getSource("atlas-places-source") as maplibregl.GeoJSONSource | undefined;
@@ -119,7 +127,7 @@ export function installMapInteractions(options: MapInteractionOptions): void {
   });
 
   map.on("click", "atlas-place-marker", (event) => {
-    if (coordinatePickerActive()) return;
+    if (coordinatePickerActive() || wasHandled(event)) return;
     const feature = event.features?.[0] as OwnerFeature | undefined;
     const place = ownerPlaceById(feature?.properties?.id);
     if (!place || feature?.geometry?.type !== "Point") return;
@@ -136,10 +144,10 @@ export function installMapInteractions(options: MapInteractionOptions): void {
   }
 
   map.on("click", (event) => {
-    if (coordinatePickerActive()) return;
-    if (wasHandled(event)) return;
+    if (coordinatePickerActive() || wasHandled(event)) return;
 
     const layers = existingLayers(map, [
+      ROAD_HAZARD_LAYER_ID,
       ...OWNER_INTERACTIVE_LAYER_IDS,
       ...LOCALITY_INTERACTIVE_LAYER_IDS,
       ...BASE_POI_INTERACTIVE_LAYER_IDS
@@ -164,7 +172,7 @@ export function installMapInteractions(options: MapInteractionOptions): void {
         return;
       }
 
-      if (BASE_POI_INTERACTIVE_LAYER_IDS.includes(layerId as (typeof BASE_POI_INTERACTIVE_LAYER_IDS)[number])) {
+      if (layerId === ROAD_HAZARD_LAYER_ID || BASE_POI_INTERACTIVE_LAYER_IDS.includes(layerId as (typeof BASE_POI_INTERACTIVE_LAYER_IDS)[number])) {
         if (showBasePoiPopup(rendered as unknown as BasePoiFeature)) return;
       }
     }

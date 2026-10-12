@@ -1,9 +1,9 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-10-10-nav-kurd-v10.4.2",
-  "appVersion": "10.4.2",
+  "release": "2026-10-12-nav-kurd-v10.4.3",
+  "appVersion": "10.4.3",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "generatedForDate": "2026-10-10",
+  "generatedForDate": "2026-10-12",
   "fileCount": 758,
   "totalBytes": 131364590,
   "files": {
@@ -13,7 +13,7 @@
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "5b5a12a558ccbe5816e0ab264628d18815fc31dbbe640eaaad43fd39285dd8d3"
+      "sha256": "e0a4cd1e11663b13f9a27dce136dc056a97f5a7968edb26ae2e4184241a78cdd"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -29,11 +29,11 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "bda39de3043c0d8b6f6055240e52e2438b565f5bb1c0a31495339db665542e7e"
+      "sha256": "8e7ed2b48960dbf4f5b1ee3241f56cb66885419cb6f5b5d25607a8b5dc4650a3"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "120105ae45af6e236d4920e854a4845c5fa88636b2194f2045512304e1b42717"
+      "sha256": "1673f74f32a2f5c4b71a9941416335404aae5827d460a27e573ee3cedd45afc8"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
@@ -101,7 +101,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "d049913a17ea743c424c9e183cc45c83bb9198907093857d6d8fe534584e0963"
+      "sha256": "4ad490c41d372854d3974a7e5956bc58d55fc9facde74dd81db5c1a19e9a52c7"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2593,7 +2593,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "90c84bc056abd36696bdd6905d68281f112c45df0110fe69b7ab6291f4495675"
+      "sha256": "d12d333cb5d82f4b0cfc0de00272d7659d1531b42c4908692413f8f615b32196"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,

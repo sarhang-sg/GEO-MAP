@@ -1,4 +1,5 @@
-import { measureRouteProgress, routeSlice, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
+import { navigationProfile, trustedTravelCourse, type TravelMode } from "./navigation-tracking";
+import { measureRouteProgress, routeCoordinateAt, routeSlice, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
 export { measureRouteProgress } from "./route-progress";
 import {routeManeuvers,nextManeuver,type ProviderStep,type Maneuver} from "./route-maneuvers";
 import { RouteGuidanceOverlay } from "./route-guidance-overlay";
@@ -6,7 +7,7 @@ import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { FeatureCollection, LineString, Point } from "geojson";
 import { UI, languageDirection } from "./i18n";
-import { distanceMeters, type LngLatTuple } from "./location";
+import { bearingBetween, distanceMeters, type LngLatTuple } from "./location";
 import { fetchJson, isAbortError } from "./service-state";
 import { installMapLongPress } from "./map-long-press";
 import type { Language } from "./types";
@@ -23,7 +24,6 @@ type TrafficLevel = "low" | "moderate" | "heavy" | "severe" | "closed" | "unknow
 type RouteFeatureCollection = FeatureCollection<LineString, { distance: number; duration: number; traffic: TrafficLevel; congestion?: number; routeId?: number; connector?: boolean }>;
 type RoutePointCollection = FeatureCollection<Point, { kind: "destination" | "candidate" | "snapped-origin" | "snapped-destination" }>;
 type RoutingProvider = "osrm" | "mapbox";
-type TravelMode = "car" | "bicycle" | "walking";
 type RouteAttemptStatus = "success" | "no-route" | "unavailable";
 
 type RouteWaypoint = {
@@ -80,7 +80,7 @@ type RoutingControllerOptions = {
   isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   onRouteVisualChange?: () => void;
   onRouteStateChange?: (active: boolean) => void;
-  onNavigationStateChange?: (active: boolean) => void;
+  onNavigationStateChange?: (active: boolean, mode: TravelMode, initialBearing: number | null) => void;
   onDestinationPromptStateChange?: (open: boolean) => void;
   lowPowerProfile?: boolean;
 };
@@ -258,7 +258,7 @@ export class RoutingController {
   private readonly isDestinationAllowed: (coordinate: LngLatTuple) => boolean;
   private readonly onRouteVisualChange: () => void;
   private readonly onRouteStateChange: (active: boolean) => void;
-  private readonly onNavigationStateChange: (active: boolean) => void;
+  private readonly onNavigationStateChange: (active: boolean, mode: TravelMode, initialBearing: number | null) => void;
   private readonly onDestinationPromptStateChange: (open: boolean) => void;
   private readonly routeAnimation: MapAnimationHandle;
   private readonly destinationAnimation: MapAnimationHandle;
@@ -528,7 +528,7 @@ export class RoutingController {
 
     if (!this.navigating) return;
     const accuracy = Math.max(0, snapshot.accuracyMeters || 0);
-    if (accuracy > 200 || accuracy <= 0 || (snapshot.sampledAt && Date.now() - snapshot.sampledAt > 10_000)) return;
+    if (accuracy > 200 || accuracy <= 0 || (snapshot.sampledAt && (Date.now() - snapshot.sampledAt > 10_000 || snapshot.sampledAt - Date.now() > 2000))) return;
     const arrivalThreshold = Math.max(12, Math.min(28, accuracy + 8));
     if (accuracy <= 30 && this.lastDistance <= arrivalThreshold * 1.5 && distanceMeters(snapshot.coordinate, this.destination) <= arrivalThreshold) {
       this.finishNavigationAtDestination();
@@ -544,20 +544,20 @@ export class RoutingController {
     }
 
     const elapsedFix = this.progressAt ? Math.min(15, (now - this.progressAt) / 1000) : 1;
-    const reliableHeading = snapshot.headingConfidence >= 0.65 && snapshot.speedMetersPerSecond >= 1.5
-      && (snapshot.headingSource === "gps-course" || snapshot.headingSource === "movement-course") ? snapshot.headingDegrees : null;
+    const profile = navigationProfile(this.travelMode);
+    const reliableHeading = trustedTravelCourse(snapshot, this.travelMode);
     const measurement = measureRouteProgress(snapshot.coordinate, this.routeCoordinates, {
       previousMeters: this.progressMeters,
       maxAdvanceMeters: Math.max(35, snapshot.speedMetersPerSecond * elapsedFix * 1.8 + accuracy * 2),
       heading: reliableHeading, accuracy
     });
     if (!measurement) return;
-    const threshold = Math.max(this.travelMode === "walking" ? 14 : ROUTE_REROUTE_METERS, Math.min(75, accuracy * 1.3 + 8));
-    const backwards = this.progressAt > 0 && measurement.progressedMeters < this.progressMeters - Math.max(30, accuracy * 2);
+    const threshold = Math.max(this.travelMode === "car" ? ROUTE_REROUTE_METERS : profile.offRoute, Math.min(75, accuracy * 1.3 + 8));
+    const backwards = this.progressAt > 0 && measurement.progressedMeters < this.progressMeters - Math.max(profile.backwards, accuracy * 2);
     const offRoute = measurement.offRouteMeters > threshold || backwards;
     const confirmed = this.rerouteConfirmation.update({ offRoute, coordinate: snapshot.coordinate, accuracy,
-      now, timestamp: snapshot.sampledAt ?? Date.now(), lastRequestAt: this.lastRouteAttemptAt,
-      decisive: accuracy <= 20 && snapshot.speedMetersPerSecond >= 3
+      now, timestamp: snapshot.sampledAt ?? Date.now(), lastRequestAt: this.lastRouteAttemptAt, mode: this.travelMode,
+      decisive: accuracy <= 20 && snapshot.speedMetersPerSecond >= profile.courseSpeed
         && (measurement.offRouteMeters > Math.max(threshold * 1.8, accuracy * 3) || backwards) });
     if (!offRoute && accuracy <= 60) this.updateLiveRemainingMetrics(snapshot, measurement);
     else this.guidance.clear();
@@ -656,7 +656,13 @@ export class RoutingController {
     }
     if (this.navigating !== this.lastEmittedNavigationState) {
       this.lastEmittedNavigationState = this.navigating;
-      this.onNavigationStateChange(this.navigating);
+      const snapshot = this.getLocationSnapshot();
+      const projection = this.navigating && snapshot.coordinate && snapshot.accuracyMeters > 0 && snapshot.accuracyMeters <= 50
+        ? measureRouteProgress(snapshot.coordinate, this.routeCoordinates) : null;
+      const ahead = projection ? routeCoordinateAt(this.routeCoordinates, projection.progressedMeters + 15) : null;
+      const initialBearing = projection && ahead && projection.offRouteMeters <= Math.max(25, snapshot.accuracyMeters * 1.5)
+        ? bearingBetween(projection.coordinate, ahead) : null;
+      this.onNavigationStateChange(this.navigating, this.travelMode, initialBearing);
     }
     this.onRouteVisualChange();
   }
@@ -725,6 +731,7 @@ export class RoutingController {
     this.navigating = true;
     this.setPinMode(false);
     this.mapShell.classList.add("is-navigating");
+    this.syncRouteVisualState();
     this.requestLocation();
     this.startRouteAnimation();
     this.startDestinationAnimation();

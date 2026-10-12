@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { navigationTracking } from "./navigation-harness.mjs";
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
@@ -47,7 +48,7 @@ const root=new URL('../../',import.meta.url);
 }
 function load(path,globals,exports){
  const code=fs.readFileSync(new URL(path,root),'utf8').replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm,'');
- const context=vm.createContext(globals);
+ const context=vm.createContext({...navigationTracking,...globals});
  vm.runInContext(stripTypeScriptTypes(code,{mode:'transform'}).replace(/\bexport /g,'')+`\nglobalThis.api={${exports}}`,context);
  return context.api;
 }
@@ -149,13 +150,13 @@ for(const native of [false,true]){
  console.log('PASS owner data freshness, unchanged geometry, live edits, failure retention and source replacement');
 }
 {
- let layers=['base','route','icon','puck','accuracy','destination'];let writes=0;
+ let layers=['base','route','icon','hazard','puck','accuracy','destination'];let writes=0;
  const {normalizeDynamicMapLayerPriority}=load('src/lib/map-layer-priority.ts',{
-  LOCATION_ACCURACY_LAYER_IDS:['accuracy'],ALL_POI_ICON_LAYER_IDS:['icon'],ATLAS_MARKER_LAYER_IDS:[],
+  ROAD_HAZARD_LAYER_ID:'hazard',LOCATION_ACCURACY_LAYER_IDS:['accuracy'],ALL_POI_ICON_LAYER_IDS:['icon'],ATLAS_MARKER_LAYER_IDS:[],
   ROUTE_GUIDANCE_LAYER_IDS:[],ROUTE_RENDER_LAYER_IDS:['route'],ROUTE_DESTINATION_LAYER_IDS:['destination'],LOCATION_PUCK_LAYER_IDS:['puck']
  },'normalizeDynamicMapLayerPriority');
  const map={isStyleLoaded:()=>false,getStyle:()=>({layers:layers.map(id=>({id}))}),moveLayer(id,before){writes++;layers.splice(layers.indexOf(id),1);layers.splice(before?layers.indexOf(before):layers.length,0,id);}};
- normalizeDynamicMapLayerPriority(map);assert.deepEqual(layers,['base','accuracy','icon','route','destination','puck']);
+ normalizeDynamicMapLayerPriority(map);assert.deepEqual(layers,['base','accuracy','icon','hazard','route','destination','puck']);
  const prior=writes;normalizeDynamicMapLayerPriority(map);assert.equal(writes,prior,'Stable route layering must be a no-op');
  layers.push('new-basemap');normalizeDynamicMapLayerPriority(map);
  assert.ok(layers.indexOf('route')>layers.indexOf('icon'));assert.equal(layers.at(-1),'puck');
@@ -210,7 +211,7 @@ for(const native of [false,true]){
  const source=fs.readFileSync(new URL('src/lib/routing-controller.ts',root),'utf8');
  const methods=['updateLocation','updateLiveRemainingMetrics','renderActiveRouteLine'].map(name=>source.match(new RegExp('  (?:private )?'+name+'\\([^]*?\\n  \\}'))[0]);
  let now=20_000,writes=0,requests=0,clears=0;
- const context=vm.createContext({...geo,...api,Date:{now:()=>1_000_000},window:{performance:{now:()=>now}},ROUTE_SOURCE:'route',ROUTE_REROUTE_METERS:25,ROUTE_FAILURE_RETRY_MS:12_000,ROUTE_REFRESH_MS:90_000,ROUTING_PROVIDER:'osrm'});
+ const context=vm.createContext({...navigationTracking,...geo,...api,Date:{now:()=>1_000_000},window:{performance:{now:()=>now}},ROUTE_SOURCE:'route',ROUTE_REROUTE_METERS:25,ROUTE_FAILURE_RETRY_MS:12_000,ROUTE_REFRESH_MS:90_000,ROUTING_PROVIDER:'osrm'});
  vm.runInContext(stripTypeScriptTypes(`class Route {${methods.join('\n')}};globalThis.route=new Route();`,{mode:'transform'}),context);
  const c=context.route,coordinates=[[44,36],[44,36.01]];
  const total=geo.distanceMeters(...coordinates);

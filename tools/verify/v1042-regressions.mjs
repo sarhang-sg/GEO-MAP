@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { navigationTracking } from "./navigation-harness.mjs";
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
@@ -8,7 +9,7 @@ const read=path=>fs.readFileSync(new URL(path,root),'utf8');
 const compile=source=>stripTypeScriptTypes(source,{mode:'transform'}).replace(/\bexport /g,'');
 function load(path,globals,exports){
  const source=read(path).replace(/^import[\s\S]*?from\s+["'][^"']+["'];\s*/gm,'');
- const context=vm.createContext(globals);
+ const context=vm.createContext({...navigationTracking,...globals});
  vm.runInContext(compile(source)+`\nglobalThis.api={${exports}}`,context);return context.api;
 }
 const descriptions=JSON.parse(read('contracts/weather-descriptions.json'));
@@ -50,7 +51,7 @@ const geo=load('src/lib/location.ts',{},'distanceMeters,bearingBetween,shortestH
 }
 {
  const method=read('src/lib/live-location-controller.ts').match(/  recenter\(initialCenter = false\): void \{[\s\S]*?\n  \}/)[0];
- let camera;const context=vm.createContext({window:{performance:{now:()=>10000}},PRECISE_FIX_METERS:80});
+ let camera;const context=vm.createContext({...navigationTracking,window:{performance:{now:()=>10000}},PRECISE_FIX_METERS:80});
  vm.runInContext(compile(`class Camera {${method}};globalThis.c=new Camera();`),context);
  const c=context.c;Object.assign(c,{lastCoordinate:[44,36],lastAccuracy:6,lastRecenterAt:0,lastHeading:90,lastSpeed:8,lastHeadingSource:'gps-course',lastHeadingConfidence:1,navigationActive:true,finishCameraMove(){},map:{stop(){},off(){},once(){},getZoom:()=>16,getBearing:()=>0,getContainer:()=>({clientHeight:800}),easeTo:o=>{camera=o;},isMoving:()=>false}});
  c.recenter(true);assert.equal(camera.bearing,90);assert.equal(camera.offset[1],96);

@@ -1,6 +1,6 @@
-# NAV KURD 10.4.2
+# NAV KURD 10.4.3
 
-Application version: **10.4.2**. Android version code: **100402**.
+Application version: **10.4.3**. Android version code: **100403**.
 
 - Restored the original nine-slice startup word and progress line, including original size, spacing, equation and default background. Desktop reduced-motion settings slow the same animation instead of freezing it. The loader appears before the map module downloads.
 - Navigation routes render above place icons; destination and live-location markers remain above the route. An unchanged layer stack performs no repeated reordering.
@@ -28,3 +28,14 @@ Application version: **10.4.2**. Android version code: **100402**.
 See the delivered QA report for actual checks and boundaries. The owner-run updater waits for Android analysis, tests, compilation, signing and exact asset verification, then binds the website to that verified APK. A source kit is not a prebuilt signed APK. A failed CI job stops publication and records its log.
 
 No database migration is required. Map data, offline-pack and third-party dependency versions describe their own unchanged artifacts; they are not relabeled as an application release.
+
+## 10.4.3 navigation update
+
+- Travel-mode-specific course and rerouting confirmation for walking, cycling and driving.
+- Camera aligns with the selected route on start, follows trusted movement through turns and respects manual panning.
+- Confirmed moving departures request the matching travel profile; duplicate, stale and stationary fixes do not trigger a route switch.
+- 142 existing attributed road records have separate colors and localized tap details. Surveillance cameras are distinct from speed cameras.
+- No new unmapped coordinates are invented. Additional dated OpenStreetMap exports can be imported with `tools/data/build-road-hazards.py --osm-json` in the web repository.
+- Android uses the same compiled UI as web; native offline core records and account data are retained.
+
+Validation includes build checks, GPS replay and browser tests. Physical road driving, native receiver behavior and signed Android release CI remain separate verification steps.

@@ -1,3 +1,4 @@
+import { ROAD_HAZARD_SOURCE_IDS } from "./road-hazards";
 import { POI_EXCLUDED_SOURCE_IDS } from "./poi-taxonomy-classification";
 
 /**
@@ -45,5 +46,5 @@ export const NAMED_POI_FILTER = [
   "all",
   [">", ["length", NAMED_POI_LABEL_EXPRESSION], 1],
   ["!", ["in", ["downcase", NAMED_POI_LABEL_EXPRESSION], ["literal", ["place", "places", "other", "unknown", "unnamed", "شوێن", "هی تر", "مكان", "أخرى", "موقع", "لا يوجد", "لايوجد"]]]],
-  ["!", ["in", POI_SOURCE_ID_EXPRESSION, ["literal", [...POI_EXCLUDED_SOURCE_IDS, ...REVIEWED_POI_REPLACED_SOURCE_IDS]]]]
+  ["!", ["in", POI_SOURCE_ID_EXPRESSION, ["literal", [...POI_EXCLUDED_SOURCE_IDS, ...REVIEWED_POI_REPLACED_SOURCE_IDS, ...ROAD_HAZARD_SOURCE_IDS]]]]
 ] as unknown as any;
