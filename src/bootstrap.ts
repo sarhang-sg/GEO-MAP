@@ -86,8 +86,13 @@ function renderStartupFailure(error: unknown): void {
   let language: keyof typeof UI = "ku";
   try { language = readAppLifecycleSnapshot()?.language ?? "ku"; } catch { /* fallback must survive damaged preferences */ }
   const copy = UI[language];
-  const rendererUnavailable = error instanceof Error &&
-    ["MapRendererUnavailableError", "GPUInitializationError"].includes(error.name);
+  const rendererUnavailable = error instanceof Error && (
+    ["MapRendererUnavailableError", "GPUInitializationError"].includes(error.name) ||
+    // The bundled renderer cleans up its partial map, then throws this plain
+    // Error. Keep it on the GPU recovery path too; unrelated errors must still
+    // use application recovery and its service-worker update before retrying.
+    error.message === "MapLibre could not initialize its WebGL2 renderer"
+  );
   const surface = document.createElement("section");
   surface.id = "mapLoading";
   surface.className = "map-loading";
