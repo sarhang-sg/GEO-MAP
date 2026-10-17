@@ -1,0 +1,75 @@
+/* Compact shared Web/Android weather card; retain the original artwork. */
+.place-weather {
+  position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; gap: 2px 6px;
+  align-items: center; width: 100%; max-width: 100%; min-width: 0; margin-top: 4px;
+  padding: 6px 8px 2px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
+  border: 1px solid var(--nk-border, rgba(132,180,255,.16)); border-radius: 12px;
+  background: var(--nk-elevated, #12243a);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+.place-weather::before, .place-weather::after { pointer-events: none; }
+.place-weather > * { position: relative; z-index: var(--z-local-content); }
+.place-weather .place-weather__visual { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; }
+.place-weather .place-weather__visual img { width: 32px; height: 32px; min-width: 0; min-height: 0; margin: 0; object-fit: contain; pointer-events: none; }
+.place-weather__visual img[hidden], .place-weather__loading[hidden] { display: none !important; }
+.place-weather__loading {
+  width: 20px; height: 20px; border: 2px solid rgba(159,184,235,.2);
+  border-top-color: var(--nk-primary, #2d8cff); border-radius: 50%; animation: place-weather-spin .8s linear infinite;
+}
+.place-weather .place-weather__copy { color: var(--nk-text, #eaf2ff); display: grid; flex: 1 1 0; min-width: 0; gap: 0; text-align: start; }
+.place-weather .place-weather__copy strong {
+  color: inherit !important; font: 800 19px/1.15 var(--font-ui) !important;
+  letter-spacing: -.02em; white-space: nowrap; text-transform: none !important;
+}
+.place-weather .place-weather__copy small {
+  color: inherit !important; opacity: .82; font: 600 10px/1.4 var(--font-ui) !important;
+  text-transform: none !important; overflow-wrap: anywhere;
+}
+.place-weather .place-weather__copy .place-weather__timestamp { font-size: 9px !important; color: var(--nk-muted, #a7b1c2) !important; opacity: 1; }
+.place-weather__timestamp bdi, .place-weather__hour time { direction: ltr; unicode-bidi: isolate; }
+.place-weather__details { flex-basis: 100%; width: 100%; min-width: 0; font: 600 11px/1.6 var(--font-ui); }
+.place-weather__details > summary {
+  position: relative; z-index: var(--z-local-content); display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; min-height: 44px; box-sizing: border-box; cursor: pointer; list-style: none;
+  padding: 6px 0; color: inherit; border-top: 1px solid var(--nk-border, rgba(132,180,255,.16));
+  touch-action: manipulation;
+}
+.place-weather__details > summary::-webkit-details-marker { display: none; }
+.place-weather__details > summary::after {
+  content: ""; width: 7px; height: 7px; flex: 0 0 7px;
+  border-inline-end: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg); margin-inline: 4px; pointer-events: none;
+}
+.place-weather__details[open] > summary::after { transform: rotate(225deg); }
+.place-weather__details > summary:focus-visible, .place-weather__forecast:focus-visible {
+  outline: 2px solid var(--nk-primary, #2d8cff); outline-offset: 2px; border-radius: 4px;
+}
+.place-weather__body {
+  max-height: min(124px, 24vh); overflow-y: auto; overflow-x: hidden;
+  overscroll-behavior: contain; padding: 2px 1px 6px; scrollbar-width: thin;
+}
+.place-weather__metrics { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 2px 0 7px; }
+.place-weather__metrics span { font: inherit; color: inherit; }
+.place-weather .place-weather__heading { display: block; font: 700 11px/1.6 var(--font-ui); color: inherit; }
+.place-weather__forecast {
+  display: flex; min-width: 0; max-width: 100%; gap: 4px; overflow-x: auto; overscroll-behavior-x: contain;
+  padding: 6px 0 7px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+}
+.place-weather__hour { display: grid; flex: 0 0 48px; justify-items: center; gap: 3px; padding: 0 2px; color: inherit; }
+.place-weather .place-weather__hour img { width: 24px; height: 24px; min-width: 0; min-height: 0; object-fit: contain; margin: 0; }
+.place-weather__hour time { font: 500 10px/1.4 var(--font-ui); opacity: .7; }
+.place-weather .place-weather__hour strong { font: 800 15px/1.3 var(--font-ui); color: inherit; }
+.place-weather .place-weather__hour small { font: 500 10px/1.4 var(--font-ui); color: inherit; opacity: .8; text-transform: none; }
+.place-weather .place-weather__credit { display: block; font: 500 9px/1.6 var(--font-ui); color: inherit; opacity: .65; text-transform: none; }
+.place-weather .place-weather__empty { font: inherit; color: inherit; margin: 4px 0 12px; }
+.place-weather[data-state="cached"] .place-weather__timestamp { opacity: 1; }
+.place-weather[data-state="unavailable"] { font: 600 11px/1.5 var(--font-ui); justify-content: space-between; }
+.place-weather[data-state="unavailable"] button {
+  min-height: 44px; font: inherit; color: inherit; background: transparent;
+  border: 1px solid currentColor; border-radius: 8px; padding: 6px 10px;
+}
+@keyframes place-weather-spin { to { transform: rotate(360deg); } }
+@media (max-width: 340px) { .place-weather { padding: 9px; } }
+@media (prefers-contrast: more) { .place-weather { border-color: currentColor; } }
+@media (forced-colors: active) { .place-weather { color: CanvasText; border-color: CanvasText; background: Canvas; } }
+@media (prefers-reduced-motion: reduce) { .place-weather__loading { animation: none; } }

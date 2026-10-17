@@ -1,0 +1,8 @@
+{
+  "https://geo-map-kappa.vercel.app/": {
+    "scope": "/"
+  },
+  "https://geo-map-two.vercel.app/": {
+    "scope": "/"
+  }
+}

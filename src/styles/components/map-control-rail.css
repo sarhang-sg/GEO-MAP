@@ -1,0 +1,138 @@
+/*
+ * Canonical left control rail.
+ * MapLibre navigation, 3D and visibility controls live in one DOM flow. This
+ * file is the sole owner of their position, size, alignment and spacing.
+ */
+.map-shell {
+  --nav-kurd-left-rail-top: 138px;
+  --nav-kurd-left-rail-left: 18px;
+  --nav-kurd-left-rail-size: 44px;
+  --nav-kurd-left-rail-gap: 8px;
+}
+
+.maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] {
+  top: var(--nav-kurd-left-rail-top) !important;
+  left: max(var(--nav-kurd-left-rail-left), env(safe-area-inset-left)) !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nav-kurd-left-rail-gap);
+  width: var(--nav-kurd-left-rail-size);
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] > .maplibregl-ctrl,
+.maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] .maplibregl-ctrl-group {
+  width: var(--nav-kurd-left-rail-size);
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+.maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] .maplibregl-ctrl-group > button {
+  width: var(--nav-kurd-left-rail-size) !important;
+  height: var(--nav-kurd-left-rail-size) !important;
+  min-width: var(--nav-kurd-left-rail-size);
+  min-height: var(--nav-kurd-left-rail-size);
+  box-sizing: border-box;
+}
+
+.map-left-control-rail__extras {
+  display: grid;
+  width: var(--nav-kurd-left-rail-size);
+  gap: var(--nav-kurd-left-rail-gap);
+  justify-items: center;
+  margin: 0 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.map-left-control-rail__extras .map-3d-button,
+.map-left-control-rail__extras .controls-visibility-button {
+  position: static !important;
+  inset: auto !important;
+  display: grid;
+  width: var(--nav-kurd-left-rail-size) !important;
+  height: var(--nav-kurd-left-rail-size) !important;
+  min-width: var(--nav-kurd-left-rail-size);
+  min-height: var(--nav-kurd-left-rail-size);
+  margin: 0 !important;
+  place-items: center;
+  box-sizing: border-box;
+  border-radius: clamp(12px, calc(var(--nav-kurd-left-rail-size) * .31), 15px);
+  transform-origin: center;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.map-left-control-rail__extras .map-3d-button svg,
+.map-left-control-rail__extras .controls-visibility-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+.controls-visibility-button {
+  z-index: var(--z-controls-raised);
+  border: 1px solid rgba(202, 214, 255, .18);
+  color: #dce6ff;
+  background: linear-gradient(155deg, rgba(14, 20, 46, .94), rgba(7, 10, 28, .91));
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .06);
+  transition: opacity .22s var(--premium-ease), visibility .22s linear, color .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.controls-visibility-button:hover,
+.controls-visibility-button:focus-visible { color: #fff; border-color: rgba(139, 108, 255, .62); }
+.controls-visibility-button:active { transform: scale(.94); }
+.controls-visibility-button__slash { opacity: 0; transition: opacity .18s ease; }
+.controls-visibility-button[aria-pressed="true"] {
+  color: #fff;
+  border-color: rgba(139, 108, 255, .68);
+  background: linear-gradient(145deg, rgba(53, 103, 255, .96), rgba(145, 61, 255, .94));
+  box-shadow: 0 10px 28px rgba(73, 81, 255, .28), 0 0 20px rgba(139, 83, 255, .20);
+}
+.controls-visibility-button[aria-pressed="true"] .controls-visibility-button__slash { opacity: 1; }
+
+/* Keep the rail geometry intact while hidden so the restore button never jumps. */
+.map-shell.map-controls-hidden .maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+.map-shell.map-controls-hidden .maplibregl-ctrl-top-left[data-nav-kurd-rail="ready"] > .maplibregl-ctrl-group,
+.map-shell.map-controls-hidden .map-left-control-rail__extras .map-3d-button {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: scale(.94) !important;
+}
+.map-shell.map-controls-hidden .map-left-control-rail__extras .controls-visibility-button {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 700px) {
+  .map-shell {
+    --nav-kurd-left-rail-top: 128px;
+    --nav-kurd-left-rail-left: 12px;
+    --nav-kurd-left-rail-size: 44px;
+    --nav-kurd-left-rail-gap: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .map-shell {
+    --nav-kurd-left-rail-size: 42px;
+    --nav-kurd-left-rail-gap: 7px;
+  }
+}
+
+@media (min-width: 981px) {
+  .map-shell {
+    --nav-kurd-left-rail-top: 149px;
+    --nav-kurd-left-rail-left: 28px;
+  }
+}

@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "NAVKurd Arabic";
+  src: url("./fonts/UniQAIDAR-Money-Heist-002.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: block;
+}
+@font-face {
+  font-family: "NAVKurd Latin";
+  src: url("./fonts/RedHatDisplay-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: block;
+}
+:root {
+  color-scheme: dark;
+  font-family: "NAVKurd Arabic", Tahoma, Arial, sans-serif;
+  background: #080a18;
+  color: #fff;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; margin: 0; }
+body {
+  display: grid;
+  place-items: center;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: radial-gradient(circle at 50% 0%, rgba(143, 48, 177, .36), transparent 48%), linear-gradient(160deg, #080a18, #130a25 64%, #090b1c);
+}
+.offline-shell {
+  width: min(100%, 34rem);
+  padding: clamp(1.25rem, 5vw, 2.25rem);
+  text-align: center;
+  border: 1px solid rgba(188, 112, 255, .34);
+  border-radius: 1.5rem;
+  background: rgba(10, 10, 31, .88);
+  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, .38), inset 0 1px rgba(255,255,255,.06);
+}
+.offline-shell img { width: 6rem; height: 6rem; border-radius: 1.3rem; }
+.eyebrow { margin: .9rem 0 .35rem; color: #d999ff; font-weight: 800; letter-spacing: .08em; }
+h1 { margin: 0; font-size: clamp(1.55rem, 7vw, 2.35rem); }
+p { margin: 1rem 0 0; line-height: 1.75; color: rgba(255,255,255,.88); }
+.secondary { font-size: .88rem; color: rgba(255,255,255,.66); }
+.offline-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem; margin-top: 1.35rem; -webkit-touch-callout: none; user-select: none; }
+.offline-actions button { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; margin: 0; padding: .7rem 1.35rem; border: 0; color: #fff; font: 800 1rem/1.2 "NAVKurd Arabic", Tahoma, Arial, sans-serif; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.retry { border-radius: .95rem; background: linear-gradient(135deg, #6a4cff, #a73ad4); box-shadow: 0 .65rem 1.7rem rgba(117, 57, 216, .28); }
+.back { border: 1px solid rgba(211, 176, 255, .34) !important; border-radius: .95rem; background: rgba(255, 255, 255, .065); }
+.offline-actions button:active { transform: scale(.97); }
+.offline-actions button:focus-visible { outline: 3px solid rgba(220, 170, 255, .65); outline-offset: 4px; }
+
+.secondary[lang="ar"] { font-family: "NAVKurd Arabic", Tahoma, Arial, sans-serif; }
+.secondary[lang="en"], .eyebrow { font-family: "NAVKurd Latin", "Segoe UI", Arial, sans-serif; }
