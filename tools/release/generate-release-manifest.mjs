@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+import { readFile, writeFile } from "node:fs/promises";
+import { ROOT, SOURCE_EXCLUDED_DIRECTORIES, posixPath, readJson, sha256, walk } from "../lib/project.mjs";
+import { configSemanticHash } from "../lib/release-content.mjs";
+import { previewPolicy } from "../lib/dependency-preview.mjs";
+
+const release = await readJson("release.config.json");
+const sourceDataManifest = await readJson("data-src/source-data-manifest.json");
+const transientStagePaths = new Set(sourceDataManifest.entries.map((entry) => entry.stage));
+const excludedFiles = new Set(["RELEASE_MANIFEST.json", ".DS_Store"]);
+const isAtomicTempPath = (path) => /(?:^|\/)\.[^/]+\.[A-Za-z0-9]{6}$/u.test(path);
+const entries = {};
+for (const file of await walk(ROOT, { excludeDirectories: SOURCE_EXCLUDED_DIRECTORIES })) {
+  const path = posixPath(file);
+  const name = path.split("/").at(-1) ?? path;
+  if (excludedFiles.has(path) || excludedFiles.has(name) || transientStagePaths.has(path)) continue;
+  if (isAtomicTempPath(path)) continue;
+  if (name === ".env" || (name.startsWith(".env.") && name !== ".env.example")) continue;
+  if (/\.(?:pyc|pyo|log|tmp|zip|sha256)$/iu.test(name)) continue;
+  const body = await readFile(file);
+  entries[path] = { bytes: body.length, sha256: sha256(body) };
+  if (path === "vercel.json") entries[path].jsonSha256 = configSemanticHash(body);
+}
+const manifest = {
+  schema: "NAV KURD production source manifest v1",
+  release: release.releaseId,
+  version: release.appVersion,
+  mapDataVersion: release.mapDataVersion,
+  cacheSchemaVersion: release.cacheSchemaVersion,
+  offlinePackVersion: release.offlinePackVersion,
+  generatedForDate: release.releaseDate,
+  secretSafe: true,
+  dependencyPreview: previewPolicy(
+    JSON.parse(await readFile("package.json", "utf8")),
+    JSON.parse(await readFile("package-lock.json", "utf8"))
+  ),
+  fileCount: Object.keys(entries).length,
+  totalBytes: Object.values(entries).reduce((sum, entry) => sum + entry.bytes, 0),
+  files: entries
+};
+await writeFile("RELEASE_MANIFEST.json", `${JSON.stringify(manifest, null, 2)}\n`);
+console.log(`PASS release manifest: ${manifest.fileCount} files / ${manifest.totalBytes} bytes.`);

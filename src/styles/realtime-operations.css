@@ -1,0 +1,88 @@
+/* Operational states that must remain truthful even under reduced motion. */
+.map-shell.is-runtime-low-power .search-empty--loading::before {
+  animation: nav-kurd-spin 1.35s steps(12, end) infinite;
+  animation-play-state: running;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-shell .search-empty--loading::before {
+    animation: nav-kurd-spin 1.8s steps(12, end) infinite;
+    animation-play-state: running;
+    animation-iteration-count: infinite;
+  }
+}
+
+/* Compact realtime presence indicator. One module owns geometry and state. */
+.map-online-indicator {
+  display: inline-flex;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  color: #f6fbff;
+  background: transparent;
+  box-shadow: none;
+  direction: ltr;
+  opacity: 1;
+}
+
+.map-online-indicator__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #8b93a8;
+  box-shadow: 0 0 0 3px rgba(139, 147, 168, .10);
+}
+
+.map-online-indicator strong {
+  display: inline-block;
+  min-width: 8px;
+  color: #f6fbff;
+  font: 900 .62rem/1 var(--font-latin);
+  text-shadow: 0 1px 5px rgba(0,0,0,.35);
+}
+
+.map-online-indicator[data-state="idle"] { opacity: .72; }
+
+.map-online-indicator[data-connection="live"] .map-online-indicator__dot {
+  background: #36f39a;
+  box-shadow: 0 0 0 3px rgba(54, 243, 154, .12), 0 0 14px rgba(54, 243, 154, .70);
+  animation: nav-kurd-online-pulse 1.9s ease-out infinite;
+}
+
+.map-online-indicator[data-connection="connecting"] .map-online-indicator__dot {
+  background: #f4c76f;
+  box-shadow: 0 0 0 3px rgba(244, 199, 111, .10), 0 0 12px rgba(244, 199, 111, .44);
+  animation: nav-kurd-online-connect 1.1s ease-in-out infinite alternate;
+}
+
+.map-online-indicator[data-connection="offline"] .map-online-indicator__dot {
+  background: #ff6b78;
+  box-shadow: 0 0 0 3px rgba(255, 107, 120, .10), 0 0 12px rgba(255, 107, 120, .42);
+}
+
+.map-online-indicator[data-connection="signed-out"] .map-online-indicator__dot,
+.map-online-indicator[data-connection="disabled"] .map-online-indicator__dot {
+  background: #8b93a8;
+  box-shadow: 0 0 0 3px rgba(139, 147, 168, .08);
+}
+
+@keyframes nav-kurd-online-pulse {
+  0%, 100% { transform: scale(.92); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes nav-kurd-online-connect {
+  from { opacity: .45; transform: scale(.88); }
+  to { opacity: 1; transform: scale(1.05); }
+}

@@ -1,0 +1,27 @@
+{
+  "version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
+  "schema": "NAV KURD compact worker search manifest v1",
+  "files": {
+    "ku": {
+      "file": "kri-search-runtime-ku.json",
+      "records": 69329,
+      "bytes": 6219438,
+      "sha256": "2b2a5b354dac3ecf2881b21d7ad2c40f5457b862700da36f73653817b377c463"
+    },
+    "ar": {
+      "file": "kri-search-runtime-ar.json",
+      "records": 69329,
+      "bytes": 5735568,
+      "sha256": "5cb05b8c3796642344f3708b1ba428262a969abfbbbcab86c513a2abb9320053"
+    },
+    "en": {
+      "file": "kri-search-runtime-en.json",
+      "records": 69329,
+      "bytes": 5661846,
+      "sha256": "16437b06e54bd45a20d6fe5cc441dc60a3eea2899586eeedb890b69530f22935"
+    }
+  },
+  "language_policy": "Exact source-backed selected-language names only; no automatic translation/transliteration and no cross-language visible fallback.",
+  "runtime_policy": "The selected-language compact dictionary payload is fetched only after search opens, parsed exclusively in a Web Worker and persisted by version; source/audit indexes are excluded from production.",
+  "payload_schema": "NAV KURD compact search runtime v1"
+}

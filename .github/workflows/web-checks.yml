@@ -1,0 +1,118 @@
+name: NAV KURD Web checks
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Use reviewed npm
+        run: npm install --global npm@12.2.0
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Verify toolchain and dependency integrity
+        run: |
+          npm run verify:toolchain
+          npm run verify:dependencies
+          npm audit --omit=dev --audit-level=high
+
+      - name: Build and verify the production candidate
+        run: npm run build:vercel
+
+      - name: Retain the tested production build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-web-production
+          if-no-files-found: error
+          retention-days: 3
+          path: dist/
+
+      - name: Upload release evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-web-release-evidence
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            RELEASE_MANIFEST.json
+            public/data/kri/source-integrity-manifest.json
+            public/data/kri/kri-canonical-data-quality-report.json
+            public/data/kri/kri-data-provenance.json
+            dist/offline-manifest.json
+
+  browser-smoke:
+    needs: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Use reviewed npm
+        run: npm install --global npm@12.2.0
+
+      - name: Install preview dependencies
+        run: npm ci
+
+      - name: Download the already-tested production build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: nav-kurd-web-production
+          path: dist
+
+      - name: Install Playwright Chromium
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.63.0
+          python3 -m playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: python3 tools/verify/browser-smoke.py
+
+  database-migrations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf
+        with:
+          version: 2.120.0
+
+      - name: Execute all migrations locally
+        run: |
+          supabase start
+          supabase db reset
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup
+

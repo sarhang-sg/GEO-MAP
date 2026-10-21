@@ -1,0 +1,83 @@
+{
+  "name": "nav-kurd",
+  "version": "10.4.4",
+  "private": true,
+  "type": "module",
+  "description": "Mobile-first Kurdistan map with multilingual search, GPS navigation, satellite context, local PMTiles data and owner-managed places.",
+  "engines": {
+    "node": "24.x",
+    "npm": "12.x"
+  },
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck",
+    "data:prepare": "node tools/data/with-source-data.mjs npm run data:prepare:core",
+    "data:prepare:core": "node tools/build/generate-pwa-manifest.mjs && node tools/release/prepare-android-download.mjs && python3 tools/data/align-data-release.py && python3 tools/data/build-compact-runtime.py && python3 tools/data/build-language-runtime.py && node tools/data/build-locality-language-deltas.mjs && node tools/data/optimize-search-runtime.mjs && node tools/data/build-compact-search-runtime.mjs && node tools/data/generate-atlas-marker-assets.mjs && node tools/data/generate-atlas-icon-bundle.mjs && python3 tools/data/build-viewport-poi-shards.py && node tools/data/update-release-metadata.mjs && node tools/data/update-runtime-sprite-release.mjs && node tools/data/generate-source-integrity-manifest.mjs && node tools/release/generate-release-manifest.mjs",
+    "release:prepare-android": "node tools/release/prepare-android-download.mjs",
+    "data:sync": "node tools/data/with-source-data.mjs --sync npm run data:prepare:core && node tools/release/generate-release-manifest.mjs",
+    "data:dedupe": "node tools/data/with-source-data.mjs --sync python3 tools/data/dedupe-canonical-data.py",
+    "data:rebuild": "node tools/data/with-source-data.mjs --sync python3 tools/data/rebuild-canonical-data.py",
+    "data:sprite": "python3 tools/data/build-poi-runtime-sprite.py",
+    "build:web": "vite build && node tools/build/prune-production-dist.mjs",
+    "build:offline": "node tools/build/build-offline-runtime.mjs",
+    "build": "npm run typecheck && npm run data:prepare && npm run build:web && npm run build:offline && npm run verify:production",
+    "build:vercel": "node tools/release/prepare-dependency-preview.mjs && npm --silent run verify:release && npm --silent run typecheck && npm --silent run build:web && npm --silent run build:android-publication && npm --silent run build:offline && npm --silent run build:identity && npm --silent run verify:production",
+    "preview": "vite preview",
+    "verify:toolchain": "node tools/verify/toolchain.mjs --require-npm",
+    "verify:source": "node tools/verify/source.mjs",
+    "verify:styles": "python3 tools/verify/styles.py",
+    "verify:syntax": "python3 tools/verify/syntax.py",
+    "verify:data": "python3 tools/verify/data.py",
+    "verify:runtime": "node tools/verify/runtime.mjs",
+    "verify:mobile": "node tools/verify/mobile-regressions.mjs",
+    "verify:critical-runtime": "node tools/verify/critical-runtime-regressions.mjs",
+    "verify:security": "node tools/verify/security.mjs",
+    "verify:pmtiles": "python3 tools/verify/pmtiles.py",
+    "verify:release": "node tools/verify/release.mjs",
+    "verify:static": "npm --silent run verify:syntax && npm --silent run verify:source && npm --silent run verify:styles && npm --silent run verify:data && npm --silent run verify:runtime && npm --silent run verify:mobile && npm --silent run verify:critical-runtime && npm --silent run verify:search-location && npm --silent run verify:route-alerts && npm --silent run verify:phase2 && npm --silent run verify:v10 && npm --silent run verify:v104 && npm --silent run verify:v1042 && npm --silent run verify:security && npm --silent run verify:pmtiles && npm --silent run verify:v1043 && npm --silent run verify:maintenance && npm --silent run verify:publication && npm --silent run verify:edge-auth && npm --silent run verify:navigation-polish",
+    "verify:production": "npm --silent run verify:static && npm --silent run verify:dependencies && node tools/data/source-data-stage.mjs unstage && node tools/data/source-data-stage.mjs verify && npm --silent run verify:release",
+    "verify": "npm run data:prepare && npm run verify:production",
+    "verify:browser": "python3 tools/verify/browser-smoke.py",
+    "verify:final": "npm run build && npm run verify:browser && npm audit --omit=dev",
+    "package": "npm run build && python3 tools/release/package-release.py",
+    "verify:dependencies": "node tools/verify/dependency-security.mjs",
+    "verify:search-location": "node tools/verify/search-location-regressions.mjs",
+    "verify:phase2": "node tools/verify/phase2-regressions.mjs",
+    "verify:phase4-performance": "node tools/verify/phase4-performance.mjs",
+    "verify:v10": "node tools/verify/v10-regressions.mjs",
+    "verify:v104": "node tools/verify/v104-regressions.mjs",
+    "verify:v1042": "node tools/verify/v1042-regressions.mjs",
+    "verify:v1043": "node tools/verify/v1043-regressions.mjs",
+    "verify:maintenance": "node tools/verify/maintenance-regressions.mjs",
+    "build:android-publication": "node tools/release/verify-published-android.mjs",
+    "build:identity": "node tools/build/write-release-identity.mjs",
+    "verify:publication": "node tools/verify/publication-regressions.mjs",
+    "verify:edge-auth": "node tools/verify/edge-auth-regressions.mjs",
+    "verify:route-alerts": "node tools/verify/route-alert-regressions.mjs",
+    "verify:navigation-polish": "node tools/verify/navigation-polish-regressions.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.117.3",
+    "maplibre-gl": "file:vendor/maplibre-gl",
+    "pmtiles": "4.5.0"
+  },
+  "devDependencies": {
+    "@mapbox/vector-tile": "3.0.0",
+    "@types/geojson": "7946.0.16",
+    "@types/node": "24.19.2",
+    "pbf": "5.1.2",
+    "typescript": "6.0.3",
+    "vite": "8.3.4"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "packageManager": "npm@12.2.0",
+  "allowScripts": {
+    "esbuild": true
+  },
+  "overrides": {
+    "nanoid": "3.3.18",
+    "postcss": "8.5.26",
+    "source-map-js": "1.2.2"
+  }
+}
