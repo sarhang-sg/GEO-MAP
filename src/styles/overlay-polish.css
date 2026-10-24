@@ -1,0 +1,81 @@
+/* Identical CSS-pixel geometry in browsers and the bundled Android WebView. */
+.map-notice-stack {
+  position: absolute; z-index: var(--z-health); left: 50%; transform: translateX(-50%);
+  bottom: var(--nav-kurd-notice-bottom, 156px); width: min(360px, calc(100% - 24px));
+  max-height: var(--nav-kurd-notice-max-height, 55dvh); box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 8px; overflow-y: auto; overflow-x: clip;
+  overscroll-behavior: contain; scrollbar-width: thin; pointer-events: none;
+  border-radius: 16px; scroll-padding-block: 6px;
+}
+.map-notice-stack:empty, .map-notice-stack[data-blocked="true"] { visibility: hidden; pointer-events: none; }
+html[data-nav-kurd-theme][data-ui-mode] .map-notice-stack > :is(.location-recovery,.navigation-advisory) {
+  position: relative; inset: auto; transform: none; width: 100%; flex: 0 0 auto;
+  margin: 0; padding: 10px; border-radius: 16px; box-sizing: border-box;
+  color: var(--nk-text) !important; background: var(--nk-surface) !important;
+  background: color-mix(in srgb, var(--nk-surface) 82%, transparent) !important;
+  border: 1px solid var(--nk-border) !important;
+  box-shadow: inset 0 1px 0 #ffffff22, 0 4px 18px #0002;
+  -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
+  font: 600 12px/1.55 var(--font-ui); pointer-events: auto; animation: map-notice-in .18s ease-out;
+}
+.map-notice-stack > [hidden] { display: none !important; }
+.location-recovery__body { display: grid !important; grid-template-columns: 24px minmax(0,1fr) 36px; align-items: center; gap: 8px !important; }
+.location-recovery .location-recovery__body p { margin: 0; min-width: 0; font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
+.location-recovery__icon { display: grid; place-items: center; width: 24px; height: 24px; color: var(--nk-link); }
+.location-recovery__icon svg { width: 24px; height: 24px; }
+.location-recovery[data-state="acquiring"] p::before { display: none; }
+.location-recovery[data-state="acquiring"] .location-recovery__icon { border: 2px solid var(--nk-border); border-top-color: var(--nk-link); border-radius: 50%; width: 16px; height: 16px; animation: location-acquire 1s linear infinite; }
+.location-recovery[data-state="acquiring"] .location-recovery__icon svg { display: none; }
+.location-recovery button { color: var(--nk-text); border-color: var(--nk-border); }
+.location-recovery .location-recovery__close { padding: 0; width: 36px; min-height: 44px; border: 0; font-size: 23px; background: transparent; }
+.location-recovery .location-recovery__actions { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.5fr); gap: 6px; margin-top: 5px; }
+.location-recovery__actions button { min-width: 0; min-height: 44px; padding: 5px 7px; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; border-radius: 10px; background: color-mix(in srgb,var(--nk-elevated) 58%,transparent); }
+.map-notice-stack .navigation-advisory { grid-template-columns: 24px minmax(0,1fr) 36px; gap: 8px; }
+.map-notice-stack .navigation-advisory__icon { width: 22px; height: 22px; margin-top: 6px; }
+.map-notice-stack .navigation-advisory strong { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.map-notice-stack .navigation-advisory p { font-size: 12px; margin-block: 3px; }
+.map-notice-stack .navigation-advisory small { font-size: 10px; overflow-wrap: anywhere; }
+.map-notice-stack .navigation-advisory button { width: 36px; height: 44px; border: 0; background: transparent; }
+
+.navigation-preferences { box-sizing: border-box; max-height: calc(var(--nav-kurd-visual-viewport-height, 100dvh) - 28px - max(var(--native-safe-top,0px),env(safe-area-inset-top)) - max(var(--native-safe-bottom,0px),env(safe-area-inset-bottom))); }
+.weather-directory { width: min(780px,calc(100% - 24px)); height: min(680px,calc(var(--nav-kurd-visual-viewport-height,100dvh) - 32px)); padding: 16px; overflow: hidden; }
+.weather-directory[open] { display: grid; grid-template-rows: auto auto auto minmax(0,1fr); gap: 8px; }
+.weather-directory header { margin: 0; gap: 8px; }
+.weather-directory header h2 { font-size: 17px; min-width: 0; }
+.weather-directory header > button { flex: 0 0 auto; }
+.weather-directory .weather-directory__status { margin: 0; font-size: 11px; }
+.weather-directory__content { min-height: 0; gap: 10px; }
+.weather-directory__list, .weather-directory__details { max-height: none; min-height: 0; overflow-y: auto; overflow-x: clip; overscroll-behavior: contain; scroll-padding-block: 8px; scrollbar-width: thin; }
+.weather-directory .weather-directory__place { padding: 9px; gap: 8px; min-height: 68px; }
+.weather-directory__label { overflow-wrap: anywhere; }
+.weather-directory__reading { min-width: 70px; flex-shrink: 0; font-size: 15px; }
+.weather-directory__details { padding: 10px; border-radius: 14px; }
+.weather-directory .place-weather { padding: 9px; }
+.weather-directory .place-weather__body { max-height: none; overflow: visible; }
+.weather-directory .place-weather__metrics { gap: 5px; }
+.weather-directory .place-weather__metrics span { padding: 4px 6px; }
+.weather-directory .weather-directory__back { display: none; }
+@media(max-width:600px) {
+  .weather-directory { padding: 12px; }
+  .weather-directory__content { display: grid; grid-template-columns: minmax(0,1fr); }
+  .weather-directory[data-weather-view="list"] .weather-directory__details,
+  .weather-directory[data-weather-view="details"] :is(.weather-directory__list, .weather-directory__status),
+  .weather-directory[data-weather-view="details"] > input { display: none; }
+  .weather-directory[data-weather-view="details"][open] { grid-template-rows: auto minmax(0,1fr); }
+  .weather-directory .weather-directory__back { display: inline-flex; align-items: center; margin-bottom: 10px; font-size: 12px; min-height: 44px; }
+}
+body[data-text-size="large"] .map-notice-stack .location-recovery p { font-size: 15px; }
+body[data-text-size="large"] .map-notice-stack .navigation-advisory :is(strong,p) { font-size: 15px; }
+@keyframes map-notice-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media(prefers-reduced-motion:reduce) { .map-notice-stack > *, .location-recovery__icon { animation: none !important; } }
+body[data-motion-preference="reduced"] :is(.map-notice-stack > *, .location-recovery__icon) { animation: none !important; }
+@media(prefers-reduced-transparency:reduce) { html[data-nav-kurd-theme][data-ui-mode] .map-notice-stack > :is(.location-recovery,.navigation-advisory) { background:var(--nk-surface) !important; -webkit-backdrop-filter:none; backdrop-filter:none; } }
+@media(forced-colors:active) { html[data-nav-kurd-theme][data-ui-mode] .map-notice-stack > :is(.location-recovery,.navigation-advisory) { background:Canvas !important; color:CanvasText !important; border-color:CanvasText !important; } }
+
+/* Reserve a real lane for the action rail beside desktop/landscape sheets. */
+@media(min-width:701px) {
+  .map-shell .map-sheet { right: 80px !important; max-width: min(410px,calc(100% - 160px)); }
+}
+@media(min-width:701px) and (max-height:500px) {
+  .map-shell .map-sheet { bottom: 14px !important; max-height: calc(var(--nav-kurd-visual-viewport-height,100dvh) - 154px) !important; }
+}

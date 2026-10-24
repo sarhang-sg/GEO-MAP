@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "frame": "1254x1254",
+  "icons": [
+    {
+      "name": "01",
+      "source": "1.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "78a139f0cc2ffb0cefbb23df0fb279f7057cd4d868536d2e7cd04503cd66e5e2"
+    },
+    {
+      "name": "02",
+      "source": "2.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "e46ec73b72ce3dbf0e0e7db64a39efeccf3e398cbe31d7ab648f2e2d9cbd2737"
+    },
+    {
+      "name": "03",
+      "source": "3.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "de2a76db72fab26880cf1e904744440b810c88875992e3ca156c077a8e93a202"
+    },
+    {
+      "name": "04",
+      "source": "4.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "ff0f4f922b4c8b87cca5e8162b61744988fb09ddd5dc19841ef475086003f6cc"
+    },
+    {
+      "name": "05",
+      "source": "5.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "4077b5d9a0236814b3b20d8229ad3356acab88bec9c4f091a387c650aa6f2098"
+    },
+    {
+      "name": "06",
+      "source": "6.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "617874b54a7c178ac2ff708cc65edc9bcf0bc3ba746ccfa3f3022d8fbfff969a"
+    },
+    {
+      "name": "07",
+      "source": "7.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "379dbf3037a4803df0b2757de315f07391997c2d548d533d810f004194e8e2ad"
+    },
+    {
+      "name": "08",
+      "source": "8.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "2f3be2077682c2d915df68813434c4eda350fee105e4aa7c80d8fead8151caa6"
+    },
+    {
+      "name": "09",
+      "source": "9.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "7fe11d138e17d04386b104985d41e6c3db3ca0912543f8686b62e57c7269c883"
+    },
+    {
+      "name": "10",
+      "source": "10.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "ab6b3bb4878c0a776de3fedfaea814a8c45d48b1a8545db6ab1e9db8c5d2fea6"
+    },
+    {
+      "name": "11",
+      "source": "11.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "402e57942b30ee8e1dcb4cecb2fecaee0374f5b3ff13df2ee54ec4ecf9366a17"
+    },
+    {
+      "name": "12",
+      "source": "12.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "80d6e40e087bd270106ad3e1da5843a2cbbcb2d0f050b7042ad3c0d12eba618d"
+    },
+    {
+      "name": "13",
+      "source": "13.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "2b1207c7109249faf73aebb729ae46bbfcb8389d7c98d8ad032c951624befc9f"
+    },
+    {
+      "name": "14",
+      "source": "14.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "698891fadb42c8916f9966d146543dd13bf48ca5f11a8e1129bcc0853d972d20"
+    },
+    {
+      "name": "15",
+      "source": "15.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "6d8d5256d977adea0bf59850315aa0f1e7dd8e774575abac0b0cb7f882605e3e"
+    },
+    {
+      "name": "profile",
+      "source": "profile.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "e2e64fa407b10ac893cb2b76247732ca11691667a09870a8c442b46ad9cac9c8"
+    },
+    {
+      "name": "delete",
+      "source": "delete.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "bee3307f8a6f71d23d50deae7ca59aeb12f624e282de3a7a382c4ef02d9ebd02"
+    },
+    {
+      "name": "speed-time",
+      "source": "speed-time.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "3a6fd65fc5fdc456c0526de3c822b3cdd5a91ed7187360a8f5ff072bb1d62fd8"
+    },
+    {
+      "name": "steps",
+      "source": "file_00000000337081f4a240a36663e9481f.png",
+      "dimensions": "1254x1254",
+      "format": "lossless embedded PNG in SVG",
+      "sha256": "63d90134dc67d07ae8254dd7a75fe2828d03572951ed89d83ca3bbe098b5531b"
+    },
+    {
+      "name": "a1",
+      "source": "a1.png",
+      "dimensions": "1536x1024",
+      "format": "clean monochrome vector SVG",
+      "sha256": "6e43c8ac31e0302d1932e4543ae2ba104126760b1c166291e43ffba939f503f4"
+    },
+    {
+      "name": "a2",
+      "source": "a2.png",
+      "dimensions": "1254x1254",
+      "format": "clean monochrome vector SVG",
+      "sha256": "4f254d08f44fdb7089ef48d7946c0a9e1e96afcd1fde170f1f5a030d601f223f"
+    }
+  ]
+}

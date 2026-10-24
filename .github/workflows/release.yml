@@ -1,0 +1,204 @@
+name: NAV KURD Web release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      expected_commit:
+        description: Optional exact commit required by the coordinated updater
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nav-kurd-web-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Use reviewed npm
+        run: npm install --global npm@12.2.0
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Verify toolchain and dependency integrity
+        run: |
+          npm run verify:toolchain
+          npm run verify:dependencies
+          npm audit --omit=dev --audit-level=high
+
+      - name: Build and verify the production candidate
+        run: npm run build:vercel
+
+      - name: Retain the tested production build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-web-production
+          if-no-files-found: error
+          retention-days: 3
+          path: dist/
+
+      - name: Upload release evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-web-release-evidence
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            RELEASE_MANIFEST.json
+            public/data/kri/source-integrity-manifest.json
+            public/data/kri/kri-canonical-data-quality-report.json
+            public/data/kri/kri-data-provenance.json
+            dist/offline-manifest.json
+
+  browser-smoke:
+    needs: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Use reviewed npm
+        run: npm install --global npm@12.2.0
+
+      - name: Install preview dependencies
+        run: npm ci
+
+      - name: Download the already-tested production build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: nav-kurd-web-production
+          path: dist
+
+      - name: Install Playwright Chromium
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.63.0
+          python3 -m playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: python3 tools/verify/browser-smoke.py
+
+  database-migrations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf
+        with:
+          version: 2.120.0
+
+      - name: Execute all migrations locally
+        run: |
+          supabase start
+          supabase db reset
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup
+
+  deploy-supabase:
+    needs: [production, browser-smoke, database-migrations]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      NAV_KURD_ALLOWED_ORIGINS: ${{ vars.NAV_KURD_ALLOWED_ORIGINS }}
+      NAV_KURD_EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Validate protected configuration
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          if [[ -n "$NAV_KURD_EXPECTED_COMMIT" ]]; then
+            [[ "$NAV_KURD_EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+            test "$GITHUB_SHA" = "$NAV_KURD_EXPECTED_COMMIT"
+          fi
+          test -n "$SUPABASE_ACCESS_TOKEN"
+          test -n "$SUPABASE_DB_PASSWORD"
+          test "$SUPABASE_PROJECT_ID" = "kaydgjhwnspnuqabaiqw"
+          NAV_KURD_ALLOWED_ORIGINS="${NAV_KURD_ALLOWED_ORIGINS:-https://geo-map-kappa.vercel.app}"
+          printf 'NAV_KURD_ALLOWED_ORIGINS=%s\n' "$NAV_KURD_ALLOWED_ORIGINS" >> "$GITHUB_ENV"
+          [[ "$NAV_KURD_ALLOWED_ORIGINS" == https://* ]]
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf
+        with:
+          version: 2.120.0
+
+      - name: Link the production database
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+        run: |
+          supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Preview and apply database migrations
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+        run: |
+          supabase db push --linked --include-all --dry-run
+          supabase db push --linked --include-all
+
+      - name: Deploy Edge Functions
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+        run: |
+          supabase secrets set --project-ref "$SUPABASE_PROJECT_ID" "NAV_KURD_ALLOWED_ORIGINS=$NAV_KURD_ALLOWED_ORIGINS"
+          supabase functions deploy --project-ref "$SUPABASE_PROJECT_ID" --use-api
+
+      - name: Record and verify the exact backend release
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+        run: python3 tools/release/verify-backend.py --record --expected-commit "$GITHUB_SHA"
+
+      - name: Retain backend verification evidence
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-backend-release-evidence
+          if-no-files-found: error
+          path: ${{ runner.temp }}/NAV-KURD-BACKEND-REPORT.json

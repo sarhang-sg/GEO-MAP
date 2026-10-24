@@ -1,0 +1,77 @@
+/* Shared semantic colors for the web and the bundled Android presentation. */
+html[data-nav-kurd-theme="professional"] {
+  --nk-link: #8dcaff; --nk-action-bg: linear-gradient(135deg, #124b96, #1769c7); --nk-advice: #ffd184;
+}
+html[data-nav-kurd-theme="professional"][data-ui-mode="light"] { --nk-link: #1559a4; --nk-advice: #795000; }
+html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) {
+  --nk-action-bg: linear-gradient(135deg, var(--user-deep), var(--user-primary)); --nk-link: var(--user-bright);
+}
+html[data-nav-kurd-theme][data-ui-mode="light"][data-accent]:not([data-accent="original"]) { --nk-link: var(--user-deep); }
+/* Older shell aliases must inherit the current mode, including original/light. */
+html[data-nav-kurd-theme] .map-shell {
+  --nk-muted: inherit; --nk-cyan: inherit;
+  --nk-ink: var(--nk-text); --nk-panel: var(--nk-surface); --nk-panel-soft: var(--nk-elevated);
+  --nk-line: var(--nk-border); --nk-line-strong: var(--nk-border);
+  --nk-blue: var(--nk-primary); --nk-violet: var(--nk-link);
+}
+html[data-nav-kurd-theme][data-ui-mode] .nav-kurd-place-popup { --nk-muted: inherit; }
+html[data-nav-kurd-theme][data-ui-mode] :is(.map-status, .support-section.support-section--neon, .support-fold, .support-method) {
+  color: var(--nk-text) !important; background: var(--nk-surface) !important; border-color: var(--nk-border) !important; text-shadow: none !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] .support-section :is(h3, p, strong, small, .support-fold__summary span, .support-empty, .support-visitors-privacy, .support-visitors-privacy__choice span) {
+  color: var(--nk-text) !important; opacity: 1; text-shadow: none !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] :is(.support-visitors-privacy, .support-section__consent, .support-person, .support-method__copy-button, .support-section__contact) {
+  color: var(--nk-text) !important; background: var(--nk-elevated) !important; border-color: var(--nk-border) !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] :is(.support-method__copy, .support-method__copy strong, .support-method__copy small) { background: transparent !important; box-shadow: none !important; }
+html[data-nav-kurd-theme][data-ui-mode] :is(.support-section__contact, .support-section__consent a, .support-visitors-privacy a, .about-dialog__links a, .user-legal-links a, .user-contrib__signin a, .user-contrib__privacy-actions a, .user-legal-accept a, .user-contrib__header p, .owner-studio__eyebrow, .owner-editor__eyebrow) { color: var(--nk-link) !important; }
+html[data-nav-kurd-theme][data-ui-mode] :is(
+  .support-person small, .support-fold__summary small, .support-section__header p,
+  .user-account-card span, .user-account-card small, .user-private-message p, .user-private-section__header p,
+  .user-contrib__subtitle, .user-submission small, .user-notification small, .owner-place-row small, .owner-studio__muted,
+  .search-result small, .search-result__meta, .search-empty, .search-hint,
+  .place-popup__category, .place-popup__coords, .place-popup__description, .place-popup > span, .place-popup > small,
+  .place-detail__description, .sheet-handle small, .sheet-handle__text, .map-note, .map-message,
+  .user-contrib__signin > p, .user-contrib__signin small, .weather-directory__path, .weather-directory__observed,
+  .place-weather__timestamp, .place-weather__day, .place-weather__hour time, .place-weather__hour small, .place-weather__credit) {
+  color: var(--nk-muted) !important; opacity: 1 !important; text-shadow: none !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] :is(.user-account-card strong, .user-notification strong, .user-private-message strong, .search-result strong, .place-popup__title, .place-weather__copy, .place-weather__heading, .place-weather__metrics, .place-weather__details, .place-weather__hour strong, .route-panel__body, .route-panel__body strong) { color: var(--nk-text) !important; }
+html[data-nav-kurd-theme][data-ui-mode] :is(input, textarea)::placeholder { color: var(--nk-muted) !important; opacity: 1 !important; }
+html[data-nav-kurd-theme][data-ui-mode] :is(
+  .owner-studio__primary, .user-contrib__primary, .route-panel__start, .nav-tutorial__next, .map-loading__retry,
+  .android-download__button, .android-download__primary, .Download-button, .place-popup__share,
+  .about-dialog__primary, .user-contrib__add, .user-contrib__submit, .user-contrib__google, .user-legal-accept button,
+  .owner-publishing__publish, .owner-media__file-button, .route-destination-prompt__actions .is-primary,
+  .segmented button.is-active, .style-choice.is-active, .route-panel__modes button.is-active,
+  .round-button[aria-pressed="true"], .map-button[aria-pressed="true"]) {
+  color: #ffffff !important; background: var(--nk-action-bg) !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] :is(.route-panel__start, .place-popup__share, .android-download__primary, .about-dialog__primary, .user-contrib__primary, .user-contrib__google, .route-panel__modes button.is-active) :is(strong, small, span) { color: inherit !important; }
+/* Navigation leaves the map visible and never expands to a full-width bar. */
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {
+  box-sizing: border-box; width: max-content; max-width: min(300px, calc(100% - 136px));
+  gap: 4px 8px; padding: 8px 10px; border-radius: 16px; color: var(--nk-text) !important;
+  background: color-mix(in srgb, var(--nk-surface) 78%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--nk-text) 20%, transparent) !important;
+  box-shadow: 0 4px 16px #0002, inset 0 1px 0 #ffffff14 !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
+}
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud__metric strong { font-size: clamp(.86rem, 3.6vw, 1.08rem); line-height: 1.25; }
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud__metric { gap: 5px; }
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud__metric svg { width: 15px; height: 15px; color: var(--nk-link); }
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud__divider { height: 16px; background: var(--nk-border); }
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud > small { display: none; }
+.route-navigation-hud__details { border: 0; padding: 0; gap: 3px 10px; font-size: .68rem; line-height: 1.5; }
+.route-navigation-hud__details > span { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.route-navigation-hud__details small { font: inherit; color: var(--nk-muted); }
+.route-navigation-hud__details bdi { color: var(--nk-text); font-variant-numeric: tabular-nums; }
+.route-navigation-hud__road { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .65rem; }
+html[data-nav-kurd-theme][data-ui-mode][data-accent] .route-panel[data-state="navigating"] { background: transparent !important; box-shadow: none !important; border: 0 !important; backdrop-filter: none !important; }
+html[data-nav-kurd-theme][data-ui-mode] .navigation-advisory__icon { color: var(--nk-advice); }
+.place-weather__advisory { flex-basis: 100%; min-width: 0; padding: 7px 9px; margin: 5px 0; border-inline-start: 3px solid var(--nk-advice); border-radius: 7px; color: var(--nk-text); background: var(--nk-surface); font: 600 11px/1.65 var(--font-ui); }
+.place-weather__advisory strong, .place-weather__advisory small { display: block; font: inherit; color: inherit; }
+.place-weather__advisory small { color: var(--nk-muted); }
+@media (max-width: 340px) { html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { max-width: calc(100% - 120px); padding: 7px 8px; gap: 3px 5px; } }
+@media (prefers-reduced-transparency: reduce) { html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { background: var(--nk-surface) !important; } }

@@ -1,0 +1,82 @@
+
+.language-transition,
+.language-transition[data-mode="switch"],
+.language-transition[data-mode="download"] {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  pointer-events: none !important;
+}
+
+.language-transition__panel {
+  position: relative;
+  overflow: hidden;
+  width: min(330px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border-radius: 17px;
+  border-color: var(--nk-border) !important;
+  color: var(--nk-text);
+  background: var(--nk-surface) !important;
+  box-shadow: var(--nk-shadow) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  contain: layout paint;
+}
+
+.language-transition__panel::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  width: 42%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--nk-primary), var(--nk-cyan));
+  animation: nav-kurd-language-progress 1.05s cubic-bezier(.4,0,.2,1) infinite alternate;
+}
+
+.language-transition__spinner {
+  width: 26px;
+  height: 26px;
+  border-width: 3px;
+  border-color: var(--nk-border);
+  border-top-color: var(--nk-primary);
+  border-right-color: var(--nk-cyan);
+  box-shadow: none;
+}
+
+.language-transition__panel small { color: var(--nk-muted); }
+
+@keyframes nav-kurd-language-progress {
+  from { transform: translateX(-35%); opacity: .65; }
+  to { transform: translateX(175%); opacity: 1; }
+}
+
+[dir="rtl"] .language-transition__panel::after {
+  animation-name: nav-kurd-language-progress-rtl;
+}
+
+@keyframes nav-kurd-language-progress-rtl {
+  from { transform: translateX(35%); opacity: .65; }
+  to { transform: translateX(-175%); opacity: 1; }
+}
+
+/* Language updates no longer repaint the language-independent cluster source. */
+.map-shell.is-language-switching .maplibregl-canvas {
+  transition: opacity .12s ease;
+}
+
+@media (max-width: 700px) {
+  .language-transition {
+    place-items: center;
+    padding: 16px;
+  }
+  .language-transition__panel {
+    width: min(310px, calc(100vw - 28px));
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language-transition__panel::after { animation: none; width: 100%; opacity: .75; }
+}

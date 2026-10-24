@@ -1,0 +1,80 @@
+{
+  "schema": "NAV KURD staged source data v2",
+  "policy": "Source/audit/intermediate data stays outside public. Large canonical source files are deterministic gzip archives and are materialized only inside build/verification wrappers.",
+  "entries": [
+    {
+      "source": "data-src/canonical/kri-pois.geojson.gz",
+      "stage": "public/data/kri/kri-pois.geojson",
+      "bytes": 63846573,
+      "sha256": "30c7debd20f6f61bfb0bf8e06f16d14027c1b7744319f8142fbea66379db5ae8",
+      "logical_source": "data-src/canonical/kri-pois.geojson",
+      "compression": "gzip",
+      "archive_bytes": 3642331,
+      "archive_sha256": "d2592c9c86b813c6e990203763ff037235dbd0a1f89577de26a65af0d3de2ffa"
+    },
+    {
+      "source": "data-src/canonical/kri-localities.geojson",
+      "stage": "public/data/kri/kri-localities.geojson",
+      "bytes": 21048782,
+      "sha256": "2825c2d39efffadc5c1c01575ef611e0a0a0038e23edb543a7c5f27a01d21060"
+    },
+    {
+      "source": "data-src/generated/kri-pois-runtime.geojson",
+      "stage": "public/data/kri/kri-pois-runtime.geojson",
+      "bytes": 28725937,
+      "sha256": "8e222f4d0166911671beff44190b77ebd54654dc5a4a8ae043ad137369cfff85"
+    },
+    {
+      "source": "data-src/generated/kri-localities-render.geojson",
+      "stage": "public/data/kri/kri-localities-render.geojson",
+      "bytes": 10625912,
+      "sha256": "2ebab0f9919a8539be2366dbc69e34e38c12ca6848979332e8f34917aeb01afe"
+    },
+    {
+      "source": "data-src/generated/search/kri-search-index.json.gz",
+      "stage": "public/data/kri/kri-search-index.json",
+      "bytes": 54668935,
+      "sha256": "fc918d83629dfcacafe54d80e1e1b79ca6cddf3af9bedcf2c84a6793f36e65c8",
+      "logical_source": "data-src/generated/search/kri-search-index.json",
+      "compression": "gzip",
+      "archive_bytes": 4916743,
+      "archive_sha256": "5b26fad4fa2bd5a67f9cd6573190ddb9d0c0e3d192d76edf89dca820e66ac164"
+    },
+    {
+      "source": "data-src/generated/search/kri-search-index-ku.json",
+      "stage": "public/data/kri/kri-search-index-ku.json",
+      "bytes": 22106776,
+      "sha256": "590cd1a8954f011b74a4a823007f99b71afac468258d22e578e373ca72897863"
+    },
+    {
+      "source": "data-src/generated/search/kri-search-index-ar.json",
+      "stage": "public/data/kri/kri-search-index-ar.json",
+      "bytes": 20695897,
+      "sha256": "4dc6e4ad1299e316a5e7ce2c6bdb94f9cd5f8f8ed512cc691d95fb9d65de3634"
+    },
+    {
+      "source": "data-src/generated/search/kri-search-index-en.json",
+      "stage": "public/data/kri/kri-search-index-en.json",
+      "bytes": 19787837,
+      "sha256": "bb4145c24822902155a7b811798f7257f7c71e8478f23fe84526814813f1e182"
+    },
+    {
+      "source": "data-src/generated/search/kri-search-index-manifest.json",
+      "stage": "public/data/kri/kri-search-index-manifest.json",
+      "bytes": 1332,
+      "sha256": "3bf098acebe1e005a5c6ff49ab0ee5971213070916e51137232e43c72eaed72c"
+    },
+    {
+      "source": "data-src/quarantine/kri-data-quality-quarantine.json",
+      "stage": "public/data/kri/kri-data-quality-quarantine.json",
+      "bytes": 2565091,
+      "sha256": "1b1b33e160796a7abaf917d483d68bee179d240695d9675dfc43f0084a693a42"
+    },
+    {
+      "source": "data-src/quarantine/kri-poi-quarantine.json",
+      "stage": "public/data/kri/kri-poi-quarantine.json",
+      "bytes": 852546,
+      "sha256": "667e8d60016693bcf34998e015747d31bf3571483e8f517d7f9e121ed02bab0a"
+    }
+  ]
+}
