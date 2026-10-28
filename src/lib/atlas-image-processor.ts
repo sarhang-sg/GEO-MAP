@@ -1,0 +1,241 @@
+import { ATLAS_MEDIA_POLICY } from "./atlas-content-policy";
+
+export type AtlasPreparedImage = {
+  file: File;
+  originalBytes: number;
+  outputBytes: number;
+  compressed: boolean;
+  width: number | null;
+  height: number | null;
+};
+
+export type AtlasImageProcessingProgress = (stage: "decode" | "compress" | "complete", percent: number) => void;
+
+const HIGH_FIDELITY_QUALITY = 0.94;
+const MAX_LONG_EDGE = 2560;
+const MIN_BYTES_FOR_REENCODE = 512 * 1024;
+const IMAGE_DECODE_TIMEOUT_MS = 7000;
+const IMAGE_ENCODE_TIMEOUT_MS = 8000;
+
+async function bounded<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("Image processing timed out."));
+    }, timeoutMs);
+    promise.then((value) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(value);
+    }, (error: unknown) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      reject(error);
+    });
+  });
+}
+
+async function decodeBitmap(file: File): Promise<ImageBitmap> {
+  return new Promise<ImageBitmap>((resolve, reject) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("Image decoding timed out."));
+    }, IMAGE_DECODE_TIMEOUT_MS);
+    void createImageBitmap(file, { imageOrientation: "from-image" }).then((bitmap) => {
+      if (settled) {
+        bitmap.close();
+        return;
+      }
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(bitmap);
+    }, (error: unknown) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      reject(error);
+    });
+  });
+}
+
+function normalizedImageName(name: string, mime: string): string {
+  const stem = name.replace(/\.[^.]+$/u, "") || "nav-kurd-image";
+  const extension = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+  return `${stem}.${extension}`;
+}
+
+function imageMimeFromName(name: string): string | null {
+  const lower = name.toLocaleLowerCase("en-US");
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+  if (lower.endsWith(".png")) return "image/png";
+  if (lower.endsWith(".webp")) return "image/webp";
+  return null;
+}
+
+async function imageMimeFromSignature(file: File): Promise<string | null> {
+  const bytes = new Uint8Array(await bounded(file.slice(0, 16).arrayBuffer(), IMAGE_DECODE_TIMEOUT_MS));
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
+  if (bytes.length >= 8
+    && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
+    && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a) return "image/png";
+  if (bytes.length >= 12
+    && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
+    && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) return "image/webp";
+  return null;
+}
+
+/** Android document providers sometimes return a valid image with no MIME. */
+export async function normalizeAtlasImageFile(file: File): Promise<File> {
+  const declared = file.type.toLocaleLowerCase("en-US").split(";", 1)[0]?.trim() ?? "";
+  const allowed = ATLAS_MEDIA_POLICY.allowedMimeTypes as readonly string[];
+  let detected: string | null = null;
+  if (!allowed.includes(declared) && imageMimeFromName(file.name) === null) {
+    try { detected = await imageMimeFromSignature(file); }
+    catch { detected = null; }
+  }
+  const mime = allowed.includes(declared) ? declared : imageMimeFromName(file.name) ?? detected;
+  if (!mime || !allowed.includes(mime)) return file;
+  if (file.type === mime && imageMimeFromName(file.name) === mime) return file;
+  return new File([file], normalizedImageName(file.name, mime), {
+    type: mime,
+    lastModified: file.lastModified || Date.now()
+  });
+}
+
+function targetDimensions(width: number, height: number): { width: number; height: number } {
+  const longest = Math.max(width, height);
+  if (longest <= MAX_LONG_EDGE) return { width, height };
+  const ratio = MAX_LONG_EDGE / longest;
+  return {
+    width: Math.max(1, Math.round(width * ratio)),
+    height: Math.max(1, Math.round(height * ratio))
+  };
+}
+
+async function canvasBlob(
+  canvas: HTMLCanvasElement | OffscreenCanvas,
+  type: string,
+  quality: number
+): Promise<Blob | null> {
+  if (typeof OffscreenCanvas !== "undefined" && canvas instanceof OffscreenCanvas) {
+    try {
+      return await bounded(canvas.convertToBlob({ type, quality }), IMAGE_ENCODE_TIMEOUT_MS);
+    } catch {
+      return null;
+    }
+  }
+  return new Promise((resolve) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve(null);
+    }, IMAGE_ENCODE_TIMEOUT_MS);
+    (canvas as HTMLCanvasElement).toBlob((blob) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(blob);
+    }, type, quality);
+  });
+}
+
+function createCanvas(width: number, height: number): HTMLCanvasElement | OffscreenCanvas {
+  if (typeof OffscreenCanvas !== "undefined") return new OffscreenCanvas(width, height);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  return canvas;
+}
+
+/**
+ * Prepares a user-selected image for upload without introducing any fake progress.
+ * The original file is retained whenever recompression would not make it smaller.
+ * Large images are decoded asynchronously and re-encoded at a high-fidelity setting.
+ */
+export async function prepareAtlasImage(
+  selectedFile: File,
+  onProgress?: AtlasImageProcessingProgress
+): Promise<AtlasPreparedImage> {
+  const file = await normalizeAtlasImageFile(selectedFile);
+  if (!(ATLAS_MEDIA_POLICY.allowedMimeTypes as readonly string[]).includes(file.type)) {
+    throw new Error("Use a JPEG, PNG or WebP image.");
+  }
+  if (file.size <= 0) throw new Error("The selected image is empty.");
+  if (file.size > ATLAS_MEDIA_POLICY.maxBytes) throw new Error("Each image must be 10 MB or smaller.");
+
+  const fallback: AtlasPreparedImage = {
+    file,
+    originalBytes: file.size,
+    outputBytes: file.size,
+    compressed: false,
+    width: null,
+    height: null
+  };
+
+  if (typeof createImageBitmap !== "function" || typeof document === "undefined") {
+    onProgress?.("complete", 100);
+    return fallback;
+  }
+
+  onProgress?.("decode", 10);
+  let bitmap: ImageBitmap;
+  try {
+    bitmap = await decodeBitmap(file);
+  } catch {
+    onProgress?.("complete", 100);
+    return fallback;
+  }
+
+  try {
+    const originalWidth = bitmap.width;
+    const originalHeight = bitmap.height;
+    const { width, height } = targetDimensions(originalWidth, originalHeight);
+
+    // Small files that already fit the target dimensions are left untouched.
+    if (file.size < MIN_BYTES_FOR_REENCODE && width === originalWidth && height === originalHeight) {
+      onProgress?.("complete", 100);
+      return { ...fallback, width: originalWidth, height: originalHeight };
+    }
+
+    onProgress?.("compress", 35);
+    const canvas = createCanvas(width, height);
+    const context = canvas.getContext("2d", { alpha: true });
+    if (!context) {
+      onProgress?.("complete", 100);
+      return { ...fallback, width: originalWidth, height: originalHeight };
+    }
+
+    context.drawImage(bitmap, 0, 0, width, height);
+    const outputMime = "image/webp";
+    const blob = await canvasBlob(canvas, outputMime, HIGH_FIDELITY_QUALITY);
+    onProgress?.("compress", 90);
+
+    if (!blob || blob.size <= 0 || blob.size >= file.size * 0.985) {
+      onProgress?.("complete", 100);
+      return { ...fallback, width: originalWidth, height: originalHeight };
+    }
+
+    const processed = new File([blob], normalizedImageName(file.name, outputMime), {
+      type: outputMime,
+      lastModified: file.lastModified || Date.now()
+    });
+    onProgress?.("complete", 100);
+    return {
+      file: processed,
+      originalBytes: file.size,
+      outputBytes: processed.size,
+      compressed: true,
+      width,
+      height
+    };
+  } finally {
+    bitmap.close();
+  }
+}

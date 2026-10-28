@@ -1,0 +1,203 @@
+/* Interaction behavior, unified language typography and the single authoritative map-attribution layout. */
+.map-button,
+.round-button,
+.action-card,
+.style-choice,
+.segmented button,
+.search-card__clear,
+.sheet-handle,
+.owner-studio button,
+.place-detail button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.map-button:active,
+.round-button:active,
+.action-card:active,
+.style-choice:active,
+.segmented button:active,
+.search-card__clear:active {
+  transform: none;
+  filter: brightness(1.04);
+}
+
+.map-sheet,
+.sheet-handle,
+.sheet-handle__text,
+.map-message,
+.map-note,
+.map-stats,
+.action-card,
+.map-stats strong,
+.map-stats span,
+.action-card strong,
+.action-card small {
+  font-family: var(--font-ui);
+}
+
+body[data-language="ku"] .sheet-handle__text,
+body[data-language="ar"] .sheet-handle__text,
+body[data-language="ku"] .map-note,
+body[data-language="ar"] .map-note {
+  font-family: var(--font-arabic);
+}
+
+.map-button--logo { overflow: hidden; }
+.map-button--logo svg { display: none; }
+.map-button__logo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
+  pointer-events: none;
+}
+
+body,
+button,
+input,
+textarea,
+select,
+.map-sheet,
+.topbar,
+.search-card,
+.maplibregl-popup,
+.place-popup,
+.place-detail,
+.owner-panel,
+.owner-studio,
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-ui);
+}
+
+body[data-language="en"] .locality-label,
+body[data-language="en"] .road-label,
+body[data-language="en"] .administrative-label,
+body[data-language="en"] .maplibregl-ctrl-attrib,
+body[data-language="en"] .eyebrow,
+body[data-language="en"] .place-detail__eyebrow {
+  font-family: var(--font-latin);
+}
+
+body[data-language="ku"] .locality-label,
+body[data-language="ku"] .road-label,
+body[data-language="ku"] .administrative-label,
+body[data-language="ar"] .locality-label,
+body[data-language="ar"] .road-label,
+body[data-language="ar"] .administrative-label {
+  font-family: var(--font-arabic);
+}
+
+.map-actions,
+.maplibregl-ctrl-top-left,
+.maplibregl-ctrl-bottom-left,
+.brand-card,
+.style-picker,
+.round-button,
+.map-button {
+  direction: ltr;
+}
+
+.search-card input,
+.map-sheet,
+.place-detail,
+.owner-panel,
+.search-results {
+  direction: inherit;
+}
+
+* { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+button, a, input, textarea, select { outline-color: transparent; }
+
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid #ffe19e;
+  outline-offset: 3px;
+}
+
+.maplibregl-ctrl-bottom-right { display: none; }
+
+/* The search field uses its parent card as the focus surface. This removes the
+   Android Chrome yellow rectangle while preserving a visible purple focus state. */
+.search-card input:focus,
+.search-card input:focus-visible {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  box-shadow: none;
+}
+
+.search-card:focus-within {
+  border-color: rgba(148, 116, 255, .34);
+}
+
+@media (forced-colors: active) {
+  :where(button, a, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid CanvasText;
+  }
+  .search-card input:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 1px;
+  }
+}
+
+.maplibregl-ctrl-compass { display: block !important; }
+
+/* One source-aware attribution slot, anchored to the approved map card. */
+.maplibregl-ctrl-bottom-left:empty { display: none; }
+.map-sheet__attribution-slot {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 20px; max-width: 100%; margin: 0 0 7px; direction: ltr;
+}
+.map-sheet__attribution-slot:empty { display: none; }
+.map-sheet__attribution-slot .maplibregl-ctrl-attrib.nav-kurd-attribution {
+  position: relative; display: block; flex: 0 1 auto; min-width: 0; max-width: 100%;
+  margin: 0 !important; padding: 0 !important; border: 0; border-radius: 8px;
+  color: var(--nk-text, #f0f6ff); background: transparent !important;
+  box-shadow: none; opacity: 1; text-align: center; font-family: var(--font-ui);
+}
+.map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner {
+  display: block !important; max-width: 100%; padding: 3px 7px;
+  border: 1px solid var(--nk-border, rgba(225,234,255,.12)); border-radius: 8px;
+  color: var(--nk-text, #f0f6ff); background: var(--nk-surface, rgba(8,14,27,.72));
+  white-space: normal; overflow-wrap: anywhere; text-wrap: balance;
+  font: 500 11px/1.45 var(--font-ui); direction: ltr;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution__project {
+  display: block; margin-bottom: 2px; color: var(--nk-muted, #c8d5e6);
+  white-space: normal; overflow-wrap: anywhere; font-size: 8px; line-height: 1.3;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution a {
+  color: inherit; text-decoration: none; white-space: normal; font: inherit;
+}
+.map-sheet__attribution-slot .nav-kurd-attribution a:hover { text-decoration: underline; }
+.map-sheet__attribution-slot a:focus-visible { outline: 2px solid var(--nk-primary,#78b8ff); outline-offset: 2px; }
+.map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button { display: none !important; }
+.nav-kurd-attribution__logo { display: block; flex: 0 0 auto; line-height: 0; }
+.nav-kurd-attribution__logo[hidden] { display: none; }
+.nav-kurd-attribution__logo img { display: block; height: 30px; width: auto; max-width: none; }
+.map-sheet.is-collapsed .nav-kurd-attribution__project { display: none; }
+.map-sheet.is-collapsed .map-sheet__attribution-slot { margin-bottom: 4px; }
+/* The legacy 82px collapsed cap must not clip mandatory source credit. */
+.map-sheet.is-collapsed:has(.nav-kurd-attribution) { max-height: none !important; }
+/* Reuse this same slot when its normal card is hidden. */
+.map-sheet__attribution-slot.is-floating {
+  position: absolute; left: max(8px,env(safe-area-inset-left),var(--native-safe-left,0px));
+  bottom: max(var(--nav-attribution-bottom,6px),env(safe-area-inset-bottom),var(--native-safe-bottom,0px));
+  z-index: var(--z-controls); width: max-content; max-width: min(360px,calc(100% - 16px));
+  margin: 0; pointer-events: auto;
+}
+.map-sheet__attribution-slot.is-floating .nav-kurd-attribution__project { display: none; }
+@media (max-width: 700px) {
+  .map-button__logo { width: 31px; height: 31px; }
+  .round-button, .map-button, .style-choice, .action-card, .segmented button { -webkit-tap-highlight-color: transparent; }
+  .road-label { opacity: .82; }
+}
+
+@media (min-width: 701px) and (max-height: 820px) {
+  .search-card { top: 72px; max-width: min(560px, calc(100vw - 210px)); }
+  .map-actions { top: 14px; right: 16px; }
+  .style-picker { max-width: 232px; }
+  .map-sheet { width: min(350px, calc(100vw - 38px)); padding: 13px; }
+  .map-stats > div { padding: 7px 6px; }
+  .action-card { min-height: 50px; }
+}

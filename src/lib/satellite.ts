@@ -1,0 +1,206 @@
+import type { RasterSourceSpecification } from "maplibre-gl";
+
+export type RasterSatelliteSource =
+  | { kind: "tilejson"; url: string }
+  | { kind: "template"; url: string; minzoom?: number; maxzoom?: number; tileSize?: number };
+
+export type SatelliteSource =
+  | { enabled: false; provider: "disabled"; reason: string; source: null; attribution: string }
+  | {
+      enabled: true;
+      provider: "maptiler" | "sentinel2" | "custom";
+      source: RasterSatelliteSource;
+      fallbackSource?: RasterSatelliteSource;
+      detailSource?: RasterSatelliteSource;
+      detailAttribution?: string;
+      transitionZoom?: number;
+      composition?: "handoff" | "context-overlay";
+      attribution: string;
+      probeUrls: readonly string[];
+    };
+
+// Keep the stable default, but let a configured dataset publish its own tile
+// format, native resolution and zoom limits through TileJSON.
+const STABLE_MAPTILER_DATASET_ID = "satellite-v2";
+const SENTINEL2_MIN_ZOOM = 5;
+const SENTINEL2_MAX_NATIVE_ZOOM = 13;
+const SENTINEL2_CONTEXT_TRANSITION_ZOOM = 7.2;
+const clean = (value: unknown): string => typeof value === "string" ? value.trim() : "";
+const enabledFlag = (value: string): boolean => value.toLowerCase() === "true";
+
+function secureUrl(value: string): string | null {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveMapTilerId(value: string): string {
+  const normalized = clean(value).toLowerCase();
+  if (!normalized) return STABLE_MAPTILER_DATASET_ID;
+  return /^[a-z0-9][a-z0-9._-]{1,63}$/.test(normalized) ? normalized : STABLE_MAPTILER_DATASET_ID;
+}
+
+function hasTileTemplateTokens(value: string): boolean {
+  return /\{z\}/.test(value) && /\{x\}/.test(value) && /\{y\}/.test(value);
+}
+
+function concreteProbeUrl(template: string): string {
+  return template.replace("{z}", "7").replace("{x}", "79").replace("{y}", "50");
+}
+
+function appBasePath(): string {
+  const raw = clean(import.meta.env.BASE_URL) || "/";
+  const rooted = raw.startsWith("/") ? raw : `/${raw}`;
+  return rooted.endsWith("/") ? rooted : `${rooted}/`;
+}
+
+function sentinelCacheDay(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function sentinelTemplate(): string {
+  return `${appBasePath()}api/sentinel2?z={z}&x={x}&y={y}&day=${sentinelCacheDay()}`;
+}
+
+function mapTilerTileJson(key: string, tilesetId: string): string {
+  const id = resolveMapTilerId(tilesetId);
+  return `https://api.maptiler.com/tiles/${encodeURIComponent(id)}/tiles.json?key=${encodeURIComponent(key)}`;
+}
+
+function stableMapTilerSource(key: string, configuredId: string): {
+  primary: RasterSatelliteSource;
+  probes: readonly string[];
+} {
+  const url = mapTilerTileJson(key, configuredId);
+  return {
+    primary: { kind: "tilejson", url },
+    probes: [url]
+  };
+}
+
+/** Explicit High uses finer imagery; custom datasets and automatic mode stay unchanged. */
+export function resolveSatelliteHighDetailSource(): RasterSourceSpecification | null {
+  const base = resolveSatelliteSource();
+  const token = clean(import.meta.env.VITE_KRI_MAPBOX_ACCESS_TOKEN);
+  const dataset = resolveMapTilerId(clean(import.meta.env.VITE_KRI_MAPTILER_TILESET_ID));
+  if (!base.enabled || base.provider === "custom" || base.source.kind !== "tilejson"
+    || dataset !== STABLE_MAPTILER_DATASET_ID || !token.startsWith("pk.")) return null;
+  return {
+    type: "raster",
+    tiles: [`https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg90?access_token=${encodeURIComponent(token)}`],
+    tileSize: 256, minzoom: 0, maxzoom: 22,
+    attribution: '<a href="https://www.mapbox.com/about/maps/">© Mapbox</a> · <a href="https://www.maxar.com/">© Maxar</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>'
+  };
+}
+
+export function resolveSatelliteSource(): SatelliteSource {
+  if (!enabledFlag(clean(import.meta.env.VITE_KRI_ENABLE_SATELLITE))) {
+    return { enabled: false, provider: "disabled", reason: "flag-disabled", source: null, attribution: "" };
+  }
+
+  const provider = clean(import.meta.env.VITE_KRI_SATELLITE_PROVIDER).toLowerCase();
+  const mapTilerKey = clean(import.meta.env.VITE_KRI_MAPTILER_API_KEY);
+  const configuredMapTilerId = clean(import.meta.env.VITE_KRI_MAPTILER_TILESET_ID);
+  const sentinelOverlayEnabled = enabledFlag(clean(import.meta.env.VITE_KRI_ENABLE_SENTINEL_OVERLAY));
+  const tileJson = clean(import.meta.env.VITE_KRI_SATELLITE_TILEJSON_URL);
+  const template = clean(import.meta.env.VITE_KRI_SATELLITE_TILE_TEMPLATE);
+  const attribution = clean(import.meta.env.VITE_KRI_SATELLITE_ATTRIBUTION);
+
+  // When a MapTiler key exists, use its globally continuous raster as the sole
+  // operational base. Sentinel-2 is opt-in only: per-tile serverless Process API
+  // calls are expensive, can be rate-limited, and must never be mounted merely
+  // because the provider label says "sentinel2".
+  if ((provider === "sentinel2" || provider === "maptiler" || !provider) && mapTilerKey) {
+    const mapTiler = stableMapTilerSource(mapTilerKey, configuredMapTilerId);
+    const sentinel = sentinelTemplate();
+    return {
+      enabled: true,
+      provider: provider === "sentinel2" ? "sentinel2" : "maptiler",
+      source: mapTiler.primary,
+      ...(sentinelOverlayEnabled ? {
+        detailSource: { kind: "template" as const, url: sentinel, minzoom: SENTINEL2_MIN_ZOOM, maxzoom: SENTINEL2_MAX_NATIVE_ZOOM, tileSize: 256 },
+        detailAttribution: "Contains modified Copernicus Sentinel-2 data (processed by Sentinel Hub)",
+        transitionZoom: SENTINEL2_CONTEXT_TRANSITION_ZOOM,
+        composition: "context-overlay" as const
+      } : {}),
+      attribution: "© MapTiler © OpenStreetMap contributors",
+      probeUrls: sentinelOverlayEnabled ? [...mapTiler.probes, concreteProbeUrl(sentinel)] : mapTiler.probes
+    };
+  }
+
+  if (provider === "sentinel2") {
+    const sentinel = sentinelTemplate();
+    return {
+      enabled: true,
+      provider: "sentinel2",
+      source: { kind: "template", url: sentinel, minzoom: SENTINEL2_MIN_ZOOM, maxzoom: SENTINEL2_MAX_NATIVE_ZOOM, tileSize: 256 },
+      attribution: "Contains modified Copernicus Sentinel-2 data (processed by Sentinel Hub)",
+      probeUrls: [concreteProbeUrl(sentinel)]
+    };
+  }
+
+  if (provider === "maptiler") {
+    return { enabled: false, provider: "disabled", reason: "missing-maptiler-key", source: null, attribution: "" };
+  }
+
+  if (provider === "custom" || tileJson || template) {
+    if (!attribution) return { enabled: false, provider: "disabled", reason: "missing-attribution", source: null, attribution: "" };
+    const validTileJson = secureUrl(tileJson);
+    if (validTileJson) return { enabled: true, provider: "custom", source: { kind: "tilejson", url: validTileJson }, attribution, probeUrls: [validTileJson] };
+    const validTemplate = secureUrl(template);
+    if (validTemplate && hasTileTemplateTokens(validTemplate)) {
+      return { enabled: true, provider: "custom", source: { kind: "template", url: validTemplate }, attribution, probeUrls: [concreteProbeUrl(validTemplate)] };
+    }
+    return { enabled: false, provider: "disabled", reason: tileJson || template ? "invalid-source" : "missing-custom-source", source: null, attribution: "" };
+  }
+
+  return { enabled: false, provider: "disabled", reason: "missing-custom-source", source: null, attribution: "" };
+}
+
+function tileJsonProbeTemplate(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const tiles = (payload as { tiles?: unknown }).tiles;
+  if (!Array.isArray(tiles)) return null;
+  const template = tiles.find((value): value is string => typeof value === "string" && hasTileTemplateTokens(value));
+  return template ?? null;
+}
+
+async function probeUrl(url: string): Promise<boolean> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8_000);
+  try {
+    const response = await fetch(url, { method: "GET", cache: "force-cache", mode: "cors", signal: controller.signal });
+    if (!response.ok) return false;
+    const contentType = (response.headers.get("content-type") || "").toLowerCase();
+    if (contentType.includes("image/")) return true;
+    if (!contentType.includes("json")) return false;
+    const template = tileJsonProbeTemplate(await response.json());
+    if (!template) return false;
+    const tile = await fetch(concreteProbeUrl(template), { method: "GET", cache: "force-cache", mode: "cors", signal: controller.signal });
+    return tile.ok && (tile.headers.get("content-type") || "").toLowerCase().includes("image/");
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+const probeCache = new Map<string, { until: number; result: Promise<boolean> }>();
+export async function validateSatelliteSource(source: SatelliteSource): Promise<boolean> {
+  if (!source.enabled) return false;
+  for (const url of source.probeUrls) {
+    let cached = probeCache.get(url);
+    if (!cached || cached.until < Date.now()) {
+      if (probeCache.size >= 8) probeCache.delete(probeCache.keys().next().value!);
+      cached = { until: Date.now() + 5 * 60_000, result: probeUrl(url) };
+      probeCache.set(url, cached);
+      // Failed probes can recover shortly after connectivity returns.
+      void cached.result.then(ok => { if (!ok && probeCache.get(url) === cached) cached!.until = Date.now() + 15_000; });
+    }
+    if (await cached.result) return true;
+  }
+  return false;
+}
