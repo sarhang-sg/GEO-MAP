@@ -58,7 +58,7 @@
     "verify:navigation-polish": "node tools/verify/navigation-polish-regressions.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.117.3",
+    "@supabase/supabase-js": "2.118.0",
     "maplibre-gl": "file:vendor/maplibre-gl",
     "pmtiles": "4.5.0"
   },
