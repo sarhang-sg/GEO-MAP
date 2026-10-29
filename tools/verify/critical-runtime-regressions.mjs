@@ -215,6 +215,7 @@ for (const code of [1,2,3]) {
   for(let i=0;i<1000;i++)h.c.locate();
   assert.equal(h.watches.length,1);assert.equal(h.messages[0],'locating');
   h.watches[0].error({code,PERMISSION_DENIED:1,POSITION_UNAVAILABLE:2,TIMEOUT:3});
+  if(code===3){assert.equal(h.c.state,'acquiring');assert.equal(h.watches[0].active,true);[...h.timers.values()][0]();}
   assert.equal(h.messages.at(-1),['','denied','unavailable','timeout'][code]);
   assert.equal(h.c.watchId,null);assert.equal(h.c.requestInFlight,false);assert.equal(h.watches[0].active,false);
   h.c.locate();assert.equal(h.watches.length,2);
@@ -334,4 +335,13 @@ class Events {
   frames.shift()();assert.equal(blurs,0);
   document.activeElement=button;context.release({target:new Element()});frames.shift()();assert.equal(blurs,1);
   console.log('PASS post-click touch cleanup preserves a newly opened dialog input focus');
+}
+
+{
+ const h=gpsHarness();h.c.locate();const watch=h.watches[0];
+ watch.error({code:3,TIMEOUT:3});assert.equal(h.c.state,'acquiring');assert.equal(watch.active,true);
+ for(const timestamp of [0,NaN,Date.now()-60000,Date.now()+10000])watch.success({timestamp,coords:{longitude:44.2,latitude:36.2,accuracy:12,speed:0}});
+ assert.equal(h.moves.length,0);watch.success({timestamp:Date.now(),coords:{longitude:44.2,latitude:36.2,accuracy:12,speed:0}});
+ assert.equal(h.c.state,'ready');assert.equal(h.moves.length,1);assert.equal(h.timers.size,0);
+ console.log('PASS cold GPS timeout retains watch, rejects undated/stale/future fixes and accepts later precise fix');
 }

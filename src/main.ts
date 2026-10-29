@@ -323,7 +323,7 @@ class KurdistanAtlasController {
       maxBounds: KRI_BOUNDS,
       minZoom: this.coverageMinZoom(),
       maxZoom: 18,
-      // Required geographic-data attribution remains visible. The custom project statement is additive.
+      // Source credit belongs to the existing expanded map card.
       attributionControl: false,
       renderWorldCopies: false,
       dragRotate: true,
@@ -616,10 +616,11 @@ class KurdistanAtlasController {
     mapSheet.dataset.sheetState = collapsed ? "collapsed" : "expanded";
     sheetToggle.setAttribute("aria-expanded", String(!collapsed));
     sheetToggle.classList.toggle("is-collapsed", collapsed);
+    mapAttributionSlot.hidden = collapsed;
 
     const attribution = mapAttributionSlot.querySelector<HTMLDetailsElement>(".maplibregl-ctrl-attrib.nav-kurd-attribution");
     if (attribution) {
-      attribution.open = true;
+      attribution.open = !collapsed;
       attribution.dataset.sheetState = collapsed ? "collapsed" : "expanded";
     }
     this.overlayLayout.refresh();
@@ -754,17 +755,25 @@ class KurdistanAtlasController {
       attribution.dir = languageDirection(this.language);
       attribution.dataset.language = this.language;
       attribution.dataset.sheetState = this.sheetCollapsed ? "collapsed" : "expanded";
-      attribution.open = true;
+      attribution.open = !this.sheetCollapsed;
+      mapAttributionSlot.hidden = this.sheetCollapsed;
+      let statement = attribution.querySelector<HTMLElement>(".nav-kurd-attribution__statement");
+      if (!statement) {
+        statement = document.createElement("span");
+        statement.className = "nav-kurd-attribution__statement";
+        attribution.insertBefore(statement, inner);
+      }
+      statement.textContent = `${copy.mapSourceCredit.split(" · ")[0]} · `;
       let project = attribution.querySelector<HTMLElement>(".nav-kurd-attribution__project");
       if (!project) {
         project = document.createElement("span");
         project.className = "nav-kurd-attribution__project";
-        attribution.insertBefore(project, inner);
+        attribution.append(project);
       }
       project.textContent = copy.mapProjectCredit;
       normalizeAttributionLinks(inner);
       updateAttributionFeedback(this.map, mapAttributionSlot);
-      // MapLibre owns active source credits; keep them available in collapsed sheets.
+      // One deduplicated source notice inside the expanded card only.
       toggle.setAttribute("aria-label", copy.mapDetails);
       attribution.setAttribute("aria-label", `${copy.mapProjectCredit} · ${inner.textContent}`);
       this.overlayLayout.refresh();

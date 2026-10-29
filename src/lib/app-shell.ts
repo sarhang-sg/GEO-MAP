@@ -74,7 +74,6 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
       <button id="sheetToggle" class="sheet-handle" type="button" aria-expanded="true" aria-controls="sheetContent">
         <span aria-hidden="true"></span><span id="sheetHandleText" class="sheet-handle__text">وردەکاری نەخشە</span>
       </button>
-      <div id="mapAttributionSlot" class="map-sheet__attribution-slot" aria-live="polite"></div>
       <div class="sheet-header"><div class="sheet-header__copy"><p id="regionEyebrow" class="eyebrow">KURDISTAN REGION</p><h1 id="mapTitle">نەخشەی کوردستان</h1></div><div class="sheet-icon"><img src="${brandLogoSrc}" alt="NAV KURD logo" width="1024" height="1024" /></div></div>
       <div id="sheetContent" class="sheet-content">
       <p id="mapMessage" class="map-message" role="status">خەریکە داتای ڕاستەقینەی نەخشەکە بار دەکرێت.</p>
@@ -82,6 +81,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
       <div class="action-grid"><button id="sheetLocateButton" class="action-card" type="button"><span class="action-card__icon action-card__icon--tracking" aria-hidden="true">${navIcon("06")}</span><span><strong id="locateTitle">شوێنی من</strong><small id="locateSub">شوێنی ئێستا و جوڵە</small></span></button><button id="sheetFitButton" class="action-card" type="button"><span class="action-card__icon" aria-hidden="true">${navIcon("09")}</span><span><strong id="fitTitle">تەواوی هەرێم</strong><small id="fitSub">گەڕانەوە بۆ سنوور</small></span></button><button id="sheetShareLocationButton" class="action-card action-card--native-share" type="button"><span class="action-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m8.3 10.9 7.4-4.6M8.3 13.1l7.4 4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span><strong id="shareLocationTitle">هاوبەشکردنی شوێن</strong><small id="shareLocationSub">بەستەری شوێنی ئێستا</small></span></button></div>
       <div class="utility-row"><div class="segmented" role="group" aria-label="Language"><button data-language="ku" class="is-active" type="button">کوردی</button><button data-language="ar" type="button">عربي</button><button data-language="en" type="button">EN</button></div><span id="backendState" class="backend-state">داتای ناوخۆیی</span></div>
       <p id="mapNote" class="map-note">نەخشەکە ڕێگا، شەقام، گوند، شار، سنوور و شوێنە گرنگەکانی هەرێمی کوردستان پیشان دەدات.</p>
+      <div id="mapAttributionSlot" class="map-sheet__attribution-slot"></div>
       </div>
     </section>
 

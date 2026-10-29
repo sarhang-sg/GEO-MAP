@@ -249,12 +249,11 @@ assert(assetLinksSource.includes("RELEASE_FINGERPRINT") && assetLinksSource.incl
 const overlayLayout = await readText("src/lib/map-overlay-layout-controller.ts");
 const attributionCss = await readText("src/styles/interaction-attribution.css");
 assert(appShell.includes('id="mapAttributionSlot"') && appShell.includes('class="map-sheet__attribution-slot"'), "Map card is missing its attribution slot.");
-assert(mainSource.includes('mapAttributionSlot.querySelector<HTMLDetailsElement>') && mainSource.includes("attribution.open = true") && mainSource.includes("mapAttributionSlot.append(attribution)") && mainSource.includes("normalizeAttributionLinks(inner)"), "The existing card must own live, always-accessible source attribution.");
-assert(overlayLayout.includes("mobileSheetHeight") && overlayLayout.includes("MOBILE_COLLAPSED_SHEET_HEIGHT = 116") && overlayLayout.includes("MOBILE_EXPANDED_SHEET_VIEWPORT_RATIO") && overlayLayout.includes("attributionHome.after(credit)"), "Overlay layout must retain card geometry and return the same attribution slot to its home.");
-assert(attributionCss.includes(".map-sheet__attribution-slot") && attributionCss.includes(".nav-kurd-attribution__logo") && attributionCss.includes("height: 30px") && !attributionCss.slice(attributionCss.indexOf("/* One source-aware")).includes("filter:") && !mainSource.includes("injectMapboxFix"), "Unified provider attribution must preserve visible, unmodified branding.");
+assert(mainSource.includes('mapAttributionSlot.hidden = collapsed') && mainSource.includes('normalizeAttributionLinks(inner)'), "The card owns one deduplicated notice and follows collapse state.");
+assert(appShell.indexOf('id="mapAttributionSlot"') > appShell.indexOf('id="mapNote"') && !overlayLayout.includes('mapShell.append(credit)'), "The footer cannot move over navigation.");
+assert(attributionCss.includes('.map-sheet__attribution-slot[hidden]') && !attributionCss.includes('.is-floating') && !attributionCss.includes('.nav-kurd-attribution__logo'), "No floating attribution or logo layout remains.");
 const satelliteCredit = await readText("src/lib/satellite-credit.ts");
-assert(!satelliteCredit.includes('className = "nav-satellite-credit"') && satelliteCredit.includes('slot.prepend(logo)') && satelliteCredit.includes('installed.get(map)'), "Satellite credits must not create a second card or duplicate install.");
-
+assert(!satelliteCredit.includes('createElement("img")') && satelliteCredit.includes('installed.get(map)'), "Imagery changes must not insert logos or duplicate listeners.");
 
 const prohibitedRuntimePatterns = [
   [/(?:window\.)?location\.reload\s*\(/u, "document reload"],

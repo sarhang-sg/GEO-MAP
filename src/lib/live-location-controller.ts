@@ -73,7 +73,7 @@ const INITIAL_FIX_MAX_AGE_MS = 30_000;
 const INITIAL_FIX_MAX_ACCURACY_METERS = 100_000;
 const PRECISE_FIX_METERS = 50;
 const DISPLAY_FIX_MAX_ACCURACY_METERS = 250;
-const ACQUISITION_DEADLINE_MS = 14_000;
+const ACQUISITION_DEADLINE_MS = 45_000;
 const TRACKING_PREFERENCE_KEY = "nav-kurd:gps:active";
 const STALE_WATCH_MS = 22_000;
 
@@ -319,10 +319,8 @@ export class LiveLocationController {
       const firstFix = this.lastCoordinate === null;
 
       const receivedAt = Date.now();
-      const sampleTimestamp =
-        Number.isFinite(position.timestamp) && position.timestamp > 0
-          ? position.timestamp
-          : receivedAt;
+      const sampleTimestamp = position.timestamp;
+      if (!Number.isFinite(sampleTimestamp) || sampleTimestamp <= 0) return;
       const rawAccuracy =
         typeof position.coords.accuracy === "number" &&
         Number.isFinite(position.coords.accuracy)
@@ -473,6 +471,8 @@ export class LiveLocationController {
     };
     const onError = (error: GeolocationPositionError): void => {
       if (requestGeneration !== this.watchGeneration) return;
+      // Cold GNSS may succeed after a provider timeout; retain this watch until the deadline.
+      if (error.code === error.TIMEOUT && this.requestInFlight && !this.lastCoordinate) return;
       const explicitRequest = this.requestInFlight;
       this.requestInFlight = false;
       this.clearAcquisitionTimer();
@@ -603,6 +603,7 @@ export class LiveLocationController {
       // is a device capability and must never be gated by connectivity state.
       const geolocation = this.geolocation;
       if (!this.watchWanted || document.hidden || !geolocation) return;
+      if (!force && this.requestInFlight) return;
       const now = Date.now();
       const waitingTooLong =
         this.lastPositionAt === 0 &&

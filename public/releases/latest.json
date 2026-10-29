@@ -7,16 +7,16 @@
   "directApkAvailable": true,
   "directApkUrl": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v10.4.4/NAV-KURD-10.4.4.apk",
   "apkPureUrl": "https://apkpure.com/nav-kurd/com.navkurd.app/download",
-  "publishedAt": "2026-10-28T15:56:07Z",
-  "apkBytes": 154581896,
-  "apkSha256": "ca41cfeee97af8e0292f0295ecc95fd86db6130cebcb2356e6fc8225c83f5db9",
+  "publishedAt": "2026-10-29T09:51:06Z",
+  "apkBytes": 154579956,
+  "apkSha256": "9a019712d19df9ef380ada646816951dc3b45f2817616403a2654e5fed5e61c6",
   "artifact": {
     "version": "10.4.4",
     "versionCode": 100404,
     "url": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v10.4.4/NAV-KURD-10.4.4.apk",
-    "bytes": 154581896,
-    "sha256": "ca41cfeee97af8e0292f0295ecc95fd86db6130cebcb2356e6fc8225c83f5db9",
+    "bytes": 154579956,
+    "sha256": "9a019712d19df9ef380ada646816951dc3b45f2817616403a2654e5fed5e61c6",
     "signingCertificateSha256": "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246",
-    "gitCommit": "b31208a442340be14045906a729a1d6c4976f59a"
+    "gitCommit": "e769236d9fa859600ed23636a7a53a18553579fe"
   }
 }

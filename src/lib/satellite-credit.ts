@@ -1,7 +1,4 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
-// Unmodified Mapbox GL JS artwork: https://docs.mapbox.com/help/dive-deeper/attribution/
-import mapboxWordmark from "../assets/mapbox-wordmark.svg?raw";
-
 export const ATTRIBUTION_CHANGE_EVENT = "nav-kurd:attribution-change";
 const installed = new WeakMap<MapLibreMap, (active: boolean) => void>();
 const normalized = new WeakMap<HTMLElement, string>();
@@ -67,7 +64,7 @@ export function updateAttributionFeedback(map: MapLibreMap, slot: HTMLElement): 
   }
 }
 
-/** The mandatory logo belongs to the existing slot; no independent satellite card. */
+/** Notify the existing card when the imagery source changes; create no overlay. */
 export function installSatelliteCredit(map: MapLibreMap): (active: boolean) => void {
   const previous = installed.get(map);
   if (previous) return previous;
@@ -75,24 +72,16 @@ export function installSatelliteCredit(map: MapLibreMap): (active: boolean) => v
   const shell = container.closest(".map-shell") ?? container;
   const slot = shell.querySelector<HTMLElement>("#mapAttributionSlot");
   if (!slot) throw new Error("The map attribution slot is missing.");
-  const logo = document.createElement("a");
-  logo.className = "nav-kurd-attribution__logo";
-  logo.href = "https://www.mapbox.com/";
-  logo.target = "_blank"; logo.rel = "noopener noreferrer"; logo.hidden = true;
-  const image = document.createElement("img");
-  image.src = `data:image/svg+xml,${encodeURIComponent(mapboxWordmark)}`;
-  image.alt = "Mapbox"; image.height = 30;
-  logo.append(image); slot.prepend(logo);
   let removed = false;
   const updateFeedback = (): void => updateAttributionFeedback(map, slot);
   const update = (active: boolean): void => {
     if (removed) return;
-    logo.hidden = !active; slot.dataset.mapbox = String(active);
+    slot.dataset.mapbox = String(active);
     updateFeedback(); container.dispatchEvent(new Event(ATTRIBUTION_CHANGE_EVENT));
   };
   const onRemove = (): void => {
     removed = true; map.off("moveend", updateFeedback);
-    logo.remove(); delete slot.dataset.mapbox; installed.delete(map);
+    delete slot.dataset.mapbox; installed.delete(map);
   };
   map.on("moveend", updateFeedback); map.on("remove", onRemove);
   installed.set(map, update);

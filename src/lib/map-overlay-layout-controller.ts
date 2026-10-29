@@ -71,35 +71,6 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
   const tracked = new Set<Element>();
   const blockers = ".about-dialog,.user-contribution-studio,.owner-studio,.feedback-studio,.place-detail,.nav-tutorial,.offline-pack-confirm,.app-update-dialog,.android-release-promo,dialog";
 
-  const attributionSlot = mapShell.querySelector<HTMLElement>("#mapAttributionSlot");
-  const attributionHome = document.createComment("map attribution home");
-  attributionSlot?.before(attributionHome);
-  const layoutImageryCredit = (): void => {
-    const credit = attributionSlot;
-    if (!credit) return;
-    const floating = !visible(mapSheet) || mapShell.classList.contains("is-map-interacting");
-    if (!floating) {
-      if (credit.parentElement !== attributionHome.parentElement) attributionHome.after(credit);
-      credit.classList.remove("is-floating");
-      credit.style.removeProperty("--nav-attribution-bottom");
-      return;
-    }
-    if (credit.parentElement !== mapShell) mapShell.append(credit);
-    credit.classList.add("is-floating");
-    const shell = mapShell.getBoundingClientRect();
-    const bounds = credit.getBoundingClientRect();
-    // Read the CSS safe-area floor without carrying a previous panel offset.
-    credit.style.removeProperty("--nav-attribution-bottom");
-    let bottom = Number.parseFloat(getComputedStyle(credit).bottom) || 6;
-    const panels = [...mapShell.querySelectorAll<HTMLElement>(".map-sheet,.route-panel,.route-destination-prompt")]
-      .filter(visible).map(element => element.getBoundingClientRect()).sort((a, b) => b.bottom - a.bottom);
-    for (const panel of panels) {
-      if (panel.left < bounds.right && panel.right > bounds.left && panel.bottom > shell.bottom - bottom - bounds.height - 4
-        && panel.top < shell.bottom - bottom) bottom = shell.bottom - panel.top + 22;
-    }
-    setPixelProperty(credit, "--nav-attribution-bottom", bottom);
-  };
-
   const layoutNotices = (height: number): void => {
     const blocked = [...document.querySelectorAll<HTMLElement>(blockers)].some(element =>
       visible(element) && (element.tagName !== "DIALOG" || element.hasAttribute("open")) && !element.classList.contains("is-minimized"));
@@ -171,7 +142,6 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
       setPixelProperty(mapShell, "--nav-kurd-actions-max-height", Math.max(88, bottom - rail.top));
       mapActions.classList.add("is-sheet-bounded");
     }
-    layoutImageryCredit();
     layoutNotices(viewport.height);
   };
 
@@ -250,12 +220,6 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
         "--nav-kurd-actions-max-height", "--nav-kurd-sheet-bottom", "--nav-kurd-sheet-collapsed-bottom",
         "--nav-kurd-sheet-visibility-lift", "--nav-kurd-notice-bottom", "--nav-kurd-notice-max-height"
       ]);
-      if (attributionSlot && attributionHome.parentNode) {
-        attributionHome.after(attributionSlot);
-        attributionSlot.classList.remove("is-floating");
-        attributionSlot.style.removeProperty("--nav-attribution-bottom");
-      }
-      attributionHome.remove();
       delete mapShell.dataset.visualViewportMeasured;
       mapActions.classList.remove("is-sheet-bounded");
     }

@@ -142,29 +142,25 @@ button, a, input, textarea, select { outline-color: transparent; }
 
 .maplibregl-ctrl-compass { display: block !important; }
 
-/* One source-aware attribution slot, anchored to the approved map card. */
+/* One source-aware notice inside the expanded card only. */
 .maplibregl-ctrl-bottom-left:empty { display: none; }
-.map-sheet__attribution-slot {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 20px; max-width: 100%; margin: 0 0 7px; direction: ltr;
-}
-.map-sheet__attribution-slot:empty { display: none; }
+.map-sheet__attribution-slot { max-width: 100%; margin-top: 7px; }
+.map-sheet__attribution-slot:empty,
+.map-sheet__attribution-slot[hidden],
+.map-sheet.is-collapsed .map-sheet__attribution-slot { display: none; }
 .map-sheet__attribution-slot .maplibregl-ctrl-attrib.nav-kurd-attribution {
-  position: relative; display: block; flex: 0 1 auto; min-width: 0; max-width: 100%;
-  margin: 0 !important; padding: 0 !important; border: 0; border-radius: 8px;
-  color: var(--nk-text, #f0f6ff); background: transparent !important;
-  box-shadow: none; opacity: 1; text-align: center; font-family: var(--font-ui);
+  position: static; display: block; min-width: 0; max-width: 100%;
+  margin: 0 !important; padding: 0 !important; border: 0; border-radius: 0;
+  color: var(--nk-muted, #c8d5e6); background: transparent !important;
+  box-shadow: none; opacity: 1; text-align: center; font: 500 10px/1.45 var(--font-ui);
+  white-space: normal; overflow-wrap: anywhere;
 }
 .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-inner {
-  display: block !important; max-width: 100%; padding: 3px 7px;
-  border: 1px solid var(--nk-border, rgba(225,234,255,.12)); border-radius: 8px;
-  color: var(--nk-text, #f0f6ff); background: var(--nk-surface, rgba(8,14,27,.72));
-  white-space: normal; overflow-wrap: anywhere; text-wrap: balance;
-  font: 500 11px/1.45 var(--font-ui); direction: ltr;
+  display: inline !important; max-width: 100%; padding: 0; border: 0;
+  color: inherit; background: transparent; font: inherit; direction: ltr;
 }
 .map-sheet__attribution-slot .nav-kurd-attribution__project {
-  display: block; margin-bottom: 2px; color: var(--nk-muted, #c8d5e6);
-  white-space: normal; overflow-wrap: anywhere; font-size: 8px; line-height: 1.3;
+  display: block; margin-top: 2px; font-size: 9px; line-height: 1.3;
 }
 .map-sheet__attribution-slot .nav-kurd-attribution a {
   color: inherit; text-decoration: none; white-space: normal; font: inherit;
@@ -172,21 +168,6 @@ button, a, input, textarea, select { outline-color: transparent; }
 .map-sheet__attribution-slot .nav-kurd-attribution a:hover { text-decoration: underline; }
 .map-sheet__attribution-slot a:focus-visible { outline: 2px solid var(--nk-primary,#78b8ff); outline-offset: 2px; }
 .map-sheet__attribution-slot .nav-kurd-attribution .maplibregl-ctrl-attrib-button { display: none !important; }
-.nav-kurd-attribution__logo { display: block; flex: 0 0 auto; line-height: 0; }
-.nav-kurd-attribution__logo[hidden] { display: none; }
-.nav-kurd-attribution__logo img { display: block; height: 30px; width: auto; max-width: none; }
-.map-sheet.is-collapsed .nav-kurd-attribution__project { display: none; }
-.map-sheet.is-collapsed .map-sheet__attribution-slot { margin-bottom: 4px; }
-/* The legacy 82px collapsed cap must not clip mandatory source credit. */
-.map-sheet.is-collapsed:has(.nav-kurd-attribution) { max-height: none !important; }
-/* Reuse this same slot when its normal card is hidden. */
-.map-sheet__attribution-slot.is-floating {
-  position: absolute; left: max(8px,env(safe-area-inset-left),var(--native-safe-left,0px));
-  bottom: max(var(--nav-attribution-bottom,6px),env(safe-area-inset-bottom),var(--native-safe-bottom,0px));
-  z-index: var(--z-controls); width: max-content; max-width: min(360px,calc(100% - 16px));
-  margin: 0; pointer-events: auto;
-}
-.map-sheet__attribution-slot.is-floating .nav-kurd-attribution__project { display: none; }
 @media (max-width: 700px) {
   .map-button__logo { width: 31px; height: 31px; }
   .round-button, .map-button, .style-choice, .action-card, .segmented button { -webkit-tap-highlight-color: transparent; }

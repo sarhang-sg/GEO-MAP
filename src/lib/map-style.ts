@@ -73,7 +73,7 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
     "kri-district-source": { type: "geojson", data: sourceData("data/kri/kri-districts.geojson", options.coverage?.districts) },
     [NATURAL_POI_SOURCE_ID]: { type: "geojson", data: options.deferNaturalPoiData ? EMPTY_POINT_COLLECTION : dataAssetUrl("data/kri/kri-natural-features.geojson"), attribution: "OpenStreetMap contributors and GeoNames" },
     [SECURITY_POI_SOURCE_ID]: { type: "geojson", data: dataAssetUrl("data/kri/kri-security-features.geojson"), attribution: "© OpenStreetMap contributors" },
-    [REVIEWED_POI_SOURCE_ID]: { type: "geojson", data: dataAssetUrl("data/kri/kri-reviewed-poi-corrections.geojson"), attribution: "NAV KURD reviewed community corrections · © OpenStreetMap contributors" }
+    [REVIEWED_POI_SOURCE_ID]: { type: "geojson", data: dataAssetUrl("data/kri/kri-reviewed-poi-corrections.geojson"), attribution: "© OpenStreetMap contributors" }
   };
   const addRasterSource = (id: string, source: NonNullable<Extract<SatelliteSource, { enabled: true }>["source"]>, attribution: string): void => {
     sources[id] = source.kind === "tilejson"
