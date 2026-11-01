@@ -375,6 +375,18 @@ export class RoutingController {
         this.handleDestinationPromptAction(button.dataset.routePromptAction || "cancel");
       });
     });
+    this.panel.querySelector<HTMLButtonElement>("[data-route-clear]")!.addEventListener("click", () => this.clearRoute());
+    const onEscape = (event: KeyboardEvent): void => {
+      if (event.key !== "Escape" || event.defaultPrevented || this.navigating) return;
+      if ((event.target as Element)?.closest("input,textarea,select,dialog,[aria-modal=true]")) return;
+      if ([...document.querySelectorAll<HTMLElement>('dialog[open],[aria-modal="true"]')].some(el => !el.hidden && el.getClientRects().length > 0)) return;
+      if (!this.destinationPrompt.hidden) this.cancelDestinationPrompt();
+      else if (this.hasActiveRoute()) this.clearRoute();
+      else return;
+      event.preventDefault();
+    };
+    window.addEventListener("keydown", onEscape);
+    this.map.on("remove", () => window.removeEventListener("keydown", onEscape));
     this.startButton.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -409,8 +421,7 @@ export class RoutingController {
   }
 
   cancelDestinationPrompt(): void {
-    this.pinMode = false;
-    this.map.getCanvas().style.cursor = "";
+    this.setPinMode(false);
     this.hideDestinationPrompt();
   }
 
@@ -619,6 +630,8 @@ export class RoutingController {
     const language = this.getLanguage();
     this.refreshDestinationPromptCopy();
     this.panel.dir = languageDirection(language);
+    const close = this.panel.querySelector<HTMLButtonElement>("[data-route-clear]")!;
+    close.title = UI[language].routeClear; close.setAttribute("aria-label", close.title);
     this.navigationHud.dir = languageDirection(language);
     this.routeButton.title = UI[language].routePinTitle;
     this.routeButton.setAttribute("aria-label", UI[language].routePinTitle);
@@ -672,6 +685,10 @@ export class RoutingController {
     this.mapShell.classList.toggle("has-rendered-route", rendered);
     this.mapShell.classList.toggle("has-active-route", active);
     this.mapShell.classList.toggle("is-navigating", this.navigating);
+    const close = this.panel.querySelector<HTMLButtonElement>("[data-route-clear]")!;
+    close.hidden = this.navigating;
+    close.setAttribute("aria-label", UI[this.getLanguage()].routeClear);
+    close.title = UI[this.getLanguage()].routeClear;
     this.applyNavigationPalette();
     if (active !== this.lastEmittedRouteState) {
       this.lastEmittedRouteState = active;
@@ -833,6 +850,7 @@ export class RoutingController {
     panel.setAttribute("aria-live", "polite");
     panel.innerHTML = `
       <h2 id="routePanelHeading" class="visually-hidden">Navigation route</h2>
+      <button type="button" class="route-panel__close" data-route-clear>×</button>
       <div class="route-panel__content">
         <div class="route-panel__body">
           <strong data-route-title></strong>

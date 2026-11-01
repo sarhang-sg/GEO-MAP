@@ -75,3 +75,36 @@ html[data-nav-kurd-theme][data-ui-mode] .navigation-advisory__icon { color: var(
 .place-weather__advisory small { color: var(--nk-muted); }
 @media (max-width: 340px) { html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { max-width: calc(100% - 120px); padding: 7px 8px; gap: 3px 5px; } }
 @media (prefers-reduced-transparency: reduce) { html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { background: var(--nk-surface) !important; } }
+
+/* Refine existing semantic surfaces without changing the seven palettes or geometry. */
+html[data-nav-kurd-theme][data-ui-mode] :is(.map-sheet,.about-dialog__panel,.place-detail__panel,.user-contrib__panel,.owner-studio__panel,.feedback-studio__panel,.navigation-preferences,.route-panel:not([data-state="navigating"])) {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--nk-primary) 12%, var(--nk-surface)), var(--nk-surface) 60%, color-mix(in srgb, var(--nk-link) 6%, var(--nk-surface))) !important;
+  border-color: color-mix(in srgb, var(--nk-border) 82%, var(--nk-link)) !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] :is(.map-stats > div,.action-card) {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--nk-primary) 8%, var(--nk-elevated)), var(--nk-elevated)) !important;
+}
+html[data-nav-kurd-theme][data-ui-mode] .map-note[lang="en"] { color: var(--nk-text) !important; font-family: var(--font-latin, sans-serif); }
+.map-stats strong { font-variant-numeric: tabular-nums; }
+html[data-nav-kurd-theme] .feedback-quick-button,
+html[data-nav-kurd-theme] .feedback-quick-button:hover,
+html[data-nav-kurd-theme] .feedback-quick-button:focus-visible,
+html[data-nav-kurd-theme] .feedback-quick-button:active { transform: translateX(-50%) !important; }
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  html[data-nav-kurd-theme][data-ui-mode] :is(.map-sheet,.about-dialog__panel,.place-detail__panel,.user-contrib__panel,.owner-studio__panel,.feedback-studio__panel,.navigation-preferences,.route-panel:not([data-state="navigating"])) { background: var(--nk-surface) !important; }
+}
+
+.route-panel__close { position: absolute; z-index: 2; inset-inline-end: 8px; top: 8px; width: 36px; height: 36px; display: grid; place-items: center; padding: 0; border: 1px solid var(--nk-border); border-radius: 12px; background: var(--nk-elevated); color: var(--nk-text); font: 22px/1 sans-serif; cursor: pointer; }
+.route-panel:not([data-state="navigating"]) .route-panel__body { padding-inline-end: 36px; }
+.compact-utility-action .nav-delete-icon { width: 20px; height: 20px; object-fit: contain; }
+
+/* One responsive dock for route preview and point confirmation. */
+.map-shell :is(.route-panel:not([data-state="navigating"]),.route-destination-prompt) { box-sizing: border-box; min-width: 0; max-height: min(65dvh, calc(var(--nav-kurd-visual-viewport-height, 100dvh) - 120px)); overflow-y: auto; overscroll-behavior: contain; }
+.map-coordinate-picker { box-sizing: border-box; max-width: 520px; margin-inline: auto; max-height: calc(var(--nav-kurd-visual-viewport-height, 100dvh) - 28px); overflow-y: auto; }
+@media (min-width: 701px) {
+  .map-shell.has-active-route .route-panel:not([data-state="navigating"]),
+  .map-shell.has-destination-prompt .route-destination-prompt { left: auto !important; right: max(18px, env(safe-area-inset-right)) !important; bottom: max(20px, env(safe-area-inset-bottom)) !important; width: min(400px, calc(100% - 110px)); margin: 0; }
+}
+@media (max-height: 500px) and (min-width: 701px) {
+  .map-shell .map-sheet { max-height: calc(var(--nav-kurd-visual-viewport-height, 100dvh) - 110px) !important; overflow-y: auto; }
+}

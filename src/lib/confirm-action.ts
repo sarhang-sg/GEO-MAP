@@ -1,3 +1,4 @@
+import { appUrl } from "./app-url";
 type Language = "ku" | "ar" | "en";
 type Action = "remove-photo" | "delete-read" | "withdraw" | "reject";
 const COPY = {
@@ -46,10 +47,17 @@ export function confirmAction(action: Action, language: Language): Promise<boole
 export function compactUtilityActions(root: HTMLElement): void {
   for (const button of root.querySelectorAll<HTMLButtonElement>("button")) {
     const action = button.dataset.userAction ?? button.dataset.ownerAction ?? "";
-    if (!button.querySelector("svg") || !/^(signout|delete|delete-place|delete-request|feedback-delete|notification-delete|photo-delete|photo-clear|history-delete|history-clear)$/.test(action)) continue;
+    const destructive = /^(delete|delete-place|delete-request|feedback-delete|notification-delete|notifications-delete-read|photo-delete|photo-clear|history-delete|history-clear)$/.test(action);
+    if (!destructive && action !== "signout") continue;
     const label = button.getAttribute("aria-label") || button.textContent?.trim() || "";
     if (!label) continue;
     button.setAttribute("aria-label", label); button.title = label;
+    if (destructive) {
+      const icon = document.createElement("img");
+      icon.className = "nav-delete-icon"; icon.src = appUrl("assets/icons/nav-kurd/delete.svg");
+      icon.alt = ""; icon.setAttribute("aria-hidden", "true"); icon.draggable = false;
+      button.replaceChildren(icon);
+    }
     button.classList.add("compact-utility-action");
   }
 }

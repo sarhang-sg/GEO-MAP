@@ -14,6 +14,8 @@ const surfaces = [
   [".user-contribution-studio", 'button[data-user-action="close"]'],
   [".about-dialog", "#aboutCloseButton"],
   [".nav-tutorial:not(.is-minimized)", 'button[data-tutorial-action="skip"]'],
+  [".route-destination-prompt", 'button[data-route-prompt-action="cancel"]'],
+  ['.route-panel:not([data-state="navigating"])', "button[data-route-clear]"],
 ] as const;
 
 function visible(element: HTMLElement): boolean {

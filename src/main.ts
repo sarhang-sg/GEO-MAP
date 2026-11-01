@@ -637,10 +637,7 @@ class KurdistanAtlasController {
         this.viewportResizeFrame = null;
         this.lastViewportResizeAt = performance.now();
         this.map.setMinZoom(this.coverageMinZoom());
-        if (!this.isMobileViewport() && this.sheetCollapsed) {
-          this.sheetCollapsed = false;
-          this.applySheetState();
-        }
+        // Resizing must preserve the user's collapsed/expanded choice.
         this.overlayLayout.refresh();
         this.map.resize();
         this.queueLabels();
@@ -764,18 +761,11 @@ class KurdistanAtlasController {
         attribution.insertBefore(statement, inner);
       }
       statement.textContent = `${copy.mapSourceCredit.split(" · ")[0]} · `;
-      let project = attribution.querySelector<HTMLElement>(".nav-kurd-attribution__project");
-      if (!project) {
-        project = document.createElement("span");
-        project.className = "nav-kurd-attribution__project";
-        attribution.append(project);
-      }
-      project.textContent = copy.mapProjectCredit;
       normalizeAttributionLinks(inner);
       updateAttributionFeedback(this.map, mapAttributionSlot);
       // One deduplicated source notice inside the expanded card only.
       toggle.setAttribute("aria-label", copy.mapDetails);
-      attribution.setAttribute("aria-label", `${copy.mapProjectCredit} · ${inner.textContent}`);
+      attribution.setAttribute("aria-label", copy.mapDetails);
       this.overlayLayout.refresh();
     });
   }
@@ -957,7 +947,13 @@ class KurdistanAtlasController {
   }
 
   private async searchRecordCount():Promise<number>{
-    if(localCoreEnabled)return (await coreStatistics()).search[this.language];
+    if (localCoreEnabled) {
+      const statistics = await coreStatistics();
+      const count = statistics.datasets.locality;
+      // Native localities are a viewport subset; use the complete SQLite catalog.
+      if (Number.isSafeInteger(count) && count >= 0) localityCount.textContent = new Intl.NumberFormat("en-US").format(count);
+      return statistics.search[this.language];
+    }
     const manifest=await loadStaticSearchManifest();
     return Math.max(manifest.files?.[this.language]?.records??0,manifest.records??0,...Object.values(manifest.files??{}).map(entry=>entry?.records??0));
   }
@@ -1346,6 +1342,7 @@ class KurdistanAtlasController {
     this.language = language;
     this.searchService.activateLanguage(language);
     if (!localCoreEnabled) localityCount.textContent = new Intl.NumberFormat("en-US").format(this.localities.length);
+    else void this.loadSearchMetadata();
     this.refreshLanguageSurface();
     this.normalizeAttributionCard();
 
@@ -1459,6 +1456,7 @@ class KurdistanAtlasController {
   }
 
   locate(): void {
+    this.collapseSheetForMapFocus();
     this.liveLocation.locate();
     this.deviceQa?.refreshSoon();
   }

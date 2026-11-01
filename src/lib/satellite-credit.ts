@@ -8,6 +8,7 @@ export function normalizeAttributionLinks(inner: HTMLElement): void {
   if (normalized.get(inner) === inner.innerHTML) return;
   const output = document.createDocumentFragment();
   const seen = new Set<string>();
+  let copyrightAdded = false;
   const add = (label: string, href?: string): void => {
     label = label.replace(/^[\s|·]+|[\s|·]+$/g, "");
     if (!label || /^(?:and|©)$/i.test(label)) return;
@@ -20,11 +21,12 @@ export function normalizeAttributionLinks(inner: HTMLElement): void {
       : host === "mapbox.com" ? "Mapbox"
       : host === "maxar.com" ? "Maxar"
       : host === "maptiler.com" ? "MapTiler" : null;
-    if (known) label = `© ${known}`;
+    if (known) label = known;
     const key = known ?? (url ? `${url.origin}${url.pathname.replace(/\/$/, "")}` : label);
     if (seen.has(key)) return;
     seen.add(key);
     if (output.childNodes.length) output.append(document.createTextNode(" · "));
+    if (known && !copyrightAdded) { output.append(document.createTextNode("© ")); copyrightAdded = true; }
     if (url) {
       const anchor = document.createElement("a");
       anchor.href = url.href; anchor.textContent = label;

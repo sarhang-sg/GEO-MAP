@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
   "fileCount": 1703,
-  "totalBytes": 289649924,
+  "totalBytes": 289658970,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -3656,7 +3656,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 942,
-      "sha256": "d79478ce01a9ca29ad6cfab29d0fb9d10ca5310bf6c3f058af22c19db021987f"
+      "sha256": "53e6494b92348dc505cb012a41f7ace0856b1888b336f821897d87f7c68d2754"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3731,8 +3731,8 @@
       "sha256": "23727ae9dfc552b86b752b949ca9a639261c7dd97ea4b1612d2ca692291ff549"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 25920,
-      "sha256": "5b8e99451ade78a4876235437ef6f83d128206069fc7620e477267b1e4ef252a"
+      "bytes": 25809,
+      "sha256": "0919b11e9d82c30934dda939bd432134f6c126beaa4c386886d2cf1a64405510"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -3779,8 +3779,8 @@
       "sha256": "435e655a702fecdef8a76483fa00f94473fdfb390498582af524f76ea5d0ff65"
     },
     "src/lib/confirm-action.ts": {
-      "bytes": 5623,
-      "sha256": "a8cea6cd5cab8250f8ce6e3c60619e02541f02d12f56474f5dbbf911694e3a9f"
+      "bytes": 6005,
+      "sha256": "0d3a3829bd0027fbc943c2b174184d59baa473b333f5b1f696e5eeff42a20d51"
     },
     "src/lib/device-qa.ts": {
       "bytes": 13720,
@@ -3811,8 +3811,8 @@
       "sha256": "8ddf7dd6f49f999c0a5f34a665f1bcc971664fb53daa4a3ef4f35e33f0911f47"
     },
     "src/lib/i18n.ts": {
-      "bytes": 39242,
-      "sha256": "882e026854a80f5df7f2205f221841c277d3e5ba3332acd76ac7114e8e9a9b8d"
+      "bytes": 38757,
+      "sha256": "39e82670bfe04f8c013cf15e656aa4a21b5495efea0ae7f5d25a3a8581d77e3f"
     },
     "src/lib/input-mode-controller.ts": {
       "bytes": 3530,
@@ -3839,8 +3839,8 @@
       "sha256": "e2c382a204909098128c25cf26a20a809e7f97dc089f417a55c016bae36e5e28"
     },
     "src/lib/live-location-controller.ts": {
-      "bytes": 38897,
-      "sha256": "eaa4330e37e54d2d3d0d7284aeed9bec1d9adce04c0da278ae2e224e4fcc1908"
+      "bytes": 38817,
+      "sha256": "b1f8a69d01177b62081eb32884700e56a942e0ac88b95bd91d3203bc9d6664f5"
     },
     "src/lib/live-location-layers.ts": {
       "bytes": 6356,
@@ -3911,8 +3911,8 @@
       "sha256": "e9399d9a1d848b9a454c954424f6983d4092f8ccb06d0e6d7079f6ff21fde535"
     },
     "src/lib/map-overlay-layout-controller.ts": {
-      "bytes": 11478,
-      "sha256": "2ac0864b384000c82f53baf70ca2ec52b4ce87e5c943b26dd6da2349b0a7efe4"
+      "bytes": 12169,
+      "sha256": "55cc98ef8e2c018d62cb80f9474424e96c939547448f40db9170eb8c2af5c031"
     },
     "src/lib/map-readiness.ts": {
       "bytes": 1252,
@@ -3943,8 +3943,8 @@
       "sha256": "5e3338f570ce775200a757e0c6d469746944945eb904061f522cb16ba576d05e"
     },
     "src/lib/native-back-navigation.ts": {
-      "bytes": 1925,
-      "sha256": "5458fec0b7987b29dba60d05176f359f315cfb87f055d04069fa0964f5e925f3"
+      "bytes": 2082,
+      "sha256": "8584602bac6e099e9f7449f64f6a5558e69f4f9e44f07340ea8963f97fe9fbc5"
     },
     "src/lib/native-geolocation.ts": {
       "bytes": 350,
@@ -4003,8 +4003,8 @@
       "sha256": "a7d78c6efab3706620ce48a65334da68d134f4f65d2b62286ce436363cdcea99"
     },
     "src/lib/owner-studio.ts": {
-      "bytes": 80255,
-      "sha256": "4ce51b8e49edb07db4ed2add34b8b1efff68ee07c8d89cbf0d1e259ec926016e"
+      "bytes": 80232,
+      "sha256": "53662309de4600e921c597ebf006e59e1f9e2d69a42d512c78c5c832bee00bb9"
     },
     "src/lib/performance.ts": {
       "bytes": 8904,
@@ -4099,8 +4099,8 @@
       "sha256": "566846b6a4ab39243616c7c2a54500d5280333d8f728aa7679128a6db34ae92e"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 78122,
-      "sha256": "6d4e7cf3cb10c719df6f2277bf2e8386f1414b79d27d19d1d53f252b85dad120"
+      "bytes": 79432,
+      "sha256": "1ab253fa451daec221629a806715ad616ecc336a1402bc61ec7cd774b0af3db2"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 15390,
@@ -4119,8 +4119,8 @@
       "sha256": "b288f0fcb4d2715a4ec7c552a2169f6324fa6ea1a164e2b76f32e1e8836ac2ef"
     },
     "src/lib/satellite-credit.ts": {
-      "bytes": 4436,
-      "sha256": "d4a5fb38dc544b4674c44cf64b655c8ae6c3648b97034d9619bc44b0d0c5b518"
+      "bytes": 4566,
+      "sha256": "65194710e5ff765bf84e4318f6060ddf5174cf0bb97238bb3d24d675638fd8ee"
     },
     "src/lib/satellite-quality.ts": {
       "bytes": 5222,
@@ -4187,8 +4187,8 @@
       "sha256": "f81b79089fbea51de1af21367233d1f412d6d0219345b643701d5a6a8461cd4c"
     },
     "src/lib/user-contribution-studio.ts": {
-      "bytes": 128721,
-      "sha256": "485a218dd4a58674091ae421813be1e56bbf24f2af7cacd17d4d9d2b98b950e6"
+      "bytes": 128716,
+      "sha256": "b480c0dbbd4704052d1cd605b70775d8d83209df6a1c51794b4ad1af4930fc60"
     },
     "src/lib/user-facing-error.ts": {
       "bytes": 3546,
@@ -4211,8 +4211,8 @@
       "sha256": "31d84c4b4b9f39d10c702d0fb6fecca2d53d4bcd39e4bd26e8a9594921409c55"
     },
     "src/main.ts": {
-      "bytes": 111943,
-      "sha256": "4676b6f4fc6d893a4f6f384d7fb457782a8282593c7f40038580219f4806ce01"
+      "bytes": 111900,
+      "sha256": "0272bb529d1de3b6a25312eefcbd36f89b781efdfe9e5930482a9b8a22caede9"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4271,8 +4271,8 @@
       "sha256": "0364991d4bcc9090579eef421c05f2d0bad54e74e8f1eda47ad97b2d8bbe4d42"
     },
     "src/styles/interaction-attribution.css": {
-      "bytes": 5395,
-      "sha256": "b1378b8d373d8e37bf1f69e16a1912b455f1e127f2a0a1fb5c7b38d22728ec7c"
+      "bytes": 5352,
+      "sha256": "874b75bc06699188973e07b5e810d1cef438963006a43f149359516f27f4d8a2"
     },
     "src/styles/interaction-polish.css": {
       "bytes": 9681,
@@ -4375,8 +4375,8 @@
       "sha256": "36feb1c95fa44c62d2fee0ea6f69b5925e1bcbeb5986ed775e3834aa3c80b53c"
     },
     "src/styles/theme-consistency.css": {
-      "bytes": 7863,
-      "sha256": "24d09266a070fe4372059b77b3d55933e90510356994ff595ba56a5e6dfccf04"
+      "bytes": 11066,
+      "sha256": "87485a2b6b0b6649a1d9d4294947c941017fd8d8648467c9895cbc80d254d90d"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
@@ -4547,8 +4547,8 @@
       "sha256": "f8f57cb43b68f0c9ec966ed3f20ec32a1acc8aef454b9195505f8650ed59fae2"
     },
     "tools/android/build-runtime.mjs": {
-      "bytes": 4147,
-      "sha256": "330a911ca6240a59ef622f7b63d1301bf613b5448169355f10241824880ec352"
+      "bytes": 4236,
+      "sha256": "9ddedd19f0703e753f687980525a84c79bd815e7f10b8b9c34bd0b1f3d246586"
     },
     "tools/android/satellite-worker.js": {
       "bytes": 3224,
@@ -4739,8 +4739,8 @@
       "sha256": "49f1c6d96033eb79cf06cea01083558758b07faa1fc2736fbaae4759564d6550"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 24291,
-      "sha256": "a78e65db9cc9230792a762679886315a939ed135fd1abb1839dc4814246e09fc"
+      "bytes": 28121,
+      "sha256": "d07f42f6e116219df0e9e138cbf7b81a87ee31e807eb2410d6c574cecfb84aaf"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4799,8 +4799,8 @@
       "sha256": "0d3add6969711849a41a4dddbf916075989baf10a9d1a218b57082dc36bac89d"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 19582,
-      "sha256": "b3d12e6a36b5a17204ef5e20c0178aa8fe280c316c55b15a0efe14f5a8336e8e"
+      "bytes": 19626,
+      "sha256": "d9ecd0edab6554f8b1f175cceb48470be8e37cd8f9da245ecf1ece7250920266"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 5192,

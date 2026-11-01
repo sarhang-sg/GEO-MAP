@@ -237,7 +237,7 @@ console.log('PASS GPS first feedback, 1000 repeated taps share one request, dist
   assert.equal(h.c.state,'idle');assert.equal(h.moves.length,0);assert.equal(h.timers.size,0);
   h.c.locate();
   h.watches.at(-1).success({timestamp:Date.now(),coords:{longitude:44,latitude:36,accuracy:12000,speed:0}});
-  assert.equal(h.c.state,'approximate');assert.equal(h.c.lastAccuracy,12000);assert.equal(h.timers.size,0);
+  assert.equal(h.c.state,'approximate');assert.equal(h.c.lastAccuracy,12000);assert.equal(h.timers.size,1);
   assert.equal(h.moves.length,0);assert.equal(h.c.lastCoordinate,null,'Coarse network position must not pin another city');assert.ok(!h.messages.includes('ready'));
   h.watches.at(-1).success({timestamp:Date.now(),coords:{longitude:44.8,latitude:36.3,accuracy:12,speed:0}});
   assert.equal(h.moves.length,1);assert.equal(h.c.state,'ready');
@@ -344,4 +344,36 @@ class Events {
  assert.equal(h.moves.length,0);watch.success({timestamp:Date.now(),coords:{longitude:44.2,latitude:36.2,accuracy:12,speed:0}});
  assert.equal(h.c.state,'ready');assert.equal(h.moves.length,1);assert.equal(h.timers.size,0);
  console.log('PASS cold GPS timeout retains watch, rejects undated/stale/future fixes and accepts later precise fix');
+}
+
+{
+ const h=gpsHarness();h.c.locate();const watch=h.watches[0];
+ watch.success({timestamp:Date.now(),coords:{longitude:44.2,latitude:36.2,accuracy:12000,speed:0}});
+ assert.equal(h.c.state,'approximate');assert.equal(h.timers.size,1);assert.equal(h.c.requestInFlight,true);
+ for(let i=0;i<50;i++)h.c.locate();assert.equal(h.watches.length,1);
+ [...h.timers.values()][0]();assert.equal(h.c.state,'timed-out');assert.equal(watch.active,false);
+ h.fix(watch);assert.equal(h.moves.length,0);assert.equal(h.c.lastCoordinate,null);
+ console.log('PASS coarse-only desktop acquisition retains one deadline, expires, and rejects late callbacks without a false location');
+}
+{
+ const source=fs.readFileSync(new URL('src/main.ts',root),'utf8');
+ const start=source.indexOf('  private async searchRecordCount()'),end=source.indexOf('  private async loadLayers()',start);
+ const localityCount={textContent:'—'},baseSearchCount={textContent:'—'};let count=12125,fail=false;
+ const context=vm.createContext({Intl,Number,localCoreEnabled:true,localityCount,baseSearchCount,recordRuntimeDiagnostic(){},coreStatistics:async()=>{if(fail)throw Error('native offline');return{datasets:{locality:count},search:{ku:69329,ar:60000,en:70000}};}});
+ vm.runInContext(stripTypeScriptTypes('class Controller{language="ku";'+source.slice(start,end)+'}\nglobalThis.c=new Controller();'),context);
+ for(const language of ['ku','ar','en']){context.c.language=language;await context.c.loadSearchMetadata();assert.equal(localityCount.textContent,'12,125');}
+ for(count of [NaN,Infinity,-1,3.5,Number.MAX_SAFE_INTEGER+1]){await context.c.loadSearchMetadata();assert.equal(localityCount.textContent,'12,125');}
+ fail=true;await context.c.loadSearchMetadata();assert.equal(localityCount.textContent,'12,125');assert.equal(baseSearchCount.textContent,'—');
+ fail=false;count=0;await context.c.loadSearchMetadata();assert.equal(localityCount.textContent,'0');
+ console.log('PASS native locality count: 3 languages, valid zero, invalid metadata, failures and retry');
+}
+{
+ class El{constructor(tag='button'){this.tagName=tag;this.dataset={};this.attrs=new Map();this.children=[];this.classList={add(){}};this.disabled=false;this.textContent='Delete item';}getAttribute(k){return this.attrs.get(k)||null;}setAttribute(k,v){this.attrs.set(k,v);}replaceChildren(...x){this.children=x;this.textContent='';}}
+ const actions=['delete','delete-place','delete-request','feedback-delete','notification-delete','notifications-delete-read','photo-delete','photo-clear','history-delete','history-clear'];
+ const {compactUtilityActions}=load('src/lib/confirm-action.ts',{appUrl:x=>'/'+x,document:{createElement:tag=>new El(tag)}},'compactUtilityActions');
+ for(const owner of ['userAction','ownerAction'])for(const action of actions){const b=new El();b.dataset[owner]=action;b.disabled=true;const root={querySelectorAll:()=>[b]};compactUtilityActions(root);compactUtilityActions(root);assert.equal(b.children.length,1);assert.equal(b.children[0].src,'/assets/icons/nav-kurd/delete.svg');assert.equal(b.children[0].getAttribute('aria-hidden'),'true');assert.equal(b.getAttribute('aria-label'),'Delete item');assert.equal(b.title,'Delete item');assert.equal(b.disabled,true);assert.equal(b.textContent,'');}
+ console.log('PASS 20 delete variants: one icon, accessible label, disabled state and idempotence');
+}
+{
+ const builder=fs.readFileSync(new URL('tools/android/build-runtime.mjs',root),'utf8');const sort=builder.match(/files\.sort\([^;]+;/)?.[0];assert.ok(sort);const files=['assets/a.js','assets/Z.js','assets/A.js','assets/z.js'].map(path=>({path}));vm.runInNewContext(sort,{files});assert.deepEqual(files.map(x=>x.path),['assets/A.js','assets/Z.js','assets/a.js','assets/z.js']);console.log('PASS Android inventory uses native UTF-16 ordering independent of locale');
 }

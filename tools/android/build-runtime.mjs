@@ -32,7 +32,8 @@ writeFileSync(join(stage,'manifest.webmanifest'),readFileSync(join(root,'public/
 cpSync(join(root,'public/legal'),join(stage,'legal'),{recursive:true});
 const sha=b=>createHash('sha256').update(b).digest('hex'),files=[];
 function walk(dir){for(const entry of readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){const path=join(dir,entry.name);if(entry.isDirectory())walk(path);else{const bytes=readFileSync(path);files.push({path:path.slice(stage.length+1),bytes:bytes.length,sha256:sha(bytes)});}}}
-walk(stage);files.sort((a,b)=>a.path.localeCompare(b.path));
+// Match Dart/Kotlin UTF-16 code-unit ordering; localeCompare changes pack hashes.
+walk(stage);files.sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 if(!files.some(f=>f.path==='index.html'))throw Error('Runtime HTML was not emitted.');
 const release=JSON.parse(readFileSync(join(root,'release.config.json'),'utf8'));
 writeFileSync(join(stage,'manifest.json'),JSON.stringify({schema:1,appVersion:release.appVersion,releaseId:release.releaseId,configurationHash:sha(readFileSync(configPath)),contentHash:sha(files.map(f=>`${f.path}\0${f.bytes}\0${f.sha256}\n`).join('')),files})+'\n');

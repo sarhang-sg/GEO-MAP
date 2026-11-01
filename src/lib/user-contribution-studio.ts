@@ -1177,7 +1177,7 @@ export class UserContributionStudio {
         ${accountDetails}
         <div class="user-confirm__actions">
           <button type="button" class="user-confirm__cancel" data-user-action="confirm-cancel" ${this.busy ? "disabled" : ""}>${escapeText(copy.confirmCancel)}</button>
-          <button type="button" class="user-confirm__delete ${isSignOut ? "is-signout" : ""}" data-user-action="confirm-proceed" ${(this.busy || (isAccount && !this.accountDeleteAcknowledged)) ? "disabled" : ""}>${userIcon(isSignOut ? "signout" : "trash")}<span>${escapeText(isSignOut ? copy.signOutConfirmAction : (isHistoryDelete || isHistoryClear) ? historyCopy.deleteAction : copy.confirmDelete)}</span></button>
+          <button type="button" class="user-confirm__delete ${isSignOut ? "is-signout" : ""}" data-user-action="confirm-proceed" ${(this.busy || (isAccount && !this.accountDeleteAcknowledged)) ? "disabled" : ""}>${isSignOut ? userIcon("signout") : ""}<span>${escapeText(isSignOut ? copy.signOutConfirmAction : (isHistoryDelete || isHistoryClear) ? historyCopy.deleteAction : copy.confirmDelete)}</span></button>
         </div>
       </section>
     </div>`;

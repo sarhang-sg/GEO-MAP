@@ -337,8 +337,6 @@ export class LiveLocationController {
       if (rawAccuracy > DISPLAY_FIX_MAX_ACCURACY_METERS) {
         if (!this.lastCoordinate) {
           this.lastAccuracy = rawAccuracy;
-          this.requestInFlight = false;
-          this.clearAcquisitionTimer();
           this.publishState("approximate");
         }
         return;

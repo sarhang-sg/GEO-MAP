@@ -426,7 +426,7 @@ export class OwnerStudio {
         <p class="owner-confirm__eyebrow">NAV KURD</p>
         <h3 id="ownerConfirmTitle">${escapeText(title)}</h3>
         <p id="ownerConfirmMessage">${escapeText(detail)}</p>
-        <div class="owner-confirm__actions"><button class="owner-confirm__cancel" type="button" data-owner-action="confirm-cancel" ${this.busy ? "disabled" : ""}>${escapeText(copy.confirmCancel)}</button><button class="owner-confirm__delete ${isSignOut ? "is-signout" : ""}" type="button" data-owner-action="confirm-proceed" ${this.busy ? "disabled" : ""}>${isSignOut ? ownerUtilityIcon("signout") : ownerUtilityIcon("trash")}<span>${escapeText(isSignOut ? copy.signOutConfirmAction : copy.confirmProceed)}</span></button></div>
+        <div class="owner-confirm__actions"><button class="owner-confirm__cancel" type="button" data-owner-action="confirm-cancel" ${this.busy ? "disabled" : ""}>${escapeText(copy.confirmCancel)}</button><button class="owner-confirm__delete ${isSignOut ? "is-signout" : ""}" type="button" data-owner-action="confirm-proceed" ${this.busy ? "disabled" : ""}>${isSignOut ? ownerUtilityIcon("signout") : ""}<span>${escapeText(isSignOut ? copy.signOutConfirmAction : copy.confirmProceed)}</span></button></div>
       </section>
     </div>`;
   }

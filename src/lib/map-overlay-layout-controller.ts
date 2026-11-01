@@ -142,6 +142,15 @@ export function installMapOverlayLayoutController(options: MapOverlayLayoutContr
       setPixelProperty(mapShell, "--nav-kurd-actions-max-height", Math.max(88, bottom - rail.top));
       mapActions.classList.add("is-sheet-bounded");
     }
+    // Use visible surface bounds after rotation; hidden sheets reserve no space.
+    const actionBounds = mapActions.getBoundingClientRect();
+    let railBottom = Math.min(viewport.height, mapShell.getBoundingClientRect().bottom) - 12;
+    for (const surface of mapShell.querySelectorAll<HTMLElement>(".map-sheet,.route-panel,.route-destination-prompt")) {
+      if (!visible(surface)) continue;
+      const rect = surface.getBoundingClientRect();
+      if (rect.left < actionBounds.right && rect.right > actionBounds.left) railBottom = Math.min(railBottom, rect.top - 10);
+    }
+    setPixelProperty(mapShell, "--nav-kurd-actions-max-height", Math.max(44, railBottom - actionBounds.top));
     layoutNotices(viewport.height);
   };
 
