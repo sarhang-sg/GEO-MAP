@@ -108,6 +108,35 @@ def verify_database_policies():
     return rows[0]
 
 
+def verify_projection_access():
+    rows = query("""
+        select
+          exists (select 1 from public.spatial_ref_sys where srid=4326) and
+            has_table_privilege('anon',t.oid,'SELECT') and has_table_privilege('authenticated',t.oid,'SELECT')
+            as projection_reads_available,
+          (not exists (
+            select 1 from unnest(array['anon','authenticated']) as client(role_name)
+            cross join unnest(array['INSERT','UPDATE','DELETE','TRUNCATE']) as op(privilege_name)
+            where has_table_privilege(client.role_name,t.oid,op.privilege_name)
+          ) or exists (
+            select 1 from pg_trigger g where g.tgrelid=t.oid and g.tgname='nav_kurd_guard_projection_writes'
+              and g.tgfoid=to_regprocedure('nav_kurd_private.guard_projection_writes()')
+              and g.tgtype=62 and g.tgenabled in ('O','A') and g.tgqual is null
+          )) as projection_client_writes_blocked,
+          not exists (
+            select 1 from pg_proc p where p.pronamespace='public'::regnamespace
+              and p.proname='st_estimatedextent' and p.prosecdef
+              and (has_function_privilege('anon',p.oid,'EXECUTE') or has_function_privilege('authenticated',p.oid,'EXECUTE'))
+              and not (p.proargnames is null and p.pronargs > 1 and p.pronargdefaults=0 and p.provariadic=0)
+          ) as projection_stats_rpc_signatures_safe
+        from pg_class t where t.oid=to_regclass('public.spatial_ref_sys')
+    """)
+    if len(rows) != 1 or not all(rows[0].get(key) is True for key in (
+            "projection_reads_available", "projection_client_writes_blocked", "projection_stats_rpc_signatures_safe")):
+        raise RuntimeError("Projection catalog protection or read access is incomplete.")
+    return rows[0]
+
+
 def verify_text_validation():
     helpers = ('nav_kurd_clean_text(text)', 'nav_kurd_normalize_kurdish(text)',
                'nav_kurd_normalize_arabic(text)', 'nav_kurd_normalize_latin(text)')
@@ -154,6 +183,7 @@ def main():
     identity=verify_identity(web_commit,android_commit)
     database=verify_database_policies()
     database.update(verify_text_validation())
+    database.update(verify_projection_access())
     inventory=probe_functions()
     deleted=[]
     if args.cleanup:

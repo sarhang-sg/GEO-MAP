@@ -34,13 +34,22 @@ def verify_startup_loader(browser) -> None:
     # Hold the heavy module: the progress surface must already be visible and
     # moving, including desktop accessibility settings that disable decoration.
     for motion in ("no-preference", "reduce"):
-        context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion=motion)
+        context = browser.new_context(
+            viewport={"width": 1440, "height": 900}, reduced_motion=motion, service_workers="block"
+        )
         page = context.new_page()
         held = []
-        page.route("**/assets/main-*.js", lambda route: held.append(route))
+        def hold_main(route):
+            held.append(route)
+            # The loader can paint before its dynamic import is requested.
+            # Acknowledge from the handler that owns the paused request.
+            page.evaluate("() => document.documentElement.setAttribute('data-qa-main-paused', '')")
+
+        page.route("**/assets/main-*.js", hold_main)
         try:
             page.goto(BASE_URL, wait_until="domcontentloaded", timeout=30_000)
             page.locator(".map-loading__word").wait_for(state="visible", timeout=10_000)
+            page.locator("html[data-qa-main-paused]").wait_for(state="attached", timeout=15_000)
             assert held, "The heavy map module was not intercepted"
             assert page.locator("#mapLoading").count() == 1
             assert page.locator("#map").count() == 0

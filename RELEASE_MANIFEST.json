@@ -11,8 +11,8 @@
     "packageDefinitionSha256": "0e71e35b00c7030d4b89a898d02c8dd4cad3294f61e96dacdbb75ed9efb6549f",
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
-  "fileCount": 1705,
-  "totalBytes": 289676070,
+  "fileCount": 1706,
+  "totalBytes": 289682387,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -4542,6 +4542,10 @@
       "bytes": 1103,
       "sha256": "39fd754ac14701d051c76f3a162c568cd51b6589d47501b588e3f56fb2d959e6"
     },
+    "supabase/migrations/20261102224618_protect_projection_catalog_client_access.sql": {
+      "bytes": 4061,
+      "sha256": "ca090ca8fa80fc467b1a451bee8bb66e0081d54d48ef8aa67be87549becac99c"
+    },
     "supabase/README.md": {
       "bytes": 2386,
       "sha256": "a4ac6db23ae19dc953db1de9c464f1bf4b17cbfb37c3d273d5d3d0d6edc89ea6"
@@ -4727,8 +4731,8 @@
       "sha256": "c8a138a9c51001efe25b386f9852e4370a80a9f4f5feebd1c64810aa355954bc"
     },
     "tools/release/verify-backend.py": {
-      "bytes": 10676,
-      "sha256": "d45f3efc8f2a3ac53253ef0127212027c1d53c9080f994801546b7a0f97934dc"
+      "bytes": 12501,
+      "sha256": "db2f43f3a75713ae3678c4788da090318084f77ca4ab906682b4e56a89c60533"
     },
     "tools/release/verify-published-android.mjs": {
       "bytes": 4056,
@@ -4739,8 +4743,8 @@
       "sha256": "7d25929a397e2fd170ccd60fbf94c2813e3dbc15a5a1a6ade82fb10c7bf84ead"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 25605,
-      "sha256": "49f1c6d96033eb79cf06cea01083558758b07faa1fc2736fbaae4759564d6550"
+      "bytes": 26036,
+      "sha256": "1f4634bb4369d566c41d038c5ccb4e576d74531718c961df90269b15cae54e65"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28121,
