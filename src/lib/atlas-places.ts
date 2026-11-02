@@ -1,3 +1,4 @@
+import { readKeysetPages } from "./keyset-pages";
 import { errorDescription, userFacingError } from "./user-facing-error";
 import { createClient, type AuthChangeEvent, type Session, type SupabaseClient, type User } from "@supabase/supabase-js";
 import { atlasTaxonomyEntry, atlasPlaceTypeSections, type AtlasPlaceTypeId } from "./atlas-taxonomy";
@@ -726,13 +727,18 @@ async function uploadAtlasStorageObject(
 async function hydrateAtlasPlaces(client: SupabaseClient, places: AtlasPlace[]): Promise<AtlasPlace[]> {
   if (places.length === 0) return [];
   const placeIds = places.map((place) => place.id);
-  const { data, error } = await client
-    .from("atlas_place_photos")
-    .select(photoSelect)
-    .in("place_id", placeIds)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: true });
-  if (error) throw error;
+  const data: AtlasPhotoRow[] = [];
+  for (let start = 0; start < placeIds.length; start += 100) {
+    const batch = placeIds.slice(start, start + 100);
+    const rows = await readKeysetPages<AtlasPhotoRow>((after, size, signal) => {
+      let query = client.from("atlas_place_photos").select(photoSelect)
+        .in("place_id", batch).order("id", { ascending: true }).limit(size).abortSignal(signal);
+      if (after) query = query.gt("id", after);
+      return query;
+    });
+    data.push(...rows);
+  }
+  data.sort((a, b) => a.sort_order - b.sort_order || (a.created_at ?? "").localeCompare(b.created_at ?? "") || a.id.localeCompare(b.id));
 
   const privatePaths = Array.from(new Set(
     ((data ?? []) as AtlasPhotoRow[])
@@ -827,13 +833,14 @@ async function attachAtlasContributorProfiles(client: SupabaseClient, places: At
 
 export async function loadPublishedAtlasPlaces(): Promise<AtlasPlace[]> {
   if (!atlasSupabase) return [];
-  const { data, error } = await atlasSupabase
-    .from("atlas_places")
-    .select(placeSelect)
-    .eq("status", "published")
-    .order("updated_at", { ascending: false });
-  if (error) throw error;
-  return hydrateAtlasPlaces(atlasSupabase, ((data ?? []) as Record<string, unknown>[]).map(normalizeAtlasPlace));
+  const client = atlasSupabase;
+  const data = await readKeysetPages<Record<string, unknown> & { id: string }>((after, size, signal) => {
+    let query = client.from("atlas_places").select(placeSelect).eq("status", "published")
+      .order("id", { ascending: true }).limit(size).abortSignal(signal);
+    if (after) query = query.gt("id", after);
+    return query;
+  });
+  return hydrateAtlasPlaces(client, data.map(normalizeAtlasPlace));
 }
 
 export async function loadManagedAtlasPlaces(): Promise<AtlasPlace[]> {

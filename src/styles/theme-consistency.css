@@ -94,7 +94,7 @@ html[data-nav-kurd-theme] .feedback-quick-button:active { transform: translateX(
   html[data-nav-kurd-theme][data-ui-mode] :is(.map-sheet,.about-dialog__panel,.place-detail__panel,.user-contrib__panel,.owner-studio__panel,.feedback-studio__panel,.navigation-preferences,.route-panel:not([data-state="navigating"])) { background: var(--nk-surface) !important; }
 }
 
-.route-panel__close { position: absolute; z-index: 2; inset-inline-end: 8px; top: 8px; width: 36px; height: 36px; display: grid; place-items: center; padding: 0; border: 1px solid var(--nk-border); border-radius: 12px; background: var(--nk-elevated); color: var(--nk-text); font: 22px/1 sans-serif; cursor: pointer; }
+.route-panel__close { position: absolute; z-index: var(--z-local-raised); inset-inline-end: 8px; top: 8px; width: 36px; height: 36px; display: grid; place-items: center; padding: 0; border: 1px solid var(--nk-border); border-radius: 12px; background: var(--nk-elevated); color: var(--nk-text); font: 22px/1 sans-serif; cursor: pointer; }
 .route-panel:not([data-state="navigating"]) .route-panel__body { padding-inline-end: 36px; }
 .compact-utility-action .nav-delete-icon { width: 20px; height: 20px; object-fit: contain; }
 
@@ -108,3 +108,21 @@ html[data-nav-kurd-theme] .feedback-quick-button:active { transform: translateX(
 @media (max-height: 500px) and (min-width: 701px) {
   .map-shell .map-sheet { max-height: calc(var(--nav-kurd-visual-viewport-height, 100dvh) - 110px) !important; overflow-y: auto; }
 }
+
+html[data-nav-kurd-theme][data-ui-mode] :is(.route-destination-prompt, .map-coordinate-picker) {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--nk-primary) 17%, var(--nk-surface)), var(--nk-surface) 72%) !important;
+  border-color: color-mix(in srgb, var(--nk-link) 44%, var(--nk-border)) !important; isolation: isolate;
+}
+.selection-card-glow { display: none; pointer-events: none; position: absolute; inset: 0; z-index: var(--z-local-content); padding: 1.5px; border-radius: inherit; overflow: hidden;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude;
+}
+.selection-card-glow > i { position: absolute; inset: -250%; background: conic-gradient(from 0deg, transparent 0deg 245deg, var(--nk-link) 285deg, var(--nk-primary) 330deg, transparent 360deg); }
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  .map-shell[data-quality-preference="sharp"]:not(.is-runtime-low-power) :is(.route-destination-prompt, .map-coordinate-picker):not([hidden]) > .selection-card-glow { display: block; }
+  .map-shell[data-quality-preference="sharp"]:not(.is-runtime-low-power) :is(.route-destination-prompt, .map-coordinate-picker):not([hidden]) > .selection-card-glow > i { animation: selection-border-orbit 7s linear infinite; }
+}
+@keyframes selection-border-orbit { to { transform: rotate(360deg); } }
+body[data-motion-preference="reduced"] .selection-card-glow { display: none !important; }
+@media (prefers-reduced-motion: reduce), (forced-colors: active), (prefers-reduced-transparency: reduce) { .selection-card-glow { display: none !important; } }
+html[data-nav-kurd-theme][data-ui-mode="light"] :is(.round-button, .map-button, .feedback-quick-button, .maplibregl-ctrl-group button, .action-card__icon) { box-shadow: none !important; text-shadow: none !important; }

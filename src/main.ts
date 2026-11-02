@@ -352,12 +352,13 @@ class KurdistanAtlasController {
     this.map.once("render", () => {
       this.initialRenderObserved = true;
     });
-    installRuntimePerformanceGuard({
+    const disposePerformanceGuard = installRuntimePerformanceGuard({
       map: this.map,
       shell: mapShell,
       baselineConstrained: this.lowPowerProfile,
       onRecovered: () => { this.queueLabels(); }
     });
+    this.map.once("remove", disposePerformanceGuard);
     this.map.dragPan.enable();
     this.map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-left");
     installMapLeftControlRail({ map: this.map, threeDButton, visibilityButton: controlsVisibilityButton });
@@ -493,7 +494,7 @@ class KurdistanAtlasController {
       backendStateElement: backendState,
       getLanguage: () => this.language,
       onWarning: (label) => health.warnSilently(label),
-      onPlacesChanged: () => { void this.reconcileAtlasMarkers(); }
+      onPlacesChanged: () => { void this.reconcileAtlasMarkers(); window.dispatchEvent(new Event("nav-kurd:places-changed")); }
     });
     this.atlasMarkers = installAtlasMarkerIconController({
       map: this.map,
@@ -572,7 +573,7 @@ class KurdistanAtlasController {
     this.map.on("rotatestart", stopLocationFollow);
     this.map.on("zoomstart", () => { if (!this.liveLocation.isProgrammaticCameraMove) this.liveLocation.handleZoomStart(); });
     window.addEventListener("resize", () => this.scheduleViewportResize(), { passive: true });
-    window.addEventListener("online", () => this.softRefreshContent(250), { passive: true });
+    window.addEventListener("online", () => this.softRefreshContent(250, true), { passive: true });
     this.map.on("error", (event) => {
       const sourceId = (event as { sourceId?: string; error?: unknown }).sourceId;
       if (isSatelliteRuntimeSource(sourceId) && this.mapMode === "satellite") {
@@ -1073,18 +1074,18 @@ class KurdistanAtlasController {
     return this.mapMode === "satellite" ? UI[language].satelliteReady : UI[language].ready;
   }
 
-  private softRefreshContent(delayMs = 120): void {
+  private softRefreshContent(delayMs = 120, networkRecovered = false): void {
     const now = Date.now();
     // Returning from the browser background must not refetch the multi-megabyte
     // immutable locality/POI catalogs. Only live owner data and lightweight UI
     // state are refreshed; static data changes arrive with a new release URL.
-    if (now - this.lastSoftRefreshAt < 4_000) {
+    if (!networkRecovered && now - this.lastSoftRefreshAt < 4_000) {
       this.map.resize();
       this.map.triggerRepaint();
       return;
     }
     this.lastSoftRefreshAt = now;
-    this.ownerPlaces.queueRefresh(delayMs, { onlyIfStale: true });
+    this.ownerPlaces.queueRefresh(delayMs, { onlyIfStale: !networkRecovered });
     this.ownerPlaces.setLanguageStatus();
     if (!this.isSearchIndexReady()) void this.loadSearchMetadata();
     this.queueLabels();

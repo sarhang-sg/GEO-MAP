@@ -1,3 +1,4 @@
+import { isCameraModeTransition } from "./map-camera-controller";
 import { LocationVolume } from "./location-volume";
 import { MovementCourseTracker, trustedTravelCourse, followCameraBearing, type TravelMode } from "./navigation-tracking";
 import {localCoreEnabled} from "../android/local-provider";
@@ -556,7 +557,7 @@ export class LiveLocationController {
   }
 
   recenter(initialCenter = false): void {
-    if (!this.lastCoordinate || this.lastAccuracy > DISPLAY_FIX_MAX_ACCURACY_METERS || this.map.isZooming() || this.map.isRotating()) return;
+    if (!this.lastCoordinate || this.lastAccuracy > DISPLAY_FIX_MAX_ACCURACY_METERS || this.map.isZooming() || this.map.isRotating() || isCameraModeTransition(this.map)) return;
     const now = window.performance.now();
     if (!initialCenter && now - this.lastRecenterAt <= 250) return;
     this.lastRecenterAt = now;

@@ -24,6 +24,8 @@
 .map-coordinate-picker small { color: #c8cce1; font: 700 .64rem/1.55 var(--font-ui); overflow-wrap: anywhere; }
 .map-coordinate-picker button { min-height: 38px; max-width: 92px; padding: 0 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 12px; color: #f4efff; background: rgba(255,255,255,.07); font: 850 .66rem/1.3 var(--font-ui); white-space: normal; }
 .map-shell.is-coordinate-picking #map { cursor: crosshair; }
+/* The picker and the report shortcut share the top-centre slot. */
+.map-shell.is-coordinate-picking #feedbackQuickButton { visibility: hidden; pointer-events: none; }
 .map-shell.is-coordinate-picking .route-destination-prompt { display: none !important; }
 @media (max-width: 430px) {
   .map-coordinate-picker { grid-template-columns: 38px minmax(0, 1fr); }

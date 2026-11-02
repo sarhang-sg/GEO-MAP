@@ -59,7 +59,9 @@ export function governorateValue(properties: LocalityProperties, language: Langu
 
 export function ownerName(place: AtlasPlace, language: Language): string {
   const exact = language === "ku" ? place.name_ku : language === "ar" ? place.name_ar : place.name_en;
-  return localizeNameValue(exact, language) || "—";
+  return localizeNameValue(exact, language)
+    || [place.name_ku, place.name_ar, place.name_en].find((name) => isMeaningfulMapName(name))?.trim()
+    || "—";
 }
 
 export function ownerDescription(place: AtlasPlace, language: Language): string {

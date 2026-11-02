@@ -36,7 +36,7 @@ export class MapCoordinatePicker {
     this.prompt.hidden = true;
     this.prompt.setAttribute("role", "status");
     this.prompt.setAttribute("aria-live", "polite");
-    this.prompt.innerHTML = `<span class="map-coordinate-picker__icon" aria-hidden="true"><i></i></span><div><strong data-coordinate-picker-title></strong><small data-coordinate-picker-body></small></div><button type="button" data-coordinate-picker-cancel></button>`;
+    this.prompt.innerHTML = `<span class="selection-card-glow" aria-hidden="true"><i></i></span><span class="map-coordinate-picker__icon" aria-hidden="true"><i></i></span><div><strong data-coordinate-picker-title></strong><small data-coordinate-picker-body></small></div><button type="button" data-coordinate-picker-cancel></button>`;
     this.prompt.querySelector<HTMLButtonElement>("[data-coordinate-picker-cancel]")?.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();

@@ -280,6 +280,13 @@ export function installSearchController(options: SearchControllerOptions): Searc
   }, { passive: true });
 
   input.addEventListener("input", () => {
+    // Invalidate before debounce, so an old promise cannot paint a new query.
+    searchVersion += 1;
+    renderGeneration += 1;
+    visibleChoices = [];
+    input.removeAttribute("aria-activedescendant");
+    results.replaceChildren();
+    results.hidden = true;
     selectedChoice = null;
     activeIndex = -1;
     clearButton.hidden = !input.value;
@@ -333,6 +340,8 @@ export function installSearchController(options: SearchControllerOptions): Searc
   }, { capture: true, passive: true });
 
   const refreshLanguage = (): void => {
+    searchVersion += 1;
+    renderGeneration += 1;
     if (selectedChoice) {
       input.value = choiceName(selectedChoice);
       clearButton.hidden = false;
@@ -344,6 +353,12 @@ export function installSearchController(options: SearchControllerOptions): Searc
     }
   };
 
+  window.addEventListener("nav-kurd:places-changed", () => {
+    if (!lastOpenState || !input.value.trim()) return;
+    searchVersion += 1;
+    renderGeneration += 1;
+    refresh();
+  });
   syncShellState();
   return { refresh, refreshLanguage, clear, dismiss };
 }

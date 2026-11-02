@@ -432,7 +432,7 @@ export class RoutingController {
     prompt.setAttribute("role", "dialog");
     prompt.setAttribute("aria-modal", "false");
     prompt.setAttribute("aria-live", "polite");
-    prompt.innerHTML = `<div class="route-destination-prompt__pin" aria-hidden="true"><span></span></div>
+    prompt.innerHTML = `<span class="selection-card-glow" aria-hidden="true"><i></i></span><div class="route-destination-prompt__pin" aria-hidden="true"><span></span></div>
       <div class="route-destination-prompt__copy"><strong data-route-prompt-title></strong><span data-route-prompt-description></span></div>
       <div class="route-destination-prompt__actions">
         <button type="button" data-route-prompt-action="confirm" class="is-primary"></button>
@@ -1068,7 +1068,8 @@ export class RoutingController {
     const controller = new AbortController();
     let timedOut = false;
     const forwardAbort = (): void => controller.abort();
-    parentSignal?.addEventListener("abort", forwardAbort, { once: true });
+    if (parentSignal?.aborted) controller.abort();
+    else parentSignal?.addEventListener("abort", forwardAbort, { once: true });
     const timeout = window.setTimeout(() => {
       timedOut = true;
       controller.abort();

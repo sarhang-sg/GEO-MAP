@@ -35,7 +35,7 @@
     "verify:security": "node tools/verify/security.mjs",
     "verify:pmtiles": "python3 tools/verify/pmtiles.py",
     "verify:release": "node tools/verify/release.mjs",
-    "verify:static": "npm --silent run verify:syntax && npm --silent run verify:source && npm --silent run verify:styles && npm --silent run verify:data && npm --silent run verify:runtime && npm --silent run verify:mobile && npm --silent run verify:critical-runtime && npm --silent run verify:search-location && npm --silent run verify:route-alerts && npm --silent run verify:phase2 && npm --silent run verify:v10 && npm --silent run verify:v104 && npm --silent run verify:v1042 && npm --silent run verify:security && npm --silent run verify:pmtiles && npm --silent run verify:v1043 && npm --silent run verify:maintenance && npm --silent run verify:publication && npm --silent run verify:edge-auth && npm --silent run verify:navigation-polish",
+    "verify:static": "npm --silent run verify:syntax && npm --silent run verify:source && npm --silent run verify:styles && npm --silent run verify:data && npm --silent run verify:runtime && npm --silent run verify:mobile && npm --silent run verify:critical-runtime && npm --silent run verify:search-location && npm --silent run verify:route-alerts && npm --silent run verify:phase2 && npm --silent run verify:v10 && npm --silent run verify:v104 && npm --silent run verify:v1042 && npm --silent run verify:security && npm --silent run verify:pmtiles && npm --silent run verify:v1043 && npm --silent run verify:maintenance && npm --silent run verify:publication && npm --silent run verify:edge-auth && npm --silent run verify:navigation-polish && npm --silent run verify:refinement",
     "verify:production": "npm --silent run verify:static && npm --silent run verify:dependencies && node tools/data/source-data-stage.mjs unstage && node tools/data/source-data-stage.mjs verify && npm --silent run verify:release",
     "verify": "npm run data:prepare && npm run verify:production",
     "verify:browser": "python3 tools/verify/browser-smoke.py",
@@ -55,7 +55,8 @@
     "verify:publication": "node tools/verify/publication-regressions.mjs",
     "verify:edge-auth": "node tools/verify/edge-auth-regressions.mjs",
     "verify:route-alerts": "node tools/verify/route-alert-regressions.mjs",
-    "verify:navigation-polish": "node tools/verify/navigation-polish-regressions.mjs"
+    "verify:navigation-polish": "node tools/verify/navigation-polish-regressions.mjs",
+    "verify:refinement": "node tools/verify/refinement-regressions.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",

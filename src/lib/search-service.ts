@@ -1,5 +1,5 @@
 import {coreStatistics,localCoreEnabled,nativeLocalities} from '../android/local-provider';
-import { languageValue, placeRank } from "./geo-format";
+import { languageValue, ownerName, placeRank } from "./geo-format";
 import { yieldToMainThread } from "./performance";
 import {
   normalizeStaticSearch,
@@ -116,6 +116,10 @@ export class SearchService {
   private readonly getOwnerPlaces: () => AtlasPlace[];
   private readonly searchStatic: SearchServiceOptions["searchStatic"];
   private readonly ownerProfiles = new WeakMap<AtlasPlace, Partial<Record<Language, StaticSearchTextProfile>>>();
+  private ownerSnapshot: AtlasPlace[] | null = null;
+  private ownerSnapshotLength = 0;
+  private ownerLanguage: Language | null = null;
+  private readonly ownerResults = new Map<string, SearchChoice[]>();
   private readonly quickIndexes = new Map<Language, LocalitySearchIndex>();
   private readonly localityIndexes = new Map<Language, LocalitySearchIndex>();
   private readonly preparedQueries = new Map<string, PreparedStaticSearchQuery>();
@@ -187,7 +191,7 @@ export class SearchService {
     const spatialIntent = Boolean(anchor && query.intentIds.length > 0);
     const locals = index && !spatialIntent ? this.searchLocalities(query, index) : [];
     const owners = this.searchOwnerPlaces(query, anchor);
-    return this.mergeChoices([...owners, ...locals]);
+    return this.mergeChoices([...owners, ...locals], spatialIntent ? null : query);
   }
 
   async search(term: string): Promise<SearchChoice[]> {
@@ -208,7 +212,7 @@ export class SearchService {
     const locals = index && !spatialIntent ? this.searchLocalities(query, index) : [];
     const owners = this.searchOwnerPlaces(query, anchor);
     const bases = await this.searchBaseMap(term, query, anchor && query.intentIds.length > 0 ? anchor : null);
-    return this.mergeChoices([...locals, ...owners, ...this.searchRoadPoints(query), ...bases]);
+    return this.mergeChoices([...owners, ...locals, ...this.searchRoadPoints(query), ...bases], spatialIntent ? null : query);
   }
 
   /** Weather uses locality names/admin metadata only, without loading POI shards. */
@@ -233,7 +237,7 @@ export class SearchService {
     const owners=this.searchOwnerPlaces(query,anchor);
     const bases=quick?[]:await this.searchBaseMap(term,query,anchor&&query.intentIds.length>0?anchor:null);
     if(language!==this.getLanguage())return [];
-    return this.mergeChoices([...choices,...owners,...this.searchRoadPoints(query),...bases]);
+    return this.mergeChoices([...owners,...choices,...this.searchRoadPoints(query),...bases], anchor && query.intentIds.length > 0 ? null : query);
   }
 
   private searchRoadPoints(query: PreparedStaticSearchQuery): SearchChoice[] {
@@ -416,30 +420,50 @@ export class SearchService {
 
   private searchOwnerPlaces(query: PreparedStaticSearchQuery, anchor: SearchAnchor | null): SearchChoice[] {
     const language = this.getLanguage();
+    const places = this.getOwnerPlaces();
+    if (places !== this.ownerSnapshot || places.length !== this.ownerSnapshotLength || language !== this.ownerLanguage) {
+      this.ownerResults.clear();
+      this.ownerSnapshot = places;
+      this.ownerSnapshotLength = places.length;
+      this.ownerLanguage = language;
+    }
+    const key = JSON.stringify([query.phrase, query.tokens, query.intentIds, query.phoneticGroups, anchor?.coordinate]);
+    const cached = this.ownerResults.get(key);
+    if (cached) {
+      this.ownerResults.delete(key);
+      this.ownerResults.set(key, cached);
+      return cached;
+    }
     const candidates: Array<{ place: AtlasPlace; score: number; distance: number }> = [];
     const effectiveQuery = anchor && query.intentIds.length > 0
       ? { phrase: query.intentIds.join(" "), tokens: [...query.intentIds], intentIds: [...query.intentIds], phoneticGroups: [] }
       : query;
 
-    for (const place of this.getOwnerPlaces()) {
+    for (const place of places) {
       const profile = this.ownerProfile(place, language);
       if (!profile) continue;
       const distance = anchor ? distanceKm(anchor.coordinate, [place.longitude, place.latitude]) : 0;
       const proximityBonus = anchor ? Math.max(0, 2_400 - distance * 22) : 0;
-      const score = scoreStaticSearchProfile(profile, effectiveQuery, "poi") + 120 + proximityBonus;
-      if (score <= 120 || (anchor && query.intentIds.length > 0 && distance > SPATIAL_SEARCH_RADIUS_KM)) continue;
+      const matchScore = scoreStaticSearchProfile(profile, effectiveQuery, "poi");
+      if (matchScore <= 0 || (anchor && query.intentIds.length > 0 && distance > SPATIAL_SEARCH_RADIUS_KM)) continue;
+      const score = matchScore + 120 + proximityBonus;
       candidates.push({ place, score, distance });
     }
 
     candidates.sort((a, b) => b.score - a.score || a.distance - b.distance);
-    return candidates.slice(0, OWNER_RESULT_LIMIT).map((entry): SearchChoice => ({ type: "owner", place: entry.place }));
+    const choices = candidates.slice(0, OWNER_RESULT_LIMIT).map((entry): SearchChoice => ({ type: "owner", place: entry.place }));
+    this.ownerResults.set(key, choices);
+    if (this.ownerResults.size > OWNER_RESULT_LIMIT) {
+      this.ownerResults.delete(this.ownerResults.keys().next().value!);
+    }
+    return choices;
   }
 
   private ownerProfile(place: AtlasPlace, language: Language): StaticSearchTextProfile | null {
     const cached = this.ownerProfiles.get(place)?.[language];
     if (cached) return cached;
-    const primaryName = language === "ku" ? place.name_ku : language === "ar" ? place.name_ar || "" : place.name_en || "";
-    if (!primaryName) return null;
+    const primaryName = ownerName(place, language);
+    if (!primaryName || primaryName === "—") return null;
     const metadataValues = Object.values(place.metadata ?? {}).filter((value): value is string | number | boolean =>
       typeof value === "string" || typeof value === "number" || typeof value === "boolean"
     );
@@ -512,15 +536,35 @@ export class SearchService {
     return best;
   }
 
-  private mergeChoices(choices: SearchChoice[]): SearchChoice[] {
+  private mergeChoices(choices: SearchChoice[], query: PreparedStaticSearchQuery | null = null): SearchChoice[] {
     const language = this.getLanguage();
+    // Rank all sources together before applying the shared result limit.
+    if (query) {
+      const score = (choice: SearchChoice): number => {
+        if (choice.type === "local") return scoreStaticSearchProfile(this.createEntry(choice.feature, language).profile, query, "place");
+        if (choice.type === "owner") {
+          const profile = this.ownerProfile(choice.place, language);
+          return profile ? scoreStaticSearchProfile(profile, query, "poi") + 120 : 0;
+        }
+        const item = choice.item, name = languageStaticName(item, language) || item.n;
+        const names = [name, item.n_ku, item.n_ar, item.n_en].filter(Boolean).join(" | ");
+        const profile: StaticSearchTextProfile = {
+          primary: normalizeStaticSearch(name), primaryName: normalizeStaticSearch(name),
+          allNames: normalizeStaticSearch(names), all: normalizeStaticSearch(`${names} | ${item.q} | ${item.c}`),
+          intent: searchIntentIdsForCategory(item.c).join(" "), phoneticKeys: [...new Set(phoneticSearchGroups(names).flat())]
+        };
+        return scoreStaticSearchProfile(profile, query, item.k);
+      };
+      choices = choices.map((choice) => ({ choice, score: score(choice) }))
+        .sort((a, b) => b.score - a.score).map(({ choice }) => choice);
+    }
     const output: SearchChoice[] = [];
     const seen = new Set<string>();
     for (const choice of choices) {
       const key = choice.type === "local"
         ? coordinateKey(choice.feature.geometry.coordinates[0], choice.feature.geometry.coordinates[1], languageValue(choice.feature.properties, language))
         : choice.type === "owner"
-          ? coordinateKey(choice.place.longitude, choice.place.latitude, language === "ku" ? choice.place.name_ku : language === "ar" ? choice.place.name_ar || "" : choice.place.name_en || "")
+          ? coordinateKey(choice.place.longitude, choice.place.latitude, ownerName(choice.place, language))
           : coordinateKey(choice.item.x, choice.item.y, languageStaticName(choice.item, language));
       if (seen.has(key)) continue;
       seen.add(key);

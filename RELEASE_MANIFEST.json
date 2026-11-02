@@ -8,11 +8,11 @@
   "generatedForDate": "2026-10-13",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "6a46e70069d92f7831339540db33e236f94a220f5296706114e76e03557fa81f",
+    "packageDefinitionSha256": "0e71e35b00c7030d4b89a898d02c8dd4cad3294f61e96dacdbb75ed9efb6549f",
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
-  "fileCount": 1703,
-  "totalBytes": 289658970,
+  "fileCount": 1705,
+  "totalBytes": 289676070,
   "files": {
     ".env.example": {
       "bytes": 2920,
@@ -195,8 +195,8 @@
       "sha256": "042c396f8da718b2e9fd7d1529bbfe0baf9d252219c09988bcba86b9c3f36819"
     },
     "package.json": {
-      "bytes": 5894,
-      "sha256": "348fbd691ee5e0674467586111fd885c9a59f41b758029dfcb745ca8ebfb8c0a"
+      "bytes": 6005,
+      "sha256": "bcb615d1fe4957aa1378e020d9b6efe0a158e156bfd54ad778969892a5d11b37"
     },
     "public/_headers": {
       "bytes": 2603,
@@ -3656,7 +3656,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 942,
-      "sha256": "53e6494b92348dc505cb012a41f7ace0856b1888b336f821897d87f7c68d2754"
+      "sha256": "44ab27901b9b5f0a8a9b6c7a1f73435e1e93a79e5e6de60c151cafa68cbea35b"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3763,8 +3763,8 @@
       "sha256": "419ec72623ad5803f2c74cc1ad0c39806a019cf7b5a8ce8aee71ae6403812c54"
     },
     "src/lib/atlas-places.ts": {
-      "bytes": 75207,
-      "sha256": "7b927badba7cc2ccc744f9194d09e897827a648b4f80fd0c79fd2ca8c4e2c2a3"
+      "bytes": 75780,
+      "sha256": "2bcae3125feb300419be1899a2850f0c8e418bf40b862c9fb3fa75afc5ec747a"
     },
     "src/lib/atlas-taxonomy.ts": {
       "bytes": 113237,
@@ -3803,8 +3803,8 @@
       "sha256": "e52ccd9d61bfd297255012881966f0bb8db8e3849fd5e2f1b43bb249e5479b5e"
     },
     "src/lib/geo-format.ts": {
-      "bytes": 4469,
-      "sha256": "db008bf44b0259a1eac5e3dc26bb2a26a3f3acb8b7455559612336de9ada4281"
+      "bytes": 4576,
+      "sha256": "5ea5a299e792b70b8b1d06fdae87ae67cdf0e491b6ed173bf499568415b60520"
     },
     "src/lib/hardware-profile.ts": {
       "bytes": 8374,
@@ -3817,6 +3817,10 @@
     "src/lib/input-mode-controller.ts": {
       "bytes": 3530,
       "sha256": "9cec510b18a0908207ad4a91bbd669acee366e7c3af1ad593696768fcafe77dd"
+    },
+    "src/lib/keyset-pages.ts": {
+      "bytes": 1133,
+      "sha256": "0f6af745b8fd925715125827f27e730414dba1f92398a600582790f36c5e4b89"
     },
     "src/lib/kri-layer-installer.ts": {
       "bytes": 5894,
@@ -3839,8 +3843,8 @@
       "sha256": "e2c382a204909098128c25cf26a20a809e7f97dc089f417a55c016bae36e5e28"
     },
     "src/lib/live-location-controller.ts": {
-      "bytes": 38817,
-      "sha256": "b1f8a69d01177b62081eb32884700e56a942e0ac88b95bd91d3203bc9d6664f5"
+      "bytes": 38919,
+      "sha256": "4fd648a6641c4780cec81da7fa22be55fadde38005e24007cc34c96195b405ab"
     },
     "src/lib/live-location-layers.ts": {
       "bytes": 6356,
@@ -3871,12 +3875,12 @@
       "sha256": "730e6a4929a0a472c61555be57c7cf4ad162e75648d2a9f681eccf719b1c63d9"
     },
     "src/lib/map-camera-controller.ts": {
-      "bytes": 1589,
-      "sha256": "c6bd1c87ee01397249098cfd7fa71d86670a8e7ecb6e3ce6f2d7738169dfa0de"
+      "bytes": 2274,
+      "sha256": "a6f36d91ccd3baca9a6fd7de2381aa85979343e3247dde3f3a6f5d96ee363728"
     },
     "src/lib/map-coordinate-picker.ts": {
-      "bytes": 6638,
-      "sha256": "5b8211869b11707e795ae8926d7a78dffc4cf4c4044f6107c473f0c67fbc8bc6"
+      "bytes": 6705,
+      "sha256": "c2d8c16c13df4b34c3397ea8fbddc6ebf1be8066f999d2ac5d4654a9e93d1237"
     },
     "src/lib/map-experience-controller.ts": {
       "bytes": 7450,
@@ -3939,8 +3943,8 @@
       "sha256": "884528f926dcabbf7c9d9d0126b6f37a89dabe1a9d9222aebfd434de6613dc0a"
     },
     "src/lib/native-account-notifications.ts": {
-      "bytes": 2227,
-      "sha256": "5e3338f570ce775200a757e0c6d469746944945eb904061f522cb16ba576d05e"
+      "bytes": 2987,
+      "sha256": "558deb0e69e66a014fd6907cef5d031f1f986c4a7428efc15086b8ec85b0b514"
     },
     "src/lib/native-back-navigation.ts": {
       "bytes": 2082,
@@ -4099,8 +4103,8 @@
       "sha256": "566846b6a4ab39243616c7c2a54500d5280333d8f728aa7679128a6db34ae92e"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 79432,
-      "sha256": "1ab253fa451daec221629a806715ad616ecc336a1402bc61ec7cd774b0af3db2"
+      "bytes": 79555,
+      "sha256": "a99bcc5853c1472427456b67e18ecfb0492d4aeaf9b99b21e8886e2af622b0c0"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 15390,
@@ -4131,12 +4135,12 @@
       "sha256": "4e4477b6fbfbe465ba6731d6cdc6e3d17e4225c6e27a0e8c7e305257051bb464"
     },
     "src/lib/search-controller.ts": {
-      "bytes": 13445,
-      "sha256": "b00f0af366e03c6ef77f1cb30dc55c0d8e5a14871ecb172e7614122c6c3f64af"
+      "bytes": 13949,
+      "sha256": "fbd9ad7d1a3e1877c3634d7c28c9a397c4b575ad6cfcc319f1238219206a2ef6"
     },
     "src/lib/search-service.ts": {
-      "bytes": 26540,
-      "sha256": "7aa12fdc56d16d58d39bfd16b0454388d5340d00cb9f887595ccbcb19776fa1b"
+      "bytes": 28918,
+      "sha256": "b6c126c07fe9918be6ba886212f4507f2940c7b05f6619e4bdd6801b81aaf84e"
     },
     "src/lib/search-worker-client.ts": {
       "bytes": 7749,
@@ -4211,8 +4215,8 @@
       "sha256": "31d84c4b4b9f39d10c702d0fb6fecca2d53d4bcd39e4bd26e8a9594921409c55"
     },
     "src/main.ts": {
-      "bytes": 111900,
-      "sha256": "0272bb529d1de3b6a25312eefcbd36f89b781efdfe9e5930482a9b8a22caede9"
+      "bytes": 112112,
+      "sha256": "e33f2370d1fc3ff96278b87e132c258d194b753902d4da79fcbddf5f0d15fab2"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4255,8 +4259,8 @@
       "sha256": "5140dd8ae4aa6a757e1cb3930b17a897e025bfb6ce4c4233cdceb6debf41d7d1"
     },
     "src/styles/coordinate-picker.css": {
-      "bytes": 2313,
-      "sha256": "6dcf290c6317250d2cdb90c45c2850e7d5fcff4384d57fbc95da33a67c9df0a9"
+      "bytes": 2481,
+      "sha256": "5b410fc04b5eb0be7555606fe4de505cfe5ec5f067abc20cdb4f5778453e3f07"
     },
     "src/styles/device-adaptation.css": {
       "bytes": 2632,
@@ -4375,8 +4379,8 @@
       "sha256": "36feb1c95fa44c62d2fee0ea6f69b5925e1bcbeb5986ed775e3834aa3c80b53c"
     },
     "src/styles/theme-consistency.css": {
-      "bytes": 11066,
-      "sha256": "87485a2b6b0b6649a1d9d4294947c941017fd8d8648467c9895cbc80d254d90d"
+      "bytes": 13040,
+      "sha256": "216811b08ee9fcbf9a86180982b98921f57b154e91eb766e33e77bbccfd8f76c"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
@@ -4767,8 +4771,8 @@
       "sha256": "295c1a1e8a6eef75286539b3fa139f09b507bcbc9cc0660e86b5705258b5b3df"
     },
     "tools/verify/navigation-harness.mjs": {
-      "bytes": 892,
-      "sha256": "ba8e1d9df617b7437e0f0aefe5be04ceb23d05549028fd4bf133eaf1fc04cbf5"
+      "bytes": 990,
+      "sha256": "8b78d2bc933e11bb422bc7b1d87a9a6497cf01250f33eb43c10f82cae50fc128"
     },
     "tools/verify/navigation-polish-regressions.mjs": {
       "bytes": 16268,
@@ -4789,6 +4793,10 @@
     "tools/verify/publication-regressions.mjs": {
       "bytes": 1662,
       "sha256": "151e8ea67c44e14eef20d36f77e4f7099ef27d1bcd8a41d9e09132ea7aa51f96"
+    },
+    "tools/verify/refinement-regressions.mjs": {
+      "bytes": 8105,
+      "sha256": "93e6a27bd11b3d2457da3b607cd04c7805a537875555764af3712089a02d9dd5"
     },
     "tools/verify/release.mjs": {
       "bytes": 2668,

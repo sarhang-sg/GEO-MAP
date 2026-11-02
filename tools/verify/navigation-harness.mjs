@@ -9,4 +9,4 @@ export function loadNavigationModule(path, globals, names) {
   return context.api;
 }
 export const navigationGeo = loadNavigationModule('src/lib/location.ts', {}, 'distanceMeters,bearingBetween,normalizeHeading,shortestHeadingDelta');
-export const navigationTracking = loadNavigationModule('src/lib/navigation-tracking.ts', navigationGeo, 'MovementCourseTracker,navigationProfile,trustedTravelCourse,followCameraBearing');
+export const navigationTracking = { ...loadNavigationModule('src/lib/navigation-tracking.ts', navigationGeo, 'MovementCourseTracker,navigationProfile,trustedTravelCourse,followCameraBearing'), ...loadNavigationModule('src/lib/map-camera-controller.ts', {}, 'isCameraModeTransition') };
