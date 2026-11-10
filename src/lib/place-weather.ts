@@ -1,4 +1,5 @@
-import { drivingWeatherAdvisory, forecastWeekday, NAVIGATION_COPY } from "./navigation-weather";
+import { weatherClock } from "./interface-feedback";
+import { forecastWeekday } from "./navigation-weather";
 import { weatherCodeKind, weatherCodeLabel, weatherContext, type WeatherCondition } from "./weather-codes";
 import { coreCall, localCoreEnabled } from "../android/local-provider";
 import type { LngLatTuple } from "./location";
@@ -11,12 +12,14 @@ const WEATHER_API_BASE_URL = safeUrl(configuredWeatherUrl)?.protocol === "https:
   ? configuredWeatherUrl
   : DEFAULT_WEATHER_API_BASE_URL;
 const CACHE_TTL_MS = 15 * 60 * 1000;
-const REQUEST_TIMEOUT_MS = 6000;
+const REQUEST_TIMEOUT_MS = 10500;
 const STALE_TTL_MS = 10 * 60 * 60 * 1000;
 const CACHE_KEY = "nav-kurd:weather:v4";
 const MAX_CACHE_ENTRIES = 240;
 
 type ForecastHour = { at: number; temperature: number; weatherCode: number; isDay: boolean; chance: number | null };
+
+type ForecastDay = { at: number; high: number; low: number; code: number };
 
 type WeatherReading = {
   observedAt: number;
@@ -24,6 +27,9 @@ type WeatherReading = {
   humidity: number | null;
   apparent: number | null;
   hours: ForecastHour[];
+  daily?: ForecastDay[];
+  pm25?: number | null;
+  aqi?: number | null;
   stale: boolean;
   temperature: number;
   weatherCode: number;
@@ -41,11 +47,12 @@ type CacheEntry = {
 type OpenMeteoResponse = {
   available?: boolean; stale?: boolean; timezone?: string; utc_offset_seconds?: number;
   current?: Record<string, unknown>;
+  daily?: ForecastDay[];
   hourly?: Record<string, unknown[]>;
 };
 const VALID_CODES = new Set([0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99]);
 const DETAILS = {
-  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینیی ٢٤ کاتژمێری داهاتوو", cached: "پاشەکەوتکراو", updated: "داتا", humidity: "شێ", feels: "هەستپێکراو", wind: "با", dust: "خۆڵی هەوا", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
+  ku: { more: "وردەکاری و پێشبینی", forecast: "پێشبینیی ٢٤ کاتژمێری داهاتوو", cached: "پاشەکەوتکراو", updated: "دوایین نوێکردنەوە لە", humidity: "شێ", feels: "هەستپێکراو", wind: "با", dust: "خۆڵی هەوا", unavailable: "کەشوھەوا بەردەست نییە.", retry: "دووبارە هەوڵدان", estimate: "پێشبینییەکان لەوانەیە گۆڕانکارییان بەسەردا بێت", rain: "ئەگەری باران" },
   ar: { more: "التفاصيل والتوقعات", forecast: "توقعات الساعات الـ24 القادمة", cached: "بيانات محفوظة", updated: "البيانات", humidity: "الرطوبة", feels: "المحسوسة", wind: "الرياح", dust: "الغبار", unavailable: "الطقس غير متاح", retry: "إعادة المحاولة", estimate: "توقعات نموذجية · قابلة للتغير", rain: "احتمال المطر" },
   en: { more: "Details & forecast", forecast: "Next 24 hours", cached: "Cached", updated: "Observed", humidity: "Humidity", feels: "Feels like", wind: "Wind", dust: "Dust", unavailable: "Weather unavailable", retry: "Retry", estimate: "Model forecast · may change", rain: "Rain chance" }
 };
@@ -75,18 +82,20 @@ function decodeReading(payload: OpenMeteoResponse): WeatherReading {
     throw new Error("weather-invalid-current");
   }
   const hours: ForecastHour[] = [];
-  for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 48); i++) {
+  for (let i = 0; i < Math.min(payload.hourly?.time?.length ?? 0, 48) && hours.length < 24; i++) {
     const at = weatherTime(payload.hourly?.time?.[i], payload.utc_offset_seconds);
     const temp = optionalNumber(payload.hourly?.temperature_2m?.[i]);
     const code = optionalNumber(payload.hourly?.weather_code?.[i]);
     const isDay = optionalNumber(payload.hourly?.is_day?.[i]);
     const chance = optionalNumber(payload.hourly?.precipitation_probability?.[i]);
-    if (at === null || at <= Date.now() || at > Date.now() + 24 * 3600000 || (hours.length && at <= hours[hours.length - 1].at)
+    if (at === null || at < Math.floor(Date.now()/3600000)*3600000 || at > Date.now() + 24 * 3600000 || (hours.length && at <= hours[hours.length - 1].at)
       || temp === null || temp < -90 || temp > 65 || code === null || !VALID_CODES.has(code) || (isDay !== 0 && isDay !== 1)) continue;
     hours.push({ at, temperature: temp, weatherCode: code, isDay: isDay === 1,
       chance: chance !== null && chance >= 0 && chance <= 100 ? chance : null });
   }
-  return { temperature, weatherCode, isDay: day === 1, observedAt, timezone, hours,
+  const daily = Array.isArray(payload.daily) ? payload.daily.filter(d => d && Number.isFinite(d.at) && Number.isFinite(d.high) && Number.isFinite(d.low) && VALID_CODES.has(d.code)).slice(0,7) : [];
+  return { temperature, weatherCode, isDay: day === 1, observedAt, timezone, hours, daily,
+    pm25: optionalNumber(payload.current?.pm2_5), aqi: optionalNumber(payload.current?.european_aqi),
     stale: payload.stale === true || Date.now() - observedAt > 90 * 60000,
     windSpeed: optionalNumber(payload.current?.wind_speed_10m), windGusts: optionalNumber(payload.current?.wind_gusts_10m),
     dust: optionalNumber(payload.current?.dust), humidity: optionalNumber(payload.current?.relative_humidity_2m),
@@ -268,6 +277,9 @@ export class PlaceWeatherService {
       root.querySelector<HTMLElement>(".place-weather__copy strong")!.textContent = temperature;
       root.querySelector<HTMLElement>(".place-weather__condition")!.textContent = conditionLabel;
       root.dataset.state = reading.stale ? "cached" : "ready";
+      root.dataset.latitude = String(coordinate[1]); root.dataset.temp = String(reading.temperature); root.dataset.wmo = String(reading.weatherCode); root.dataset.dust = String(reading.dust??0);
+      weatherClock(root, reading.timezone);
+      root.dataset.skyKind = condition;
       root.dataset.phase = reading.isDay ? "day" : "night";
       const at = clock(reading.observedAt, reading.timezone, language);
       root.setAttribute("aria-label", `${temperature}. ${conditionLabel}. ${words.updated} ${at}${reading.stale ? ` · ${words.cached}` : ""}`);
@@ -276,15 +288,15 @@ export class PlaceWeatherService {
       const timeLabel = document.createElement("bdi"); timeLabel.dir = "ltr"; timeLabel.textContent = at;
       timestamp.append(`${words.updated} `, timeLabel, reading.stale ? ` · ${words.cached}` : "");
       root.querySelector(".place-weather__copy")!.append(timestamp);
-      const warning = drivingWeatherAdvisory(reading, Date.now(), 24);
-      if (warning) {
-        const copy = NAVIGATION_COPY[language], notice = document.createElement("aside");
-        notice.className = "place-weather__advisory"; notice.setAttribute("role", "status");
-        const title = document.createElement("strong"); title.textContent = `${copy.weather} · ${root.dataset.placeName || copy.selected}`;
-        const message = document.createElement("span"); message.textContent = copy[warning.kind];
-        const source = document.createElement("small");
-        source.textContent = `${forecastWeekday(warning.at, reading.timezone, language)} · ${clock(warning.at, reading.timezone, language)} · ${copy.source}`;
-        notice.append(title, message, source); root.append(notice);
+      const extreme = !reading.stale && (reading.temperature > 45 || reading.temperature < 0);
+      if (extreme) {
+        const message = reading.temperature > 45
+          ? { ku:"ئاگاداری: شەپۆلی گەرمای تاقەتپڕووکێن", ar:"تنبيه: موجة حر شديدة", en:"Extreme heat warning" }
+          : { ku:"ئاگاداری: شەختە و بەستەڵەک", ar:"تنبيه: صقيع وتجمد", en:"Freezing warning" };
+        const notice=document.createElement("aside"); notice.className="place-weather__advisory"; notice.setAttribute("role","status"); notice.textContent=message[language]; root.append(notice);
+      }
+      if ([51,53,55,61,63,65,80,81,82,95,96,99].includes(reading.weatherCode)) {
+        const advice=document.createElement("small"); advice.textContent={ku:"ئەمڕۆ پێویستت بە چەتر دەبێت",ar:"خذ مظلة اليوم",en:"Take an umbrella today"}[language];root.querySelector(".place-weather__copy")?.append(advice);
       }
       const details = document.createElement("details"); details.className = "place-weather__details"; details.open = expanded;
       const summary = document.createElement("summary"); summary.textContent = words.more; details.append(summary);
@@ -295,17 +307,21 @@ export class PlaceWeatherService {
         reading.apparent !== null ? `${words.feels} ${roundTemperature(reading.apparent, language)}` : "",
         reading.humidity !== null && reading.humidity >= 0 && reading.humidity <= 100 ? `${words.humidity} ${Math.round(reading.humidity)}%` : "",
         reading.windSpeed !== null && reading.windSpeed >= 0 ? `${words.wind} ${Math.round(reading.windSpeed)} km/h` : "",
+        reading.pm25 != null ? `PM2.5 ${Math.round(reading.pm25)} µg/m³` : "",
+        reading.aqi != null ? `AQI ${Math.round(reading.aqi)}` : "",
         reading.dust !== null && reading.dust >= 0 ? `${words.dust} ${Math.round(reading.dust)} µg/m³` : ""
       ];
       for (const value of metricValues.filter(Boolean)) { const chip = document.createElement("span"); chip.textContent = value; metrics.append(chip); }
       if (metrics.childElementCount) body.append(metrics);
-      const hours = reading.hours.filter((h) => h.at > Date.now() && h.at <= Date.now() + 24 * 3600000);
+      const hours = reading.hours.filter((h) => h.at >= Math.floor(Date.now()/3600000)*3600000 && h.at < Math.floor(Date.now()/3600000)*3600000 + 24 * 3600000);
       if (hours.length) {
         const title = document.createElement("strong"); title.className = "place-weather__heading"; title.textContent = words.forecast; body.append(title);
         const row = document.createElement("div"); row.className = "place-weather__forecast"; row.dir = "ltr"; row.tabIndex = 0; row.setAttribute("aria-label", words.forecast);
         for (const hour of hours) {
           const cell = document.createElement("div"); cell.className = "place-weather__hour";
-          const time = document.createElement("time"); time.dateTime = new Date(hour.at).toISOString(); time.textContent = clock(hour.at, reading.timezone, language);
+          const time = document.createElement("time"); time.dateTime = new Date(hour.at).toISOString(); const localDate = new Intl.DateTimeFormat("en-CA", { timeZone: reading.timezone });
+          const tomorrow = localDate.format(hour.at) !== localDate.format(Date.now());
+          time.textContent = (language === "ku" && tomorrow ? "سبەی " : "") + clock(hour.at, reading.timezone, language);
           const icon = document.createElement("img"); const kind = baseWeatherCondition(hour.weatherCode);
           icon.src = weatherIconAsset(kind, hour.isDay); icon.alt = weatherCodeLabel(hour.weatherCode, hour.isDay, language); icon.loading = "lazy"; icon.width = 28; icon.height = 28;
           const value = document.createElement("strong"); value.textContent = roundTemperature(hour.temperature, language);
@@ -323,6 +339,19 @@ export class PlaceWeatherService {
         empty.textContent = language === "en" ? "Hourly forecast is currently unavailable."
           : language === "ar" ? "توقعات الساعات غير متاحة حالياً." : "پێشبینییەکانی کاتژمێری لەم کاتەدا بەردەست نین.";
         body.append(empty);
+      }
+      if (reading.daily?.length) {
+        const heading = document.createElement("strong"); heading.className = "place-weather__heading";
+        heading.textContent = { ku: "پێشبینیی حەوت ڕۆژ", ar: "توقعات سبعة أيام", en: "Seven-day forecast" }[language];
+        const row = document.createElement("div"); row.className = "place-weather__forecast";
+        for (const day of reading.daily) {
+          const cell = document.createElement("div"); cell.className = "place-weather__hour";
+          const label = document.createElement("small"); label.textContent = forecastWeekday(day.at*1000, reading.timezone, language);
+          const icon = document.createElement("img"); icon.width = 28; icon.height = 28; icon.alt = weatherCodeLabel(day.code,true,language); icon.src = weatherIconAsset(baseWeatherCondition(day.code),true);
+          const range = document.createElement("bdi"); range.textContent = `${Math.round(day.low)}° / ${Math.round(day.high)}°`;
+          cell.append(label,icon,range); row.append(cell);
+        }
+        body.append(heading,row);
       }
       const credit = document.createElement("small"); credit.className = "place-weather__credit";
       credit.textContent = `Open-Meteo · ${words.estimate} ·`;
@@ -360,7 +389,7 @@ export class PlaceWeatherService {
     url.searchParams.set("latitude", latitude.toFixed(5)); url.searchParams.set("longitude", longitude.toFixed(5));
     url.searchParams.set("current", "temperature_2m,is_day,weather_code,wind_speed_10m,wind_gusts_10m,relative_humidity_2m,apparent_temperature");
     url.searchParams.set("hourly", "temperature_2m,weather_code,is_day,precipitation_probability");
-    url.searchParams.set("forecast_hours", "25"); url.searchParams.set("timeformat", "unixtime");
+    url.searchParams.set("scope", "detail"); url.searchParams.set("forecast_hours", "24"); url.searchParams.set("timeformat", "unixtime");
     url.searchParams.set("temperature_unit", "celsius"); url.searchParams.set("wind_speed_unit", "kmh"); url.searchParams.set("timezone", "auto");
     const controller = new AbortController(); const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {

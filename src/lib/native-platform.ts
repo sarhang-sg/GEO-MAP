@@ -1,3 +1,4 @@
+import { confirmAction } from "./confirm-action";
 import type { Language } from "./types";
 import { installNativeAccountNotifications } from "./native-account-notifications";
 import {
@@ -224,13 +225,18 @@ export function installNativeSettingsPanel(getLanguage: () => Language): void {
     clear.disabled = true;
     void (async () => {
       try {
-        await flutterInvoke("nativeClearTransientCache");
+        if (!await confirmAction("clear-cache", getLanguage())) return;
+        const status = await flutterInvoke<{cleared: boolean}>("nativeClearTransientCache");
+        if (!status?.cleared) throw new Error("Native cache not cleared");
         if ("caches" in window) {
           const keys = await caches.keys();
-          const transient = keys.filter((key) => key.includes("runtime") || key.includes("satellite"));
+          const transient = keys.filter((key) => /^nav-kurd-(?:runtime-s[0-9]+-|satellite-s[0-9]+$)/.test(key));
           await Promise.all(transient.map((key) => caches.delete(key)));
         }
         await refresh();
+        if (note) note.textContent = {ku:"کاشی کاتی پاک کرایەوە.", ar:"تم مسح الملفات المؤقتة.", en:"Temporary files cleared."}[getLanguage()];
+      } catch {
+        if (note) note.textContent = {ku:"پاککردنەوە تەواو نەبوو.",ar:"لم يكتمل المسح.",en:"Cache clearing did not finish."}[getLanguage()];
       } finally {
         clear.disabled = false;
       }

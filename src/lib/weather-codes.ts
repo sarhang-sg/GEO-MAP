@@ -18,6 +18,7 @@ export function weatherContext(temperature: number | null, wind: number | null, 
   const add = (key: keyof typeof c): void => { labels.push(c[key][language]); };
   if (temperature !== null && Number.isFinite(temperature)) {
     if (temperature <= t.extremeColdC) add("extremeCold");
+    else if (temperature <= 0) add("freezing");
     else if (temperature <= t.coldC) add("cold");
     else if (temperature < t.coolC) add("cool");
     else if (temperature >= t.extremeHeatC) add("extremeHeat");

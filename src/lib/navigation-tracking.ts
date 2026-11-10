@@ -14,21 +14,22 @@ export class MovementCourseTracker {
   reset(): void { this.samples = []; }
   update(coordinate: LngLatTuple, at: number, accuracy: number, speed: number, mode: TravelMode = "car"): { heading: number; confidence: number } | null {
     const profile = navigationProfile(mode);
-    if (!Number.isFinite(at) || !Number.isFinite(accuracy) || accuracy <= 0 || accuracy > profile.courseAccuracy
-      || !coordinate.every(Number.isFinite) || !Number.isFinite(speed) || speed < profile.courseSpeed) {
+    if (!Number.isFinite(at) || !Number.isFinite(accuracy) || accuracy <= 0 || accuracy > Math.max(200,profile.courseAccuracy)
+      || !coordinate.every(Number.isFinite) || !Number.isFinite(speed) || speed < 0) {
       this.reset(); return null;
     }
     const latest = this.samples[this.samples.length - 1];
     if (latest && at <= latest.at) return null;
-    if (latest && at - latest.at > 10_000) this.reset();
-    this.samples = this.samples.filter(sample => at - sample.at <= 8000).slice(-31);
-    const threshold = Math.max(mode === "walking" ? 3 : 4, accuracy * 0.8);
+    if (speed === 0) { this.reset(); return null; }
+    if (latest && at - latest.at > 30_000) this.reset();
+    this.samples = this.samples.filter(sample => at - sample.at <= 30_000).slice(-31);
+    const threshold = Math.max(mode === "walking" ? 3 : 4, accuracy * (accuracy > profile.courseAccuracy ? 1.5 : .8));
     let result: { heading: number; confidence: number } | null = null;
     for (let i = this.samples.length - 1; i >= 0; i--) {
       const sample = this.samples[i], seconds = (at - sample.at) / 1000;
       if (seconds < 0.75) continue;
       const moved = distanceMeters(sample.coordinate, coordinate);
-      if (moved < Math.max(threshold, sample.accuracy * 0.8)) continue;
+      if (speed <= 0 || moved < Math.max(threshold, sample.accuracy * (sample.accuracy > profile.courseAccuracy ? 1.5 : .8))) continue;
       if (moved / seconds > (mode === "walking" ? 8 : mode === "bicycle" ? 25 : 90)) { this.reset(); break; }
       const heading = bearingBetween(sample.coordinate, coordinate);
       if (heading !== null) result = { heading, confidence: Math.min(0.94, 0.65 + moved / Math.max(20, accuracy * 6) * 0.2) };

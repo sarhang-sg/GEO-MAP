@@ -2,9 +2,9 @@
   "schema": 1,
   "source": "https://open-meteo.com/en/docs#weathervariables",
   "clearDay": {
-    "ku": "خۆرەتاو",
-    "ar": "مشمس",
-    "en": "Sunny"
+    "ku": "ساماڵ",
+    "ar": "صافٍ",
+    "en": "Clear Sky"
   },
   "unavailable": {
     "ku": "کەشوھەوا بەردەست نییە.",
@@ -16,43 +16,43 @@
       "kind": "clear",
       "ku": "ئاسمانی ڕوون",
       "ar": "سماء صافية",
-      "en": "Clear sky"
+      "en": "Clear Night"
     },
     "1": {
-      "kind": "mainly-clear",
-      "ku": "بە زۆری ئاسمان ڕوونە",
-      "ar": "صحو غالباً",
-      "en": "Mainly clear"
+      "kind": "partly-cloudy",
+      "ku": "نیمچە هەور",
+      "ar": "غائم جزئياً",
+      "en": "Partly Cloudy"
     },
     "2": {
       "kind": "partly-cloudy",
-      "ku": "نیمچە هەوراوی",
+      "ku": "نیمچە هەور",
       "ar": "غائم جزئياً",
-      "en": "Partly cloudy"
+      "en": "Partly Cloudy"
     },
     "3": {
       "kind": "cloudy",
       "ku": "هەوراوی",
-      "ar": "ملبد بالغيوم",
-      "en": "Overcast"
+      "ar": "غائم",
+      "en": "Cloudy"
     },
     "45": {
       "kind": "fog",
-      "ku": "تەم",
+      "ku": "تەمومژ",
       "ar": "ضباب",
       "en": "Fog"
     },
     "48": {
       "kind": "fog",
-      "ku": "تەمی سەهۆڵبەندوو",
-      "ar": "ضباب متجمد",
-      "en": "Depositing rime fog"
+      "ku": "تەمومژ",
+      "ar": "ضباب",
+      "en": "Fog"
     },
     "51": {
       "kind": "drizzle",
-      "ku": "نمەبارانی سووک",
-      "ar": "رذاذ خفيف",
-      "en": "Light drizzle"
+      "ku": "نمە باران",
+      "ar": "أمطار خفيفة",
+      "en": "Light Rain"
     },
     "53": {
       "kind": "drizzle",
@@ -80,9 +80,9 @@
     },
     "61": {
       "kind": "rain",
-      "ku": "بارانی سووک",
-      "ar": "مطر خفيف",
-      "en": "Light rain"
+      "ku": "نمە باران",
+      "ar": "أمطار خفيفة",
+      "en": "Light Rain"
     },
     "63": {
       "kind": "rain",
@@ -92,9 +92,9 @@
     },
     "65": {
       "kind": "rain",
-      "ku": "بارانی توند",
-      "ar": "مطر غزير",
-      "en": "Heavy rain"
+      "ku": "لێزمە باران",
+      "ar": "أمطار غزيرة",
+      "en": "Heavy Rain"
     },
     "66": {
       "kind": "freezing-rain",
@@ -110,33 +110,33 @@
     },
     "71": {
       "kind": "snow",
-      "ku": "بەفری سووک",
-      "ar": "ثلوج خفيفة",
-      "en": "Light snow"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "73": {
       "kind": "snow",
-      "ku": "بەفری مامناوەند",
-      "ar": "ثلوج متوسطة",
-      "en": "Moderate snow"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "75": {
       "kind": "snow",
-      "ku": "بەفری توند",
-      "ar": "ثلوج كثيفة",
-      "en": "Heavy snow"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "77": {
       "kind": "snow",
-      "ku": "دەنکەبەفر",
-      "ar": "حبيبات ثلج",
-      "en": "Snow grains"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "80": {
       "kind": "showers",
-      "ku": "بارانی پچڕپچڕی سووک",
-      "ar": "زخات مطر خفيفة",
-      "en": "Light rain showers"
+      "ku": "نمە باران",
+      "ar": "أمطار خفيفة",
+      "en": "Light Rain"
     },
     "81": {
       "kind": "showers",
@@ -146,39 +146,39 @@
     },
     "82": {
       "kind": "showers",
-      "ku": "بارانی پچڕپچڕی زۆر توند",
-      "ar": "زخات مطر شديدة جداً",
-      "en": "Violent rain showers"
+      "ku": "لێزمە باران",
+      "ar": "أمطار غزيرة",
+      "en": "Heavy Rain"
     },
     "85": {
       "kind": "snow",
-      "ku": "بەفری پچڕپچڕی سووک",
-      "ar": "زخات ثلج خفيفة",
-      "en": "Light snow showers"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "86": {
       "kind": "snow",
-      "ku": "بەفری پچڕپچڕی توند",
-      "ar": "زخات ثلج كثيفة",
-      "en": "Heavy snow showers"
+      "ku": "بەفربارین",
+      "ar": "تساقط الثلوج",
+      "en": "Snow"
     },
     "95": {
       "kind": "thunderstorm",
-      "ku": "هەورەگرمە و بروسکە",
+      "ku": "هەورەبروسکە",
       "ar": "عاصفة رعدية",
       "en": "Thunderstorm"
     },
     "96": {
       "kind": "hail",
-      "ku": "هەورەگرمە لەگەڵ تەرزەی سووک",
-      "ar": "عاصفة رعدية مع برد خفيف",
-      "en": "Thunderstorm with light hail"
+      "ku": "هەورەبروسکە",
+      "ar": "عاصفة رعدية",
+      "en": "Thunderstorm"
     },
     "99": {
       "kind": "hail",
-      "ku": "هەورەگرمە لەگەڵ تەرزەی توند",
-      "ar": "عاصفة رعدية مع برد كثيف",
-      "en": "Thunderstorm with heavy hail"
+      "ku": "هەورەبروسکە",
+      "ar": "عاصفة رعدية",
+      "en": "Thunderstorm"
     }
   },
   "context": {
@@ -208,14 +208,19 @@
       "en": "Very hot"
     },
     "strongWind": {
-      "ku": "بای بەهێز",
-      "ar": "رياح قوية",
-      "en": "Strong wind"
+      "ku": "با و بۆران",
+      "ar": "عاصف",
+      "en": "Windy"
     },
     "gusts": {
       "ku": "تەپەبای بەهێز",
       "ar": "هبّات قوية",
       "en": "Strong gusts"
+    },
+    "freezing": {
+      "ku": "بەستەڵەک",
+      "ar": "صقيع",
+      "en": "Freezing"
     }
   },
   "contextThresholds": {
@@ -226,5 +231,22 @@
     "extremeHeatC": 40,
     "strongWindKmh": 40,
     "strongGustsKmh": 60
+  },
+  "supplementalConditions": {
+    "dust": {
+      "ku": "خۆڵبارین",
+      "ar": "عاصفة رملية",
+      "en": "Dust"
+    },
+    "heatwave": {
+      "ku": "شەپۆلی گەرما",
+      "ar": "موجة حر",
+      "en": "Heatwave"
+    },
+    "blizzard": {
+      "ku": "کڕێوەی بەفر",
+      "ar": "عاصفة ثلجية",
+      "en": "Blizzard"
+    }
   }
 }

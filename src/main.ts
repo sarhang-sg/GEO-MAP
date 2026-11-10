@@ -1,3 +1,4 @@
+import { installInterfaceFeedback } from "./lib/interface-feedback";
 import { ATTRIBUTION_CHANGE_EVENT, normalizeAttributionLinks, updateAttributionFeedback } from "./lib/satellite-credit";
 import { installMapTouchGuard } from "./lib/map-touch-guard";
 import { installRoadInformation } from "./lib/road-information-overlay";
@@ -506,6 +507,7 @@ class KurdistanAtlasController {
     this.searchWorker = localCoreEnabled ? new NativeSearchProvider() : new SearchWorkerClient({
       manifestUrl: versionedAssetUrl(asset("data/kri/kri-search-shards-manifest.json"), mapDataVersion)
     });
+    installInterfaceFeedback(() => this.language);
     this.searchService = new SearchService({
       getLanguage: () => this.language,
       getLocalities: () => this.localities,
@@ -2155,7 +2157,7 @@ async function completeTruthfulMapReadyFlow(criticalInitialization: Promise<void
   await dismissMapLoading();
   await hideNativeSplash();
   await waitForUiFrames(2);
-  tutorialController.maybeStart();
+  if (new URLSearchParams(location.search).get("weatherReturn") !== "1") tutorialController.maybeStart();
 }
 
 async function completeDegradedVisualReadyFlow(): Promise<void> {
@@ -2167,7 +2169,7 @@ async function completeDegradedVisualReadyFlow(): Promise<void> {
   await dismissMapLoading();
   await hideNativeSplash();
   await waitForUiFrames(2);
-  tutorialController.maybeStart();
+  if (new URLSearchParams(location.search).get("weatherReturn") !== "1") tutorialController.maybeStart();
 }
 
 let usableBootFinalized = false;

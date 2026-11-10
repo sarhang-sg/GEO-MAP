@@ -1,4 +1,4 @@
-import { distanceMeters, type LngLatTuple } from "./location";
+import { type LngLatTuple } from "./location";
 import { drivingWeatherAdvisory, navigationClock, forecastWeekday, NAVIGATION_COPY, type DrivingWeather } from "./navigation-weather";
 import type { Language } from "./types";
 import { mapNoticeStack, NoticeAutoHide } from "./map-notices";
@@ -11,7 +11,7 @@ export class NavigationAdvisory {
   private readonly close = document.createElement("button");
   private readonly seen = new Map<string,number>();
   private active = false; private generation = 0; private lastRequest = 0;
-  private lastCoordinate: LngLatTuple | null = null;
+  private nativeHeartbeat = 0;
   private destinationKey = ""; private destinationRequest = 0; private destinationPending: object | null = null;
   private pending: object | null = null; private currentSeverity = 0; private currentId = "";
   private readonly dismissal: NoticeAutoHide;
@@ -25,7 +25,7 @@ export class NavigationAdvisory {
     this.dismissal = new NoticeAutoHide(this.element, () => this.hide());
     this.close.addEventListener("click",() => this.hide());
   }
-  setActive(active: boolean): void { if (this.active === active) return; this.active = active; this.generation++; this.pending = null; this.destinationPending = null; if (!active) this.hide(); else { this.lastRequest = 0; this.destinationRequest = 0; } }
+  setActive(active: boolean): void { if (this.active === active) return; this.active = active; this.generation++; this.pending = null; this.destinationPending = null; if (!active) { this.hide(); this.nativeHeartbeat = 0; void window.flutter_inappwebview?.callHandler("nativeWeatherJourney",null).catch(()=>undefined); } else { this.lastRequest = 0; this.destinationRequest = 0; } }
   hide(): void { this.element.hidden = true; this.currentSeverity = 0; this.currentId = ""; this.dismissal.clear(); }
   show(notice: Notice): void {
     const now = Date.now();
@@ -38,12 +38,16 @@ export class NavigationAdvisory {
   }
   updateDestination(coordinate: LngLatTuple, name: string): void {
     const key = coordinate.map(value => value.toFixed(3)).join(","), now = Date.now();
+    if (this.active && (key !== this.destinationKey || now - this.nativeHeartbeat >= 15 * 60_000)) {
+      this.nativeHeartbeat = now;
+      void window.flutter_inappwebview?.callHandler("nativeWeatherJourney",{lat:coordinate[1],lon:coordinate[0],name}).catch(()=>undefined);
+    }
     if (key !== this.destinationKey) {
       this.destinationKey = key; this.destinationRequest = 0; this.destinationPending = null;
       if (this.currentId.startsWith("destination:")) this.hide();
     }
     if (!this.active || !this.readWeather || this.destinationPending || document.hidden || navigator.onLine === false
-      || (key === this.destinationKey && now - this.destinationRequest < 5 * 60_000)) return;
+      || (key === this.destinationKey && now - this.destinationRequest < 30 * 60_000)) return;
     this.destinationRequest = now; const request = {}; this.destinationPending = request;
     const generation = this.generation;
     void this.readWeather(coordinate).then(reading => {
@@ -57,9 +61,8 @@ export class NavigationAdvisory {
   }
   updateWeather(coordinate: LngLatTuple): void {
     const now = Date.now(), elapsed = now-this.lastRequest;
-    if (!this.active || !this.readWeather || this.pending || document.hidden || navigator.onLine === false || elapsed < 60_000
-      || (elapsed < 5*60_000 && this.lastCoordinate && distanceMeters(coordinate,this.lastCoordinate) < 1000)) return;
-    this.lastRequest = now; this.lastCoordinate = [...coordinate]; const request = {}; this.pending = request;
+    if (!this.active || !this.readWeather || this.pending || document.hidden || navigator.onLine === false || elapsed < 30 * 60_000) return;
+    this.lastRequest = now; const request = {}; this.pending = request;
     const generation = this.generation;
     void this.readWeather(coordinate).then(reading => {
       if (!this.active || generation !== this.generation || this.pending !== request) return;

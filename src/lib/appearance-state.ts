@@ -3,7 +3,7 @@ export type AppearancePreferences = {
   controls: "visible" | "auto";
   font: "brand" | "system";
   size: "normal" | "large";
-  accent: "original" | "blue" | "teal" | "amber" | "purple" | "pink" | "red";
+  accent: "original" | "blue" | "teal" | "amber" | "purple" | "pink" | "red" | "gold";
   motion: "auto" | "reduced";
   quality: "auto" | "economy" | "medium" | "sharp";
   satelliteQuality: "auto" | "high" | "medium" | "low";
@@ -17,7 +17,7 @@ export const DEFAULT_APPEARANCE: AppearancePreferences = {
 };
 export const APPEARANCE_VALUES = {
   controls: ["visible", "auto"], font: ["brand", "system"], size: ["normal", "large"],
-  accent: ["original", "blue", "teal", "amber", "purple", "pink", "red"], motion: ["auto", "reduced"], quality: ["auto", "economy", "medium", "sharp"], satelliteQuality: ["auto", "high", "medium", "low"], satelliteContrast: ["natural", "clear"], cameraZoom: ["follow", "manual"], cameraBearing: ["travel", "north"]
+  accent: ["original", "blue", "teal", "amber", "purple", "pink", "red", "gold"], motion: ["auto", "reduced"], quality: ["auto", "economy", "medium", "sharp"], satelliteQuality: ["auto", "high", "medium", "low"], satelliteContrast: ["natural", "clear"], cameraZoom: ["follow", "manual"], cameraBearing: ["travel", "north"]
 };
 const STORAGE = "nav-kurd:appearance:v1";
 

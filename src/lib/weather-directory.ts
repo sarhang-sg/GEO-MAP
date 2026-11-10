@@ -142,12 +142,18 @@ export function installWeatherDirectory(options: {
     const content = document.createElement("div"); content.className = "weather-directory__content"; content.append(list, details);
     dialog.append(header, input, status, content);
   };
-  const open = (feature?: LocalityFeature): void => {
+  const openWeb = (feature?: LocalityFeature): void => {
     if (!dialog.open) previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     selected = feature; render(); if (!dialog.open) dialog.showModal();
     if (feature) choose(feature); void search();
     // Avoid opening the mobile keyboard until the user actually taps Search.
     if (!feature && window.matchMedia("(min-width: 701px) and (pointer: fine)").matches) input.focus();
+  };
+  const open = (feature?: LocalityFeature): void => {
+    const native = window.flutter_inappwebview;
+    if (!native) { openWeb(feature); return; }
+    const place = feature ? {lat:feature.geometry.coordinates[1], lon:feature.geometry.coordinates[0], name:languageValue(feature.properties,options.getLanguage())} : null;
+    void native.callHandler("nativeWeatherDetails", place).then(ok => { if (ok !== true) openWeb(feature); }, () => openWeb(feature));
   };
   button.addEventListener("click", () => open());
   dialog.addEventListener("close", () => { generation++; stopSummaries(); window.clearTimeout(timer); details.replaceChildren(); (previousFocus?.isConnected && previousFocus.getClientRects().length ? previousFocus : button).focus({ preventScroll: true }); });

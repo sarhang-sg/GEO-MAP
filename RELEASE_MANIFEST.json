@@ -8,15 +8,15 @@
   "generatedForDate": "2026-10-13",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "0e71e35b00c7030d4b89a898d02c8dd4cad3294f61e96dacdbb75ed9efb6549f",
+    "packageDefinitionSha256": "5b1a5c00714660752f754bc825c4bbe5db0453701449770634a5954cf6b022d6",
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
-  "fileCount": 1706,
-  "totalBytes": 289682387,
+  "fileCount": 1708,
+  "totalBytes": 289701686,
   "files": {
     ".env.example": {
-      "bytes": 2920,
-      "sha256": "28c2b51f7a15816097fe256e11797ba56fd6ad6f7504874f10145ce75adac30d"
+      "bytes": 3007,
+      "sha256": "1b1aa2bfc406325b08b705c9161c7cbc1ddbb5ab6ec102311c16fe10341bb343"
     },
     ".gitattributes": {
       "bytes": 743,
@@ -83,16 +83,16 @@
       "sha256": "8c1f3af3faad7e6f460e83804e0af3da09d1d017b8303b3cf187c9a5c2926a44"
     },
     "api/weather.js": {
-      "bytes": 10623,
-      "sha256": "43edda5ad0cea07a30bd6ab291c7e03944e0f6bd92687a1d39876d34056f1ae1"
+      "bytes": 12387,
+      "sha256": "907678c22410478d11638ceca46dc9defc01a5d3e269e98f365f9ba668d699aa"
     },
     "contracts/gps-visual-contract.json": {
       "bytes": 1119,
       "sha256": "7c9a50a99c03762d59ddb19139dcc535acde420d29293a088ecbb8317cb15b21"
     },
     "contracts/weather-descriptions.json": {
-      "bytes": 5764,
-      "sha256": "76850187c24b3f63347be296f4b2beb192ed5f8c00cea2fdcdbb483f76f326d2"
+      "bytes": 5844,
+      "sha256": "798d0bd869b5488f6dcd2a2217926faf9fcbbb148ba8711b10c44f9c3810ab1d"
     },
     "data-src/canonical/kri-localities.geojson": {
       "bytes": 21048782,
@@ -195,8 +195,8 @@
       "sha256": "042c396f8da718b2e9fd7d1529bbfe0baf9d252219c09988bcba86b9c3f36819"
     },
     "package.json": {
-      "bytes": 6005,
-      "sha256": "bcb615d1fe4957aa1378e020d9b6efe0a158e156bfd54ad778969892a5d11b37"
+      "bytes": 6052,
+      "sha256": "2ed5edca067adbd2895de270f872429227f61718e3780a08568c95edc11b2ecd"
     },
     "public/_headers": {
       "bytes": 2603,
@@ -3731,16 +3731,16 @@
       "sha256": "23727ae9dfc552b86b752b949ca9a639261c7dd97ea4b1612d2ca692291ff549"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 25809,
-      "sha256": "0919b11e9d82c30934dda939bd432134f6c126beaa4c386886d2cf1a64405510"
+      "bytes": 25864,
+      "sha256": "c8cef495e29f63e347ef080d21593f9167f6a8242aaca23014b231b0aa383992"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
       "sha256": "7353342c94a8bfdf1d9328fb629e39911cd406af7b39ef9f0058dfcd50b048ec"
     },
     "src/lib/appearance-state.ts": {
-      "bytes": 2510,
-      "sha256": "fea192993f34631c653a8e80923fdd35d75be97010ca041e2ab2d5c78576062a"
+      "bytes": 2527,
+      "sha256": "062b888ccf677b5c482ea07f7c92571932beb757154769309034b6543f613f79"
     },
     "src/lib/atlas-content-policy.ts": {
       "bytes": 6864,
@@ -3779,8 +3779,8 @@
       "sha256": "435e655a702fecdef8a76483fa00f94473fdfb390498582af524f76ea5d0ff65"
     },
     "src/lib/confirm-action.ts": {
-      "bytes": 6005,
-      "sha256": "0d3a3829bd0027fbc943c2b174184d59baa473b333f5b1f696e5eeff42a20d51"
+      "bytes": 6459,
+      "sha256": "2354078f25ace4f8e0a9ab18a1b48701ec54938469f0e9b7a886c2e1fa08190f"
     },
     "src/lib/device-qa.ts": {
       "bytes": 13720,
@@ -3817,6 +3817,10 @@
     "src/lib/input-mode-controller.ts": {
       "bytes": 3530,
       "sha256": "9cec510b18a0908207ad4a91bbd669acee366e7c3af1ad593696768fcafe77dd"
+    },
+    "src/lib/interface-feedback.ts": {
+      "bytes": 3804,
+      "sha256": "5ec100c7e8d3eb3796b0d835dafe4a94a4c4166fe4a457bb5a02448d2e1cfde8"
     },
     "src/lib/keyset-pages.ts": {
       "bytes": 1133,
@@ -3955,28 +3959,28 @@
       "sha256": "37cb5d7212fb87a2c6f6465d3a0c2339a72ef5cca3428fcb4002801e771c3a1f"
     },
     "src/lib/native-platform.ts": {
-      "bytes": 11128,
-      "sha256": "8f19ad3a7a7a9766bd020ca029735e8dd8984f36101fe3839f660c821dc14017"
+      "bytes": 11739,
+      "sha256": "e44c264943891c0259abc4dede60503b25f8c24f817f3c64ad65e8f3145efd24"
     },
     "src/lib/native-share.ts": {
       "bytes": 3009,
       "sha256": "d1d2b139667abbb319dfe4e8053f995932bff7badef4001744ab56494ef136b2"
     },
     "src/lib/navigation-advisory.ts": {
-      "bytes": 6114,
-      "sha256": "bf750914875f5acd3f44631881e06fd056f1290cc251de0bcdf524749abfce01"
+      "bytes": 6342,
+      "sha256": "327cb1633c4afab356c95d7d9f0dcd2ca140d233bbcba95694e2d6d7fe78fea0"
     },
     "src/lib/navigation-history-store.ts": {
       "bytes": 7532,
       "sha256": "f0dfb90f904f2e0e8f7349970abfa488dd35850fa9f71527724981a32e793181"
     },
     "src/lib/navigation-preferences.ts": {
-      "bytes": 18626,
-      "sha256": "58a9704afde724c57869be24a6ca627835c4f0a5b2aa97797cde09cb5d68f156"
+      "bytes": 18694,
+      "sha256": "4af33e0de2c405db6ec7959596670a6b8eb0e4b4cadfd261f4936cc84791b468"
     },
     "src/lib/navigation-tracking.ts": {
-      "bytes": 3813,
-      "sha256": "9cca3e0a74d6af22c365feb4ce28ccaa3a547a6c0c9fd91a1d8e14892c9c5ed7"
+      "bytes": 3970,
+      "sha256": "1efb0e8e4182b0e684171d51158fa9e8e10e7d0fc3f003857c6c5bc4a576fbe7"
     },
     "src/lib/navigation-weather.ts": {
       "bytes": 5825,
@@ -4023,8 +4027,8 @@
       "sha256": "ca0ce41a97db9bfddbeb5b3ba3708e2a57dc7fa3f071fc10ebe319ca1451d3eb"
     },
     "src/lib/place-weather.ts": {
-      "bytes": 23628,
-      "sha256": "299c1bbb225021fd112f331a24ebbd6b3956c95af354d5bc2b9668a1831dce5a"
+      "bytes": 26264,
+      "sha256": "1371fa626cadd3255c3b0c3d86d63dabb95e5cfb7dc10fce99302ed12d2279a1"
     },
     "src/lib/poi-icon-catalog.ts": {
       "bytes": 7741,
@@ -4099,8 +4103,8 @@
       "sha256": "678b25bb4e21586ec00037665d3ab0547c54ab564939ea2f3e6a57314b5482a1"
     },
     "src/lib/route-turn-geometry.ts": {
-      "bytes": 2021,
-      "sha256": "566846b6a4ab39243616c7c2a54500d5280333d8f728aa7679128a6db34ae92e"
+      "bytes": 2926,
+      "sha256": "c4ca1cfc50b98471c3561feda0a0daf547f24017449d22d133778ca8b3d09376"
     },
     "src/lib/routing-controller.ts": {
       "bytes": 79555,
@@ -4135,8 +4139,8 @@
       "sha256": "4e4477b6fbfbe465ba6731d6cdc6e3d17e4225c6e27a0e8c7e305257051bb464"
     },
     "src/lib/search-controller.ts": {
-      "bytes": 13949,
-      "sha256": "fbd9ad7d1a3e1877c3634d7c28c9a397c4b575ad6cfcc319f1238219206a2ef6"
+      "bytes": 14020,
+      "sha256": "f7f57f28427c40ca1d8b7e664a61355acca9a45f97bcc352b6be77270e0e1d84"
     },
     "src/lib/search-service.ts": {
       "bytes": 28918,
@@ -4191,8 +4195,8 @@
       "sha256": "f81b79089fbea51de1af21367233d1f412d6d0219345b643701d5a6a8461cd4c"
     },
     "src/lib/user-contribution-studio.ts": {
-      "bytes": 128716,
-      "sha256": "b480c0dbbd4704052d1cd605b70775d8d83209df6a1c51794b4ad1af4930fc60"
+      "bytes": 128566,
+      "sha256": "00fea8f22d02e11b4d188d22651dd27d516976f51d53a54d42ab0e672cc264c6"
     },
     "src/lib/user-facing-error.ts": {
       "bytes": 3546,
@@ -4203,20 +4207,20 @@
       "sha256": "cc3a8d57d5ade134a7d59626a8766e158f96bd762769cf2009151edfc89f0e7e"
     },
     "src/lib/weather-codes.ts": {
-      "bytes": 1864,
-      "sha256": "2936155f9db8cc3a939fca3b85bf1a9318615d4ae4835932a23c1c4b96532392"
+      "bytes": 1912,
+      "sha256": "b182912c638519912b80e9eee4b3cc35dcda8666bfa55d841cbd1bcb9ddfbe71"
     },
     "src/lib/weather-directory.ts": {
-      "bytes": 13083,
-      "sha256": "ea7b6ec072ec6f62f1bb1ef0d2936de55cd60bed4bea97db9c356330d384f154"
+      "bytes": 13548,
+      "sha256": "68d78854d5e7edadfadd432caa35e15694982181fce0005d2baeb145c072b664"
     },
     "src/lib/weather-entry-icon.ts": {
       "bytes": 2449,
       "sha256": "31d84c4b4b9f39d10c702d0fb6fecca2d53d4bcd39e4bd26e8a9594921409c55"
     },
     "src/main.ts": {
-      "bytes": 112112,
-      "sha256": "e33f2370d1fc3ff96278b87e132c258d194b753902d4da79fcbddf5f0d15fab2"
+      "bytes": 112374,
+      "sha256": "050c008319a8669798edb3088d0ef03a558354ed917268ec39f0d1b7874f504f"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4347,8 +4351,8 @@
       "sha256": "63bcf74d8bc943d6f9116a9673547491d7ea6b33aebca31b1bfe46950921e30b"
     },
     "src/styles/place-weather.css": {
-      "bytes": 5413,
-      "sha256": "9935ba1fc89c48f6d451464c12d4c2e3ed46bf03c70a065546749d54923c7675"
+      "bytes": 6026,
+      "sha256": "8dbfe0d2e630835dd4eebec1a7e6aad13edbfef43a6d3dfe70810a5d3c765778"
     },
     "src/styles/platform-data.css": {
       "bytes": 1714,
@@ -4379,8 +4383,8 @@
       "sha256": "36feb1c95fa44c62d2fee0ea6f69b5925e1bcbeb5986ed775e3834aa3c80b53c"
     },
     "src/styles/theme-consistency.css": {
-      "bytes": 13040,
-      "sha256": "216811b08ee9fcbf9a86180982b98921f57b154e91eb766e33e77bbccfd8f76c"
+      "bytes": 18205,
+      "sha256": "0b7cadb6914ff48677b413282fa8df20c667094089ea1c7f363b7698d756be6f"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
@@ -4779,8 +4783,8 @@
       "sha256": "8b78d2bc933e11bb422bc7b1d87a9a6497cf01250f33eb43c10f82cae50fc128"
     },
     "tools/verify/navigation-polish-regressions.mjs": {
-      "bytes": 16268,
-      "sha256": "af7b5dccda5602dc54c0c97b23098c40649fe695a7b96d7304a27358fdf6dc63"
+      "bytes": 16477,
+      "sha256": "5b90630d0d98a3dde4ede47e91a2237c3cab367d9131419c72b88a1966dfd8f3"
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 5322,
@@ -4799,16 +4803,16 @@
       "sha256": "151e8ea67c44e14eef20d36f77e4f7099ef27d1bcd8a41d9e09132ea7aa51f96"
     },
     "tools/verify/refinement-regressions.mjs": {
-      "bytes": 8105,
-      "sha256": "93e6a27bd11b3d2457da3b607cd04c7805a537875555764af3712089a02d9dd5"
+      "bytes": 8121,
+      "sha256": "6be39a4524cfb1557cc53d0ec39eb44802b40e57c839f6bfaf96368b0a1e2634"
     },
     "tools/verify/release.mjs": {
       "bytes": 2668,
       "sha256": "41c1bf2e91894666d6301dd200b5c0207c05d31f8f3bef2cb5a9b0711636154f"
     },
     "tools/verify/route-alert-regressions.mjs": {
-      "bytes": 3586,
-      "sha256": "0d3add6969711849a41a4dddbf916075989baf10a9d1a218b57082dc36bac89d"
+      "bytes": 3580,
+      "sha256": "0fd9a6e25b545f55620e31e3551a1539496ecf5c8c36e94eeafe5396456bd108"
     },
     "tools/verify/runtime.mjs": {
       "bytes": 19626,
@@ -4847,16 +4851,20 @@
       "sha256": "9d7fec2cecdc7acaa5b27102a6834ad3aa6afa518763f9c92981f730e813636d"
     },
     "tools/verify/v104-regressions.mjs": {
-      "bytes": 21973,
-      "sha256": "c62de4d94609b6462e0b176cd91bfb50b43ea6ffa4c3d87da38e744fbc728e2c"
+      "bytes": 21980,
+      "sha256": "31f91892cc4090f127287d9b6ac16c1e214b15edbd9d115583916db8bfd60b04"
     },
     "tools/verify/v1042-regressions.mjs": {
-      "bytes": 7869,
-      "sha256": "d2cc431a09df9450ba30c4bed1c449093936fb2c65a6370adb81b9280b988a5d"
+      "bytes": 7871,
+      "sha256": "0cd85a3a4c497ef11a6818f09d41c1bd54817e7767de56a25b5586908a0c7890"
     },
     "tools/verify/v1043-regressions.mjs": {
       "bytes": 7122,
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
+    },
+    "tools/verify/weather-scopes.mjs": {
+      "bytes": 1684,
+      "sha256": "274a6908953f6d2f1495aaa7a392663a27cbe607184647f410d60d961586d181"
     },
     "tsconfig.json": {
       "bytes": 694,

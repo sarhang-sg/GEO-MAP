@@ -1,3 +1,4 @@
+import { tactile } from "./interface-feedback";
 import { UI } from "./i18n";
 import { categoryValue, districtValue, governorateValue, languageValue, normalize, ownerName, pointKind } from "./geo-format";
 import { localizedStaticCategory, localizedStaticName } from "./map-language";
@@ -220,6 +221,7 @@ export function installSearchController(options: SearchControllerOptions): Searc
       render([], "");
       return;
     }
+    tactile("search");
     let fastChoices:SearchChoice[]=[];
     try { fastChoices=await (adapter.searchFast?.(term)??[]); }
     catch { /* A quick-index failure must not prevent the complete search. */ }

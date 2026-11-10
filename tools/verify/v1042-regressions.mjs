@@ -31,7 +31,7 @@ console.log('PASS shared descriptive heat/cold/wind context, all languages, miss
  vm.runInContext(compile(source)+'\nglobalThis.decode=decodeReading;',context);
  const payload={timezone:'Asia/Baghdad',current:{time:now/1000,temperature_2m:22,weather_code:61,is_day:1,dust:250},hourly:{time:Array.from({length:48},(_,i)=>(hour+i*3600000)/1000),temperature_2m:Array(48).fill(22),weather_code:Array(48).fill(61),is_day:Array(48).fill(1),precipitation_probability:Array(48).fill(50)}};
  const result=context.decode(payload);assert.equal(result.hours.length,24);assert.equal(result.weatherCode,61);assert.equal(result.windSpeed,null);
- assert.ok(result.hours.every(h=>h.at>now&&h.at<=now+24*3600000));
+ assert.ok(result.hours.every(h=>h.at>=hour&&h.at<hour+24*3600000));
  assert.throws(()=>context.decode({...payload,timezone:'Invalid/Zone'}));
  assert.throws(()=>context.decode({...payload,current:{...payload.current,weather_code:100}}));
  assert.throws(()=>context.decode({...payload,current:{...payload.current,temperature_2m:null}}));

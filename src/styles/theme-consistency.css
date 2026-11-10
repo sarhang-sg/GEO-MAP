@@ -126,3 +126,54 @@ html[data-nav-kurd-theme][data-ui-mode] :is(.route-destination-prompt, .map-coor
 body[data-motion-preference="reduced"] .selection-card-glow { display: none !important; }
 @media (prefers-reduced-motion: reduce), (forced-colors: active), (prefers-reduced-transparency: reduce) { .selection-card-glow { display: none !important; } }
 html[data-nav-kurd-theme][data-ui-mode="light"] :is(.round-button, .map-button, .feedback-quick-button, .maplibregl-ctrl-group button, .action-card__icon) { box-shadow: none !important; text-shadow: none !important; }
+
+html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {
+  left:calc(50% + clamp(6px,2vw,12px) + (env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2);
+  max-width:min(300px,calc(100% - 116px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)));
+}
+.home-greeting{display:block;color:var(--nk-muted);font-size:.78rem;}
+html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator {
+  color:#152536 !important;background:#f8fbff !important;border:1px solid #acbbca;border-radius:999px;padding:2px 6px;
+}
+html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicatorCount,html[data-nav-kurd-theme][data-ui-mode="light"] .map-stats strong {color:#152536 !important;opacity:1;font-variant-numeric:tabular-nums;}
+html[data-nav-kurd-theme][data-ui-mode="light"] .about-dialog__links a{color:#14365a !important;background:#e4eef8 !important;border-color:#acbed1 !important;}
+html[data-nav-kurd-theme][data-ui-mode] button[data-account-action] {width:auto !important;min-height:44px;height:auto !important;display:inline-flex !important;align-items:center;justify-content:center;gap:8px;padding:12px 16px !important;}
+html[data-nav-kurd-theme][data-ui-mode] button[data-account-action] span{display:inline !important;position:static !important;clip:auto !important;width:auto !important;height:auto !important;}
+html[data-nav-kurd-theme][data-ui-mode] :is(.navigation-preferences__fields,.owner-navigation-history,.user-navigation-history){gap:12px;padding:16px;}
+html[data-nav-kurd-theme][data-ui-mode] :is(.search-result,.user-navigation-history__item,.owner-navigation-history__item){padding:12px 16px;}
+html[data-nav-kurd-theme][data-ui-mode] .support-section.support-section--neon{
+  --nk-text:#fff7fa;--nk-muted:#f6dce4;--nk-link:#ffd4df;--nk-border:#a25065;--nk-surface:#451426;--nk-elevated:#572034;
+  color:var(--nk-text) !important;border-color:#ff375c !important;background:linear-gradient(150deg,#811d3a,#471328 58%,#381223) !important;
+}
+html[data-nav-kurd-theme][data-accent="gold"][data-ui-mode]{
+  color-scheme:dark;--user-primary:#71501c;--user-deep:#493211;--user-bright:#ffde92;
+  --user-bg:#121212;--user-surface:#221e18;--user-elevated:#30281c;--user-border:#84683b;--user-light-bg:#121212;--user-light-surface:#221e18;--user-light-elevated:#30281c;--user-light-border:#84683b;
+  --nk-bg:#121212;--nk-surface:#211d18;--nk-elevated:#30271e;--nk-text:#fff2cf;--nk-muted:#dfcda8;--nk-border:#84683b;--nk-link:#ffde92 !important;--nk-primary:#97722e;--nk-advice:#ffda8c;--nk-action-bg:linear-gradient(130deg,#4a3519,#72521e);
+}
+html[data-nav-kurd-theme][data-accent="gold"][data-ui-mode] :is(.map-sheet,.route-navigation-hud,.navigation-preferences,.about-dialog__panel,.user-contrib__panel,.owner-studio__panel,.search-results,.map-status,.map-button,.round-button){
+ color:var(--nk-text) !important;border-color:var(--nk-border) !important;background:linear-gradient(145deg,#35291c,#121212 75%) !important;
+}
+html[data-nav-kurd-theme][data-accent="gold"] :is(.map-stats strong,.sheet-title,.route-navigation-hud__metric strong){color:#ffdc86 !important;}
+.place-weather[data-sky-phase]{--sky-a:#25257b;--sky-b:#421667;}
+.place-weather[data-sky-phase="dawn"]{--sky-a:#ff996e;--sky-b:#b294ff;}
+.place-weather[data-sky-phase="morning"]{--sky-a:#00d5ff;--sky-b:#ffe737;}
+.place-weather[data-sky-phase="afternoon"]{--sky-a:#329cff;--sky-b:#ffc33a;}
+.place-weather[data-sky-phase="sunset"]{--sky-a:#ff671a;--sky-b:#c10978;}
+.place-weather[data-sky-kind="snow"]:not([data-sky-phase="night"]){--sky-a:#edf9ff;--sky-b:#ffd7ec;}
+.place-weather[data-sky-kind="dust"]{--sky-a:#f4d695;--sky-b:#dc761f;}
+html[data-nav-kurd-theme][data-ui-mode] .place-weather[data-sky-phase] {
+ --nk-text:white;--nk-muted:white;--nk-link:white;color:white !important;
+ background:linear-gradient(105deg,#0c1b32a1,#15213c99),linear-gradient(135deg,var(--sky-a),var(--sky-b)) !important;
+ backdrop-filter:blur(14px) saturate(1.18);-webkit-backdrop-filter:blur(14px) saturate(1.18);
+}
+html[data-nav-kurd-theme][data-ui-mode] .place-weather[data-sky-phase] :is(strong,small,time,span,bdi,p,summary){color:white !important;text-shadow:0 1px 3px #0c1223 !important;}
+.place-weather[data-sky-phase="night"]{background-image:radial-gradient(1px 1px at 12% 10%,white,transparent),linear-gradient(135deg,var(--sky-a),var(--sky-b));}
+@keyframes navSkyPulse{50%{transform:scale(1.055)}}
+@keyframes navSkyDrift{50%{transform:translateX(3px)}}
+@media(prefers-reduced-motion:no-preference){
+ body:not([data-motion-preference="reduced"]) .place-weather[data-sky-kind="clear"] .place-weather__visual img,
+ body:not([data-motion-preference="reduced"]) .place-weather[data-sky-kind="mainly-clear"] .place-weather__visual img{animation:navSkyPulse 5s ease-in-out infinite;}
+ body:not([data-motion-preference="reduced"]) .place-weather[data-sky-kind*="cloud"] .place-weather__visual img{animation:navSkyDrift 7s ease-in-out infinite;}
+}
+@media(prefers-reduced-motion:reduce){html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {transition:none !important;}}
+body[data-motion-preference="reduced"] .route-navigation-hud{transition:none !important;}
