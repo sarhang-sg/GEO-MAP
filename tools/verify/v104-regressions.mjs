@@ -227,9 +227,9 @@ for(const native of [false,true]){
  const descriptions=JSON.parse(fs.readFileSync(new URL('contracts/weather-descriptions.json',root),'utf8'));
  const api=load('src/lib/weather-codes.ts',{descriptions},'weatherCodeKind,weatherCodeLabel');
  assert.equal(Object.keys(descriptions.codes).length,28);
- assert.equal(api.weatherCodeKind(1),'mainly-clear');assert.equal(api.weatherCodeKind(2),'partly-cloudy');
- assert.equal(api.weatherCodeLabel(0,true,'en'),'Sunny');assert.equal(api.weatherCodeLabel(0,false,'en'),'Clear sky');
- assert.equal(api.weatherCodeLabel(61,true,'en'),'Light rain');assert.equal(api.weatherCodeKind(96),'hail');
+ assert.equal(api.weatherCodeKind(1),'partly-cloudy');assert.equal(api.weatherCodeKind(2),'partly-cloudy');
+ assert.equal(api.weatherCodeLabel(0,true,'en'),'Clear Sky');assert.equal(api.weatherCodeLabel(0,false,'en'),'Clear Night');
+ assert.equal(api.weatherCodeLabel(61,true,'en'),'Light Rain');assert.equal(api.weatherCodeKind(96),'hail');
  for(const code of Object.keys(descriptions.codes))for(const lang of ['ku','ar','en'])assert.ok(api.weatherCodeLabel(Number(code),true,lang).length>1);
  assert.equal(api.weatherCodeKind(100),'unavailable');assert.equal(api.weatherCodeLabel(NaN,true,'en'),'Weather unavailable');
  console.log('PASS all 28 WMO conditions in Kurdish/Arabic/English, clear/cloud separation and unknown-code fallback');

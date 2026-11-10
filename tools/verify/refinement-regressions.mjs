@@ -114,6 +114,7 @@ class InputFixture {
 const input=new InputFixture(), list=new InputFixture();
 let deferredRefresh, resolveOld;
 const {installSearchController}=load('src/lib/search-controller.ts', {
+  tactile() {},
   debounceAsync(fn) { return () => { deferredRefresh=fn; }; },
   normalize:s=>s.trim().toLowerCase(), UI:{en:{noResult:'none',searchLoading:'loading',searchError:'error'}},
   window:{matchMedia:()=>({matches:false}),queueMicrotask,addEventListener(){}},

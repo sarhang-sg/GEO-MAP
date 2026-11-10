@@ -19,7 +19,9 @@ const turns=load('src/lib/route-turn-geometry.ts',{...geo,...progress},'routeTur
 const route=bent.coordinates, at=geo.distanceMeters(route[0],route[1]);
 const step={atMeters:at,type:'turn',modifier:'right',coordinate:route[1],name:'',exit:null};
 const arrows=turns(route,[step,step]);assert.equal(arrows.features.length,2);
-assert.ok(arrows.features[0].geometry.coordinates.some(p=>p[0]===route[1][0]&&p[1]===route[1][1]));
+const cornerDistances = arrows.features[0].geometry.coordinates.map(point => geo.distanceMeters(point, route[1]));
+const nearestCorner = Math.min(...cornerDistances);
+assert.ok(nearestCorner > 0.01 && nearestCorner < 3, `The rounded arrow should follow the intersection within 3 m (got ${nearestCorner} m)`);
 assert.equal(arrows.features[1].properties.bearing,0);
 assert.equal(turns(route,[{...step,coordinate:[44.002,36]}]).features.length,0);
 assert.equal(turns(route,[{...step,type:'arrive'}]).features.length,0);

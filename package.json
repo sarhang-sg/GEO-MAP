@@ -54,7 +54,7 @@
     "build:identity": "node tools/build/write-release-identity.mjs",
     "verify:publication": "node tools/verify/publication-regressions.mjs",
     "verify:edge-auth": "node tools/verify/edge-auth-regressions.mjs",
-    "verify:route-alerts": "node tools/verify/route-alert-regressions.mjs",
+    "verify:route-alerts": "node tools/verify/route-alert-regressions.mjs && node --test tools/verify/weather-scopes.mjs",
     "verify:navigation-polish": "node tools/verify/navigation-polish-regressions.mjs",
     "verify:refinement": "node tools/verify/refinement-regressions.mjs"
   },

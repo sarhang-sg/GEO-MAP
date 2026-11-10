@@ -278,7 +278,7 @@ const COPY: Record<StudioLanguage, Copy> = {
     signOutConfirmBody: "هەژمارەکەت ناسراو دەمێنێتەوە، بەڵام دانیشتنەکەت لەم ئامێرەدا دادەخرێت. دەتوانیت هەر کاتێک دووبارە بە Google بچیتە ژوورەوە.",
     signOutConfirmAction: "بەڵێ، بچۆ دەرەوە",
     account: "هەژمار",
-    deleteRequest: "سڕینەوەی هەژمار و داتا",
+    deleteRequest: "سڕینەوەی هەژمار",
     deletionRequested: "هەژمار و داتای تایبەتی تۆ بە سەرکەوتوویی سڕایەوە.",
     deleteConfirm: "دڵنیایت؟ ئەم کردارە هەژمار، شوێنەکان، وێنەکان و داتای تایبەتی تۆ بە شێوەی هەمیشەیی دەسڕێتەوە و گەڕاندنەوەی نییە.",
     adminBlocked: "هەژماری بەڕێوەبەر لە هەژماری یوزەری ئاسایی جیاکراوەتەوە. بۆ بەڕێوەبردن، بەشی تایبەتی بەڕێوەبەر بەکاربهێنە.",
@@ -382,7 +382,7 @@ const COPY: Record<StudioLanguage, Copy> = {
     signOutConfirmBody: "سيبقى حسابك محفوظًا، لكن جلسة تسجيل الدخول ستنتهي على هذا الجهاز. يمكنك تسجيل الدخول مجددًا عبر Google في أي وقت.",
     signOutConfirmAction: "نعم، تسجيل الخروج",
     account: "الحساب",
-    deleteRequest: "حذف الحساب والبيانات",
+    deleteRequest: "حذف الحساب",
     deletionRequested: "تم حذف حسابك وبياناتك الشخصية بنجاح.",
     deleteConfirm: "هل أنت متأكد؟ سيؤدي هذا إلى حذف حسابك وأماكنك وصورك وبياناتك الشخصية نهائياً ولا يمكن التراجع عنه.",
     adminBlocked: "حساب المشرف منفصل تماماً عن حساب المستخدم العادي. استخدم لوحة الإدارة لإدارة المحتوى.",
@@ -481,12 +481,12 @@ const COPY: Record<StudioLanguage, Copy> = {
     legalRequired: "Accept the privacy policy and terms before submitting a place.",
     saved: "Your contribution was sent for review.",
     withdrawnMessage: "Your submission was withdrawn.",
-    signOut: "Sign out",
+    signOut: "Log Out",
     signOutConfirmTitle: "Sign out of NAV KURD?",
     signOutConfirmBody: "Your account remains intact, but this device session will end. You can sign in with Google again at any time.",
     signOutConfirmAction: "Yes, sign out",
     account: "Account",
-    deleteRequest: "Delete account and data",
+    deleteRequest: "Delete Account",
     deletionRequested: "Your account and personal data were deleted successfully.",
     deleteConfirm: "Are you sure? This permanently deletes your account, places, photos and personal data and cannot be undone.",
     adminBlocked: "Administrator accounts are strictly separated from ordinary-user accounts. Use Owner Studio for management.",
@@ -1296,7 +1296,7 @@ export class UserContributionStudio {
     const accountPanel = `<section class="user-contrib__private-panel" data-private-panel="account">
       <div class="user-account-private"><h3>${escapeText(privateCopy.tabs.account)}</h3><p>${escapeText(this.identity?.email ?? "")}</p></div>
       ${navigationHistoryPanel}
-      <section class="user-contrib__privacy-actions"><a href="${localizedLegalUrl("legal/privacy.html", language)}" target="_blank" rel="noopener" data-legal-kind="privacy">${escapeText(copy.privacy)}</a><a href="${localizedLegalUrl("legal/terms.html", language)}" target="_blank" rel="noopener" data-legal-kind="terms">${escapeText(copy.terms)}</a><a href="${localizedLegalUrl("legal/contribution-guidelines.html", language)}" target="_blank" rel="noopener" data-legal-kind="guidelines">${escapeText(copy.guidelines)}</a><button type="button" data-user-action="signout" data-account-action="signout">${userIcon("signout")}<span>${escapeText(copy.signOut)}</span></button><button type="button" data-user-action="delete-request" data-account-action="delete">${userIcon("trash")}<span>${escapeText(copy.deleteRequest)}</span></button></section>
+      <section class="user-contrib__privacy-actions"><a href="${localizedLegalUrl("legal/privacy.html", language)}" target="_blank" rel="noopener" data-legal-kind="privacy">${escapeText(copy.privacy)}</a><a href="${localizedLegalUrl("legal/terms.html", language)}" target="_blank" rel="noopener" data-legal-kind="terms">${escapeText(copy.terms)}</a><a href="${localizedLegalUrl("legal/contribution-guidelines.html", language)}" target="_blank" rel="noopener" data-legal-kind="guidelines">${escapeText(copy.guidelines)}</a><button type="button" data-user-action="signout" data-account-action="signout">${userIcon("signout")}<span>${escapeText(copy.signOut)}</span></button><button type="button" data-user-action="delete-request" data-account-action="delete"><img class="nav-delete-icon" src="${appUrl("assets/icons/nav-kurd/delete.svg")}" alt="" aria-hidden="true"><span>${escapeText(copy.deleteRequest)}</span></button></section>
     </section>`;
     const panel = this.activeDashboardTab === "messages" ? messagesPanel
       : this.activeDashboardTab === "notifications" ? notificationsPanel
@@ -1304,7 +1304,7 @@ export class UserContributionStudio {
       : placesPanel;
 
     return `<div class="user-contrib__dashboard">
-      <section class="user-account-card"><div class="user-account-card__avatar" data-user-avatar-shell>${avatar}</div><div class="user-account-card__identity"><strong>${escapeText(displayName)}</strong><span>${escapeText(this.identity?.email ?? "")}</span></div><button class="user-account-card__signout" type="button" data-user-action="signout" aria-label="${escapeText(copy.signOut)}">${userIcon("signout")}<span>${escapeText(copy.signOut)}</span></button></section>
+      <section class="user-account-card"><div class="user-account-card__avatar" data-user-avatar-shell>${avatar}</div><div class="user-account-card__identity"><strong>${escapeText(displayName)}</strong><span>${escapeText(this.identity?.email ?? "")}</span></div></section>
       <nav class="user-private-tabs" aria-label="${escapeText(copy.dashboard)}">
         ${(Object.keys(privateCopy.tabs) as UserDashboardTab[]).map((tab) => `<button type="button" data-user-action="dashboard-tab" data-id="${tab}" class="${this.activeDashboardTab === tab ? "is-active" : ""}" aria-pressed="${this.activeDashboardTab === tab ? "true" : "false"}"><i aria-hidden="true">${userIcon(tab === "places" ? "places" : tab === "messages" ? "messages" : tab === "notifications" ? "bell" : "account")}</i><span>${escapeText(privateCopy.tabs[tab])}</span>${tab === "places" ? `<b>${this.places.length}</b>` : tab === "messages" ? `<b>${this.feedback.length}</b>` : tab === "notifications" ? `<b>${unreadCount}</b>` : ""}</button>`).join("")}
       </nav>

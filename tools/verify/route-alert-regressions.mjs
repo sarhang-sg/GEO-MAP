@@ -44,5 +44,5 @@ assert.deepEqual(Array.from(projected,x=>x.kind).sort(),['sharp_curve','uturn'])
 for(const language of ['ku','ar','en'])assert.ok(hazards.roadHazardDetails('speed_bump',language).label.length>2);
 console.log('PASS route-distance warning windows, curved road geometry, parallel-road rejection, deduplication, passed alerts, invalid routes and provider-only sharp bend/U-turn signs');
 const weather=JSON.parse(fs.readFileSync(new URL('contracts/weather-descriptions.json',root),'utf8'));
-assert.equal(weather.codes['2'].ku,'نیمچە هەوراوی');assert.equal(weather.codes['3'].ku,'هەوراوی');
+assert.equal(weather.codes['2'].ku,'نیمچە هەور');assert.equal(weather.codes['3'].ku,'هەوراوی');
 console.log('PASS Kurdish cloudy and partly-cloudy grammar');

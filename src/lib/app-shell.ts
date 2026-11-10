@@ -74,7 +74,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
       <button id="sheetToggle" class="sheet-handle" type="button" aria-expanded="true" aria-controls="sheetContent">
         <span aria-hidden="true"></span><span id="sheetHandleText" class="sheet-handle__text">وردەکاری نەخشە</span>
       </button>
-      <div class="sheet-header"><div class="sheet-header__copy"><p id="regionEyebrow" class="eyebrow">KURDISTAN REGION</p><h1 id="mapTitle">نەخشەی کوردستان</h1></div><div class="sheet-icon"><img src="${brandLogoSrc}" alt="NAV KURD logo" width="1024" height="1024" /></div></div>
+      <div class="sheet-header"><div class="sheet-header__copy"><p id="regionEyebrow" class="eyebrow">KURDISTAN REGION</p><small class="home-greeting" id="homeGreeting"></small><h1 id="mapTitle">نەخشەی کوردستان</h1></div><div class="sheet-icon"><img src="${brandLogoSrc}" alt="NAV KURD logo" width="1024" height="1024" /></div></div>
       <div id="sheetContent" class="sheet-content">
       <p id="mapMessage" class="map-message" role="status">خەریکە داتای ڕاستەقینەی نەخشەکە بار دەکرێت.</p>
       <div class="map-stats" role="group" aria-label="Map dataset details"><div><strong id="localityCount">—</strong><span id="localityStatLabel">شوێن</span></div><div><strong id="baseSearchCount">—</strong><span id="baseSearchStatLabel">داتای گەڕان</span></div><div><strong id="ownerPlaceCount">—</strong><span id="ownerPlaceStatLabel">شوێنی زیادکراو</span></div></div>

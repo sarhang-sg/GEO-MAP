@@ -9,6 +9,15 @@ const FRESH_TTL_MS = 10 * 60 * 1000;
 const STALE_TTL_MS = 10 * 60 * 60 * 1000;
 const CACHE_LIMIT = 320;
 const RATE_LIMIT = 180;
+function providerUrl(endpoint) {
+  const url = new URL(endpoint);
+  const key = process.env.OPEN_METEO_API_KEY?.trim();
+  if (key) {
+    url.hostname = "customer-" + url.hostname;
+    url.searchParams.set("apikey", key);
+  }
+  return url;
+}
 const RATE_WINDOW_MS = 60 * 1000;
 
 const cache = new Map();
@@ -57,10 +66,10 @@ function finiteNumber(value) {
 }
 
 async function fetchAirQuality(latitude, longitude) {
-  const url = new URL(OPEN_METEO_AIR_QUALITY_URL);
+  const url = providerUrl(OPEN_METEO_AIR_QUALITY_URL);
   url.searchParams.set("latitude", latitude.toFixed(5));
   url.searchParams.set("longitude", longitude.toFixed(5));
-  url.searchParams.set("current", "dust,pm10");
+  url.searchParams.set("current", "dust,pm10,pm2_5,european_aqi");
   url.searchParams.set("timezone", "auto");
 
   const controller = new AbortController();
@@ -75,6 +84,8 @@ async function fetchAirQuality(latitude, longitude) {
     const payload = await response.json();
     return {
       dust: finiteNumber(payload?.current?.dust),
+      pm25: finiteNumber(payload?.current?.pm2_5),
+      aqi: finiteNumber(payload?.current?.european_aqi),
       pm10: finiteNumber(payload?.current?.pm10)
     };
   } catch {
@@ -84,8 +95,8 @@ async function fetchAirQuality(latitude, longitude) {
   }
 }
 
-async function fetchUpstream(latitude, longitude) {
-  const url = new URL(OPEN_METEO_URL);
+async function fetchUpstream(latitude, longitude, scope) {
+  const url = providerUrl(OPEN_METEO_URL);
   url.searchParams.set("latitude", latitude.toFixed(5));
   url.searchParams.set("longitude", longitude.toFixed(5));
   url.searchParams.set(
@@ -97,11 +108,16 @@ async function fetchUpstream(latitude, longitude) {
   url.searchParams.set("timezone", "auto");
 
   url.searchParams.set("hourly", "temperature_2m,weather_code,is_day,precipitation_probability,wind_speed_10m");
-  url.searchParams.set("forecast_hours", "25");
+  const limit = scope === "widget" ? 5 : 24;
+  url.searchParams.set("forecast_hours", String(limit));
+  if (scope === "detail") {
+    url.searchParams.set("forecast_days", "7");
+    url.searchParams.set("daily", "weather_code,temperature_2m_max,temperature_2m_min");
+  }
   url.searchParams.set("timeformat", "unixtime");
   const airQualityPromise = fetchAirQuality(latitude, longitude);
   let lastError = null;
-  for (let attempt = 0; attempt < 1; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
@@ -110,7 +126,11 @@ async function fetchUpstream(latitude, longitude) {
         headers: { Accept: "application/json", "User-Agent": UPSTREAM_USER_AGENT },
         cache: "no-store"
       });
-      if (!response.ok) throw new Error(`weather-upstream-${response.status}`);
+      if (!response.ok) {
+        const error = new Error(`weather-upstream-${response.status}`);
+        error.retryable = response.status >= 500 || response.status === 429;
+        throw error;
+      }
       const payload = await response.json();
       const current = payload?.current;
       const temperature = finiteNumber(current?.temperature_2m);
@@ -136,14 +156,22 @@ async function fetchUpstream(latitude, longitude) {
         const temp = finiteNumber(payload.hourly.temperature_2m?.[i]);
         const code = finiteNumber(payload.hourly.weather_code?.[i]);
         const day = finiteNumber(payload.hourly.is_day?.[i]);
-        if (at === null || at * 1000 <= Date.now() || at * 1000 > Date.now() + 24 * 3600000
-          || (hourly.time.length && at <= hourly.time.at(-1)) || temp === null || temp < -90 || temp > 65
+        if (at === null || at < Math.floor(Date.now()/3600000)*3600 || at * 1000 > Date.now() + 24 * 3600000
+          || (hourly.time.length >= limit || hourly.time.length && at <= hourly.time.at(-1)) || temp === null || temp < -90 || temp > 65
           || !validCodes.has(code) || (day !== 0 && day !== 1)) continue;
         hourly.time.push(at); hourly.temperature_2m.push(temp); hourly.weather_code.push(code); hourly.is_day.push(day);
         const chance = finiteNumber(payload.hourly.precipitation_probability?.[i]);
         const wind = finiteNumber(payload.hourly.wind_speed_10m?.[i]);
         hourly.precipitation_probability.push(chance !== null && chance >= 0 && chance <= 100 ? chance : null);
         hourly.wind_speed_10m.push(wind !== null && wind >= 0 ? wind : null);
+      }
+      const daily = [];
+      for (let i = 0; scope === "detail" && i < Math.min(payload.daily?.time?.length ?? 0, 7); i++) {
+        const at = finiteNumber(payload.daily.time[i]);
+        const high = finiteNumber(payload.daily.temperature_2m_max?.[i]);
+        const low = finiteNumber(payload.daily.temperature_2m_min?.[i]);
+        const code = finiteNumber(payload.daily.weather_code?.[i]);
+        if (at !== null && high !== null && low !== null && low <= high && low >= -90 && high <= 65 && validCodes.has(code)) daily.push({at, high, low, code});
       }
       const airQuality = await airQualityPromise;
       return {
@@ -162,6 +190,8 @@ async function fetchUpstream(latitude, longitude) {
           wind_speed_10m: finiteNumber(current?.wind_speed_10m),
           wind_gusts_10m: finiteNumber(current?.wind_gusts_10m),
           dust: airQuality.dust,
+          pm2_5: airQuality.pm25 ?? null,
+          european_aqi: airQuality.aqi ?? null,
           pm10: airQuality.pm10
         },
         timezone,
@@ -170,6 +200,7 @@ async function fetchUpstream(latitude, longitude) {
           : "",
         utc_offset_seconds: utcOffset,
         hourly,
+        ...(scope === "detail" ? { daily } : {}),
         requested_location: { latitude, longitude },
         fetched_at: Date.now(),
         stale: false,
@@ -178,6 +209,8 @@ async function fetchUpstream(latitude, longitude) {
       };
     } catch (error) {
       lastError = error;
+      if (error.retryable === false || error.message?.startsWith("weather-invalid-")) break;
+      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 220 + Math.random() * 180));
     } finally {
       clearTimeout(timeout);
     }
@@ -185,15 +218,15 @@ async function fetchUpstream(latitude, longitude) {
   throw lastError || new Error("weather-unavailable");
 }
 
-async function resolveWeather(latitude, longitude) {
-  const key = coordinateKey(latitude, longitude);
+async function resolveWeather(latitude, longitude, scope) {
+  const key = scope + ":" + coordinateKey(latitude, longitude);
   const now = Date.now();
   const cached = cache.get(key);
   if (cached && now - cached.storedAt <= FRESH_TTL_MS) return { payload: cached.payload, cache: "hit" };
 
   let pending = inflight.get(key);
   if (!pending) {
-    pending = fetchUpstream(latitude, longitude)
+    pending = fetchUpstream(latitude, longitude, scope)
       .then((payload) => {
         cache.set(key, { payload, storedAt: Date.now() });
         trimCache();
@@ -239,7 +272,7 @@ export default async function handler(request, response) {
     return;
   }
 
-  const result = await resolveWeather(latitude, longitude);
+  const result = await resolveWeather(latitude, longitude, request.query?.scope === "widget" ? "widget" : "detail");
   response.setHeader("X-NAV-KURD-Weather-Cache", result.cache);
   response.setHeader("Cache-Control", result.payload.available && result.cache !== "stale"
     ? "public, max-age=120, s-maxage=300" : "no-store");

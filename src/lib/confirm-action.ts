@@ -1,10 +1,10 @@
 import { appUrl } from "./app-url";
 type Language = "ku" | "ar" | "en";
-type Action = "remove-photo" | "delete-read" | "withdraw" | "reject";
+type Action = "remove-photo" | "delete-read" | "withdraw" | "reject" | "clear-cache";
 const COPY = {
-  ku: { cancel: "پاشگەزبوونەوە", confirm: "پشتڕاستکردنەوە", title: "دڵنیایت؟", "remove-photo": "وێنە هەڵبژێردراوەکە لاببرێت؟", "delete-read": "هەموو ئاگادارکردنەوە خوێندراوەکان بسڕدرێنەوە؟", withdraw: "ئەم شوێنە یان دەستکارییە بکشێنرێتەوە؟", reject: "ئەم داواکارییە ڕەت بکرێتەوە؟" },
-  ar: { cancel: "إلغاء", confirm: "تأكيد", title: "هل أنت متأكد؟", "remove-photo": "إزالة الصورة المحددة؟", "delete-read": "حذف جميع الإشعارات المقروءة؟", withdraw: "سحب هذا المكان أو التعديل؟", reject: "رفض هذا الطلب؟" },
-  en: { cancel: "Cancel", confirm: "Confirm", title: "Are you sure?", "remove-photo": "Remove the selected image?", "delete-read": "Delete all read notifications?", withdraw: "Withdraw this place or edit?", reject: "Reject this submission?" }
+  ku: { "clear-cache": "کاشی کاتی پاک بکرێتەوە؟ نەخشە دەرھێڵەکان، هەژمار و مێژووەکەت دەپارێزرێن.", cancel: "پاشگەزبوونەوە", confirm: "پشتڕاستکردنەوە", title: "دڵنیایت؟", "remove-photo": "وێنە هەڵبژێردراوەکە لاببرێت؟", "delete-read": "هەموو ئاگادارکردنەوە خوێندراوەکان بسڕدرێنەوە؟", withdraw: "ئەم شوێنە یان دەستکارییە بکشێنرێتەوە؟", reject: "ئەم داواکارییە ڕەت بکرێتەوە؟" },
+  ar: { "clear-cache": "هل تريد مسح الملفات المؤقتة؟ ستُحفظ الخرائط دون اتصال والحساب والسجل.", cancel: "إلغاء", confirm: "تأكيد", title: "هل أنت متأكد؟", "remove-photo": "إزالة الصورة المحددة؟", "delete-read": "حذف جميع الإشعارات المقروءة؟", withdraw: "سحب هذا المكان أو التعديل؟", reject: "رفض هذا الطلب؟" },
+  en: { "clear-cache": "Clear temporary downloaded files? Offline maps, your account and history will be kept.", cancel: "Cancel", confirm: "Confirm", title: "Are you sure?", "remove-photo": "Remove the selected image?", "delete-read": "Delete all read notifications?", withdraw: "Withdraw this place or edit?", reject: "Reject this submission?" }
 };
 let pending: Promise<boolean> | null = null;
 
@@ -48,7 +48,7 @@ export function compactUtilityActions(root: HTMLElement): void {
   for (const button of root.querySelectorAll<HTMLButtonElement>("button")) {
     const action = button.dataset.userAction ?? button.dataset.ownerAction ?? "";
     const destructive = /^(delete|delete-place|delete-request|feedback-delete|notification-delete|notifications-delete-read|photo-delete|photo-clear|history-delete|history-clear)$/.test(action);
-    if (!destructive && action !== "signout") continue;
+    if (button.dataset.accountAction || (!destructive && action !== "signout")) continue;
     const label = button.getAttribute("aria-label") || button.textContent?.trim() || "";
     if (!label) continue;
     button.setAttribute("aria-label", label); button.title = label;
