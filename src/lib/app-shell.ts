@@ -1,4 +1,5 @@
 import { appUrl } from "./app-url";
+import { ANDROID_VERSION } from "./release";
 import { dialogCloseIcon } from "./dialog-close-icon";
 import { loadingMarkup } from "./loading-view";
 
@@ -135,12 +136,12 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
             <span class="android-download__mark" aria-hidden="true">
               <img src="${appUrl("assets/android-app-icon.png")}" alt="" width="1080" height="1080" loading="lazy" decoding="async" draggable="false" />
             </span>
-            <div><p>NAV KURD ${releaseVersion}</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
+            <div><p>NAV KURD ${ANDROID_VERSION}</p><h3 id="androidDownloadTitle">ئەپی Android دابگرە</h3><small id="androidDownloadSummary">وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر</small></div>
           </div>
           <div class="android-download__actions">
-            <a id="androidDirectDownload" class="android-download__primary Download-button" href="${appUrl(`downloads/NAV-KURD-${releaseVersion}.apk`)}" download="NAV-KURD-${releaseVersion}.apk">
+            <a id="androidDirectDownload" class="android-download__primary Download-button" href="https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${ANDROID_VERSION}/NAV-KURD-${ANDROID_VERSION}.apk" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 640 512" aria-hidden="true"><path fill="currentColor" d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144Zm79-167 80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24v134.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9Z"/></svg>
-              <span><strong>APK دابگرە</strong><small>ڕاستەوخۆ · v${releaseVersion}</small></span>
+              <span><strong>APK دابگرە</strong><small>ڕاستەوخۆ · v${ANDROID_VERSION}</small></span>
             </a>
           </div>
         </section>

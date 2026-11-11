@@ -11,6 +11,7 @@ export type OfflineMapFileConfig = {
 
 export type ReleaseConfig = {
   appVersion: string;
+  androidVersion: string;
   releaseId: string;
   mapEdition: string;
   mapDataVersion: string;
@@ -24,6 +25,7 @@ export type ReleaseConfig = {
 const config = releaseConfig as ReleaseConfig;
 
 export const APP_VERSION = config.appVersion;
+export const ANDROID_VERSION = config.androidVersion;
 export const MAP_EDITION = config.mapEdition;
 export const MAP_DATA_VERSION = config.mapDataVersion;
 export const CACHE_SCHEMA_VERSION = config.cacheSchemaVersion;

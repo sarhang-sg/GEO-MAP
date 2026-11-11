@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
   "fileCount": 1708,
-  "totalBytes": 289701686,
+  "totalBytes": 289703492,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -3687,8 +3687,8 @@
       "sha256": "e40d3c40bd1920d9a24ccf48c2d713208e262f17a3d7826bd320f09bfad741a2"
     },
     "release.config.json": {
-      "bytes": 1031,
-      "sha256": "9ef3d3315ce7f80f88b83c16e19d1f06f48ca944174260a203b990d95c1e4609"
+      "bytes": 1061,
+      "sha256": "5c2917b3a09f4e9473f4b74d6ab6d24490fee5dea4538a2cd005ccbd484e4cbd"
     },
     "src/android/local-provider.ts": {
       "bytes": 5069,
@@ -3719,8 +3719,8 @@
       "sha256": "4e02776b3c219a1e9b6cc87353a1298b886cb303c93633846183b71d78d7f008"
     },
     "src/lib/android-release-experience.ts": {
-      "bytes": 14339,
-      "sha256": "43f9135e0d6ca25fed9ea3ea03c6713a24591259485d34a59ad7c60b2cdcd010"
+      "bytes": 14432,
+      "sha256": "5fde563b7dcee2a4727fb43a7106886a2139cf77c4a721606a644153a96fe785"
     },
     "src/lib/app-health.ts": {
       "bytes": 7666,
@@ -3731,8 +3731,8 @@
       "sha256": "23727ae9dfc552b86b752b949ca9a639261c7dd97ea4b1612d2ca692291ff549"
     },
     "src/lib/app-shell.ts": {
-      "bytes": 25864,
-      "sha256": "c8cef495e29f63e347ef080d21593f9167f6a8242aaca23014b231b0aa383992"
+      "bytes": 25969,
+      "sha256": "aedb58038121b141d7bf55683711c68ab3938cc73d42a22ac42d7bdefc47c946"
     },
     "src/lib/app-url.ts": {
       "bytes": 1022,
@@ -4063,8 +4063,8 @@
       "sha256": "3ca1e7f83a0e545143e345d28ca9cf95f6a17c1db46eedc937bfcb145221f995"
     },
     "src/lib/release.ts": {
-      "bytes": 1383,
-      "sha256": "37be979642e7351a7edd86f7eba38c4f35e1cb41320c7bc0a5d84181147e69ea"
+      "bytes": 1463,
+      "sha256": "54ae5e2dca97349daf4186deb77fed702b71e526bcac96721a4f0ad0b783d516"
     },
     "src/lib/road-hazards.ts": {
       "bytes": 6661,
@@ -4587,8 +4587,8 @@
       "sha256": "d810a022cb864ce1a78defdc062a73379e93ff6fd99161f4ed69b5b4e6c773ff"
     },
     "tools/build/write-release-identity.mjs": {
-      "bytes": 889,
-      "sha256": "f348ad9d0bb9dadcf3b0de7d8f4a39b2f468f95da85adfbec64d956bbc83d71b"
+      "bytes": 928,
+      "sha256": "2a5dd9e2704202a9607f0417c1937c1c7a2f98b188a067498242f1f82362dd85"
     },
     "tools/data/align-data-release.py": {
       "bytes": 5950,
@@ -4727,8 +4727,8 @@
       "sha256": "bcb4608d77ba34e333c9f60e037acbac568ad2307c1a481fa3617855230e6571"
     },
     "tools/release/prepare-android-download.mjs": {
-      "bytes": 4327,
-      "sha256": "66ad109ea5ca6dbc28ae5ff30b0804127ef37cc8b17b458421fec5a83bba1b7d"
+      "bytes": 4347,
+      "sha256": "0b84e3565a81ffa76c461728f6e017f3c1d4c071877d368f7825ca62d77c83ef"
     },
     "tools/release/prepare-dependency-preview.mjs": {
       "bytes": 3948,
@@ -4739,16 +4739,16 @@
       "sha256": "db2f43f3a75713ae3678c4788da090318084f77ca4ab906682b4e56a89c60533"
     },
     "tools/release/verify-published-android.mjs": {
-      "bytes": 4056,
-      "sha256": "b04be93ed5e71df804e551e22232efe3dc19c099d7702267f5f559b2c94271e7"
+      "bytes": 4293,
+      "sha256": "4712e533a9e1e4f02606c3c5db0655829c2197c10164efd7b35a634f47894743"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 795,
       "sha256": "7d25929a397e2fd170ccd60fbf94c2813e3dbc15a5a1a6ade82fb10c7bf84ead"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 26036,
-      "sha256": "1f4634bb4369d566c41d038c5ccb4e576d74531718c961df90269b15cae54e65"
+      "bytes": 26096,
+      "sha256": "bd943d111772d8a9aa977e961a7559e4c6da486f7ef20fa2ac4bc61be26a6325"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28121,
@@ -4799,8 +4799,8 @@
       "sha256": "313e71265a2fdd5696daea91d748940babd1b45e24dcd7566fea0c569d4132c8"
     },
     "tools/verify/publication-regressions.mjs": {
-      "bytes": 1662,
-      "sha256": "151e8ea67c44e14eef20d36f77e4f7099ef27d1bcd8a41d9e09132ea7aa51f96"
+      "bytes": 2590,
+      "sha256": "ac6c0b4624b5e2c33ef5f6571eb20aac8829689845e535b3b7d7882d4ea0e7bb"
     },
     "tools/verify/refinement-regressions.mjs": {
       "bytes": 8121,
@@ -4815,8 +4815,8 @@
       "sha256": "0fd9a6e25b545f55620e31e3551a1539496ecf5c8c36e94eeafe5396456bd108"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 19626,
-      "sha256": "d9ecd0edab6554f8b1f175cceb48470be8e37cd8f9da245ecf1ece7250920266"
+      "bytes": 19840,
+      "sha256": "17676d85516d9699461e41187c9fbed30cbdf84a3ebf1e8369c9976b94d566d1"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 5192,

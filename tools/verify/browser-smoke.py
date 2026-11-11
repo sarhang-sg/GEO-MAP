@@ -159,8 +159,8 @@ def main() -> int:
                     direct_probe = {"ok": True, "bytes": receipt.get("bytes"), "expected": android_release.get("apkBytes")}
                 else:
                     direct_probe = page.evaluate(
-                    """async expected => {
-                      const response = await fetch('/downloads/NAV-KURD-10.4.4.apk', {
+                    """async ({ url, expected }) => {
+                      const response = await fetch(url, {
                         method: 'HEAD', cache: 'no-store', redirect: 'error'
                       });
                       return {
@@ -169,7 +169,7 @@ def main() -> int:
                         expected
                       };
                     }""",
-                    android_release.get("apkBytes"),
+                    {"url": f"/downloads/NAV-KURD-{android_release['version']}.apk", "expected": android_release.get("apkBytes")},
                     )
                 if not direct_probe["ok"] or direct_probe["bytes"] != direct_probe["expected"]:
                     raise AssertionError(f"direct APK probe failed: {direct_probe}")
