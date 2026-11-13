@@ -1,6 +1,7 @@
 {
   "appVersion": "10.4.4",
-  "androidVersionCode": 100404,
+  "androidVersion": "10.4.6",
+  "androidVersionCode": 100406,
   "releaseId": "2026-10-13-nav-kurd-v10.4.4",
   "releaseDate": "2026-10-13",
   "mapEdition": "2027",

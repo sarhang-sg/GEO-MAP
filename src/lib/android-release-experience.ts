@@ -1,5 +1,5 @@
 import type { Language } from "./types";
-import { APP_VERSION } from "./release";
+import { ANDROID_VERSION } from "./release";
 
 declare global {
   interface Window { __NAV_KURD_FLUTTER__?: boolean; }
@@ -18,7 +18,7 @@ type ReleaseCopy = {
   title: string;
   summary: string;
   direct: string;
-  directSub: string;
+  directSub: (version: string) => string;
   store: string;
   storeSub: string;
   promoTitle: string;
@@ -38,7 +38,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "ئەپی Android دابگرە",
     summary: "وەشانی واژۆکراو و پشتڕاستکراو بۆ Android 7 و نوێتر",
     direct: "APK دابگرە",
-    directSub: `ڕاستەوخۆ · v${APP_VERSION}`,
+    directSub: (version) => `ڕاستەوخۆ · v${version}`,
     store: "لە کۆگای APKPure",
     storeSub: "وەشانی بەردەست لە APKPure ببینە",
     promoTitle: "NAV KURD لە Android لەگەڵتە",
@@ -54,7 +54,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "تنزيل تطبيق Android",
     summary: "نسخة موقعة وموثقة لنظام Android 7 أو أحدث",
     direct: "تنزيل APK",
-    directSub: `مباشر · v${APP_VERSION}`,
+    directSub: (version) => `مباشر · v${version}`,
     store: "من متجر APKPure",
     storeSub: "تحقق من الإصدار المتاح في APKPure",
     promoTitle: "NAV KURD معك على Android",
@@ -70,7 +70,7 @@ const COPY: Record<Language, ReleaseCopy> = {
     title: "Download the Android app",
     summary: "Signed and verified for Android 7 or newer",
     direct: "Download APK",
-    directSub: `Direct · v${APP_VERSION}`,
+    directSub: (version) => `Direct · v${version}`,
     store: "Get it from APKPure",
     storeSub: "Check the version listed on APKPure",
     promoTitle: "Take NAV KURD with you on Android",
@@ -159,7 +159,8 @@ async function readLatestRelease(): Promise<LatestRelease | null> {
   } catch { return null; }
 }
 
-function updateSection(copy: ReleaseCopy, directAvailable: boolean): void {
+function updateSection(copy: ReleaseCopy, release: LatestRelease | null): void {
+  const directAvailable = release?.directApkAvailable === true;
   const title = document.querySelector<HTMLElement>("#androidDownloadTitle");
   const summary = document.querySelector<HTMLElement>("#androidDownloadSummary");
   const direct = document.querySelector<HTMLElement>("#androidDirectDownload strong");
@@ -168,7 +169,7 @@ function updateSection(copy: ReleaseCopy, directAvailable: boolean): void {
   if (title) title.textContent = copy.title;
   if (summary) summary.textContent = copy.summary;
   if (direct) direct.textContent = directAvailable ? copy.direct : copy.store;
-  if (directSub) directSub.textContent = directAvailable ? copy.directSub : copy.storeSub;
+  if (directSub) directSub.textContent = directAvailable ? copy.directSub(release.version) : copy.storeSub;
   if (store) store.textContent = copy.store;
 }
 
@@ -192,12 +193,12 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
       directLink.removeAttribute("aria-busy");
     }, 2000);
   });
-  updateSection(COPY[getLanguage()], false);
-  window.addEventListener("nav-kurd:language-change", () => updateSection(COPY[getLanguage()], latest?.directApkAvailable === true));
+  updateSection(COPY[getLanguage()], null);
+  window.addEventListener("nav-kurd:language-change", () => updateSection(COPY[getLanguage()], latest));
 
   const synchronizeLinks = (release: LatestRelease): void => {
     latest = release;
-    updateSection(COPY[getLanguage()], release.directApkAvailable);
+    updateSection(COPY[getLanguage()], release);
     if (directLink) {
       if (release.directApkAvailable && release.directApkUrl) {
         directLink.href = release.directApkUrl;
@@ -223,7 +224,7 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     if (nativeAndroid()) return;
     if (document.querySelector(".android-release-promo")) return;
     try {
-      const promoKey = `nav-kurd:android-promo:${APP_VERSION}`;
+      const promoKey = `nav-kurd:android-promo:${ANDROID_VERSION}`;
       if (sessionStorage.getItem(promoKey) === "shown") return;
       sessionStorage.setItem(promoKey, "shown");
     } catch { /* A private browser may not expose session storage. */ }

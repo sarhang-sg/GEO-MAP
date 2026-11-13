@@ -19,4 +19,17 @@ const cases=[
   [ release,receipt,{...artifact,url:'https://example.com/fake.apk'} ],
 ];
 for (const args of cases) assert.throws(()=>assertPublicAndroid(...args));
-console.log(`PASS Android publication regressions: ${cases.length+1} cases / zero skipped.`);
+
+const nativeVersion = '10.4.6';
+const nativeCode = 100406;
+const nativeName = `NAV-KURD-${nativeVersion}.apk`;
+const nativeUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${nativeVersion}/${nativeName}`;
+const nativeArtifact = {...artifact, url: nativeUrl};
+const nativeReceipt = {...receipt, versionName: nativeVersion, versionCode: nativeCode,
+  files: {apk: {...receipt.files.apk, name: nativeName}}};
+const nativeRelease = {...release, tag_name: `v${nativeVersion}`,
+  assets: [{...release.assets[0], name: nativeName, browser_download_url: nativeUrl}]};
+assert.equal(assertPublicAndroid(nativeRelease, nativeReceipt, nativeArtifact, nativeVersion, nativeCode), release.published_at);
+assert.throws(() => assertPublicAndroid(nativeRelease, receipt, nativeArtifact, nativeVersion, nativeCode));
+assert.throws(() => assertPublicAndroid(release, nativeReceipt, nativeArtifact, nativeVersion, nativeCode));
+console.log(`PASS Android publication regressions: ${cases.length+4} cases / zero skipped.`);

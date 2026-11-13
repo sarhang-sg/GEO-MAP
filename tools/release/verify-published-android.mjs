@@ -41,6 +41,8 @@ async function getJson(url) {
 async function main() {
   const metadata = JSON.parse(await readFile('public/releases/latest.json', 'utf8'));
   const config = JSON.parse(await readFile('release.config.json', 'utf8'));
+  assert.equal(metadata.version, config.androidVersion, 'Android download version differs from configuration');
+  assert.equal(metadata.versionCode, config.androidVersionCode, 'Android download code differs from configuration');
   const production = process.env.VERCEL_ENV === 'production' || process.env.GITHUB_REF === 'refs/heads/main';
   if (!metadata.artifact) {
     if (production) throw new Error('Production requires a CI-verified Android receipt binding. Run the coordinated Termux updater.');
@@ -53,11 +55,11 @@ async function main() {
   let lastError;
   do {
     try {
-      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/v${config.appVersion}`);
+      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/v${config.androidVersion}`);
       const asset = release.assets.find(a => a.name === 'DOWNLOAD-RECEIPT.json');
       assert.ok(asset && asset.size <= 32768, 'verified receipt missing');
       const receipt = await getJson(asset.browser_download_url);
-      const published = assertPublicAndroid(release, receipt, metadata.artifact, config.appVersion, config.androidVersionCode);
+      const published = assertPublicAndroid(release, receipt, metadata.artifact, config.androidVersion, config.androidVersionCode);
       const download = await fetch(metadata.artifact.url, {method:'HEAD', signal:AbortSignal.timeout(20000)});
       assert.ok(download.ok, 'published APK is not downloadable');
       await writeFile('dist/releases/latest.json', JSON.stringify({...metadata, publishedAt:published}, null, 2)+'\n');

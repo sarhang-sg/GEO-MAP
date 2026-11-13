@@ -9,6 +9,6 @@ if (!commit) {
 if (commit && !/^[a-f0-9]{40}$/u.test(commit)) throw new Error('Invalid deployment commit.');
 if (process.env.VERCEL === '1' && !commit) throw new Error('Vercel deployment is missing its source commit.');
 await writeFile('dist/release-identity.json', JSON.stringify({schema:1,
-  appVersion:release.appVersion, androidVersionCode:release.androidVersionCode,
+  appVersion:release.appVersion, androidVersion:release.androidVersion, androidVersionCode:release.androidVersionCode,
   releaseId:release.releaseId, gitCommit:commit}) + '\n');
 console.log('PASS deployment release identity.');

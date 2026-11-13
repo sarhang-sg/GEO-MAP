@@ -14,7 +14,9 @@ PROJECT = 'kaydgjhwnspnuqabaiqw'
 ORIGIN = 'https://geo-map-kappa.vercel.app'
 FUNCTIONS = ('delete-atlas-account', 'delete-atlas-place', 'review-atlas-submission')
 VERSION = '10.4.4'
-CODE = 100404
+CODE = json.loads((Path(__file__).resolve().parents[2] / 'release.config.json').read_text())['androidVersionCode']
+if type(CODE) is not int or not 0 < CODE < 2**31:
+    raise ValueError('Invalid configured Android version code.')
 
 
 def request_json(path, method='GET', body=None):
@@ -171,15 +173,18 @@ def main():
         raise RuntimeError('Unexpected Supabase project.')
     web_commit=args.expected_commit
     metadata=json.loads(Path('public/releases/latest.json').read_text())
+    if metadata.get('versionCode') != CODE or metadata.get('artifact',{}).get('versionCode') != CODE:
+        raise RuntimeError('The verified download and backend release must identify the same Android APK.')
     android_commit=metadata.get('artifact',{}).get('gitCommit','')
     if not re.fullmatch('[0-9a-f]{40}',web_commit) or not re.fullmatch('[0-9a-f]{40}',android_commit):
         raise RuntimeError('Verified source identities are required.')
     if os.environ.get('GITHUB_SHA') != web_commit or os.environ.get('GITHUB_REF') != 'refs/heads/main':
         raise RuntimeError('Backend operation requires the exact protected main source.')
     if args.record:
-        query("update public.nav_kurd_app_release set web_source_commit='"+web_commit+
-              "', android_source_commit='"+android_commit+"', updated_at=now() where singleton=true "
-              "and app_version='10.4.4' and android_version_code=100404 returning singleton")
+        query(f"update public.nav_kurd_app_release set android_version_code={CODE}, "
+              f"web_source_commit='{web_commit}', android_source_commit='{android_commit}', updated_at=now() "
+              f"where singleton=true and app_version='10.4.4' and release_id='2026-10-13-nav-kurd-v10.4.4' "
+              f"and android_version_code <= {CODE} returning singleton")
     identity=verify_identity(web_commit,android_commit)
     database=verify_database_policies()
     database.update(verify_text_validation())
