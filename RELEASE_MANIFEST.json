@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
   },
   "fileCount": 1708,
-  "totalBytes": 289703492,
+  "totalBytes": 289704014,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -3656,7 +3656,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 942,
-      "sha256": "44ab27901b9b5f0a8a9b6c7a1f73435e1e93a79e5e6de60c151cafa68cbea35b"
+      "sha256": "4bcbb889aa92245f215975549c3d9f05ba0a3f2068a4767db34e1fc6ad961fc0"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3688,7 +3688,7 @@
     },
     "release.config.json": {
       "bytes": 1061,
-      "sha256": "5c2917b3a09f4e9473f4b74d6ab6d24490fee5dea4538a2cd005ccbd484e4cbd"
+      "sha256": "09695a67f56906b4a077f88b8b2120a2271c19c8db64e37291d7b5774192f052"
     },
     "src/android/local-provider.ts": {
       "bytes": 5069,
@@ -4416,7 +4416,7 @@
     },
     "supabase/functions/_shared/release.ts": {
       "bytes": 81,
-      "sha256": "38daee3b479514188dde5e6311a85ad441960c1d38bb3edc6660176e9a2c7ecf"
+      "sha256": "c4be3a5075ad5ee8b50effd8604d27b42cf3ed238de8534ab7d8f0573457a15f"
     },
     "supabase/functions/delete-atlas-account/index.ts": {
       "bytes": 8487,
@@ -4735,8 +4735,8 @@
       "sha256": "c8a138a9c51001efe25b386f9852e4370a80a9f4f5feebd1c64810aa355954bc"
     },
     "tools/release/verify-backend.py": {
-      "bytes": 12501,
-      "sha256": "db2f43f3a75713ae3678c4788da090318084f77ca4ab906682b4e56a89c60533"
+      "bytes": 13023,
+      "sha256": "46dfa5f1160f5ca619fc8f44b94f8451deaeaae95c9e6c8e9f18c4c983554d43"
     },
     "tools/release/verify-published-android.mjs": {
       "bytes": 4293,
