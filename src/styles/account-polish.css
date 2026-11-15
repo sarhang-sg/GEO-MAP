@@ -173,12 +173,28 @@ html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { width: 260px; ma
   html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { max-width: 300px; }
 }
 
+html[data-nav-kurd-theme][data-accent="gold"][data-ui-mode] :where(.map-shell > :not(.map-loading), body > :not(#app, .map-shell, .map-loading)) {
+  --user-primary:#775119; --user-deep:#513509; --user-bright:#ffe0a3;
+  --user-bg:#171511; --user-surface:#262119; --user-elevated:#322c22;
+  --user-text:#fff9ed; --user-muted:#e0d4c2; --user-border:#736650;
+  --user-light-bg:#f7f2e9; --user-light-surface:#fffaf1; --user-light-elevated:#f1e6cf;
+  --user-light-text:#251d10; --user-light-muted:#4e422e; --user-light-border:#958467;
+
+  --nk-bg:var(--user-bg); --nk-surface:var(--user-surface); --nk-elevated:var(--user-elevated);
+  --nk-text:var(--user-text); --nk-muted:var(--user-muted); --nk-link:var(--user-bright);
+  --nk-primary:var(--user-primary); --nk-action-bg:linear-gradient(135deg,var(--user-deep),var(--user-primary));
+}
+html[data-nav-kurd-theme][data-accent="gold"][data-ui-mode="light"] :where(.map-shell > :not(.map-loading), body > :not(#app, .map-shell, .map-loading)) {
+  color-scheme:light;
+  --nk-bg:var(--user-light-bg); --nk-surface:var(--user-light-surface); --nk-elevated:var(--user-light-elevated);
+  --nk-text:var(--user-light-text); --nk-muted:var(--user-light-muted); --nk-link:var(--user-deep);
+}
 /* The controls share neutral ink and receive their accent through the surface or action. */
-html[data-nav-kurd-theme][data-accent][data-ui-mode] .map-shell {
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .map-shell > :not(.map-loading) {
   --nk-text: #f9fafc; --nk-muted: #d6deeb;
   --nk-ink: var(--nk-text); --nk-panel: var(--nk-surface);
 }
-html[data-nav-kurd-theme][data-accent][data-ui-mode="light"] .map-shell { --nk-text: #192332; --nk-muted: #404d60; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode="light"] .map-shell > :not(.map-loading) { --nk-text: #192332; --nk-muted: #404d60; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-card,.search-field,.search-results,.search-result,.round-button,.map-button,.map-sheet,.map-status,.maplibregl-ctrl-group,.place-popup,.navigation-preferences,.navigation-preferences__fields,.route-panel,.map-coordinate-picker,.route-destination-prompt,.route-navigation-hud,.user-contrib__panel,.owner-studio__panel,.user-account-card,.user-navigation-history,.owner-navigation-history,.support-fold,.support-method,.weather-directory,.weather-city) {
   border-width: 0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
 }

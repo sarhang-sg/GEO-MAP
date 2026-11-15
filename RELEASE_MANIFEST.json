@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1717,
-  "totalBytes": 289720281,
+  "totalBytes": 289721743,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -4259,8 +4259,8 @@
       "sha256": "f84df4532d5c129a5aad2bfdd2fa2cba94f19c93eaf98c2b4638f789265b80c0"
     },
     "src/styles/account-polish.css": {
-      "bytes": 21592,
-      "sha256": "1f5f4b4eead48fdb67d0cb3f98558b005b8e89a57ab9ee2d9b742a010b4b3c10"
+      "bytes": 22858,
+      "sha256": "99b3af20c77ad306c94657923bdccb0639c4acedd249e141d3cbed5b5e7fe184"
     },
     "src/styles/android-release.css": {
       "bytes": 9035,
@@ -4355,8 +4355,8 @@
       "sha256": "8b38c22005d6d5f6b3010861a37b3e6414055a79a07b9dceec901fe5a9b9a48f"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 93320,
-      "sha256": "4eafee57d9fc6365a4e98b7bf4ba31479da8eac286b7e155aa575894283689b9"
+      "bytes": 92909,
+      "sha256": "00c4ea3783c5adbc54cbacc48315b4ce5a20b5481bcff6f88eafc36135ccc257"
     },
     "src/styles/navigation-preferences.css": {
       "bytes": 8678,
@@ -4407,8 +4407,8 @@
       "sha256": "dc87153980239e0742f35e00ee87da0fdab04d5b69be272dfa234e60538bbc11"
     },
     "src/styles/theme-consistency.css": {
-      "bytes": 15952,
-      "sha256": "ddcd77d07da0aaa1ccca9acb5a4f757e3bc9caaa6939b1e8ce3eb14c0aeba8f9"
+      "bytes": 16546,
+      "sha256": "17eec8e17ab0dbe7615c838cd73fd3b153b996c5c5d1522157b7dfb12d120d5c"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
@@ -4779,8 +4779,8 @@
       "sha256": "7d25929a397e2fd170ccd60fbf94c2813e3dbc15a5a1a6ade82fb10c7bf84ead"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 27829,
-      "sha256": "a96239e0e824d31ae3cc3cf3eeed25d409a9376ccb0c9e72deb64d5d932b9ab6"
+      "bytes": 27842,
+      "sha256": "34745b2c48f67dd72b6e15f220e21de2d812ac0988c0a15b0fba4fe4398d5304"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,

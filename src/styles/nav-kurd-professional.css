@@ -1996,13 +1996,6 @@ html[data-nav-kurd-theme="professional"] .map-shell.is-navigating :where(.topbar
 
 /* One optional color palette for the complete interface. Original preserves
    the approved appearance; map imagery and semantic warnings keep their colors. */
-html[data-accent="gold"] {
-  --user-primary:#775119; --user-deep:#513509; --user-bright:#ffe0a3;
-  --user-bg:#171511; --user-surface:#262119; --user-elevated:#322c22;
-  --user-text:#fff9ed; --user-muted:#e0d4c2; --user-border:#736650;
-  --user-light-bg:#f7f2e9; --user-light-surface:#fffaf1; --user-light-elevated:#f1e6cf;
-  --user-light-text:#251d10; --user-light-muted:#4e422e; --user-light-border:#958467;
-}
 html[data-accent="blue"] {
   --user-primary: #1769c7; --user-deep: #104a99; --user-bright: #4db4ff;
   --user-bg: #081827; --user-surface: #0c2036; --user-elevated: #15314e;

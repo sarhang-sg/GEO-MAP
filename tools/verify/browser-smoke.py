@@ -79,7 +79,7 @@ def verify_startup_loader(browser) -> None:
 
 def verify_theme_contrast(page) -> None:
     results = page.evaluate("""() => {
-      const root = document.documentElement, shell = document.querySelector('.map-shell');
+      const root = document.documentElement, shell = document.querySelector('.map-shell .search-card');
       const initial = [root.dataset.accent, root.dataset.uiMode];
       const probe = document.createElement('span');
       shell.append(probe);
