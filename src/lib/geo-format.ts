@@ -1,6 +1,6 @@
 import type { AtlasPhoto, AtlasPlace } from "./atlas-places";
 import type { LngLatTuple } from "./location";
-import { localizeNameValue, localizedCategory, localizedOptionalBody } from "./map-language";
+import { localizeNameValue, localizedRecordName, localizedCategory, localizedOptionalBody } from "./map-language";
 import type { Language, LocalityProperties, PointKind } from "./types";
 
 export function escapeText(value: string): string {
@@ -45,8 +45,7 @@ export function placeRank(place: string | undefined): number {
 }
 
 export function languageValue(properties: LocalityProperties, language: Language): string {
-  const exact = properties[`name_${language}`] as string | undefined;
-  return localizeNameValue(exact, language) || "—";
+  return localizedRecordName(properties, language, []) || "—";
 }
 
 export function districtValue(properties: LocalityProperties, language: Language): string {
@@ -58,10 +57,7 @@ export function governorateValue(properties: LocalityProperties, language: Langu
 }
 
 export function ownerName(place: AtlasPlace, language: Language): string {
-  const exact = language === "ku" ? place.name_ku : language === "ar" ? place.name_ar : place.name_en;
-  return localizeNameValue(exact, language)
-    || [place.name_ku, place.name_ar, place.name_en].find((name) => isMeaningfulMapName(name))?.trim()
-    || "—";
+  return localizedRecordName(place, language, []) || "—";
 }
 
 export function ownerDescription(place: AtlasPlace, language: Language): string {

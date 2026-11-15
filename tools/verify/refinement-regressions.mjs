@@ -1,13 +1,17 @@
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { loadNavigationModule as load } from './navigation-harness.mjs';
 
 const taxonomy = load('src/lib/atlas-taxonomy.ts', {}, 'ATLAS_TAXONOMY,atlasPlaceTypeSearchTerms');
 const matching = load('src/lib/static-search.ts', taxonomy,
   'normalizeStaticSearch,phoneticSearchGroups,prepareStaticSearchQuery,scoreStaticSearchProfile,searchIntentIdsForCategory');
-const languageHelpers = load('src/lib/map-language.ts', {}, 'localizeNameValue');
+const languageHelpers = load('src/lib/map-language.ts', {}, 'localizeNameValue,localizedRecordName,localizedStaticName');
 const names = load('src/lib/geo-format.ts', languageHelpers, 'ownerName,languageValue,placeRank');
+const cities = JSON.parse(readFileSync(new URL('../../contracts/weather-cities.json',import.meta.url),'utf8'));
+const { KRI_BOUNDS } = load('src/lib/kri.ts',{},'KRI_BOUNDS');
+const directory = load('src/lib/weather-cities.ts',{cities,KRI_BOUNDS},'exactDirectoryCity,cityFeature,canonicalCityQuery,inMapCoverage');
 const { SearchService } = load('src/lib/search-service.ts', {
-  ...taxonomy, ...matching, ...names, localCoreEnabled: false,
+  ...directory, ...languageHelpers, ...taxonomy, ...matching, ...names, localCoreEnabled: false,
   ROAD_HAZARD_DATA: { features: [] }, yieldToMainThread: async () => {}
 }, 'SearchService');
 
@@ -31,6 +35,13 @@ for (const [lang, terms] of Object.entries({ en: ['water well','oil field','fact
   }
 }
 assert.equal(names.ownerName(records[2], 'ku'), 'Silver Birch');
+for (const alias of ['Hjiawa','Hajiawa']) {
+  const quick = await service.searchFast(alias);
+  assert.equal(quick[0].feature.properties.name_ku,'حاجیاوا');
+  const merged = service.mergeResults(alias,quick,[{type:'local',feature:{...quick[0].feature,properties:{title:' '}}},...quick]);
+  assert.equal(merged.length,1);
+  assert.equal(merged[0].feature.properties.name_ku,'حاجیاوا');
+}
 const anchor = { coordinate: [44,36], score: 1 };
 assert.deepEqual(ids(service.searchOwnerPlaces(matching.prepareStaticSearchQuery('factory'), anchor)), ['factory']);
 assert.deepEqual(ids(await service.searchFast('xqzvpl')), []);
@@ -114,7 +125,7 @@ class InputFixture {
 const input=new InputFixture(), list=new InputFixture();
 let deferredRefresh, resolveOld;
 const {installSearchController}=load('src/lib/search-controller.ts', {
-  tactile() {},
+  AbortController, ...directory, globalCities:async()=>[], tactile() {},
   debounceAsync(fn) { return () => { deferredRefresh=fn; }; },
   normalize:s=>s.trim().toLowerCase(), UI:{en:{noResult:'none',searchLoading:'loading',searchError:'error'}},
   window:{matchMedia:()=>({matches:false}),queueMicrotask,addEventListener(){}},

@@ -85,7 +85,7 @@ for (const absolute of sourceFiles) {
   }
   graph.set(path, deps);
 }
-const entrypoints = ["src/bootstrap.ts", "src/pwa-register.ts", "src/workers/search.worker.ts"];
+const entrypoints = ["src/bootstrap.ts", "src/weather-picker.ts", "src/pwa-register.ts", "src/workers/search.worker.ts"];
 const reachable = new Set();
 const stack = entrypoints.filter((path) => sourceSet.has(path));
 while (stack.length) {
@@ -273,7 +273,7 @@ for (const absolute of sourceFiles) {
       assert((source.match(/window\.location\.reload\(\)/gu) ?? []).length === 1
         && source.includes('retry.addEventListener("click", () => {')
         && source.includes('}, { once: true });')
-        && source.includes('"./main").catch('), "Fatal-startup retry must remain explicit and single-owned.");
+        && /import\("\.\/main"\)\)?\.catch\(/u.test(source), "Fatal-startup retry must remain explicit and single-owned.");
       continue;
     }
     if (pattern.test(source)) prohibitedRuntimeHits.push(`${path}: ${label}`);

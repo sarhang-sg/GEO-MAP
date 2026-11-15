@@ -1,3 +1,4 @@
+import { preparePresentationConfig } from "./lib/presentation-config";
 import { UI, languageDirection } from "./lib/i18n";
 import { readAppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
 import { loadingMarkup } from "./lib/loading-view";
@@ -155,7 +156,7 @@ if (handoffTarget) {
     const surface = document.getElementById("mapLoading");
     surface?.setAttribute("aria-label", UI[language].loadingCard);
   }
-  void import("./main").catch((error: unknown) => {
+  void preparePresentationConfig().then(() => import("./main")).catch((error: unknown) => {
     console.error("NAV KURD startup failed", error);
     renderStartupFailure(error);
   });

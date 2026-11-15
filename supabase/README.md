@@ -1,6 +1,6 @@
-# NAV KURD 10.4.4 backend
+# NAV KURD 11.0.0 backend
 
-Now updated — NAV KURD 10.4.4 · Reviewed 14 October 2026.
+Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
 
 The canonical backend source is in `sarhang-sg/GEO-MAP`. The
 `.github/workflows/release.yml` workflow tests the web build, browser behavior
@@ -47,4 +47,4 @@ be committed or exposed through `VITE_*`.
 It verifies the current release before removing obsolete application-owned
 Edge Functions. PostGIS data and schema history remain dependencies of the
 current application. Provider audit logs and internal function revision
-numbers are managed by Supabase, separately from app version 10.4.4.
+numbers are managed by Supabase, separately from app version 11.0.0.

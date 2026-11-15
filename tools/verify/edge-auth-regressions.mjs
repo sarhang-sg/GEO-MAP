@@ -25,7 +25,7 @@ async function exercise({invalid=false, owner=false, revokeError=false, token=tr
   }};
   let handler;
   const context=vm.createContext({Request,Response,Headers,TextEncoder,Map,Set,Error,Date,Promise,console:{error(){}},
-    APP_VERSION:'10.4.4',createClient:()=>admin,
+    APP_VERSION:'11.0.0',createClient:()=>admin,
     Deno:{env:{get:key=>key==='SUPABASE_URL'?'https://fixture.supabase.co':key==='SUPABASE_SERVICE_ROLE_KEY'?'fixture-server-key':''},serve:callback=>{handler=callback;}},
     PRIVATE_MEDIA_BUCKET:'atlas-user-media',mediaBucket:()=>null,addMediaPath(){},
     listPrivateUserMediaPaths:async()=>[],removeStoragePaths:async()=>{}

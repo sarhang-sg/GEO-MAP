@@ -50,7 +50,7 @@ const pendingWrites=[];
 const map={on:(e,fn)=>events.set(e,fn),off(){},getStyle:()=>({layers:[]}),getPitch:()=>pitch,getZoom:()=>zoom,getSource:id=>sources.get(id),addSource:(id,s)=>sources.set(id,{...s,setData(data){writes++; return new Promise(resolve=>pendingWrites.push(()=>{this.data=data;resolve();}));}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty:(id,p,v)=>paint.set(id+':'+p,v),setPaintProperty:(id,p,v)=>paint.set(id+':'+p,v)};
 const tick=()=>new Promise(r=>setImmediate(r));
 const v=new volume.LocationVolume(map);v.update([44,36],90);assert.equal(writes,0);
-pitch=55;events.get('pitch')();await tick();assert.equal(paint.get('location-dot:circle-opacity'),1);
+await tick(); assert.equal(writes,1, 'The extruded puck is built at zero pitch');
 pendingWrites.shift()();await tick();assert.equal(paint.get('location-dot:circle-opacity'),0);
 assert.equal(paint.get('location-dot:visibility'),'none');
 assert.equal(paint.get('location-3d-volume:visibility'),'visible');
@@ -60,14 +60,19 @@ assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity-transition').d
 pendingWrites.shift()();await tick();
 v.update([44,36],90);await tick();pendingWrites.shift()();await tick();
 const count=writes;v.update([44,36],90);await tick();assert.equal(writes,count);
-events.get('zoomstart')();zoom=19;assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),0);
-events.get('zoomend')();await tick();assert.equal(paint.get('location-dot:circle-opacity'),1);
-events.get('zoomstart')();zoom=15;pendingWrites.shift()();await tick();assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),0);
-events.get('zoomend')();await tick();pendingWrites.shift()();await tick();assert.equal(paint.get('location-dot:circle-opacity'),0);
-pitch=0;events.get('pitch')();assert.equal(paint.get('location-dot:circle-opacity'),1);
-pitch=55;zoom=8;events.get('zoomend')();await tick();assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),0);
+for (const nextZoom of [19,15,8]) {
+  zoom=nextZoom; events.get('zoom')(); await tick();
+  assert.equal(paint.get('location-3d-volume:visibility'),'visible');
+  assert.equal(paint.get('location-dot:visibility'),'none');
+  pendingWrites.shift()(); await tick();
+}
+for (const angle of [0,20,65]) {
+  pitch=angle; events.get('pitch')();
+  assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),1);
+}
+v.update(null,null);assert.equal(paint.get('location-3d-volume:visibility'),'none');
 assert.equal(volume.locationVolume([44,NaN],0,17).features.length,0);
-console.log('PASS delayed-worker 3D visibility, rapid zoom cancellation, bounded overview fallback and unchanged-fix write suppression');
+console.log('PASS delayed-worker 3D visibility, rapid zoom cancellation, continuous extrusion at overview zoom and unchanged-fix write suppression');
 const weather=load('src/lib/navigation-weather.ts',{Intl},'drivingWeatherAdvisory,navigationClock,NAVIGATION_COPY,forecastWeekday');
 const now=Date.UTC(2026,9,16,12), normal={observedAt:now,stale:false,weatherCode:0,temperature:25,windGusts:0,hours:[]};
 for(const [code,kind] of [[65,'rain'],[75,'snow'],[95,'storm'],[67,'ice']])assert.equal(weather.drivingWeatherAdvisory({...normal,weatherCode:code},now).kind,kind);

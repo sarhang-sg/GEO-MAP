@@ -136,7 +136,7 @@ img[src*="assets/icons/nav-kurd/"] {
 .route-panel__modes button img { width: 19px; height: 19px; max-width: 19px; max-height: 19px; flex-basis: 19px; }
 .route-panel__modes button.is-active { border-color: rgba(76, 203, 255, .54) !important; color: #fff !important; background: var(--nk-primary) !important; box-shadow: none !important; }
 .route-panel__modes button:disabled { cursor: default; opacity: .74; }
-.route-panel__start { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 9px; padding: 8px 16px; border: 1px solid rgba(76, 203, 255, .60); border-radius: var(--nk-radius-button); color: #fff; background: linear-gradient(135deg, #1769c7, var(--nk-primary)); box-shadow: 0 8px 20px rgba(19, 104, 201, .25); font: 850 .84rem/1 var(--font-ui); }
+.route-panel__start { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 9px; padding: 8px 16px; border: 0; border-radius: var(--nk-radius-button); color: #fff; background: linear-gradient(135deg, #1769c7, var(--nk-primary)); box-shadow: 0 8px 20px rgba(19, 104, 201, .25); font: 850 .84rem/1 var(--font-ui); }
 .route-panel__start[hidden] { display: none !important; }
 .route-panel__start:disabled { opacity: .66; box-shadow: none; }
 .route-panel__start img { width: 21px; height: 21px; max-width: 21px; max-height: 21px; flex-basis: 21px; }
@@ -382,7 +382,7 @@ html[data-ui-mode="satellite"] :where(.map-sheet, .search-card, .brand-card,
   padding: 0 !important;
   place-items: center !important;
   overflow: hidden !important;
-  border: 1px solid var(--nk-border) !important;
+  border: 0 !important;
   border-radius: 14px !important;
   color: var(--nk-text) !important;
   background: var(--nk-elevated) !important;
@@ -476,7 +476,7 @@ html[data-nav-kurd-theme="professional"] .style-choice[data-map-mode-cycle="true
   padding: 0;
   place-items: center;
   overflow: hidden;
-  border: 1px solid rgba(213, 224, 238, .22) !important;
+  border: 0 !important;
   border-radius: 15px !important;
   color: #f7f9fc !important;
   background: rgba(7, 17, 31, .72) !important;
@@ -514,7 +514,7 @@ html[data-nav-kurd-theme="professional"] .style-choice[data-map-mode="satellite"
 html[data-nav-kurd-theme="professional"] :where(.map-actions .round-button,
   .map-actions .map-button, .map-3d-button, .controls-visibility-button,
   .feedback-quick-button, .maplibregl-ctrl-group) {
-  border: 1px solid var(--nk-border) !important;
+  border: 0 !important;
   color: var(--nk-text) !important;
   background: color-mix(in srgb, var(--nk-surface) 92%, transparent) !important;
   background-image: none !important;
@@ -623,7 +623,7 @@ html[data-nav-kurd-theme="professional"] .route-navigation-hud {
   justify-content: center;
   gap: 9px;
   padding: 8px 12px;
-  border: 1px solid rgba(213, 224, 238, .2);
+  border: 0;
   border-radius: 17px;
   color: #ffffff;
   background: rgba(7, 17, 31, .74);
@@ -768,7 +768,7 @@ html[data-nav-kurd-theme="professional"] .nav-tutorial__restore {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--nk-border);
+  border: 0;
   color: var(--nk-text);
   background: var(--nk-elevated);
   box-shadow: var(--nk-shadow);
@@ -807,7 +807,7 @@ html[data-nav-kurd-theme="professional"] .user-navigation-history {
   display: grid;
   gap: 9px;
   padding: 13px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 16px;
   background: var(--nk-elevated);
 }
@@ -835,7 +835,7 @@ html[data-nav-kurd-theme="professional"] .user-navigation-history__item {
   align-items: center;
   gap: 4px 9px;
   padding: 10px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 13px;
   color: var(--nk-text);
   background: var(--nk-surface);
@@ -1380,7 +1380,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"] :where(
   height: calc(100% - 6px);
   max-width: none;
   max-height: none;
-  border: 1px solid color-mix(in srgb, var(--nk-border) 82%, transparent);
+  border: 0;
   border-radius: 12px;
   object-fit: cover;
   object-position: center;
@@ -1446,7 +1446,7 @@ html[data-nav-kurd-theme="professional"] .user-contrib__editor-head button {
   justify-content: center;
   gap: 7px;
   padding: 0 12px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 12px;
   color: var(--nk-text);
   background: var(--nk-elevated);
@@ -1494,7 +1494,7 @@ html[data-nav-kurd-theme] .maplibregl-popup.nav-kurd-place-popup .maplibregl-pop
   overscroll-behavior: contain;
   scrollbar-width: thin;
   padding: 8px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 16px;
   color: var(--nk-text);
   background: var(--nk-surface);
@@ -1735,7 +1735,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"]
   display: grid;
   gap: 9px;
   padding: 13px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 16px;
   color: var(--nk-text);
   background: var(--nk-elevated);
@@ -1775,7 +1775,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"]
   justify-content: center;
   gap: 6px;
   padding: 0 9px;
-  border: 1px solid rgba(255, 99, 120, .28);
+  border: 0;
   border-radius: 10px;
   color: #ffb8c4;
   background: rgba(255, 99, 120, .10);
@@ -1799,7 +1799,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"]
   align-items: center;
   gap: 5px 8px;
   padding: 9px;
-  border: 1px solid var(--nk-border);
+  border: 0;
   border-radius: 13px;
   color: var(--nk-text);
   background: var(--nk-surface);
@@ -1881,7 +1881,7 @@ html[data-ui-mode="light"][data-nav-kurd-theme="professional"]
   min-width: 34px;
   padding: 0;
   place-items: center;
-  border: 1px solid rgba(255, 99, 120, .24);
+  border: 0;
   border-radius: 10px;
   color: #ff9aab;
   background: rgba(255, 99, 120, .09);
@@ -1996,6 +1996,13 @@ html[data-nav-kurd-theme="professional"] .map-shell.is-navigating :where(.topbar
 
 /* One optional color palette for the complete interface. Original preserves
    the approved appearance; map imagery and semantic warnings keep their colors. */
+html[data-accent="gold"] {
+  --user-primary:#775119; --user-deep:#513509; --user-bright:#ffe0a3;
+  --user-bg:#171511; --user-surface:#262119; --user-elevated:#322c22;
+  --user-text:#fff9ed; --user-muted:#e0d4c2; --user-border:#736650;
+  --user-light-bg:#f7f2e9; --user-light-surface:#fffaf1; --user-light-elevated:#f1e6cf;
+  --user-light-text:#251d10; --user-light-muted:#4e422e; --user-light-border:#958467;
+}
 html[data-accent="blue"] {
   --user-primary: #1769c7; --user-deep: #104a99; --user-bright: #4db4ff;
   --user-bg: #081827; --user-surface: #0c2036; --user-elevated: #15314e;
@@ -2261,14 +2268,14 @@ html[data-nav-kurd-theme="professional"] .route-navigation-hud {
 .route-navigation-hud__road { width: 100%; color: var(--nk-muted); text-align: center; font-size: .7rem; line-height: 1.45; }
 .route-navigation-hud :is(bdi, [data-navigation-distance], [data-navigation-duration]), [data-route-metrics] bdi { unicode-bidi: isolate; }
 .route-navigation-hud [hidden] { display: none !important; }
-.navigation-advisory { position: absolute; z-index: var(--z-critical); left: 50%; transform: translateX(-50%); top: max(230px, calc(env(safe-area-inset-top) + 220px)); width: min(420px, calc(100% - 36px)); box-sizing: border-box; display: grid; grid-template-columns: 28px minmax(0, 1fr) 44px; gap: 9px; padding: 12px; border: 1px solid var(--nk-warning, #f4bf65); border-radius: 18px; color: var(--nk-text); background: var(--nk-surface); box-shadow: 0 12px 30px #0005; animation: nav-advisory-in .18s ease-out; }
+.navigation-advisory { position: absolute; z-index: var(--z-critical); left: 50%; transform: translateX(-50%); top: max(230px, calc(env(safe-area-inset-top) + 220px)); width: min(420px, calc(100% - 36px)); box-sizing: border-box; display: grid; grid-template-columns: 28px minmax(0, 1fr) 44px; gap: 9px; padding: 12px; border: 0; border-radius: 18px; color: var(--nk-text); background: var(--nk-surface); box-shadow: 0 12px 30px #0005; animation: nav-advisory-in .18s ease-out; }
 .map-shell.map-controls-idle .navigation-advisory { top: max(165px, calc(env(safe-area-inset-top) + 155px)); }
 .navigation-advisory[hidden] { display: none !important; }
-.navigation-advisory__icon { display: grid; place-items: center; align-self: start; width: 26px; height: 26px; border: 1px solid currentColor; border-radius: 50%; color: var(--nk-warning, #f4bf65); font-weight: 800; }
+.navigation-advisory__icon { display: grid; place-items: center; align-self: start; width: 26px; height: 26px; border: 0; border-radius: 50%; color: var(--nk-warning, #f4bf65); font-weight: 800; }
 .navigation-advisory strong { display: block; font-size: .92rem; }
 .navigation-advisory p { margin: 5px 0; font-size: .86rem; line-height: 1.6; }
 .navigation-advisory small { display: block; color: var(--nk-muted); font-size: .66rem; line-height: 1.5; }
-.navigation-advisory button { width: 44px; height: 44px; padding: 0; border: 1px solid var(--nk-border); border-radius: 12px; color: var(--nk-text); background: var(--nk-elevated); font: inherit; font-size: 24px; cursor: pointer; }
+.navigation-advisory button { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 12px; color: var(--nk-text); background: var(--nk-elevated); font: inherit; font-size: 24px; cursor: pointer; }
 .navigation-advisory button:focus-visible { outline: 2px solid var(--nk-warning, #f4bf65); outline-offset: 2px; }
 .road-information { color: var(--nk-text); padding: 4px; line-height: 1.65; }
 .road-information p { margin: 8px 0; font-size: .86rem; }
@@ -2279,7 +2286,7 @@ html[data-nav-kurd-theme="professional"] .route-navigation-hud {
 
 /* Anchored road information follows the same popup palette as places. */
 html[data-nav-kurd-theme][data-ui-mode] .nav-kurd-road-popup .maplibregl-popup-content {
-  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 1px solid var(--nk-border) !important;
+  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 0 !important;
   border-radius: 16px; padding: 14px; box-shadow: 0 8px 28px #0003; min-width: 180px;
 }
 .nav-kurd-road-popup .road-information { padding-top: 22px; font: 500 12px/1.7 var(--font-ui); overflow-wrap: anywhere; }
@@ -2291,3 +2298,7 @@ html[data-nav-kurd-theme][data-ui-mode] .nav-kurd-road-popup .maplibregl-popup-c
 .nav-kurd-road-popup[class*="anchor-top"] .maplibregl-popup-tip { border-bottom-color: var(--nk-surface) !important; }
 .nav-kurd-road-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--nk-surface) !important; }
 .nav-kurd-road-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--nk-surface) !important; }
+
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { border:0 !important; backdrop-filter:none; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { box-shadow:0 6px 16px #12182512,0 18px 44px #12182522 !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { overflow:auto; max-height:min(58dvh,520px); overscroll-behavior:contain; }

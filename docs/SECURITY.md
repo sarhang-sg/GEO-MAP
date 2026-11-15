@@ -1,6 +1,6 @@
 # Security
 
-Now updated — NAV KURD 10.4.4 · Reviewed 14 October 2026.
+Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
 
 Browser security is enforced with CSP, HSTS, frame denial, MIME sniffing protection, bounded permissions and same-origin resource policies. API responses are non-cacheable and non-indexable.
 

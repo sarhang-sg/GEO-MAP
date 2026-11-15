@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 
 const repository = 'sarhang-sg/GEO-ANDROID';
 const certificate = 'A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246';
-export function assertPublicAndroid(release, receipt, artifact, version='10.4.4', code=100404) {
+export function assertPublicAndroid(release, receipt, artifact, version='11.0.0', code=110000) {
   assert.equal(release.draft, false, 'APK is still a draft');
   assert.equal(release.prerelease, false, 'APK is a prerelease');
   assert.equal(release.tag_name, `v${version}`);
@@ -41,25 +41,23 @@ async function getJson(url) {
 async function main() {
   const metadata = JSON.parse(await readFile('public/releases/latest.json', 'utf8'));
   const config = JSON.parse(await readFile('release.config.json', 'utf8'));
-  assert.equal(metadata.version, config.androidVersion, 'Android download version differs from configuration');
-  assert.equal(metadata.versionCode, config.androidVersionCode, 'Android download code differs from configuration');
+  assert.ok(Number.isSafeInteger(metadata.versionCode) && metadata.versionCode > 0 && metadata.versionCode <= config.androidVersionCode);
   const production = process.env.VERCEL_ENV === 'production' || process.env.GITHUB_REF === 'refs/heads/main';
   if (!metadata.artifact) {
     if (production) throw new Error('Production requires a CI-verified Android receipt binding. Run the coordinated Termux updater.');
     console.log('PASS source preview: Android download remains unavailable until publication.');
     return;
   }
-  // The web push precedes publication. Wait for the same verified draft to
-  // become public; an interrupted updater cannot expose a dead APK link.
+  // Bind the download to the signed release already available to users.
   const deadline = Date.now() + 15*60*1000;
   let lastError;
   do {
     try {
-      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/v${config.androidVersion}`);
+      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/v${metadata.version}`);
       const asset = release.assets.find(a => a.name === 'DOWNLOAD-RECEIPT.json');
       assert.ok(asset && asset.size <= 32768, 'verified receipt missing');
       const receipt = await getJson(asset.browser_download_url);
-      const published = assertPublicAndroid(release, receipt, metadata.artifact, config.androidVersion, config.androidVersionCode);
+      const published = assertPublicAndroid(release, receipt, metadata.artifact, metadata.version, metadata.versionCode);
       const download = await fetch(metadata.artifact.url, {method:'HEAD', signal:AbortSignal.timeout(20000)});
       assert.ok(download.ok, 'published APK is not downloadable');
       await writeFile('dist/releases/latest.json', JSON.stringify({...metadata, publishedAt:published}, null, 2)+'\n');

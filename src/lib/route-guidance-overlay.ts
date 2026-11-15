@@ -1,3 +1,4 @@
+import { setMeasuredText } from "./dom";
 import { Marker, type GeoJSONSource, type Map as MapLibreMap } from "maplibre-gl";
 import { type LngLatTuple } from "./location";
 import { maneuverLabel, type Maneuver } from "./route-maneuvers";
@@ -58,7 +59,7 @@ export class RouteGuidanceOverlay {
     // This label is anchored to the real maneuver, not a fixed screen panel.
     const title = maneuverLabel(step, language);
     const text = `${title} · ${formattedDistance}`;
-    if (this.element.textContent !== text) this.element.textContent = text;
+    if (this.element.textContent !== text) setMeasuredText(this.element, text);
     this.element.dir = language === "en" ? "ltr" : "rtl";
     this.element.title = step.name;
     this.marker.setLngLat(coordinate);

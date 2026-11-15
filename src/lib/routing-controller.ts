@@ -1,3 +1,4 @@
+import { setMeasuredText } from "./dom";
 import { maneuverLabel } from "./route-maneuvers";
 import { NavigationAdvisory } from "./navigation-advisory";
 import { NAVIGATION_COPY, navigationClock, type DrivingWeather } from "./navigation-weather";
@@ -1346,11 +1347,11 @@ export class RoutingController {
     this.guidance.hideLabel();
     const instruction = this.navigationHud.querySelector<HTMLElement>("[data-navigation-instruction]")!;
     // A maneuver outside the viewport still needs a visible instruction.
-    instruction.textContent = next && !this.rerouteConfirmation.pending ? `${maneuverLabel(next,language)} · ${formatDistance(Math.max(0,next.atMeters-this.progressMeters),language)}` : "";
+    setMeasuredText(instruction, next && !this.rerouteConfirmation.pending ? `${maneuverLabel(next,language)} · ${formatDistance(Math.max(0,next.atMeters-this.progressMeters),language)}` : "");
     instruction.dir = language === "en" ? "ltr" : "rtl";
     instruction.hidden = !instruction.textContent;
-    this.navigationHudDistance.textContent = formatDistance(this.lastDistance, language);
-    this.navigationHudDuration.textContent = formatDuration(this.lastDuration, language);
+    setMeasuredText(this.navigationHudDistance, formatDistance(this.lastDistance, language));
+    setMeasuredText(this.navigationHudDuration, formatDuration(this.lastDuration, language));
     this.navigationHudDestination.textContent = this.destinationName || UI[language].routeDestination;
     const copy = NAVIGATION_COPY[language], snapshot = this.getLocationSnapshot();
     const age = typeof snapshot.sampledAt === "number" ? Date.now() - snapshot.sampledAt : Infinity;
@@ -1369,7 +1370,7 @@ export class RoutingController {
     arrival.setAttribute("aria-label", `${copy.arrival} ${arrival.textContent}`);
     this.navigationHud.querySelector<HTMLElement>("[data-navigation-arrival-label]")!.textContent = copy.arrivalShort;
     const speedElement = this.navigationHud.querySelector<HTMLElement>("[data-navigation-speed]")!;
-    speedElement.textContent = speed; speedElement.setAttribute("aria-label", `${copy.speed} ${speed}`);
+    setMeasuredText(speedElement, speed); speedElement.setAttribute("aria-label", `${copy.speed} ${speed}`);
     this.navigationHud.querySelector<HTMLElement>("[data-navigation-speed-wrap]")!.hidden = this.travelMode !== "car";
     this.navigationHud.querySelector<HTMLElement>("[data-navigation-limit-label]")!.textContent = copy.limit;
     this.navigationHud.querySelector<HTMLElement>("[data-navigation-limit]")!.textContent = limit === null ? "—" : `${limit} km/h`;

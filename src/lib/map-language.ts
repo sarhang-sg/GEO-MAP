@@ -91,7 +91,7 @@ function isPublicName(value: unknown): boolean {
   if (GENERIC_PUBLIC_NAMES.has(text) || GENERIC_PUBLIC_NAMES.has(lower)) return false;
   if (/^[.\-–—_\s]+$/u.test(text)) return false;
   if (/^[\d\s\-_/.,()]+$/u.test(text)) return false;
-  return /[A-Za-z\u0600-\u06ff]/u.test(text) && text.replace(/[^A-Za-z\u0600-\u06ff0-9]+/gu, "").length >= 2;
+  return /\p{L}/u.test(text);
 }
 
 function replaceChars(value: string, table: Record<string, string>): string {
@@ -167,8 +167,7 @@ export function localizedCategory(value: unknown, language: Language, fallback: 
 }
 
 export function localizedStaticName(item: StaticSearchItem, language: Language): string {
-  const exact = language === "ku" ? item.n_ku : language === "ar" ? item.n_ar : item.n_en;
-  return localizeNameValue(exact, language);
+  return localizedRecordName(item, language, ["n", "n_ku", "n_ar", "n_en"]);
 }
 
 export function localizedStaticCategory(item: StaticSearchItem, language: Language, fallback: string): string {
@@ -179,17 +178,14 @@ export function localizedStaticCategory(item: StaticSearchItem, language: Langua
 }
 
 export function localizedRecordName(properties: Record<string, unknown>, language: Language, candidates: readonly string[]): string {
-  const exactKeys = language === "ku"
-    ? ["name_ku", "name:ku", "name:ckb"]
-    : language === "ar"
-      ? ["name_ar", "name:ar"]
-      : ["name_en", "name:en", "int_name"];
-  const exact = exactKeys.map((key) => properties[key]).find((value) => clean(value));
-  // The candidates parameter is retained for API compatibility, but visible
-  // names are resolved only from the exact selected-language properties.
-  void candidates;
-  const localized = localizeNameValue(exact, language);
-  return isPublicName(localized) ? localized : "";
+  const keys = [`name_${language}`, `name:${language}`, `n_${language}`,
+    ...(language === "ku" ? ["name:ckb"] : []), "name_ku", "name_ar", "name_en",
+    "name", "title", "display_name", "name_display", "name_local", ...candidates];
+  for (const key of keys) {
+    const value = clean(properties[key]).replace(/[\u200b-\u200f\u202a-\u202e\u2066-\u2069]/gu, "").trim();
+    if (isPublicName(value)) return localizeNameValue(value, language) || value;
+  }
+  return "";
 }
 
 /** Resolve every name property accepted by the visible POI filter. */

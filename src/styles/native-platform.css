@@ -38,7 +38,7 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
   gap: 10px 12px;
   margin: 12px 0;
   padding: 12px;
-  border: 1px solid var(--nk-border, rgba(105, 157, 241, .23));
+  border: 0;
   border-radius: 18px;
   color: var(--nk-text, #f7f9fc);
   background: var(--nk-surface, #0d1a2b);
@@ -79,7 +79,7 @@ html.is-native-app .maplibregl-ctrl-bottom-right {
   height: 42px;
   place-items: center;
   flex: 0 0 42px;
-  border: 1px solid var(--nk-border, rgba(111, 177, 255, .20));
+  border: 0;
   border-radius: 13px;
   color: var(--nk-text, #f7f9fc);
   background: var(--nk-elevated, #12243a);
@@ -107,7 +107,7 @@ html[data-ui-mode="light"] .native-app-panel__icon { filter: brightness(0); }
 .native-app-panel__status > div {
   min-width: 0;
   padding: 8px 10px;
-  border: 1px solid var(--nk-border, rgba(137, 162, 210, .10));
+  border: 0;
   border-radius: 12px;
   background: var(--nk-elevated, rgba(255,255,255,.028));
 }
@@ -127,7 +127,7 @@ html[data-ui-mode="light"] .native-app-panel__icon { filter: brightness(0); }
 .place-detail__share,
 .place-popup__share {
   appearance: none;
-  border: 1px solid rgba(193, 106, 225, 0.48);
+  border: 0;
   border-radius: 12px;
   color: #fff;
   background: rgba(112, 39, 139, 0.55);

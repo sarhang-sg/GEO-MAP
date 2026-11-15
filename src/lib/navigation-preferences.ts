@@ -5,6 +5,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import { LOCATION_STATE_EVENT, type LiveLocationController, type LocationState } from "./live-location-controller";
 import type { MapCoordinatePicker } from "./map-coordinate-picker";
 import type { Language } from "./types";
+import { setMeasuredText } from "./dom";
 import { escapeText } from "./geo-format";
 import { mapNoticeStack, NoticeAutoHide } from "./map-notices";
 import { APPEARANCE_VALUES as VALID, DEFAULT_APPEARANCE, applyAppearance, readAppearance, saveAppearance, type AppearancePreferences as Preferences } from "./appearance-state";
@@ -106,7 +107,8 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
     status.dir=getLanguage()==="en"?"ltr":"rtl";status.dataset.state=state;
     if(status.hidden){dismissal.clear();return;}
     const text=state==="acquiring"?c.acquiring:state==="approximate"?`${c.approximate} ${Math.round(accuracy).toLocaleString()} m`:state==="denied"?c.denied:c.unavailable;
-    status.innerHTML=`<div class="location-recovery__body"><span class="location-recovery__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><p>${escapeText(text)}</p><button type="button" class="location-recovery__close" data-location-dismiss aria-label="${escapeText(c.close)}">×</button></div><div class="location-recovery__actions"><button type="button" ${state==="acquiring"?"data-location-stop":"data-location-retry"}>${escapeText(state==="acquiring"?c.stop:c.retry)}</button><button type="button" data-location-pick>${escapeText(c.choose)}</button></div>`;
+    status.innerHTML=`<div class="location-recovery__body"><span class="location-recovery__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><p></p><button type="button" class="location-recovery__close" data-location-dismiss aria-label="${escapeText(c.close)}">×</button></div><div class="location-recovery__actions"><button type="button" ${state==="acquiring"?"data-location-stop":"data-location-retry"}>${escapeText(state==="acquiring"?c.stop:c.retry)}</button><button type="button" data-location-pick>${escapeText(c.choose)}</button></div>`;
+    setMeasuredText(status.querySelector("p")!, text);
     if(restart){dismissal.clear();if(state!=="acquiring")dismissal.start(state==="approximate"?12_000:24_000);}
   };
   document.addEventListener(LOCATION_STATE_EVENT,event=>{

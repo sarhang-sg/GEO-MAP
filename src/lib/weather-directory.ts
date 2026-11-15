@@ -1,6 +1,10 @@
 import { WEATHER_ENTRY_ICON } from "./weather-entry-icon";
-import { coreCall, localCoreEnabled } from "../android/local-provider";
-import { languageValue, districtValue, governorateValue, categoryValue, placeRank } from "./geo-format";
+import { directoryCities, cityFeature, cityKey, cityName, cityMatches, canonicalCityQuery, exactDirectoryCity, type WeatherCity } from "./weather-cities";
+import { cityReadings, cachedReading, globalCities, skyMesh } from "./weather-explorer";
+import { weatherPins } from "./weather-pins";
+import { weatherCodeLabel, weatherCodeKind } from "./weather-codes";
+import { weatherIconAsset } from "./place-weather";
+import { languageValue, districtValue, governorateValue } from "./geo-format";
 import type { LocalityFeature, Language } from "./types";
 import type { PlaceWeatherService } from "./place-weather";
 import type { LngLatTuple } from "./location";
@@ -12,8 +16,9 @@ const COPY = {
 };
 export type WeatherDirectory = { open: (feature?: LocalityFeature) => void };
 export function installWeatherDirectory(options: {
-  shell: HTMLElement; getLanguage: () => Language; getLocalities: () => LocalityFeature[];
+  shell: HTMLElement; getLanguage: () => Language;
   search: (term: string) => Promise<LocalityFeature[]>; service: PlaceWeatherService;
+  embedded?: boolean; selectCity?: (city:WeatherCity)=>void; onClose?:()=>void; onGps?:()=>void;
 }): WeatherDirectory {
   const button = document.createElement("button"); button.type = "button"; button.id = "weatherListButton";
   button.className = "round-button weather-list-button"; button.innerHTML = WEATHER_ENTRY_ICON;
@@ -26,27 +31,11 @@ export function installWeatherDirectory(options: {
   let generation = 0, timer = 0, input: HTMLInputElement, list: HTMLElement, details: HTMLElement, status: HTMLElement;
   let selected: LocalityFeature | undefined;
   let previousFocus: HTMLElement | null = null;
-  let summaryGeneration = 0, activeRequests = 0;
-  let observer: IntersectionObserver | null = null;
-  const queue: Array<() => Promise<void>> = [];
-  const pump = (): void => {
-    while (dialog.open && activeRequests < 2 && queue.length) {
-      const task = queue.shift()!; activeRequests++;
-      void task().finally(() => { activeRequests--; pump(); });
-    }
-  };
-  const stopSummaries = (): void => { summaryGeneration++; observer?.disconnect(); observer = null; queue.length = 0; };
-  let nativeDefaults: { language: Language; rows: LocalityFeature[] } | null = null;
-  const defaults = async (): Promise<LocalityFeature[]> => {
-    const language = options.getLanguage();
-    if (localCoreEnabled) {
-      if (nativeDefaults?.language === language) return nativeDefaults.rows;
-      // A single bounded native query; never transfer the full village catalog.
-      const result = await coreCall<{ features: LocalityFeature[] }>("viewport", { datasets: ["locality"], language, bounds: [42, 34, 47, 38], limit: 128, after: 0, minimumLocalityRank: 80 });
-      nativeDefaults = { language, rows: result.features }; return result.features;
-    }
-    return options.getLocalities().filter(feature => ["city", "town"].includes(feature.properties.place ?? ""));
-  };
+  let controller: AbortController | undefined;
+  let currentRows:WeatherCity[] = [];
+  let pinsReady = false;
+  const pins = weatherPins(() => { if (pinsReady && dialog.open) draw(currentRows); });
+  const stopSummaries = () => { controller?.abort(); };
   const choose = (feature: LocalityFeature): void => {
     selected = feature;
     const language = options.getLanguage(), name = languageValue(feature.properties, language);
@@ -65,65 +54,78 @@ export function installWeatherDirectory(options: {
     for (const row of list.querySelectorAll<HTMLButtonElement>("button[data-place-id]")) row.setAttribute("aria-pressed", String(row.dataset.placeId === feature.properties.id));
     if (window.matchMedia("(max-width: 600px)").matches) back.focus({ preventScroll: true });
   };
-  const showRows = (rows: LocalityFeature[], isDefault: boolean): void => {
-    stopSummaries();
-    const batch = summaryGeneration;
-    const pending = new Map<Element, () => Promise<void>>();
-    const language = options.getLanguage(), copy = COPY[language];
-    const unique = new Map(rows.map(feature => [feature.properties.id, feature]));
-    const candidates = [...unique.values()];
-    if (isDefault) candidates.sort((a, b) => placeRank(b.properties.place) - placeRank(a.properties.place));
-    const visible = candidates.filter(feature => languageValue(feature.properties, language) !== "—").slice(0, 32);
-    const fragment = document.createDocumentFragment();
-    for (const feature of visible) {
-      const row = document.createElement("button"); row.type = "button"; row.className = "weather-directory__place";
-      row.dataset.placeId = feature.properties.id; row.setAttribute("aria-pressed", String(selected?.properties.id === feature.properties.id));
-      const name = document.createElement("strong"); name.textContent = languageValue(feature.properties, language);
-      const context = document.createElement("small");
-      context.textContent = [...new Set([categoryValue(feature.properties.place, language, copy.place),
-        String(feature.properties[`admin_subdistrict_${language}`] ?? ""), districtValue(feature.properties, language), governorateValue(feature.properties, language)].filter(Boolean))].join(" · ");
-      const label = document.createElement("span"); label.className = "weather-directory__label"; label.append(name, context);
-      const observed = document.createElement("small"); observed.className = "weather-directory__observed"; label.append(observed);
-      const reading = document.createElement("span"); reading.className = "weather-directory__reading";
-      const icon = document.createElement("img"); icon.width = 30; icon.height = 30; icon.alt = ""; icon.hidden = true;
-      const temperature = document.createElement("bdi"); temperature.textContent = "—"; reading.append(icon, temperature);
-      row.append(label, reading); row.addEventListener("click", () => choose(feature)); fragment.append(row);
-      pending.set(row, async () => {
-        if (batch !== summaryGeneration || !dialog.open || !row.isConnected) return;
-        row.setAttribute("aria-busy", "true");
-        try {
-          const weather = await options.service.summary(feature.geometry.coordinates.slice(0, 2) as LngLatTuple, language);
-          if (batch !== summaryGeneration || !dialog.open || !row.isConnected) return;
-          temperature.textContent = weather.temperature; icon.src = weather.icon; icon.alt = weather.condition; icon.hidden = false;
-          observed.textContent = weather.observed; row.title = `${name.textContent} · ${weather.condition} · ${weather.temperature}`;
-        } catch { if (batch === summaryGeneration) reading.title = language === "en" ? "Weather unavailable" : language === "ar" ? "الطقس غير متاح" : "کەش‌وهەوا بەردەست نییە"; }
-        finally { row.removeAttribute("aria-busy"); }
-      });
+  function draw(cities:WeatherCity[]) {
+    currentRows = cities;
+    const language = options.getLanguage(), saved = pins.all();
+    const all = new Map<string,WeatherCity>();
+    for (const city of [...saved.filter(c=>!input.value || cityMatches(c,input.value)),...cities]) {
+      const key=cityKey(city); if (!all.has(key)) all.set(key,city);
     }
-    list.replaceChildren(fragment); status.textContent = visible.length ? `${visible.length} ${copy.ready}` : copy.empty;
-    if (typeof IntersectionObserver !== "undefined") {
-      observer = new IntersectionObserver(entries => {
-        for (const entry of entries) if (entry.isIntersecting) {
-          const task = pending.get(entry.target); if (task) { pending.delete(entry.target); queue.push(task); observer?.unobserve(entry.target); }
-        }
-        pump();
-      }, { root: list, rootMargin: "40px" });
-      for (const row of pending.keys()) observer.observe(row);
-    } else { queue.push(...pending.values()); pump(); }
-  };
-  const search = async (): Promise<void> => {
-    stopSummaries();
-    const serial = ++generation, copy = COPY[options.getLanguage()], term = input.value.trim(); status.textContent = copy.loading;
-    try {
-      const rows = term.length >= 2 ? await options.search(term) : await defaults();
-      if (serial !== generation || !dialog.open) return;
-      showRows(rows, term.length < 2);
-    } catch {
-      if (serial !== generation || !dialog.open) return;
-      status.textContent = copy.unavailable;
-      const retry = document.createElement("button"); retry.type = "button"; retry.textContent = copy.retry;
-      retry.addEventListener("click", () => { void search(); }); list.replaceChildren(retry);
+    const visible = [...all.values()].slice(0,32), frag = document.createDocumentFragment();
+    for (const city of visible) {
+      const key = cityKey(city), value = cachedReading(city);
+      const card = document.createElement("article"); card.className = "weather-city";
+      const row = document.createElement("button"); row.type="button"; row.dataset.placeId=key;
+      row.className="weather-directory__place"; row.setAttribute("aria-pressed",String(selected?.properties.id===key));
+      const title = document.createElement("strong"); title.textContent=cityName(city,language);
+      const context=document.createElement("small"); context.textContent=city.region || "";
+      const copy=document.createElement("span"); copy.append(title,context);
+      if (value) {
+        const icon=document.createElement("img"); icon.alt=""; icon.width=48; icon.height=48;
+        icon.src=weatherIconAsset(weatherCodeKind(value.code),value.day);
+        const temp=document.createElement("span"); temp.dir="ltr"; temp.className="weather-city__temp";
+        temp.textContent=`${Math.round(value.temperature)}°`;
+        const condition=document.createElement("span"); condition.textContent=weatherCodeLabel(value.code,value.day,language);
+        const range=document.createElement("span"); range.dir="ltr";
+        if (value.high!==null && value.low!==null) range.textContent=`${Math.round(value.high)}° / ${Math.round(value.low)}°`;
+        const stamp=document.createElement("time");
+        stamp.textContent=new Intl.DateTimeFormat(language==="ku"?"ckb-IQ":language,{hour:"2-digit",minute:"2-digit",timeZone:"UTC",hourCycle:"h23"}).format((value.at+value.offset)*1000);
+        stamp.dateTime=new Date(value.at*1000).toISOString();
+        context.replaceChildren(condition," · ",stamp); copy.append(range); row.append(copy,icon,temp);
+        card.style.setProperty("--city-sky",skyMesh(value.temperature,value.code,value.at,value.offset,city.lat));
+      } else row.append(copy);
+      row.onclick=()=>{
+        if(options.selectCity) options.selectCity(city);
+        else if (window.flutter_inappwebview) open(cityFeature(city));
+        else choose(cityFeature(city));
+      };
+      const pin=document.createElement("button"); pin.className="weather-city__pin"; pin.type="button";
+      const pinned=pins.has(city); pin.setAttribute("aria-pressed",String(pinned));
+      pin.textContent=pinned?"★":"☆"; pin.title=({ku:"دڵخوازەکان",ar:"المفضلة",en:"Favorites"})[language]+" · "+title.textContent;
+      pin.setAttribute("aria-label",pin.title); pin.onclick=()=>{pins.toggle(city); list.querySelector<HTMLButtonElement>(`button[data-place-id="${key}"] + button`)?.focus();};
+      card.append(row,pin); frag.append(card);
     }
+    list.replaceChildren(frag);
+    status.textContent=visible.length ? "" : COPY[language].empty;
+    return visible;
+  }
+  const search = async () => {
+    stopSummaries(); controller=new AbortController();
+    const signal=controller.signal, serial=++generation, term=input.value.trim(), language=options.getLanguage();
+    const initial=directoryCities.filter(c=>!term || cityMatches(c,term));
+    const exact=exactDirectoryCity(term);
+    if (exact) initial.splice(0,0,...initial.splice(initial.indexOf(exact),1));
+    const paint = async (rows:WeatherCity[]) => {
+      if (signal.aborted || serial!==generation || !dialog.open) return;
+      const visible=draw(rows);
+      try { await cityReadings(visible,signal); if (!signal.aborted && serial===generation) draw(rows); }
+      catch { if (!signal.aborted && serial===generation) status.textContent=COPY[language].unavailable; }
+    };
+    if (term.length<2) { await paint(initial); return; }
+    draw(initial);
+    const candidates = [...initial];
+    const merge = (rows:WeatherCity[]) => {
+      if (signal.aborted || serial!==generation) return;
+      candidates.push(...rows); draw(candidates);
+    };
+    await Promise.allSettled([
+      options.search(canonicalCityQuery(term)).then(features=>merge(features.map(f=>({
+        name:languageValue(f.properties,"ku"),en:languageValue(f.properties,"en"),ar:languageValue(f.properties,"ar"),
+        lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0]
+      })))),
+      globalCities(canonicalCityQuery(term),language,signal).then(merge)
+    ]);
+    await paint(candidates);
   };
   const render = (): void => {
     stopSummaries();
@@ -133,6 +135,7 @@ export function installWeatherDirectory(options: {
     const header = document.createElement("header"), title = document.createElement("h2"), close = document.createElement("button");
     title.id = "weatherDirectoryTitle"; title.textContent = copy.title; close.type = "button"; close.textContent = copy.close;
     close.addEventListener("click", () => dialog.close()); header.append(title, close);
+    if (options.onGps) { const gps=document.createElement("button"); gps.type="button"; gps.textContent={ku:"شوێنی ئێستام",ar:"موقعي الحالي",en:"Use my location"}[options.getLanguage()]; gps.onclick=options.onGps; header.append(gps); }
     input = document.createElement("input"); input.type = "search"; input.placeholder = copy.search; input.setAttribute("aria-label", copy.search); input.autocomplete = "off";
     input.addEventListener("input", () => { generation++; stopSummaries(); window.clearTimeout(timer); timer = window.setTimeout(() => { void search(); }, 220); });
     status = document.createElement("p"); status.className = "weather-directory__status"; status.setAttribute("role", "status");
@@ -144,19 +147,19 @@ export function installWeatherDirectory(options: {
   };
   const openWeb = (feature?: LocalityFeature): void => {
     if (!dialog.open) previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    selected = feature; render(); if (!dialog.open) dialog.showModal();
+    selected = feature; render(); if (!dialog.open) dialog.showModal(); pinsReady=true; pins.sync();
     if (feature) choose(feature); void search();
     // Avoid opening the mobile keyboard until the user actually taps Search.
     if (!feature && window.matchMedia("(min-width: 701px) and (pointer: fine)").matches) input.focus();
   };
   const open = (feature?: LocalityFeature): void => {
     const native = window.flutter_inappwebview;
-    if (!native) { openWeb(feature); return; }
+    if (!native || options.embedded || !feature) { openWeb(feature); return; }
     const place = feature ? {lat:feature.geometry.coordinates[1], lon:feature.geometry.coordinates[0], name:languageValue(feature.properties,options.getLanguage())} : null;
     void native.callHandler("nativeWeatherDetails", place).then(ok => { if (ok !== true) openWeb(feature); }, () => openWeb(feature));
   };
   button.addEventListener("click", () => open());
-  dialog.addEventListener("close", () => { generation++; stopSummaries(); window.clearTimeout(timer); details.replaceChildren(); (previousFocus?.isConnected && previousFocus.getClientRects().length ? previousFocus : button).focus({ preventScroll: true }); });
+  dialog.addEventListener("close", () => { generation++; stopSummaries(); window.clearTimeout(timer); options.onClose?.(); details.replaceChildren(); (previousFocus?.isConnected && previousFocus.getClientRects().length ? previousFocus : button).focus({ preventScroll: true }); });
   window.addEventListener("nav-kurd:language-change", () => { render(); if (dialog.open) { if (selected) choose(selected); void search(); } });
   render();
   return { open };

@@ -78,7 +78,7 @@ html.is-native-app .search-card {
 .search-card__icon { color: #c9d5ef; }
 .search-card:focus-within .search-card__icon { color: var(--nk-cyan); }
 .search-results {
-  border: 1px solid rgba(127, 164, 237, .20);
+  border: 0;
   border-radius: 0 0 18px 18px;
   background: rgba(7, 12, 27, .98);
   box-shadow: 0 20px 44px rgba(0, 3, 15, .50);
@@ -102,7 +102,7 @@ html.is-native-app .search-card {
 }
 
 .style-picker {
-  border: 1px solid rgba(138, 165, 220, .17) !important;
+  border: 0 !important;
   border-radius: 16px !important;
   background: rgba(8, 13, 29, .94) !important;
   box-shadow: 0 12px 28px rgba(0, 4, 19, .32), inset 0 1px 0 rgba(255,255,255,.05) !important;
@@ -152,7 +152,7 @@ html.is-native-app .search-card {
   height: 52px;
   padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(113, 170, 255, .25);
+  border: 0;
   border-radius: 15px;
   color: inherit;
   background: #020304;
@@ -176,7 +176,7 @@ html.is-native-app .search-card {
 .nav-tutorial__visual {
   width: 46px;
   height: 46px;
-  border: 1px solid rgba(115, 171, 246, .23);
+  border: 0;
   border-radius: 14px;
   color: #cce8ff;
   background: linear-gradient(145deg, rgba(49, 92, 164, .22), rgba(77, 55, 150, .20));

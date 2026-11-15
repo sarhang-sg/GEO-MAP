@@ -1,18 +1,18 @@
 {
   "schema": "NAV KURD production source manifest v1",
-  "release": "2026-10-13-nav-kurd-v10.4.4",
-  "version": "10.4.4",
+  "release": "2026-11-15-nav-kurd-v11.0.0",
+  "version": "11.0.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "cacheSchemaVersion": 91,
+  "cacheSchemaVersion": 92,
   "offlinePackVersion": "2027.13",
-  "generatedForDate": "2026-10-13",
+  "generatedForDate": "2026-11-15",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "5b1a5c00714660752f754bc825c4bbe5db0453701449770634a5954cf6b022d6",
-    "lockRootDefinitionSha256": "99a38b3dd909e3e4c254bbe0a1ad9ab78c1d5b94f21297729f0571a80034cb8b"
+    "packageDefinitionSha256": "343184006e29bcda0c623218cca805a1708def7bb23a66f44c8a6ab789250957",
+    "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
-  "fileCount": 1708,
-  "totalBytes": 289704014,
+  "fileCount": 1717,
+  "totalBytes": 289721410,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -43,8 +43,8 @@
       "sha256": "35473a1a8a4983881dca3679282ee107f34e8a7cae6a1453de8bb7b89bce64e7"
     },
     ".github/SECURITY.md": {
-      "bytes": 587,
-      "sha256": "e499d0fb1ef06ba0571929fc1f17031e73b17e190bb4551a7665f965d563ba7e"
+      "bytes": 205,
+      "sha256": "6be208762964a6900e285265a0494fd41054ac5a95524116462abaa1889e6a59"
     },
     ".github/workflows/cleanup.yml": {
       "bytes": 1869,
@@ -74,6 +74,10 @@
       "bytes": 1380,
       "sha256": "abc6282bd6c48b96b34b7bb8fd141878a4d353109ab9adca6dc8151795b56cc1"
     },
+    "api/cities.js": {
+      "bytes": 4312,
+      "sha256": "930c9d33321987b501e941a3f0511847545881976a827df450cff748f226d5b6"
+    },
     "api/csp-report.js": {
       "bytes": 1933,
       "sha256": "ad721be4181c6b187b882406097110dfaa7c92381c1e00d8b1b4c10fa3ad77d1"
@@ -83,12 +87,16 @@
       "sha256": "8c1f3af3faad7e6f460e83804e0af3da09d1d017b8303b3cf187c9a5c2926a44"
     },
     "api/weather.js": {
-      "bytes": 12387,
-      "sha256": "907678c22410478d11638ceca46dc9defc01a5d3e269e98f365f9ba668d699aa"
+      "bytes": 12395,
+      "sha256": "b7f03e82280069929be7b0deabcab84c4246af5f4089d3a773df6196b0924b4a"
     },
     "contracts/gps-visual-contract.json": {
       "bytes": 1119,
       "sha256": "7c9a50a99c03762d59ddb19139dcc535acde420d29293a088ecbb8317cb15b21"
+    },
+    "contracts/weather-cities.json": {
+      "bytes": 2950,
+      "sha256": "fef5afc71e04e9874bac5c9936e634b7f39dc20149fd0b6d49a34919f61b08a4"
     },
     "contracts/weather-descriptions.json": {
       "bytes": 5844,
@@ -152,23 +160,19 @@
     },
     "docs/ARCHITECTURE.md": {
       "bytes": 2026,
-      "sha256": "a890304dc20d1536b142a2adafd0acbfd22b12883a25a41825e4dc4ec50ccfa4"
-    },
-    "docs/COORDINATED-10.4.4.md": {
-      "bytes": 2413,
-      "sha256": "d5f7fe6b4402c740f7b6d79e62d43fb61cb841af7b3f5b7fb9d0c0c8909c2db2"
+      "sha256": "1347fa414106fcc93e73879b2f2fa2c620359b304f31aba689f5a4ce65af2a3b"
     },
     "docs/DATA.md": {
       "bytes": 761,
-      "sha256": "c8f1a1602ef3f5c2651e3618caf0a6a5498e74b549f57cfddb95276679e2dfb3"
+      "sha256": "35ecf33fae2e669f865dd64773131dbd32bab3029367b615570c04fd7b057ce4"
     },
     "docs/DEPLOYMENT.md": {
       "bytes": 2348,
-      "sha256": "c686a5f72aaac7ed377ffbcf8b534b984facf7438436853270d11bc256030ac0"
+      "sha256": "45a9384241faf7e454385fea0cb99129e04d75646f69fbd9bfaa6c9ac8c8318c"
     },
     "docs/OFFLINE.md": {
       "bytes": 711,
-      "sha256": "5914aa4af3c1279a40eea2613fc50651f8cd25da3342616eb5ff7f793b81f337"
+      "sha256": "004f5fc3baa63fe79bf7e6a5c3523c6dd824d0ebd8a654e5d172627e96e27997"
     },
     "docs/public/DATA_PROVENANCE.md": {
       "bytes": 350,
@@ -176,11 +180,11 @@
     },
     "docs/RELEASE.md": {
       "bytes": 2860,
-      "sha256": "89ea4b92b842f91f5d7ca484130da9b4f3ee57d074ddb3d3c8de5a9e23dcf954"
+      "sha256": "89fea3a369b9db5ba688804642257cb4bebfc432f92b0cdc37a4d18463c72b19"
     },
     "docs/SECURITY.md": {
       "bytes": 675,
-      "sha256": "a957e1e87c9314b45f4b45b1ad68d460ea7072ad21148d83effadce4e73d8e61"
+      "sha256": "d2a8864e053669ab96fe460b59a9255fe594ba179c5667068148d3afb564ab56"
     },
     "index.html": {
       "bytes": 4383,
@@ -188,19 +192,19 @@
     },
     "LICENSE": {
       "bytes": 1983,
-      "sha256": "32884b5a6b612bdd26422772a253d76c12d8bb101bd7ab75dcc6e585eb0495e2"
+      "sha256": "982d5fdd0acecff482546418aa173816b1cb0e193691d0beeb702d169160b445"
     },
     "package-lock.json": {
       "bytes": 32684,
-      "sha256": "042c396f8da718b2e9fd7d1529bbfe0baf9d252219c09988bcba86b9c3f36819"
+      "sha256": "1d469b2c211b62c66879037a4ed4f6ad2d3049dc290c6163df2bb340b6f9f599"
     },
     "package.json": {
       "bytes": 6052,
-      "sha256": "2ed5edca067adbd2895de270f872429227f61718e3780a08568c95edc11b2ecd"
+      "sha256": "3dcf3add394e3a6ea3a4d80c5b34835436d34dad5ac32082a2e2021bfdda4f5c"
     },
     "public/_headers": {
-      "bytes": 2603,
-      "sha256": "42522f29943618bc5196d901b1e558e05e1df0f23cd8908b071c576e05296c06"
+      "bytes": 2557,
+      "sha256": "85a46a5aa674c52b2408f923fa974809cd465636d9e33b87d6ff31c8a023652d"
     },
     "public/.well-known/security.txt": {
       "bytes": 234,
@@ -460,7 +464,7 @@
     },
     "public/assets/icons/atlas/bundle.json": {
       "bytes": 663131,
-      "sha256": "15f671768ecac026efbf72c01655c71d0633dd3c75ca79a4273cd62cde8e6bca"
+      "sha256": "8ef06020afb095e49da6e819b53236c40a1d0467655737749bfa052ce12643ab"
     },
     "public/assets/icons/atlas/bus_station.svg": {
       "bytes": 1335,
@@ -928,7 +932,7 @@
     },
     "public/assets/icons/atlas/groups-manifest.json": {
       "bytes": 19604,
-      "sha256": "0e3df1627698bb336f4732c0799cbf2031ad04877a0445b319c848bde0f61234"
+      "sha256": "c664a26e5d258327f4edc21f846d168305885aac9d8864a78e32e7a9f961c915"
     },
     "public/assets/icons/atlas/groups/border_route.json": {
       "bytes": 22161,
@@ -1248,7 +1252,7 @@
     },
     "public/assets/icons/atlas/manifest.json": {
       "bytes": 95228,
-      "sha256": "898ec8af4c4cb5a72a089f72b788a465b16854861e19ac5119319279ad5e29d7"
+      "sha256": "b187fd59a9502e8c177138fb272e5e851550d44188104ee4d61ca7247841ec43"
     },
     "public/assets/icons/atlas/market.svg": {
       "bytes": 1313,
@@ -1728,7 +1732,7 @@
     },
     "public/assets/icons/atlas/runtime-sprite/nav-kurd-poi-runtime.json": {
       "bytes": 34322,
-      "sha256": "bd7a8963ecde197652336b0783bea0001248888a591e9a2603fe5505e77c115e"
+      "sha256": "fb838490d8ae070757e840963676342f96df45663132f2bf27e249050b74dee3"
     },
     "public/assets/icons/atlas/satellite_station.svg": {
       "bytes": 1311,
@@ -2428,11 +2432,11 @@
     },
     "public/data/kri/kirkuk-verified-name-corrections.json": {
       "bytes": 16229,
-      "sha256": "09d451f4dd18cc72d54659f4026be336e329cd90b4b4e45373cfbf5f421a6d4f"
+      "sha256": "f497742f89a3e664497af311507d0394abbb304da4b8c73560c139cd01f730fd"
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5287,
-      "sha256": "efb0de30b13bc9d89cbc56ea9830585a74e1a1b70dba56bd14c6e1e9305255a6"
+      "sha256": "7da375f65fa807f0fcce09edb288b03c2c26ce070b48341357d5caa699c6c1f1"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -2448,15 +2452,15 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4219,
-      "sha256": "7d4425c529de53d39e278421d06f27780939473c01d2b85479fe5e0321342ea6"
+      "sha256": "112cf2bea8fa5e7ab768f225b6a01fd17445421bd87ebf3d718ec0fa21b87371"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6226,
-      "sha256": "e6951c982fb7530faf356e88cedd3577335e6c22ed7bf78bc048e9cc4250cc5f"
+      "sha256": "6fe912fb642f3cd7a39a43e76e1561e0b514463c81fa63f6bd01a77c6bf1cac1"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
-      "sha256": "e5d1d4ad6dfb47b96e9acd37096acae0e07955b7d560f00a956627aaa42e1979"
+      "sha256": "8cc617001624eacdf80c80aa9669e5717b7fadd23fa59a1c6ffded2fe4dfb59c"
     },
     "public/data/kri/kri-districts.geojson": {
       "bytes": 318663,
@@ -2520,7 +2524,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6249,
-      "sha256": "3c32e287f9eaa76ec786751623dc65e256517b1f0f871fede173b0e45d82bb39"
+      "sha256": "ff7357f84a72283816e17a735d5a022cba64c490f1d5e8a4c07e729cd13fa37e"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2564,7 +2568,7 @@
     },
     "public/data/kri/source-integrity-manifest.json": {
       "bytes": 128475,
-      "sha256": "ced13598977b60a71240a3974ca7164fc2975771be349406fd2c19f41748a4b9"
+      "sha256": "6a7f00ebf9ad3f46f63ba20e44cd27fb5470037836f9b8dd9a43d95d90e64893"
     },
     "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
       "bytes": 22951,
@@ -3600,11 +3604,11 @@
     },
     "public/legal/account-deletion.html": {
       "bytes": 7948,
-      "sha256": "b35c9b5a125c0c7fe29e0fa7d40c1c3123b6743b9d398c90c8ed707ed8b00ab8"
+      "sha256": "8d0a7755445c691035dde93660a46e9b17997c2d059ad6a70e2c066bcaed80b2"
     },
     "public/legal/contribution-guidelines.html": {
       "bytes": 9749,
-      "sha256": "39de5cdd6983d84b269330b4b21a6e481789d2866ceb3d45eba3c50dbbbb0c00"
+      "sha256": "cd01b1089f849f1054e23c7c7c08906fb683c64adfc4fd610e93fc04b41c0418"
     },
     "public/legal/legal-i18n.js": {
       "bytes": 1704,
@@ -3616,23 +3620,23 @@
     },
     "public/legal/privacy.html": {
       "bytes": 27061,
-      "sha256": "9c96c351fa27f4ac260f7144440a0e6fe89edf89c9252f903d03f833eff69f94"
+      "sha256": "882729c57351af07d741e49095bd8dd28ec6c7f4545b6f696e026f8078a3b6f1"
     },
     "public/legal/security.html": {
       "bytes": 2821,
-      "sha256": "6b3b35add9f179ed9e5d7a41c38b625a7edee147f63717a6347cc5c38b76f86c"
+      "sha256": "41fc5c0089ebbb1a434c8f94f7d172fc6a9daca4443df502f5f068c6645ef171"
     },
     "public/legal/terms.html": {
       "bytes": 19946,
-      "sha256": "acc77c3e2852bb71b96ad75a04120e025ce0b7f585249471d8fc0e4fb9533cea"
+      "sha256": "f73ce362f5aa2b6fd1e357e6372e32afb08a41dac661a1895505c022c9075cbb"
     },
     "public/manifest.webmanifest": {
       "bytes": 4005,
-      "sha256": "132e0f34a938a2d942e4354b24a21827948eae673fa47412ec88e2c379e5d55a"
+      "sha256": "310e56035be90c354717e174f69d1d6cdc245e247cf05b96e3b7b879bb67b5e0"
     },
     "public/offline-manifest.json": {
       "bytes": 49704,
-      "sha256": "72c9a836152b815f06b5c35b0fd39cbae18f322fc4f672d25bd55e8d21cd67df"
+      "sha256": "ecc91ffe917ebe2633197704294f777f0f9f1a47c2fb943f04efa28ac891180a"
     },
     "public/offline-map-state.js": {
       "bytes": 4142,
@@ -3683,12 +3687,16 @@
       "sha256": "1995374f9a4065765fb57c88504d563d6282c974723f0f24209b45ccc0a970a1"
     },
     "README.md": {
-      "bytes": 9228,
-      "sha256": "e40d3c40bd1920d9a24ccf48c2d713208e262f17a3d7826bd320f09bfad741a2"
+      "bytes": 2986,
+      "sha256": "f327b90a9c108d77468f38cb95a635b8b617fb66f3db7f29ec2e9ee2780afe40"
     },
     "release.config.json": {
-      "bytes": 1061,
-      "sha256": "09695a67f56906b4a077f88b8b2120a2271c19c8db64e37291d7b5774192f052"
+      "bytes": 997,
+      "sha256": "2fa8d0c40a989065332020ae75ff7678a0f34f3f0c357a1393275ecd71fc5eb3"
+    },
+    "SECURITY.md": {
+      "bytes": 1472,
+      "sha256": "10358d17accc5d7195443eeb15acb4a166e53f9ae0db607fccec893881ec79a6"
     },
     "src/android/local-provider.ts": {
       "bytes": 5069,
@@ -3707,8 +3715,8 @@
       "sha256": "5c806f5ca880e6bd7e92730a923179aaa3a8bdf7bf98fcda5eb1b62453a06710"
     },
     "src/bootstrap.ts": {
-      "bytes": 7181,
-      "sha256": "d2c73225b407f5e6261cb9887908ce2b9c038d8c1bcb783ac6c363effb948032"
+      "bytes": 7292,
+      "sha256": "e1f45b9787c4372c37aec6cb5a1e66d6a9b2c28b5b1aa90495b79cc878dd275c"
     },
     "src/data/road-hazards.json": {
       "bytes": 86018,
@@ -3791,8 +3799,8 @@
       "sha256": "9cd30502c1163816d69f64fcc4f44fed009acc9e9c1197956eea7090530842ee"
     },
     "src/lib/dom.ts": {
-      "bytes": 1975,
-      "sha256": "4d564e69cbdf4877d167f3658c2071e79e82ee6bb38a02004677e244f939dfc7"
+      "bytes": 3414,
+      "sha256": "81e5f3900f0e666d916b24e1fbfea5badf5159e21ebbcc8431fb1f89b4ce6c8b"
     },
     "src/lib/feedback-studio.ts": {
       "bytes": 22617,
@@ -3803,8 +3811,8 @@
       "sha256": "e52ccd9d61bfd297255012881966f0bb8db8e3849fd5e2f1b43bb249e5479b5e"
     },
     "src/lib/geo-format.ts": {
-      "bytes": 4576,
-      "sha256": "5ea5a299e792b70b8b1d06fdae87ae67cdf0e491b6ed173bf499568415b60520"
+      "bytes": 4334,
+      "sha256": "198eaa84da717fde160eed6f1ef250027420e1d7bdcffd83335b078352d3cab8"
     },
     "src/lib/hardware-profile.ts": {
       "bytes": 8374,
@@ -3867,8 +3875,8 @@
       "sha256": "c30f24116601790b270d9dd2de4f3b99ebd344b49f5187e1c33ca257a043d819"
     },
     "src/lib/location-volume.ts": {
-      "bytes": 6460,
-      "sha256": "27e12dc0b0c1e5cb46ebf82839e24d602f798f491cb6ad85b241baedf0756b16"
+      "bytes": 5775,
+      "sha256": "150299f065650f5a045e8d2594f111409097f553acdf0b1e84c3bdb461695edb"
     },
     "src/lib/location.ts": {
       "bytes": 9683,
@@ -3895,8 +3903,8 @@
       "sha256": "bba2f94e4a9db959107ca39ee55e0eaef158c730326dec2b5887986e9e1ddaaf"
     },
     "src/lib/map-language.ts": {
-      "bytes": 10958,
-      "sha256": "a596b6bc662aa5dab7889937ec285d18ffcf95ae603912d64480de16a02eb1af"
+      "bytes": 10748,
+      "sha256": "be2d0f6fa58617514e0902d9c489f7c5006785b95969a5c5f9c8f73903cbc639"
     },
     "src/lib/map-layer-ids.ts": {
       "bytes": 1993,
@@ -3931,8 +3939,8 @@
       "sha256": "3a8b4c024899f85a4ccef52f994afe52fb5e3337eccf009792908c3ea4d5d431"
     },
     "src/lib/map-style.ts": {
-      "bytes": 21050,
-      "sha256": "e416d04e473a4b57cf7a4a12ebf8abde3f0a88cacace259c1fa1613c80af520c"
+      "bytes": 20850,
+      "sha256": "83fc75df1cdc83469c7639cdd5a79aa3912e5fa2593cef7f4654d77500654c85"
     },
     "src/lib/map-touch-guard.ts": {
       "bytes": 2696,
@@ -3975,8 +3983,8 @@
       "sha256": "f0dfb90f904f2e0e8f7349970abfa488dd35850fa9f71527724981a32e793181"
     },
     "src/lib/navigation-preferences.ts": {
-      "bytes": 18694,
-      "sha256": "4af33e0de2c405db6ec7959596670a6b8eb0e4b4cadfd261f4936cc84791b468"
+      "bytes": 18771,
+      "sha256": "0782914f343f368eeb3aa3a52f0214b9ce9cd3b549d0cdb336af26d9a69ed614"
     },
     "src/lib/navigation-tracking.ts": {
       "bytes": 3970,
@@ -4011,8 +4019,8 @@
       "sha256": "a7d78c6efab3706620ce48a65334da68d134f4f65d2b62286ce436363cdcea99"
     },
     "src/lib/owner-studio.ts": {
-      "bytes": 80232,
-      "sha256": "53662309de4600e921c597ebf006e59e1f9e2d69a42d512c78c5c832bee00bb9"
+      "bytes": 80337,
+      "sha256": "440115d686d358a460efc05fb377b99588b9446da3a6f1caae5e4c7f15c0ea2e"
     },
     "src/lib/performance.ts": {
       "bytes": 8904,
@@ -4027,8 +4035,8 @@
       "sha256": "ca0ce41a97db9bfddbeb5b3ba3708e2a57dc7fa3f071fc10ebe319ca1451d3eb"
     },
     "src/lib/place-weather.ts": {
-      "bytes": 26264,
-      "sha256": "1371fa626cadd3255c3b0c3d86d63dabb95e5cfb7dc10fce99302ed12d2279a1"
+      "bytes": 26879,
+      "sha256": "e3a6ada91150407e90222897e5ec17a9f3a1fe59f106f45bd10f3035348ae36b"
     },
     "src/lib/poi-icon-catalog.ts": {
       "bytes": 7741,
@@ -4049,6 +4057,10 @@
     "src/lib/poi-taxonomy-classification.ts": {
       "bytes": 13128,
       "sha256": "fd3a96491344716b235dc248afeea25cdd732557dc11cf940fe99ea6abe0ef6a"
+    },
+    "src/lib/presentation-config.ts": {
+      "bytes": 1319,
+      "sha256": "322346125c8ba6cec047f0df50db5491287dd81e13ba54fc159539e3c053ca1a"
     },
     "src/lib/pwa-file-handler.ts": {
       "bytes": 8942,
@@ -4091,8 +4103,8 @@
       "sha256": "d12db43954fd139283c964cd54bf60e077d9079a54bfa9fc520c606c0fd897fd"
     },
     "src/lib/route-guidance-overlay.ts": {
-      "bytes": 4727,
-      "sha256": "7c1be5b7a84be127f8e293a59b062da9c4b1b4ead12705543372c70c98e8f262"
+      "bytes": 4772,
+      "sha256": "d472d028ba446b48831a2e9a1440c017d700a1dc450f5463ea15847250635069"
     },
     "src/lib/route-maneuvers.ts": {
       "bytes": 2593,
@@ -4107,8 +4119,8 @@
       "sha256": "c4ca1cfc50b98471c3561feda0a0daf547f24017449d22d133778ca8b3d09376"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 79555,
-      "sha256": "a99bcc5853c1472427456b67e18ecfb0492d4aeaf9b99b21e8886e2af622b0c0"
+      "bytes": 79612,
+      "sha256": "9166988322720c8b7371826da16c35a8d3547e7c19ccf4b44c64c0ad6d42b486"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 15390,
@@ -4139,12 +4151,12 @@
       "sha256": "4e4477b6fbfbe465ba6731d6cdc6e3d17e4225c6e27a0e8c7e305257051bb464"
     },
     "src/lib/search-controller.ts": {
-      "bytes": 14020,
-      "sha256": "f7f57f28427c40ca1d8b7e664a61355acca9a45f97bcc352b6be77270e0e1d84"
+      "bytes": 15006,
+      "sha256": "40f406463dd0006df57beb6bc06d3a866526d416e42f38c4de58bcd4cca06c9a"
     },
     "src/lib/search-service.ts": {
-      "bytes": 28918,
-      "sha256": "b6c126c07fe9918be6ba886212f4507f2940c7b05f6619e4bdd6801b81aaf84e"
+      "bytes": 29903,
+      "sha256": "b8de549711d15d3df34e5b892f37ad3d4a6341da0eef55904715e4ad420d6e96"
     },
     "src/lib/search-worker-client.ts": {
       "bytes": 7749,
@@ -4195,8 +4207,8 @@
       "sha256": "f81b79089fbea51de1af21367233d1f412d6d0219345b643701d5a6a8461cd4c"
     },
     "src/lib/user-contribution-studio.ts": {
-      "bytes": 128566,
-      "sha256": "00fea8f22d02e11b4d188d22651dd27d516976f51d53a54d42ab0e672cc264c6"
+      "bytes": 128511,
+      "sha256": "4513c04b2c1dbec9bd119d491e2771062cbd2c8aa62068a4fa1ac5079855b684"
     },
     "src/lib/user-facing-error.ts": {
       "bytes": 3546,
@@ -4206,21 +4218,33 @@
       "bytes": 25319,
       "sha256": "cc3a8d57d5ade134a7d59626a8766e158f96bd762769cf2009151edfc89f0e7e"
     },
+    "src/lib/weather-cities.ts": {
+      "bytes": 1966,
+      "sha256": "05a5e693e8f71c47e8b8efd5324b5762bdfb32a663aef32bad28591f90c6c861"
+    },
     "src/lib/weather-codes.ts": {
       "bytes": 1912,
       "sha256": "b182912c638519912b80e9eee4b3cc35dcda8666bfa55d841cbd1bcb9ddfbe71"
     },
     "src/lib/weather-directory.ts": {
-      "bytes": 13548,
-      "sha256": "68d78854d5e7edadfadd432caa35e15694982181fce0005d2baeb145c072b664"
+      "bytes": 13490,
+      "sha256": "9f9369b32796b57e194851862e3fcd8b8026335d4045e0a62a4151f0772c3384"
     },
     "src/lib/weather-entry-icon.ts": {
       "bytes": 2449,
       "sha256": "31d84c4b4b9f39d10c702d0fb6fecca2d53d4bcd39e4bd26e8a9594921409c55"
     },
+    "src/lib/weather-explorer.ts": {
+      "bytes": 2861,
+      "sha256": "b2ae8d34121623320d9e1e3e635059bdb58525fd97e1a15c163bf45072e6b2ab"
+    },
+    "src/lib/weather-pins.ts": {
+      "bytes": 2830,
+      "sha256": "d78d285bf005d5bd2eebf51642190c488b888fab215adf9ff6ab5d771984efb1"
+    },
     "src/main.ts": {
-      "bytes": 112374,
-      "sha256": "050c008319a8669798edb3088d0ef03a558354ed917268ec39f0d1b7874f504f"
+      "bytes": 112611,
+      "sha256": "558c448d333bda0bbf27e67c8485b5deb9e8ba4d5f7016da118c1873c13cccd7"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
@@ -4231,20 +4255,20 @@
       "sha256": "41f35bafb56421fc7fa5a23ccdda80df83af21062fa5c2a3b71eaebf2d9319ab"
     },
     "src/styles/about-support.css": {
-      "bytes": 6843,
-      "sha256": "06e0352003e96d19e8005cd60fa450bc1753aab67eba85c46c8b71826dacff81"
+      "bytes": 6810,
+      "sha256": "f84df4532d5c129a5aad2bfdd2fa2cba94f19c93eaf98c2b4638f789265b80c0"
     },
     "src/styles/account-polish.css": {
-      "bytes": 15742,
-      "sha256": "7b008247ad4e4ea2f5fa43a5ea966c6e19ac9a4f29bfc61d8747b174a65931da"
+      "bytes": 21592,
+      "sha256": "1f5f4b4eead48fdb67d0cb3f98558b005b8e89a57ab9ee2d9b742a010b4b3c10"
     },
     "src/styles/android-release.css": {
-      "bytes": 9196,
-      "sha256": "79a7e8190dcd492c510378755462df76bcf571300a4155b00815ffb096395d3a"
+      "bytes": 9035,
+      "sha256": "920bf254cea509ee412266def22ef64f4137b68ffccd6a1a1b79e18ed223a39b"
     },
     "src/styles/aurora-shell.css": {
-      "bytes": 11073,
-      "sha256": "06d0fc1503a5d8661361716aec51e1cdf8a2e8e575b226bbc9e5bfdee892b198"
+      "bytes": 10979,
+      "sha256": "9c4052270c6353d141640d41b91d3f082d6d025341378c249b19f49af36c5436"
     },
     "src/styles/base.css": {
       "bytes": 1681,
@@ -4255,24 +4279,24 @@
       "sha256": "aab7b40ca3f237cd228d8cf09a2faae26e6dfb1e3f1856d0073a4dbc96b55bcb"
     },
     "src/styles/components/map-control-rail.css": {
-      "bytes": 4789,
-      "sha256": "78343df6f0f990b73d02bfa6c397375f8de9ed737081078ee43caf49977ac370"
+      "bytes": 4756,
+      "sha256": "29f943ce1e5a2f81628bf76e9d38984851696842fa7629e3b0d74cab026e1a52"
     },
     "src/styles/components/map-surface-state.css": {
       "bytes": 1374,
       "sha256": "5140dd8ae4aa6a757e1cb3930b17a897e025bfb6ce4c4233cdceb6debf41d7d1"
     },
     "src/styles/coordinate-picker.css": {
-      "bytes": 2481,
-      "sha256": "5b410fc04b5eb0be7555606fe4de505cfe5ec5f067abc20cdb4f5778453e3f07"
+      "bytes": 2418,
+      "sha256": "daff63fb28ee35d835a2eb03e92490ba1ef905da9acad0a253a79859fcd65a9a"
     },
     "src/styles/device-adaptation.css": {
-      "bytes": 2632,
-      "sha256": "5a77e90da73a418817866c199fa95063069c062177bf98d1a454b41112026a52"
+      "bytes": 2565,
+      "sha256": "0c13674ca773ccc04f5d191a8de5ffcade3ff82958a1e6276438b06bd0014f53"
     },
     "src/styles/feedback.css": {
-      "bytes": 11413,
-      "sha256": "5c10e4c4df7f0e0da9346e8400787001c23f804819cb29a7c854890706c06ba3"
+      "bytes": 11068,
+      "sha256": "d9baddef1d81f6d96307ad2c90563f5a8475a3a6f0847f0aace0123c958b3d5c"
     },
     "src/styles/font-system.css": {
       "bytes": 2058,
@@ -4283,92 +4307,92 @@
       "sha256": "874b75bc06699188973e07b5e810d1cef438963006a43f149359516f27f4d8a2"
     },
     "src/styles/interaction-polish.css": {
-      "bytes": 9681,
-      "sha256": "b2371957695bfa9803a1ec92e602b6c61d0fb39ab68016562dacaace2fb9085c"
+      "bytes": 9436,
+      "sha256": "5fd0e2186e53da1c75fcd99fbe248b3cbdbf786bde008ce33774531b1c542067"
     },
     "src/styles/interaction-quality.css": {
-      "bytes": 7869,
-      "sha256": "d852e779aa5f3228a051bed9d577abdae212e88781bc27abf3ac69ddcac8718b"
+      "bytes": 7737,
+      "sha256": "d0dc50d9904c6b67c35183b327d889475baa384b45e55dd97d553567d5b29210"
     },
     "src/styles/labels-typography.css": {
-      "bytes": 5067,
-      "sha256": "6976b9190210098610dfb6716841faa193162bfc7c158b0939c4d8c97d464e19"
+      "bytes": 5039,
+      "sha256": "88da8b6a07e54da2351fd1b6b55f5454264aa7b367cd96f7d7903e0530809245"
     },
     "src/styles/layout-detail.css": {
-      "bytes": 14085,
-      "sha256": "e421ec8798d48187fb6df27bba5a0aa2b572ea9f2b316dedb8d57307bfc5ef42"
+      "bytes": 13716,
+      "sha256": "281d95b518a9b58f4da42bd5e365023d595868d905671ca879d9b0150d4474e6"
     },
     "src/styles/layout-runtime.css": {
-      "bytes": 17648,
-      "sha256": "a4b832365165b996c3110d17ed39b538b6e1cc3580f71074cdc710b369a0be1c"
+      "bytes": 17615,
+      "sha256": "8c840cc478f0990ba828f06c4a07391a167b1016af39bedd772619e834762ef6"
     },
     "src/styles/loading-search.css": {
       "bytes": 1319,
       "sha256": "b494a27ae3294355155825567950ebbcc3aba09e6bc48870d6d65a8e711be11c"
     },
     "src/styles/luxe-ui.css": {
-      "bytes": 13686,
-      "sha256": "06ada597349ca07f618f6748757297f88b77fb18169f0ac4a8e3bc20ab522fa3"
+      "bytes": 13587,
+      "sha256": "f7791d30c20d8a75144e0b8faab2871a8e36b509f362e0661b9690750caae608"
     },
     "src/styles/map-responsive.css": {
       "bytes": 7624,
       "sha256": "8ab685420ec6f43dd8ed47039ccc65f5c3721fd4e461bcac63bcebb4c7df5910"
     },
     "src/styles/map-shell.css": {
-      "bytes": 16107,
-      "sha256": "96bf6e52005747e2583180e6b330d5a2e3a0aade0b9e6ec9e5cd9f87342d2fce"
+      "bytes": 15687,
+      "sha256": "1163c815ec60ff4cb319943249894a5513defa570cb6bd32bd4e5d954d24e538"
     },
     "src/styles/map-visual-system.css": {
-      "bytes": 11937,
-      "sha256": "9bccd90ab1030a32ec633ced148713487d29ad91b1c5cd906ccda6742972ef3c"
+      "bytes": 11884,
+      "sha256": "dbb68e006d52f9e320732db3d2304b88a8129a70b08b5ca36e081ddb66e40936"
     },
     "src/styles/modal-scroll.css": {
       "bytes": 6392,
       "sha256": "159ccbef9e8dc4c29f57b0aae13e97b05b3ca16a517e392cb659fe4e39e21437"
     },
     "src/styles/native-platform.css": {
-      "bytes": 5088,
-      "sha256": "237afd54b5046b6c0f9b3eaebd16ca54d119f58a7f386b20c23af00b278b01b5"
+      "bytes": 4901,
+      "sha256": "8b38c22005d6d5f6b3010861a37b3e6414055a79a07b9dceec901fe5a9b9a48f"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 92965,
-      "sha256": "7542e50474da6c80d8dec8875be52af3c413f0e83ee14ae552e558031da296b4"
+      "bytes": 93320,
+      "sha256": "4eafee57d9fc6365a4e98b7bf4ba31479da8eac286b7e155aa575894283689b9"
     },
     "src/styles/navigation-preferences.css": {
-      "bytes": 8905,
-      "sha256": "df40453e58f6ed2f6c6d2075538625fe2f54cd2d7adaf0e23cddb5158cf4c30a"
+      "bytes": 8678,
+      "sha256": "6c20be3813f659242fd25865f23b427a661ffd88499a1489d32754f9f67d135e"
     },
     "src/styles/network-resilience.css": {
       "bytes": 1629,
       "sha256": "b422f51a1b508e6df5d71aca95ec598349964efa82e2b5c26f7d8c66b8bac7dd"
     },
     "src/styles/overlay-polish.css": {
-      "bytes": 7279,
-      "sha256": "1b47cf5be869badf6b93009c907cde4f60d0725c358f6afb3da5d9e8dd2add98"
+      "bytes": 7254,
+      "sha256": "8a5186e39fe2aa49860711dea6773611447f4c456269454ef048932b60557639"
     },
     "src/styles/owner-studio.css": {
-      "bytes": 30317,
-      "sha256": "63bcf74d8bc943d6f9116a9673547491d7ea6b33aebca31b1bfe46950921e30b"
+      "bytes": 29270,
+      "sha256": "4988da3db5abdf66c7cf355556f71a5f182ed08cf52a13d281499c7fe2e928a6"
     },
     "src/styles/place-weather.css": {
-      "bytes": 6026,
-      "sha256": "8dbfe0d2e630835dd4eebec1a7e6aad13edbfef43a6d3dfe70810a5d3c765778"
+      "bytes": 5957,
+      "sha256": "33f13dbd7e6f379f5bc7bdbf5dd8bdc7ce1e624c2fbe1c1c53def0053a8a25b0"
     },
     "src/styles/platform-data.css": {
       "bytes": 1714,
       "sha256": "54b67a2ebd4cb9c001c218e6886985a1416b931e628a4bb11f8fbc35b83d2a89"
     },
     "src/styles/premium-ui.css": {
-      "bytes": 8432,
-      "sha256": "bcdd739dd67a89615160c8caf814e5c7a3b4c41aff54fdab5ffe7247542d1109"
+      "bytes": 8300,
+      "sha256": "45dc1957d80a9abc5cbb9f3e8848c8166737dbcf3048e4d16dcf51eb6a31704c"
     },
     "src/styles/realtime-operations.css": {
       "bytes": 2545,
       "sha256": "638a5d4dac9287b8af8b529fa9d3fa5058836ff6cdfa34e5596e9c2b7d78bf7c"
     },
     "src/styles/runtime-health.css": {
-      "bytes": 1255,
-      "sha256": "27b0f9b4c71f0fe77a49b94c98a14fa447072d134f04af80333034a4f6d6870b"
+      "bytes": 1225,
+      "sha256": "41f2cf2e8088b9d2042e5d3caf18a932a20cd3b5c2fc3e0a0addd85a725fa8b6"
     },
     "src/styles/runtime-performance.css": {
       "bytes": 2209,
@@ -4379,28 +4403,32 @@
       "sha256": "6e380ac7ef3f10c6f9403abcf26714b3117500a86e279cc6b64f4c3d84e317ac"
     },
     "src/styles/support-payment.css": {
-      "bytes": 17227,
-      "sha256": "36feb1c95fa44c62d2fee0ea6f69b5925e1bcbeb5986ed775e3834aa3c80b53c"
+      "bytes": 16966,
+      "sha256": "dc87153980239e0742f35e00ee87da0fdab04d5b69be272dfa234e60538bbc11"
     },
     "src/styles/theme-consistency.css": {
-      "bytes": 18205,
-      "sha256": "0b7cadb6914ff48677b413282fa8df20c667094089ea1c7f363b7698d756be6f"
+      "bytes": 15952,
+      "sha256": "ddcd77d07da0aaa1ccca9acb5a4f757e3bc9caaa6939b1e8ce3eb14c0aeba8f9"
     },
     "src/styles/tokens.css": {
       "bytes": 4885,
       "sha256": "270637333a4fe44e31bf20eadb1cc072f391eab52541d94b8b4fb001929fb4f6"
     },
     "src/styles/user-contribution.css": {
-      "bytes": 44544,
-      "sha256": "8c620aa51dc905bca3669be2413641ebd77d1ae0d68e1ed81f46849e352c641f"
+      "bytes": 43225,
+      "sha256": "802cc3e923da30dd11a360d6f62a9bb5055ce3ef5e3dca178a0abbd48e876861"
     },
     "src/styles/visual-system.css": {
-      "bytes": 33645,
-      "sha256": "291ae34d217c0ef0e18f2d793efe9f5d2d8d0f7bd2831485d7df8d13764f0db9"
+      "bytes": 32951,
+      "sha256": "e459af1a8f120783146f49bc2b74af098abbddf71e003031dc3f798a257aa4ac"
     },
     "src/vite-env.d.ts": {
       "bytes": 1566,
       "sha256": "a7786111d0b80deada90b2ea5e84d2a0e653d162bdbea5d1a2233304aee2252d"
+    },
+    "src/weather-picker.ts": {
+      "bytes": 1997,
+      "sha256": "e17f91c80eaffa49c58b2212bfae34b47726f25df3a0960b9ad4f277d22d7f7d"
     },
     "src/workers/search.worker.ts": {
       "bytes": 11796,
@@ -4416,7 +4444,7 @@
     },
     "supabase/functions/_shared/release.ts": {
       "bytes": 81,
-      "sha256": "c4be3a5075ad5ee8b50effd8604d27b42cf3ed238de8534ab7d8f0573457a15f"
+      "sha256": "0e7910d02f4de9f58ec498459eac2e9814d095e0d3d59d69acf73a33434bcdd4"
     },
     "supabase/functions/delete-atlas-account/index.ts": {
       "bytes": 8487,
@@ -4550,13 +4578,17 @@
       "bytes": 4061,
       "sha256": "ca090ca8fa80fc467b1a451bee8bb66e0081d54d48ef8aa67be87549becac99c"
     },
+    "supabase/migrations/20261115083305_weather_city_favorites.sql": {
+      "bytes": 1108,
+      "sha256": "eca92132b073ee06f9aefc332ceeb033d47c90d911b5ddef30caafce7190b6ac"
+    },
     "supabase/README.md": {
       "bytes": 2386,
-      "sha256": "a4ac6db23ae19dc953db1de9c464f1bf4b17cbfb37c3d273d5d3d0d6edc89ea6"
+      "sha256": "0f6878b1c215ad64ed1398275e73ae6ac76479354dd7e95436da166f22f255f4"
     },
     "TERMUX.sh": {
       "bytes": 3189,
-      "sha256": "f8f57cb43b68f0c9ec966ed3f20ec32a1acc8aef454b9195505f8650ed59fae2"
+      "sha256": "b1e158779f98025633477aad329e565ceb18039576ab214b79dcaffb3604e4a6"
     },
     "tools/android/build-runtime.mjs": {
       "bytes": 4236,
@@ -4571,8 +4603,8 @@
       "sha256": "c84b3239586c8dd178f745e0be7e9e5475a0473a8ead0af1a402410c9280f424"
     },
     "tools/build/build-offline-runtime.mjs": {
-      "bytes": 9159,
-      "sha256": "83edfff01a05fbaddf004f7254b513f81963607e393eb19adc08da88306396d9"
+      "bytes": 9242,
+      "sha256": "0699465072bd89bfa8fcbc95404dc885e08c28e78eeb8149e8eaf89aaa8a0e3d"
     },
     "tools/build/generate-pwa-manifest.mjs": {
       "bytes": 2039,
@@ -4727,8 +4759,8 @@
       "sha256": "bcb4608d77ba34e333c9f60e037acbac568ad2307c1a481fa3617855230e6571"
     },
     "tools/release/prepare-android-download.mjs": {
-      "bytes": 4347,
-      "sha256": "0b84e3565a81ffa76c461728f6e017f3c1d4c071877d368f7825ca62d77c83ef"
+      "bytes": 4371,
+      "sha256": "724be26b62984ed7469fe50b3be7bc7f05b6e2f7c1a6fa460f58426e489c1c7e"
     },
     "tools/release/prepare-dependency-preview.mjs": {
       "bytes": 3948,
@@ -4736,23 +4768,23 @@
     },
     "tools/release/verify-backend.py": {
       "bytes": 13023,
-      "sha256": "46dfa5f1160f5ca619fc8f44b94f8451deaeaae95c9e6c8e9f18c4c983554d43"
+      "sha256": "0ca327131717d3656d78e6f9ab514d1384f86230c05d01ac4dfe017921a9ee65"
     },
     "tools/release/verify-published-android.mjs": {
-      "bytes": 4293,
-      "sha256": "4712e533a9e1e4f02606c3c5db0655829c2197c10164efd7b35a634f47894743"
+      "bytes": 4110,
+      "sha256": "7ab37e149229b78bdacb3c062e95998928e67c49eb5c6e843c9f0c7f2f90d7da"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 795,
       "sha256": "7d25929a397e2fd170ccd60fbf94c2813e3dbc15a5a1a6ade82fb10c7bf84ead"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 26096,
-      "sha256": "bd943d111772d8a9aa977e961a7559e4c6da486f7ef20fa2ac4bc61be26a6325"
+      "bytes": 27829,
+      "sha256": "a96239e0e824d31ae3cc3cf3eeed25d409a9376ccb0c9e72deb64d5d932b9ab6"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
-      "bytes": 28121,
-      "sha256": "d07f42f6e116219df0e9e138cbf7b81a87ee31e807eb2410d6c574cecfb84aaf"
+      "bytes": 28134,
+      "sha256": "3f0931cd3c94413fa1e216a321991f916c0ee1ad3d3a4108297192b861a08d35"
     },
     "tools/verify/data.py": {
       "bytes": 9700,
@@ -4764,7 +4796,7 @@
     },
     "tools/verify/edge-auth-regressions.mjs": {
       "bytes": 3372,
-      "sha256": "89bec441d8f69de7331f0b0ac4925314f671f70c51d9180d34398203afc10782"
+      "sha256": "6c9339f29204214026d073b3481eb62d590989c0073f914bd899ab4c856d9c29"
     },
     "tools/verify/maintenance-regressions.mjs": {
       "bytes": 12125,
@@ -4783,8 +4815,8 @@
       "sha256": "8b78d2bc933e11bb422bc7b1d87a9a6497cf01250f33eb43c10f82cae50fc128"
     },
     "tools/verify/navigation-polish-regressions.mjs": {
-      "bytes": 16477,
-      "sha256": "5b90630d0d98a3dde4ede47e91a2237c3cab367d9131419c72b88a1966dfd8f3"
+      "bytes": 16275,
+      "sha256": "765ec042dde2f0132a55edacf07eda8e77f0c555c1f19ae655951e463af237c0"
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 5322,
@@ -4800,11 +4832,11 @@
     },
     "tools/verify/publication-regressions.mjs": {
       "bytes": 2590,
-      "sha256": "ac6c0b4624b5e2c33ef5f6571eb20aac8829689845e535b3b7d7882d4ea0e7bb"
+      "sha256": "eb70cce66e01d2633d46204f0dc524121312ea363cfd936c525c54f408717ed5"
     },
     "tools/verify/refinement-regressions.mjs": {
-      "bytes": 8121,
-      "sha256": "6be39a4524cfb1557cc53d0ec39eb44802b40e57c839f6bfaf96368b0a1e2634"
+      "bytes": 9006,
+      "sha256": "135aa06f54e1376e4e3f58ec3199023eede21eb4f2ace72c04cfa57f6ca956e5"
     },
     "tools/verify/release.mjs": {
       "bytes": 2668,
@@ -4815,8 +4847,8 @@
       "sha256": "0fd9a6e25b545f55620e31e3551a1539496ecf5c8c36e94eeafe5396456bd108"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 19840,
-      "sha256": "17676d85516d9699461e41187c9fbed30cbdf84a3ebf1e8369c9976b94d566d1"
+      "bytes": 19922,
+      "sha256": "765238453b3421f0845e80aad168bad106916910b248254e06c738ba9324b1ad"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 5192,
@@ -4827,8 +4859,8 @@
       "sha256": "21d9656839149f22480df1f164decc673e7cd8fa7a2270bd6b71f6923383e836"
     },
     "tools/verify/source.mjs": {
-      "bytes": 18839,
-      "sha256": "63d476a4fb6c024ffcfa362eabec20a13c9e3565b72541849509ca8d99e7da7c"
+      "bytes": 18877,
+      "sha256": "cc70448e837454b1cc63651511eb69777dab059ca45e1108cd09a1f230f68259"
     },
     "tools/verify/styles.py": {
       "bytes": 6196,
@@ -6844,8 +6876,12 @@
       "jsonSha256": "5865fd93eaf78f82cf03c176c5096f5f4de5e77eb880e5d14c8d46aab261f6db"
     },
     "vite.config.ts": {
-      "bytes": 1742,
-      "sha256": "834d528ddd053dc64e14840baf321bab352c896b67ed3a1e71631a6cbb1a2327"
+      "bytes": 3248,
+      "sha256": "f31be2cdfc4ae3084af694fb478f207e98b170155c0f0dd5ae83b699ad6b1be3"
+    },
+    "weather-cities.html": {
+      "bytes": 748,
+      "sha256": "d4c4cebba2eb04b5df526a84bfc3878f2ab8a92175edad8b9fa8650b157c5c92"
     }
   }
 }

@@ -1,3 +1,4 @@
+import { historyDate } from "./dom";
 import { confirmAction, compactUtilityActions, bindConfirmationKeyboard } from "./confirm-action";
 import { appUrl } from "./app-url";
 import {
@@ -1225,7 +1226,7 @@ export class UserContributionStudio {
     const feedbackRows = this.feedback.map((item) => {
       const editable = item.status === "new";
       const isEditing = this.editingFeedbackId === item.id && editable;
-      const date = new Date(item.updated_at || item.created_at).toLocaleString(language === "ar" ? "ar-IQ" : language === "en" ? "en-GB" : "ckb-IQ");
+      const date = historyDate(item.updated_at || item.created_at, language);
       if (isEditing) {
         const categories = (["bug","data","place","search","login","offline","gps","ui","other"] as AtlasFeedbackCategory[])
           .map((category) => `<option value="${category}" ${category === item.category ? "selected" : ""}>${escapeText(feedbackCategoryLabel(category, language))}</option>`)
@@ -1270,17 +1271,16 @@ export class UserContributionStudio {
       : "";
 
     const historyCopy = navigationHistoryCopy(language);
-    const historyLocale = language === "ar" ? "ar-IQ" : language === "en" ? "en-GB" : "ckb-IQ";
     const navigationHistory = this.navigationHistory;
     const navigationHistoryRows = navigationHistory.map((entry) => {
       const distance = entry.status === "arrived"
         ? entry.planned_distance_meters
         : Math.max(0, entry.planned_distance_meters - entry.remaining_distance_meters);
-      const date = new Intl.DateTimeFormat(historyLocale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(entry.ended_at));
+      const date = historyDate(entry.ended_at, language);
       return `<article class="user-navigation-history__item" data-status="${entry.status}">
         <i aria-hidden="true">${userIcon("pin")}</i>
         <div><strong>${escapeText(entry.destination)}</strong><span>${escapeText(date)}</span></div>
-        <small>${escapeText(formatNavigationDistance(distance, language))} · ${escapeText(formatNavigationElapsed(entry.elapsed_seconds, language))}</small>
+        <small><span dir="ltr">${escapeText(formatNavigationDistance(distance, language))}</span> · <span dir="ltr">${escapeText(formatNavigationElapsed(entry.elapsed_seconds, language))}</span></small>
         <b>${escapeText(entry.status === "arrived" ? historyCopy.arrived : historyCopy.cancelled)}</b>
         <button type="button" class="user-navigation-history__delete" data-user-action="history-delete" data-id="${escapeText(entry.id)}" aria-label="${escapeText(historyCopy.delete)}" title="${escapeText(historyCopy.delete)}">${userIcon("trash")}</button>
       </article>`;
@@ -1306,7 +1306,7 @@ export class UserContributionStudio {
     return `<div class="user-contrib__dashboard">
       <section class="user-account-card"><div class="user-account-card__avatar" data-user-avatar-shell>${avatar}</div><div class="user-account-card__identity"><strong>${escapeText(displayName)}</strong><span>${escapeText(this.identity?.email ?? "")}</span></div></section>
       <nav class="user-private-tabs" aria-label="${escapeText(copy.dashboard)}">
-        ${(Object.keys(privateCopy.tabs) as UserDashboardTab[]).map((tab) => `<button type="button" data-user-action="dashboard-tab" data-id="${tab}" class="${this.activeDashboardTab === tab ? "is-active" : ""}" aria-pressed="${this.activeDashboardTab === tab ? "true" : "false"}"><i aria-hidden="true">${userIcon(tab === "places" ? "places" : tab === "messages" ? "messages" : tab === "notifications" ? "bell" : "account")}</i><span>${escapeText(privateCopy.tabs[tab])}</span>${tab === "places" ? `<b>${this.places.length}</b>` : tab === "messages" ? `<b>${this.feedback.length}</b>` : tab === "notifications" ? `<b>${unreadCount}</b>` : ""}</button>`).join("")}
+        ${(Object.keys(privateCopy.tabs) as UserDashboardTab[]).map((tab) => `<button type="button" data-user-action="dashboard-tab" data-id="${tab}" class="${this.activeDashboardTab === tab ? "is-active" : ""}" aria-pressed="${this.activeDashboardTab === tab ? "true" : "false"}"><i aria-hidden="true">${userIcon(tab === "places" ? "places" : tab === "messages" ? "messages" : tab === "notifications" ? "bell" : "account")}</i><span>${escapeText(privateCopy.tabs[tab])}</span>${tab === "places" ? `<b${this.places.length ? "" : " hidden"}>${this.places.length}</b>` : tab === "messages" ? `<b${this.feedback.length ? "" : " hidden"}>${this.feedback.length}</b>` : tab === "notifications" ? `<b${unreadCount ? "" : " hidden"}>${unreadCount}</b>` : ""}</button>`).join("")}
       </nav>
       ${panel}
     </div>`;

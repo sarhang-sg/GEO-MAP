@@ -9,7 +9,7 @@
   gap: 11px;
   min-height: 66px;
   padding: 10px 11px;
-  border: 1px solid rgba(184, 156, 255, .34);
+  border: 0;
   border-radius: 19px;
   color: #fff;
   background: linear-gradient(145deg, rgba(16, 18, 52, .96), rgba(43, 19, 91, .94));
@@ -22,7 +22,7 @@
 .map-coordinate-picker > div { display: grid; min-width: 0; gap: 3px; }
 .map-coordinate-picker strong { font: 900 .8rem/1.45 var(--font-ui); overflow-wrap: anywhere; }
 .map-coordinate-picker small { color: #c8cce1; font: 700 .64rem/1.55 var(--font-ui); overflow-wrap: anywhere; }
-.map-coordinate-picker button { min-height: 38px; max-width: 92px; padding: 0 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 12px; color: #f4efff; background: rgba(255,255,255,.07); font: 850 .66rem/1.3 var(--font-ui); white-space: normal; }
+.map-coordinate-picker button { min-height: 38px; max-width: 92px; padding: 0 12px; border: 0; border-radius: 12px; color: #f4efff; background: rgba(255,255,255,.07); font: 850 .66rem/1.3 var(--font-ui); white-space: normal; }
 .map-shell.is-coordinate-picking #map { cursor: crosshair; }
 /* The picker and the report shortcut share the top-centre slot. */
 .map-shell.is-coordinate-picking #feedbackQuickButton { visibility: hidden; pointer-events: none; }
