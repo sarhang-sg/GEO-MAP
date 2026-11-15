@@ -1,7 +1,5 @@
 # Architecture
 
-Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
-
 NAV KURD uses a central composition root and independent controllers. `src/main.ts` owns orchestration; feature logic belongs in `src/lib`. Modules communicate through explicit callbacks and snapshots instead of hidden global state.
 
 ## Rendering

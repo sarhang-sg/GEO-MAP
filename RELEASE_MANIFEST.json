@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1717,
-  "totalBytes": 289721410,
+  "totalBytes": 289720281,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -159,32 +159,32 @@
       "sha256": "7b32814bc975f710d3ecc11d67081f20b3f6b585b28b06d4fe0dd903c08a4e03"
     },
     "docs/ARCHITECTURE.md": {
-      "bytes": 2026,
-      "sha256": "1347fa414106fcc93e73879b2f2fa2c620359b304f31aba689f5a4ce65af2a3b"
+      "bytes": 1964,
+      "sha256": "a0e31fcf97f37e30fd64487461ab1dc81e9a1fcc232ff417836bfb3ef4132da3"
     },
     "docs/DATA.md": {
-      "bytes": 761,
-      "sha256": "35ecf33fae2e669f865dd64773131dbd32bab3029367b615570c04fd7b057ce4"
+      "bytes": 699,
+      "sha256": "85233cb50b385ce88961c28371ccafde5d14ab3e361755e8fc92e8db66c7af69"
     },
     "docs/DEPLOYMENT.md": {
-      "bytes": 2348,
-      "sha256": "45a9384241faf7e454385fea0cb99129e04d75646f69fbd9bfaa6c9ac8c8318c"
+      "bytes": 2305,
+      "sha256": "e22ec129a9a792a642e61ecc778aa44b8624d65821831a7ef93f82834435ed5c"
     },
     "docs/OFFLINE.md": {
-      "bytes": 711,
-      "sha256": "004f5fc3baa63fe79bf7e6a5c3523c6dd824d0ebd8a654e5d172627e96e27997"
+      "bytes": 649,
+      "sha256": "7cd8868a0c76f8fe9035e786fc1da1630a5373d453af2f55b61ee4ba20b4ce7e"
     },
     "docs/public/DATA_PROVENANCE.md": {
       "bytes": 350,
       "sha256": "c651b569bb8b478247af066683661024255d95e63f2558213d2fd09b919eae7f"
     },
     "docs/RELEASE.md": {
-      "bytes": 2860,
-      "sha256": "89fea3a369b9db5ba688804642257cb4bebfc432f92b0cdc37a4d18463c72b19"
+      "bytes": 1821,
+      "sha256": "4e6237eae2701e416efc2547b22ef3842a9ac3f868e39111dbbc57eaac7347e9"
     },
     "docs/SECURITY.md": {
-      "bytes": 675,
-      "sha256": "d2a8864e053669ab96fe460b59a9255fe594ba179c5667068148d3afb564ab56"
+      "bytes": 613,
+      "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
     },
     "index.html": {
       "bytes": 4383,
@@ -4583,8 +4583,8 @@
       "sha256": "eca92132b073ee06f9aefc332ceeb033d47c90d911b5ddef30caafce7190b6ac"
     },
     "supabase/README.md": {
-      "bytes": 2386,
-      "sha256": "0f6878b1c215ad64ed1398275e73ae6ac76479354dd7e95436da166f22f255f4"
+      "bytes": 2324,
+      "sha256": "123f8d59511ba2e6a19add0296259309a6abe20f1ad33319e7bc89464bf956d7"
     },
     "TERMUX.sh": {
       "bytes": 3189,
@@ -4767,8 +4767,8 @@
       "sha256": "c8a138a9c51001efe25b386f9852e4370a80a9f4f5feebd1c64810aa355954bc"
     },
     "tools/release/verify-backend.py": {
-      "bytes": 13023,
-      "sha256": "0ca327131717d3656d78e6f9ab514d1384f86230c05d01ac4dfe017921a9ee65"
+      "bytes": 13286,
+      "sha256": "342d2040674e91b37db35a28f647672b3d5af57ac70555309e89727363518997"
     },
     "tools/release/verify-published-android.mjs": {
       "bytes": 4110,

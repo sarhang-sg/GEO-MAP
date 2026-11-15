@@ -1,52 +1,19 @@
 # NAV KURD 11.0.0
 
-Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
+The release identifier is `2026-11-15-nav-kurd-v11.0.0`. The corresponding Android release uses version code `110000`.
 
-Application **11.0.0**, Android version code **110000**, source release
-**2026-10-13-nav-kurd-v11.0.0**.
+## Changes
 
-- Logout and account switching invalidate pending identity requests. Late
-  responses cannot restore the previous profile, role or notifications.
-- Offline worker discovery supports Pause and a deadline. Status/cancellation
-  requests have bounded deadlines. Replies for a previous language cannot mark
-  the current language downloaded.
-- Android Back uses existing Cancel/Close controls, handles the top dialog first
-  and retains editor draft handling. Busy confirmations consume Back.
-- Native resume restores map/GPS lifecycle state when OEM WebView visibility
-  events are missing. Listener cleanup is included.
-- Web/native camera preferences reject impossible zoom/pitch and future dates.
-- GeoJSON imports validate geometry, closed polygon rings, coordinates, nesting
-  and size before rendering. Slow old imports cannot overwrite a new selection.
-- Android uses the matching rebuilt web presentation. Old generated chunks are
-  replaced. Original styles, fonts, colors and artwork are retained.
-- The catalog omitted from the uploaded GitHub ZIP is restored from Git LFS and
-  verified against its existing SHA-256 inventory. Source archives include the
-  actual database rather than a pointer.
+- Local and remote search results merge by query. Kurdish, Arabic and English names use a nonempty fallback, and the directory recognizes Latin spellings of Hajiawa.
+- All eight color schemes have distinct foreground and surface colors in both map modes. Search docks while a place card is open. Account tabs keep Kurdish labels on a single line. Navigation measurements use isolated left-to-right spans.
+- Location geometry stays extruded through zoom and pitch. Base satellite imagery remains under higher-resolution tiles during transitions.
+- The city directory contains 19 regional entries and supports worldwide search. City summaries share a batched request. Favorites persist locally and synchronize with the signed-in account under row-level security.
+- Android uses the same packaged presentation. Launcher widgets render from Flutter bitmaps and retain cached artwork during resizing. Widget weather opens directly. The signature split Loading animation remains the normal map launch.
 
-Compatible current dependencies are locked. Flutter is stable 3.47.7.
-TypeScript 6.0.3 is pinned for the supported Android/Termux workflow.
+## Verification and publication
 
-The immutable geographic catalog retains its own provenance and data version.
-Historical SQL migrations remain necessary for reproducible upgrades. No
-geographic coordinates or weather readings are invented or relabeled as new.
+`npm run build` verifies TypeScript, canonical map assets, application and service-worker versions, production dependencies and the source manifest. The Chromium suite covers all eight palettes in light and dark modes. GitHub Actions also applies the SQL migrations against a disposable Supabase instance.
 
-## Publication and QA
+Vercel exposes the deployed commit in `/release-identity.json`. The public APK link in `/releases/latest.json` is bound to its published GitHub receipt, SHA-256, byte count and signing identity. The map data edition and APK signing identity are maintained independently of the web release.
 
-Source version 11.0.0 is separate from a signed APK. Download metadata remains
-unavailable for this version until release CI verifies and publishes the APK
-with the established key. Never substitute a previous APK or debug key.
-
-Validation covers builds, source/data contracts, maintenance regressions,
-Chromium mobile/desktop flows and native Dart/Flutter checks. Android pull
-requests also compile without release signing secrets. Physical GPS, camera,
-launcher widgets and authenticated server operations need device/account QA.
-
-## Source and documentation refresh
-
-- Current 11.0.0 README, deployment instructions and disclosure contacts.
-- Consistent policy version/date on Android and Web; existing legal terms and
-  third-party rights remain in force.
-- Android local-core instructions describe the integrated runtime and locked SQLite 3.7.0 package.
-- Unreachable older Android presentation chunks are removed.
-- Signed rebuilds are staged by source identity before replacing the public APK.
-- Only the verified live Vercel deployment record is retained on GitHub.
+[Build and Termux commands](../README.md)

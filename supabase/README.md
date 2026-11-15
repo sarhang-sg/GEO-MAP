@@ -1,7 +1,5 @@
 # NAV KURD 11.0.0 backend
 
-Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
-
 The canonical backend source is in `sarhang-sg/GEO-MAP`. The
 `.github/workflows/release.yml` workflow tests the web build, browser behavior
 and a clean local database before deploying the production backend.

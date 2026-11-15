@@ -1,7 +1,5 @@
 # Deployment — NAV KURD 11.0.0
 
-Now updated — reviewed 14 October 2026.
-
 ## Web production
 
 Use Node.js 24 and npm 12.2.0 with the committed lockfile:

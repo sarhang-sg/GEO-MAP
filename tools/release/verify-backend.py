@@ -13,10 +13,16 @@ import urllib.request
 PROJECT = 'kaydgjhwnspnuqabaiqw'
 ORIGIN = 'https://geo-map-kappa.vercel.app'
 FUNCTIONS = ('delete-atlas-account', 'delete-atlas-place', 'review-atlas-submission')
-VERSION = '11.0.0'
-CODE = json.loads((Path(__file__).resolve().parents[2] / 'release.config.json').read_text())['androidVersionCode']
-if type(CODE) is not int or not 0 < CODE < 2**31:
-    raise ValueError('Invalid configured Android version code.')
+ROOT = Path(__file__).resolve().parents[2]
+CONFIG = json.loads((ROOT / 'release.config.json').read_text())
+VERSION = CONFIG['appVersion']
+RELEASE_ID = CONFIG['releaseId']
+PUBLISHED = json.loads((ROOT / 'public/releases/latest.json').read_text())
+CODE = PUBLISHED['versionCode']
+if not re.fullmatch(r'[0-9]+[.][0-9]+[.][0-9]+', VERSION) or not re.fullmatch(r'[0-9A-Za-z.-]+', RELEASE_ID):
+    raise ValueError('Invalid configured web release identity.')
+if type(CODE) is not int or not 0 < CODE <= CONFIG['androidVersionCode'] < 2**31:
+    raise ValueError('Invalid published Android version code.')
 
 
 def request_json(path, method='GET', body=None):
@@ -76,7 +82,7 @@ def verify_identity(web_commit, android_commit):
                  'from public.nav_kurd_app_release where singleton=true')
     if len(rows)!=1 or rows[0] != {
         'app_version':VERSION, 'android_version_code':CODE,
-        'release_id':'2026-10-13-nav-kurd-v11.0.0',
+        'release_id':RELEASE_ID,
         'web_source_commit':web_commit, 'android_source_commit':android_commit}:
         raise RuntimeError('Backend version/source does not match the exact release.')
     return rows[0]
@@ -172,7 +178,7 @@ def main():
     if os.environ.get('SUPABASE_PROJECT_ID') != PROJECT:
         raise RuntimeError('Unexpected Supabase project.')
     web_commit=args.expected_commit
-    metadata=json.loads(Path('public/releases/latest.json').read_text())
+    metadata=PUBLISHED
     if metadata.get('versionCode') != CODE or metadata.get('artifact',{}).get('versionCode') != CODE:
         raise RuntimeError('The verified download and backend release must identify the same Android APK.')
     android_commit=metadata.get('artifact',{}).get('gitCommit','')
@@ -181,9 +187,9 @@ def main():
     if os.environ.get('GITHUB_SHA') != web_commit or os.environ.get('GITHUB_REF') != 'refs/heads/main':
         raise RuntimeError('Backend operation requires the exact protected main source.')
     if args.record:
-        query(f"update public.nav_kurd_app_release set android_version_code={CODE}, "
+        query(f"update public.nav_kurd_app_release set app_version='{VERSION}', release_id='{RELEASE_ID}', android_version_code={CODE}, "
               f"web_source_commit='{web_commit}', android_source_commit='{android_commit}', updated_at=now() "
-              f"where singleton=true and app_version='11.0.0' and release_id='2026-10-13-nav-kurd-v11.0.0' "
+              f"where singleton=true "
               f"and android_version_code <= {CODE} returning singleton")
     identity=verify_identity(web_commit,android_commit)
     database=verify_database_policies()

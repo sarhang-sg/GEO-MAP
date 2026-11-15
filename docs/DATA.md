@@ -1,7 +1,5 @@
 # Data system
 
-Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
-
 `data-src/canonical` contains maintained canonical catalogs. `data-src/generated` contains reproducible intermediates. `data-src/quarantine` contains rejected or uncertain records with reasons. Compressed source catalogs are indexed by `data-src/source-data-manifest.json` and are materialized only during maintenance or release preparation.
 
 Production clients consume bounded files under `public/data/kri`, including PMTiles, compact search data, language packs and viewport POI shards.
