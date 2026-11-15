@@ -1,9 +1,9 @@
-# NAV KURD 10.4.4
+# NAV KURD 11.0.0
 
-Now updated — NAV KURD 10.4.4 · Reviewed 14 October 2026.
+Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
 
-Application **10.4.4**, Android version code **100404**, source release
-**2026-10-13-nav-kurd-v10.4.4**.
+Application **11.0.0**, Android version code **110000**, source release
+**2026-10-13-nav-kurd-v11.0.0**.
 
 - Logout and account switching invalidate pending identity requests. Late
   responses cannot restore the previous profile, role or notifications.
@@ -32,7 +32,7 @@ geographic coordinates or weather readings are invented or relabeled as new.
 
 ## Publication and QA
 
-Source version 10.4.4 is separate from a signed APK. Download metadata remains
+Source version 11.0.0 is separate from a signed APK. Download metadata remains
 unavailable for this version until release CI verifies and publishes the APK
 with the established key. Never substitute a previous APK or debug key.
 
@@ -43,7 +43,7 @@ launcher widgets and authenticated server operations need device/account QA.
 
 ## Source and documentation refresh
 
-- Current 10.4.4 README, deployment instructions and disclosure contacts.
+- Current 11.0.0 README, deployment instructions and disclosure contacts.
 - Consistent policy version/date on Android and Web; existing legal terms and
   third-party rights remain in force.
 - Android local-core instructions describe the integrated runtime and locked SQLite 3.7.0 package.

@@ -1,3 +1,5 @@
+import { globalCities } from "./weather-explorer";
+import { canonicalCityQuery, cityFeature, inMapCoverage } from "./weather-cities";
 import { tactile } from "./interface-feedback";
 import { UI } from "./i18n";
 import { categoryValue, districtValue, governorateValue, languageValue, normalize, ownerName, pointKind } from "./geo-format";
@@ -11,6 +13,7 @@ import type { Language, SearchChoice } from "./types";
 export type SearchAdapter = {
   isSearchIndexReady: () => boolean;
   searchFast?: (term: string) => SearchChoice[] | Promise<SearchChoice[]>;
+  mergeResults: (term: string, ...groups: SearchChoice[][]) => SearchChoice[];
   prepare?: () => void;
   search: (term: string) => Promise<SearchChoice[]>;
   focusSearch: (choice: SearchChoice) => void;
@@ -38,6 +41,7 @@ const VISIBLE_RESULT_LIMIT = 24;
 export function installSearchController(options: SearchControllerOptions): SearchControllerApi {
   const { input, clearButton, results, getLanguage, adapter } = options;
   let searchVersion = 0;
+  let geocoding: AbortController | undefined;
   let visibleChoices: SearchChoice[] = [];
   let selectedChoice: SearchChoice | null = null;
   let activeIndex = -1;
@@ -56,6 +60,7 @@ export function installSearchController(options: SearchControllerOptions): Searc
       // Invalidate both pending worker results and queued DOM commits. Several
       // map controls stop bubbling their click events, so a result that settled
       // after the user tapped another control could previously reopen the list.
+      geocoding?.abort();
       searchVersion += 1;
       renderGeneration += 1;
       activeIndex = -1;
@@ -133,7 +138,7 @@ export function installSearchController(options: SearchControllerOptions): Searc
 
   const commitRender = (choices: SearchChoice[], term: string): void => {
     if (!lastOpenState) return;
-    visibleChoices = choices.slice(0, VISIBLE_RESULT_LIMIT);
+    visibleChoices = choices.filter(choice => { const title = choiceName(choice); return title && title !== "—"; }).slice(0, VISIBLE_RESULT_LIMIT);
     activeIndex = -1;
     input.removeAttribute("aria-activedescendant");
     const language = getLanguage();
@@ -228,15 +233,24 @@ export function installSearchController(options: SearchControllerOptions): Searc
     if(version!==searchVersion)return;
     if (fastChoices.length > 0) render(fastChoices, term);
     else if (!adapter.isSearchIndexReady()) renderLoading();
-    try {
-      const choices = await adapter.search(term);
-      if (version !== searchVersion) return;
-      render(choices.length > 0 ? choices : fastChoices, term);
-    } catch {
-      if (version !== searchVersion) return;
-      if (fastChoices.length > 0) render(fastChoices, term);
-      else renderSearchError();
-    }
+    geocoding?.abort();
+    const external = new AbortController();
+    geocoding = external;
+    let combined = fastChoices;
+    const append = (choices: SearchChoice[]) => {
+      if (version !== searchVersion || !choices.length) return;
+      combined = adapter.mergeResults(term, combined, choices);
+      render(combined, term);
+    };
+    const local = adapter.search(term).then(append);
+    const remote = term.trim().length >= 3 && /^[\p{L}\p{M} '\-]+$/u.test(term)
+      ? globalCities(canonicalCityQuery(term), getLanguage(), external.signal)
+        .then(rows => append(rows.filter(inMapCoverage).map(city => ({type:"local",feature:cityFeature(city)}))))
+      : Promise.resolve();
+    const [localResult] = await Promise.allSettled([local, remote]);
+    if (version !== searchVersion || combined.length) return;
+    if (localResult.status === "rejected") renderSearchError();
+    else render([],term);
   }, 135);
 
   const clear = (): void => {
@@ -282,6 +296,7 @@ export function installSearchController(options: SearchControllerOptions): Searc
   }, { passive: true });
 
   input.addEventListener("input", () => {
+    geocoding?.abort();
     // Invalidate before debounce, so an old promise cannot paint a new query.
     searchVersion += 1;
     renderGeneration += 1;

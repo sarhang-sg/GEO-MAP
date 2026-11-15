@@ -333,7 +333,7 @@ body[data-language="en"] .topbar > .brand-card { direction: ltr; }
   gap: 12px;
   width: min(360px, calc(100vw - 28px));
   padding: 13px 15px;
-  border: 1px solid rgba(170, 150, 255, .24);
+  border: 0;
   border-radius: 18px;
   color: #f7f8ff;
   background: linear-gradient(145deg, rgba(17, 25, 60, .97), rgba(7, 12, 31, .98));

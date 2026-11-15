@@ -3,7 +3,7 @@
   position: relative; isolation: isolate; overflow: hidden; display: flex; flex-wrap: wrap; gap: 2px 6px;
   align-items: center; width: 100%; max-width: 100%; min-width: 0; margin-top: 4px;
   padding: 6px 8px 2px; box-sizing: border-box; color: var(--nk-text, #eaf2ff);
-  border: 1px solid var(--nk-border, rgba(132,180,255,.16)); border-radius: 12px;
+  border: 0; border-radius: 12px;
   background: var(--nk-elevated, #12243a);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
 }
@@ -66,7 +66,7 @@
 .place-weather[data-state="unavailable"] { font: 600 11px/1.5 var(--font-ui); justify-content: space-between; }
 .place-weather[data-state="unavailable"] button {
   min-height: 44px; font: inherit; color: inherit; background: transparent;
-  border: 1px solid currentColor; border-radius: 8px; padding: 6px 10px;
+  border: 0; border-radius: 8px; padding: 6px 10px;
 }
 @keyframes place-weather-spin { to { transform: rotate(360deg); } }
 @media (max-width: 340px) { .place-weather { padding: 9px; } }

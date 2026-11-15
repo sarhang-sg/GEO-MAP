@@ -77,6 +77,41 @@ def verify_startup_loader(browser) -> None:
     print("PASS desktop startup progress before map download, normal and reduced motion")
 
 
+def verify_theme_contrast(page) -> None:
+    results = page.evaluate("""() => {
+      const root = document.documentElement, shell = document.querySelector('.map-shell');
+      const initial = [root.dataset.accent, root.dataset.uiMode];
+      const probe = document.createElement('span');
+      shell.append(probe);
+      const failures = [];
+      function light(color) {
+        const values = color.match(/[0-9.]+/g).slice(0,3).map(Number).map(x => {
+          const v=x/255; return v<=.04045 ? v/12.92 : ((v+.055)/1.055)**2.4;
+        });
+        return .2126*values[0]+.7152*values[1]+.0722*values[2];
+      }
+      for (const accent of ['original','blue','teal','amber','purple','pink','red','gold']) {
+        for (const mode of ['dark','light']) {
+          root.dataset.accent=accent; root.dataset.uiMode=mode;
+          for (const bg of ['surface','elevated']) for (const [fg,min] of [['text',7],['muted',4.5],['link',4.5]]) {
+            probe.style.setProperty('color','var(--nk-'+fg+')','important');
+            probe.style.setProperty('background-color','var(--nk-'+bg+')','important');
+            const computed=getComputedStyle(probe);
+            const a=light(computed.color), b=light(computed.backgroundColor);
+            const ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+            if(ratio < min) failures.push({accent,mode,fg,bg,ratio});
+          }
+        }
+      }
+      probe.remove();
+      [root.dataset.accent,root.dataset.uiMode]=initial;
+      return failures;
+    }""")
+    if results:
+        raise AssertionError(f"Theme contrast regression: {results}")
+    print("PASS primary, secondary and link contrast across all eight palettes in both modes")
+
+
 def main() -> int:
     if not (ROOT / "dist/index.html").is_file():
         raise SystemExit("dist/index.html is missing; run npm run build:vercel first.")
@@ -138,6 +173,8 @@ def main() -> int:
                 raise AssertionError("fresh launches must start in dark/night mode")
             if page.locator("#mapModeCycleButton").get_attribute("data-map-mode") != "night":
                 raise AssertionError("first-frame map mode and runtime mode differ")
+
+            verify_theme_contrast(page)
 
             # Direct downloads use an embedded binary or a signed CI receipt.
             android_release = page.evaluate(

@@ -27,7 +27,7 @@ require_toolchain() {
   command -v node >/dev/null 2>&1 || fail "Node.js is missing. Run: bash TERMUX.sh setup"
   command -v npm >/dev/null 2>&1 || fail "npm is missing. Run: bash TERMUX.sh setup"
   [[ "$(node -p 'process.versions.node.split(".")[0]')" == "24" ]] || fail "Node.js 24.x is required; found $(node --version)."
-  [[ "$(npm --version | cut -d. -f1)" == "11" ]] || fail "npm 11.x is required; found $(npm --version)."
+  [[ "$(npm --version | cut -d. -f1)" == "12" ]] || fail "npm 12.x is required; found $(npm --version)."
   [[ "$(node -p 'require("./package.json").devDependencies.typescript')" == "$TYPESCRIPT_VERSION" ]] ||
     fail "TypeScript $TYPESCRIPT_VERSION is required for Android/Termux compatibility."
   [[ "$(node -p 'require("./package-lock.json").packages["node_modules/typescript"].version')" == "$TYPESCRIPT_VERSION" ]] ||
@@ -72,8 +72,8 @@ package_source() {
   mkdir -p "$DOWNLOADS"
   python3 tools/release/package-release.py \
     --output-dir "$DOWNLOADS" \
-    --name NAV-KURD-10.4.4-WEB-SOURCE.zip \
-    --root-name NAV-KURD-10.4.4-WEB
+    --name NAV-KURD-11.0.0-WEB-SOURCE.zip \
+    --root-name NAV-KURD-11.0.0-WEB
   log "Source ZIP and checksums saved in Android Download"
 }
 

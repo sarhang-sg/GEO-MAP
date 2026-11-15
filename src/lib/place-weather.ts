@@ -1,3 +1,5 @@
+import { setMeasuredText } from "./dom";
+import { skyMesh } from "./weather-explorer";
 import { weatherClock } from "./interface-feedback";
 import { forecastWeekday } from "./navigation-weather";
 import { weatherCodeKind, weatherCodeLabel, weatherContext, type WeatherCondition } from "./weather-codes";
@@ -111,7 +113,7 @@ const UI_COPY: Record<Language, { loading: string; current: string }> = {
 function baseWeatherCondition(code: number): WeatherCondition { return weatherCodeKind(code); }
 function weatherCondition(reading: WeatherReading): WeatherCondition { return baseWeatherCondition(reading.weatherCode); }
 
-function weatherIconAsset(condition: WeatherCondition, isDay: boolean): string {
+export function weatherIconAsset(condition: WeatherCondition, isDay: boolean): string {
   const fileName = (condition === "clear" || condition === "mainly-clear")
     ? isDay ? "clear-day.svg" : "clear-night.svg"
     : condition === "partly-cloudy"
@@ -179,7 +181,7 @@ function buildWeatherBadge(language: Language): HTMLElement {
   copyContainer.className = "place-weather__copy";
 
   const temperature = document.createElement("strong");
-  temperature.textContent = "—";
+  temperature.dir = "ltr"; temperature.textContent = "—";
 
   const condition = document.createElement("small");
   condition.className = "place-weather__condition";
@@ -279,6 +281,9 @@ export class PlaceWeatherService {
       root.dataset.state = reading.stale ? "cached" : "ready";
       root.dataset.latitude = String(coordinate[1]); root.dataset.temp = String(reading.temperature); root.dataset.wmo = String(reading.weatherCode); root.dataset.dust = String(reading.dust??0);
       weatherClock(root, reading.timezone);
+      const clockParts = new Intl.DateTimeFormat("sv-SE",{timeZone:reading.timezone,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).format(reading.observedAt);
+      const offset = (Date.parse(clockParts.replace(" ","T")+"Z")-reading.observedAt)/1000;
+      root.style.setProperty("--city-sky",skyMesh(reading.temperature,reading.weatherCode,reading.observedAt/1000,offset,coordinate[1]));
       root.dataset.skyKind = condition;
       root.dataset.phase = reading.isDay ? "day" : "night";
       const at = clock(reading.observedAt, reading.timezone, language);
@@ -311,7 +316,7 @@ export class PlaceWeatherService {
         reading.aqi != null ? `AQI ${Math.round(reading.aqi)}` : "",
         reading.dust !== null && reading.dust >= 0 ? `${words.dust} ${Math.round(reading.dust)} µg/m³` : ""
       ];
-      for (const value of metricValues.filter(Boolean)) { const chip = document.createElement("span"); chip.textContent = value; metrics.append(chip); }
+      for (const value of metricValues.filter(Boolean)) { const chip = document.createElement("span"); setMeasuredText(chip, value); metrics.append(chip); }
       if (metrics.childElementCount) body.append(metrics);
       const hours = reading.hours.filter((h) => h.at >= Math.floor(Date.now()/3600000)*3600000 && h.at < Math.floor(Date.now()/3600000)*3600000 + 24 * 3600000);
       if (hours.length) {
@@ -324,7 +329,7 @@ export class PlaceWeatherService {
           time.textContent = (language === "ku" && tomorrow ? "سبەی " : "") + clock(hour.at, reading.timezone, language);
           const icon = document.createElement("img"); const kind = baseWeatherCondition(hour.weatherCode);
           icon.src = weatherIconAsset(kind, hour.isDay); icon.alt = weatherCodeLabel(hour.weatherCode, hour.isDay, language); icon.loading = "lazy"; icon.width = 28; icon.height = 28;
-          const value = document.createElement("strong"); value.textContent = roundTemperature(hour.temperature, language);
+          const value = document.createElement("strong"); value.dir = "ltr"; value.textContent = roundTemperature(hour.temperature, language);
           const day = document.createElement("small"); day.className = "place-weather__day";
           const locale = language === "en" ? "en-GB" : language === "ar" ? "ar-IQ" : "ckb-IQ";
           day.textContent = forecastWeekday(hour.at, reading.timezone, language);
@@ -348,7 +353,7 @@ export class PlaceWeatherService {
           const cell = document.createElement("div"); cell.className = "place-weather__hour";
           const label = document.createElement("small"); label.textContent = forecastWeekday(day.at*1000, reading.timezone, language);
           const icon = document.createElement("img"); icon.width = 28; icon.height = 28; icon.alt = weatherCodeLabel(day.code,true,language); icon.src = weatherIconAsset(baseWeatherCondition(day.code),true);
-          const range = document.createElement("bdi"); range.textContent = `${Math.round(day.low)}° / ${Math.round(day.high)}°`;
+          const range = document.createElement("bdi"); range.dir = "ltr"; range.textContent = `${Math.round(day.low)}° / ${Math.round(day.high)}°`;
           cell.append(label,icon,range); row.append(cell);
         }
         body.append(heading,row);

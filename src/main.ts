@@ -333,6 +333,7 @@ class KurdistanAtlasController {
       clickTolerance: 10,
       fadeDuration: this.lowPowerProfile ? 0 : 90,
       refreshExpiredTiles: true,
+      cancelPendingTileRequestsWhileZooming: false,
       maxTileCacheSize: recommendedMapTileCacheSize(this.hardwareProfile),
       pixelRatio: recommendedMapPixelRatio(this.hardwareProfile),
       validateStyle: false
@@ -514,7 +515,7 @@ class KurdistanAtlasController {
       getOwnerPlaces: () => this.ownerPlaces.getItems(),
       searchStatic: (term, language, limit) => this.searchWorker.search(term, language, limit)
     });
-    this.weatherDirectory = installWeatherDirectory({ shell: mapShell, getLanguage: () => this.language, getLocalities: () => this.localities,
+    this.weatherDirectory = installWeatherDirectory({ shell: mapShell, getLanguage: () => this.language,
       search: term => this.searchService.searchWeatherLocalities(term), service: this.weather });
     this.deviceQa = installDeviceQaPanel({
       map: this.map,
@@ -1289,6 +1290,10 @@ class KurdistanAtlasController {
     return this.searchService.searchFast(term);
   }
 
+  mergeResults(term: string, ...groups: SearchChoice[][]): SearchChoice[] {
+    return this.searchService.mergeResults(term, ...groups);
+  }
+
   async search(term: string): Promise<SearchChoice[]> {
     return this.searchService.search(term);
   }
@@ -1742,6 +1747,7 @@ const searchController = installSearchController({
   adapter: {
     isSearchIndexReady: () => controller.isSearchIndexReady(),
     searchFast: (term) => controller.searchFast(term),
+    mergeResults: (term, ...groups) => controller.mergeResults(term, ...groups),
     prepare: () => controller.prepareSearch(),
     search: (term) => controller.search(term),
     focusSearch: (choice) => controller.focusSearch(choice)

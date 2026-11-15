@@ -94,18 +94,18 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
       id: "kri-satellite-fallback", type: "raster", source: "kri-satellite-fallback", maxzoom: 24,
       layout: { visibility: "none" },
       paint: {
-        "raster-opacity": 1, "raster-resampling": "linear", "raster-fade-duration": 0,
+        "raster-opacity": 1, "raster-resampling": "linear", "raster-fade-duration": 240,
         "raster-saturation": 0.01, "raster-contrast": 0.12, "raster-brightness-min": 0.03, "raster-brightness-max": 0.99
       }
     });
     satelliteLayers.push({
-      id: "kri-satellite", type: "raster", source: "kri-satellite", maxzoom: contextOverlay || !satelliteDetailAvailable ? 24 : transitionZoom + 0.35,
+      id: "kri-satellite", type: "raster", source: "kri-satellite", maxzoom: 24,
       layout: { visibility: satellite ? "visible" : "none" },
       paint: {
         // In context-overlay mode the global raster never fades out. This is the
         // guaranteed far/near-zoom satellite layer and the Sentinel source is additive.
-        "raster-opacity": contextOverlay || !satelliteDetailAvailable ? 1 : ["interpolate", ["linear"], ["zoom"], transitionZoom - 0.28, 1, transitionZoom + 0.14, 0],
-        "raster-resampling": "linear", "raster-fade-duration": 0,
+        "raster-opacity": 1,
+        "raster-resampling": "linear", "raster-fade-duration": 240,
         "raster-saturation": 0.01, "raster-contrast": 0.14, "raster-brightness-min": 0.03, "raster-brightness-max": 0.99
       }
     });
@@ -116,7 +116,7 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
         // Stop the lower-resolution context layer at street zoom. The
         // controller extends it only when the primary imagery actually fails.
         "raster-opacity": ["interpolate", ["linear"], ["zoom"], 6.45, 0, transitionZoom, 0.72, 12.15, 0.72, 14.5, 0],
-        "raster-resampling": "linear", "raster-fade-duration": 0,
+        "raster-resampling": "linear", "raster-fade-duration": 240,
         "raster-saturation": 0.02, "raster-contrast": 0.10, "raster-brightness-min": 0.02, "raster-brightness-max": 1
       }
     } : {
@@ -124,7 +124,7 @@ export function buildKriMapStyle(options: KriMapStyleOptions): StyleSpecificatio
       layout: { visibility: satellite ? "visible" : "none" },
       paint: {
         "raster-opacity": ["interpolate", ["linear"], ["zoom"], transitionZoom - 0.22, 0, transitionZoom + 0.14, 1],
-        "raster-resampling": "linear", "raster-fade-duration": 0,
+        "raster-resampling": "linear", "raster-fade-duration": 240,
         "raster-saturation": 0.03, "raster-contrast": 0.12, "raster-brightness-min": 0.02, "raster-brightness-max": 1
       }
     });

@@ -155,7 +155,7 @@ function gpsHarness() {
   }
   const main = fs.readFileSync(new URL('src/main.ts', root), 'utf8');
   assert.ok(main.indexOf('if (!this.map.dragPan)') < main.indexOf('this.animationScheduler ='), 'partial map must be rejected before installing controllers');
-  assert.ok(source.includes('"./main").catch('), 'module evaluation failures must reach the startup boundary');
+  assert.ok(/import\("\.\/main"\)\)?\.catch\(/u.test(source), 'module evaluation failures must reach the startup boundary');
   assert.ok(main.includes('visualWait.abort();'), 'critical initialization failure must cancel the competing frame wait');
   console.log('PASS localized startup recovery for typed and bundled renderer failures, safe text, explicit first-tap retry and partial-map guard');
 }

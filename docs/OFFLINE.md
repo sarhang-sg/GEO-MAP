@@ -1,6 +1,6 @@
 # Offline system
 
-Now updated — NAV KURD 10.4.4 · Reviewed 14 October 2026.
+Now updated — NAV KURD 11.0.0 · Reviewed 14 October 2026.
 
 The Service Worker caches the application shell and bounded runtime data. The optional full map pack downloads the configured PMTiles files to OPFS with resumable range requests.
 

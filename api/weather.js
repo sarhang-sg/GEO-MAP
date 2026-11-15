@@ -9,7 +9,7 @@ const FRESH_TTL_MS = 10 * 60 * 1000;
 const STALE_TTL_MS = 10 * 60 * 60 * 1000;
 const CACHE_LIMIT = 320;
 const RATE_LIMIT = 180;
-function providerUrl(endpoint) {
+export function providerUrl(endpoint) {
   const url = new URL(endpoint);
   const key = process.env.OPEN_METEO_API_KEY?.trim();
   if (key) {
@@ -30,7 +30,7 @@ function clientKey(request) {
     .trim();
 }
 
-function allowRequest(request) {
+export function allowRequest(request) {
   const now = Date.now();
   const key = clientKey(request);
   let bucket = buckets.get(key);
@@ -210,7 +210,7 @@ async function fetchUpstream(latitude, longitude, scope) {
     } catch (error) {
       lastError = error;
       if (error.retryable === false || error.message?.startsWith("weather-invalid-")) break;
-      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 220 + Math.random() * 180));
+      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
     } finally {
       clearTimeout(timeout);
     }

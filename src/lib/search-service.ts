@@ -1,3 +1,5 @@
+import { exactDirectoryCity, inMapCoverage, cityFeature, canonicalCityQuery } from "./weather-cities";
+import { localizedStaticName } from "./map-language";
 import {coreStatistics,localCoreEnabled,nativeLocalities} from '../android/local-provider';
 import { languageValue, ownerName, placeRank } from "./geo-format";
 import { yieldToMainThread } from "./performance";
@@ -62,7 +64,7 @@ function distanceKm(a: [number, number], b: [number, number]): number {
 }
 
 function languageStaticName(item: StaticSearchItem, language: Language): string {
-  return language === "ku" ? item.n_ku || "" : language === "ar" ? item.n_ar || "" : item.n_en || "";
+  return localizedStaticName(item, language);
 }
 
 function coordinateKey(longitude: number, latitude: number, name: string): string {
@@ -178,7 +180,18 @@ export class SearchService {
     return task;
   }
 
+  mergeResults(term: string, ...groups: SearchChoice[][]): SearchChoice[] {
+    const query = this.prepareQuery(canonicalCityQuery(term));
+    const exact = exactDirectoryCity(term);
+    const rows = this.mergeChoices(groups.flat(), query.intentIds.length ? null : query);
+    if (!exact || !inMapCoverage(exact)) return rows;
+    const preferred: SearchChoice = { type: "local", feature: cityFeature(exact) };
+    return this.mergeChoices([preferred, ...rows]);
+  }
+
   searchFast(term: string): SearchChoice[] | Promise<SearchChoice[]> {
+    const match = exactDirectoryCity(term);
+    if (match && inMapCoverage(match)) return [{type: "local", feature: cityFeature(match)}];
     if(localCoreEnabled)return this.searchNative(term,true);
     const query = this.prepareQuery(term);
     if (query.phrase.length < 2 && query.tokens.length === 0) return [];
@@ -195,6 +208,7 @@ export class SearchService {
   }
 
   async search(term: string): Promise<SearchChoice[]> {
+    term = canonicalCityQuery(term);
     if(localCoreEnabled)return this.searchNative(term,false);
     const query = this.prepareQuery(term);
     if (query.phrase.length < 2 && query.tokens.length === 0) return [];
@@ -566,7 +580,9 @@ export class SearchService {
         : choice.type === "owner"
           ? coordinateKey(choice.place.longitude, choice.place.latitude, ownerName(choice.place, language))
           : coordinateKey(choice.item.x, choice.item.y, languageStaticName(choice.item, language));
-      if (seen.has(key)) continue;
+      const title = choice.type === "local" ? languageValue(choice.feature.properties, language)
+        : choice.type === "owner" ? ownerName(choice.place, language) : languageStaticName(choice.item, language);
+      if (!title || title === "—" || seen.has(key)) continue;
       seen.add(key);
       output.push(choice);
       if (output.length >= SEARCH_RESULT_LIMIT) break;

@@ -13,7 +13,7 @@ import urllib.request
 PROJECT = 'kaydgjhwnspnuqabaiqw'
 ORIGIN = 'https://geo-map-kappa.vercel.app'
 FUNCTIONS = ('delete-atlas-account', 'delete-atlas-place', 'review-atlas-submission')
-VERSION = '10.4.4'
+VERSION = '11.0.0'
 CODE = json.loads((Path(__file__).resolve().parents[2] / 'release.config.json').read_text())['androidVersionCode']
 if type(CODE) is not int or not 0 < CODE < 2**31:
     raise ValueError('Invalid configured Android version code.')
@@ -76,7 +76,7 @@ def verify_identity(web_commit, android_commit):
                  'from public.nav_kurd_app_release where singleton=true')
     if len(rows)!=1 or rows[0] != {
         'app_version':VERSION, 'android_version_code':CODE,
-        'release_id':'2026-10-13-nav-kurd-v10.4.4',
+        'release_id':'2026-10-13-nav-kurd-v11.0.0',
         'web_source_commit':web_commit, 'android_source_commit':android_commit}:
         raise RuntimeError('Backend version/source does not match the exact release.')
     return rows[0]
@@ -183,7 +183,7 @@ def main():
     if args.record:
         query(f"update public.nav_kurd_app_release set android_version_code={CODE}, "
               f"web_source_commit='{web_commit}', android_source_commit='{android_commit}', updated_at=now() "
-              f"where singleton=true and app_version='10.4.4' and release_id='2026-10-13-nav-kurd-v10.4.4' "
+              f"where singleton=true and app_version='11.0.0' and release_id='2026-10-13-nav-kurd-v11.0.0' "
               f"and android_version_code <= {CODE} returning singleton")
     identity=verify_identity(web_commit,android_commit)
     database=verify_database_policies()

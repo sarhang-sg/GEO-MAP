@@ -1,3 +1,4 @@
+import { historyDate } from "./dom";
 import { confirmAction, compactUtilityActions, bindConfirmationKeyboard } from "./confirm-action";
 import {
   atlasErrorMessage,
@@ -501,7 +502,7 @@ export class OwnerStudio {
     const deleteMessageLabel = language === "ar" ? "حذف الرسالة" : language === "en" ? "Delete message" : "سڕینەوەی نامە";
     const deviceReportLabel = language === "ar" ? "بيانات الجهاز" : language === "en" ? "Device report" : "ڕاپۆرتی ئامێر";
     const feedbackRows = this.feedback.slice(0, 100).map((item) => {
-      const date = new Date(item.updated_at || item.created_at).toLocaleString(language === "ar" ? "ar-IQ" : language === "en" ? "en-GB" : "ckb-IQ");
+      const date = historyDate(item.updated_at || item.created_at, language);
       return `<article class="owner-feedback" data-status="${escapeText(item.status)}">
         <div class="owner-feedback__heading"><strong>${escapeText(categoryLabelForFeedback(item.category))}</strong><span>${escapeText(feedbackStatus(item.status))}</span></div>
         <p data-text-selectable="true">${escapeText(item.message)}</p>
@@ -540,13 +541,13 @@ export class OwnerStudio {
     const historyRows = this.navigationHistory.slice(0, 40).map((entry) => {
       const coveredMeters = entry.status === "arrived" ? entry.planned_distance_meters : Math.max(0, entry.planned_distance_meters - entry.remaining_distance_meters);
       const distance = coveredMeters < 1000 ? `${Math.round(coveredMeters).toLocaleString(historyLocale)} m` : `${(coveredMeters / 1000).toLocaleString(historyLocale, { maximumFractionDigits: 1 })} km`;
-      const date = new Intl.DateTimeFormat(historyLocale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(entry.ended_at));
-      return `<article class="owner-navigation-history__item" data-status="${entry.status}"><span class="owner-navigation-history__pin" aria-hidden="true">${ownerUtilityIcon("pin")}</span><div><strong>${escapeText(entry.destination)}</strong><small>${escapeText(date)} · ${escapeText(distance)}</small></div><b>${escapeText(entry.status === "arrived" ? historyCopy.arrived : historyCopy.cancelled)}</b><button type="button" data-owner-action="history-delete" data-id="${escapeText(entry.id)}" aria-label="${escapeText(historyCopy.delete)}" title="${escapeText(historyCopy.delete)}">${ownerUtilityIcon("trash")}</button></article>`;
+      const date = historyDate(entry.ended_at, language);
+      return `<article class="owner-navigation-history__item" data-status="${entry.status}"><span class="owner-navigation-history__pin" aria-hidden="true">${ownerUtilityIcon("pin")}</span><div><strong>${escapeText(entry.destination)}</strong><small>${escapeText(date)} · <span dir="ltr">${escapeText(distance)}</span></small></div><b>${escapeText(entry.status === "arrived" ? historyCopy.arrived : historyCopy.cancelled)}</b><button type="button" data-owner-action="history-delete" data-id="${escapeText(entry.id)}" aria-label="${escapeText(historyCopy.delete)}" title="${escapeText(historyCopy.delete)}">${ownerUtilityIcon("trash")}</button></article>`;
     }).join("") || `<p class="owner-studio__empty">${escapeText(historyCopy.empty)}</p>`;
     const historyPanel = `<section class="owner-navigation-history"><header><h3>${escapeText(historyCopy.title)} <span>${this.navigationHistory.length}</span></h3>${this.navigationHistory.length ? `<button type="button" data-owner-action="history-clear">${ownerUtilityIcon("trash")}<span>${escapeText(historyCopy.clear)}</span></button>` : ""}</header><div>${historyRows}</div></section>`;
 
     return `<div class="owner-studio__toolbar"><div><strong>${escapeText(this.identity?.displayName || this.identity?.email || "NAV KURD")}</strong><span>${escapeText(copy.signedIn)}</span></div><button type="button" class="owner-studio__signout" data-owner-action="signout" aria-label="${escapeText(copy.signOut)}">${ownerUtilityIcon("signout")}<span>${escapeText(copy.signOut)}</span></button></div>
-      <nav class="owner-private-tabs" aria-label="${escapeText(copy.title)}">${(Object.keys(workspaceLabels) as OwnerWorkspaceTab[]).map((tab) => `<button type="button" data-owner-action="workspace-tab" data-id="${tab}" class="${this.activeWorkspaceTab === tab ? "is-active" : ""}" aria-pressed="${this.activeWorkspaceTab === tab ? "true" : "false"}"><span>${escapeText(workspaceLabels[tab])}</span>${tab === "review" ? `<b>${reviewPlaces.length}</b>` : tab === "places" ? `<b>${this.places.length}</b>` : tab === "messages" ? `<b>${this.feedback.filter((item) => item.status === "new").length}</b>` : `<b>${unreadNotifications}</b>`}</button>`).join("")}</nav>
+      <nav class="owner-private-tabs" aria-label="${escapeText(copy.title)}">${(Object.keys(workspaceLabels) as OwnerWorkspaceTab[]).map((tab) => `<button type="button" data-owner-action="workspace-tab" data-id="${tab}" class="${this.activeWorkspaceTab === tab ? "is-active" : ""}" aria-pressed="${this.activeWorkspaceTab === tab ? "true" : "false"}"><span>${escapeText(workspaceLabels[tab])}</span>${tab === "review" ? `<b${reviewPlaces.length ? "" : " hidden"}>${reviewPlaces.length}</b>` : tab === "places" ? `<b${this.places.length ? "" : " hidden"}>${this.places.length}</b>` : tab === "messages" ? `<b${this.feedback.filter((item) => item.status === "new").length ? "" : " hidden"}>${this.feedback.filter((item) => item.status === "new").length}</b>` : `<b${unreadNotifications ? "" : " hidden"}>${unreadNotifications}</b>`}</button>`).join("")}</nav>
       ${panel}
       ${historyPanel}`;
   }

@@ -13,7 +13,7 @@ html[data-nav-kurd-theme][data-ui-mode] .map-notice-stack > :is(.location-recove
   margin: 0; padding: 10px; border-radius: 16px; box-sizing: border-box;
   color: var(--nk-text) !important; background: var(--nk-surface) !important;
   background: color-mix(in srgb, var(--nk-surface) 82%, transparent) !important;
-  border: 1px solid var(--nk-border) !important;
+  border: 0 !important;
   box-shadow: inset 0 1px 0 #ffffff22, 0 4px 18px #0002;
   -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
   font: 600 12px/1.55 var(--font-ui); pointer-events: auto; animation: map-notice-in .18s ease-out;

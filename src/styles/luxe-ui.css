@@ -45,7 +45,7 @@ html.is-native-app .search-card {
   position: relative;
   overflow: visible;
   isolation: isolate;
-  border: 1px solid rgba(141, 194, 255, .22) !important;
+  border: 0 !important;
   border-radius: 16px !important;
   color: #e4efff !important;
   background: linear-gradient(145deg, rgba(13, 34, 68, .97), rgba(3, 12, 31, .96)) !important;
@@ -171,7 +171,7 @@ html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(3) 
   z-index: var(--z-local-content);
   margin: 17px 0 14px;
   overflow: hidden;
-  border: 1px solid rgba(122, 192, 255, .20);
+  border: 0;
   border-radius: 19px;
   background: #07142f;
   box-shadow: 0 18px 42px rgba(0,9,30,.34), inset 0 1px 0 rgba(255,255,255,.05);
@@ -238,7 +238,7 @@ html[data-hover="available"] #shareLocationButton:hover svg circle:nth-child(3) 
   width: 31px;
   height: 31px;
   flex: 0 0 auto;
-  border: 1px solid rgba(133, 202, 255, .20);
+  border: 0;
   border-radius: 10px;
   object-fit: contain;
   background: rgba(24, 91, 164, .12);

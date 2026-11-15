@@ -1,4 +1,4 @@
-# Deployment — NAV KURD 10.4.4
+# Deployment — NAV KURD 11.0.0
 
 Now updated — reviewed 14 October 2026.
 
@@ -34,7 +34,7 @@ are the upgrade history used to reproduce and check the current schema.
 Android source and signed builds live in `sarhang-sg/GEO-ANDROID`. The coordinated
 release verifies APK/AAB versions, source inventory and the established signing
 certificate before binding `public/releases/latest.json` to their byte counts
-and SHA-256 digests. A refreshed build of 10.4.4 is staged as a private draft;
+and SHA-256 digests. A refreshed build of 11.0.0 is staged as a private draft;
 the current public APK remains available until the new signed build is verified.
 
 ## Cleanup

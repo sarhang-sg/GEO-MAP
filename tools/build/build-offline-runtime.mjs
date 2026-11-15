@@ -180,7 +180,8 @@ if (manifestEntry.bytes !== Buffer.byteLength(manifestJson)) {
 
 const requiredAssets = manifest.assets.filter((entry) => entry.required);
 const requiredBytes = requiredAssets.reduce((sum, entry) => sum + entry.bytes, 0);
-if (requiredAssets.length > 32) throw new Error(`Atomic shell has too many required files: ${requiredAssets.length}.`);
+// The map and city explorer share several additional, individually hashed chunks.
+if (requiredAssets.length > 40) throw new Error(`Atomic shell has too many required files: ${requiredAssets.length}.`);
 if (requiredBytes > 8 * 1024 * 1024) throw new Error(`Atomic shell exceeds 8 MiB: ${requiredBytes} bytes.`);
 for (const entry of requiredAssets) await stat(resolve(dist, entry.path));
 

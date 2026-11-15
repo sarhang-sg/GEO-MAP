@@ -30,12 +30,11 @@ export class LocationVolume {
   private heading: number | null = null;
   private signature = "";
   private generation = 0;
-  private zooming = false;
   private destroyed = false;
   private active = false;
   private writes: Promise<void> = Promise.resolve();
   constructor(private readonly map: MapLibreMap) {
-    map.on("zoomstart", this.onZoomStart); map.on("zoomend", this.onZoomEnd);
+    map.on("zoom", this.paint);
     map.on("pitch", this.paint); map.on("style.load", this.onStyleLoad); map.on("remove", this.destroy);
   }
   update(coordinate: LngLatTuple | null, heading: number | null): void { this.coordinate = coordinate; this.heading = heading; this.paint(); }
@@ -58,23 +57,16 @@ export class LocationVolume {
       this.map.setPaintProperty("location-dot","circle-stroke-opacity",active ? 0 : 1);
     }
   }
-  private onZoomStart = (): void => {
-    this.zooming = true; this.generation++; this.signature = "";
-    // World-sized geometry must not survive a zoom gesture. The bounded 2D
-    // puck stays visible until the worker commits the new zoom's geometry.
-    this.visible(false);
-  };
-  private onZoomEnd = (): void => { this.zooming = false; this.paint(); };
   private onStyleLoad = (): void => { this.active = false; this.generation++; this.signature = ""; this.paint(); };
   private destroy = (): void => {
     this.destroyed = true; this.generation++;
-    this.map.off("zoomstart",this.onZoomStart); this.map.off("zoomend",this.onZoomEnd);
+    this.map.off("zoom",this.paint);
     this.map.off("pitch",this.paint); this.map.off("style.load",this.onStyleLoad); this.map.off("remove",this.destroy);
   };
   private paint = (): void => {
     if (this.destroyed || !this.map.getStyle()?.layers) return;
     const zoom = this.map.getZoom();
-    if (this.zooming || !this.coordinate || this.map.getPitch() < 18 || zoom < 13 || zoom > 22) {
+    if (!this.coordinate) {
       this.generation++; this.signature = ""; this.visible(false); return;
     }
     if (!this.map.getSource(SOURCE)) {
@@ -87,12 +79,12 @@ export class LocationVolume {
     this.signature = signature;
     const generation = ++this.generation, source = this.map.getSource(SOURCE) as GeoJSONSource;
     const data = locationVolume(this.coordinate,this.heading,zoom);
-    if (!this.active) this.visible(false);
+
     this.writes = this.writes.catch(() => undefined).then(async () => {
       if (this.destroyed || generation !== this.generation || source !== this.map.getSource(SOURCE)) return;
       await source.setData(data);
-      if (this.destroyed || generation !== this.generation || this.zooming || source !== this.map.getSource(SOURCE)) return;
-      this.visible(data.features.length > 0 && this.map.getPitch() >= 18 && this.map.getZoom() === zoom);
-    }).catch(() => { if (!this.destroyed && generation === this.generation) { this.signature = ""; this.visible(false); } });
+      if (this.destroyed || !this.coordinate || source !== this.map.getSource(SOURCE)) return;
+      if (!this.active && data.features.length) this.visible(true);
+    }).catch(() => { if (!this.destroyed && generation === this.generation) { this.signature = ""; } });
   };
 }

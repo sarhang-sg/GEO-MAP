@@ -19,7 +19,7 @@ html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio,.user-contribution-stu
   min-width: 0; max-width: 100%; box-sizing: border-box; font-size: 14px; line-height: 1.65;
 }
 html[data-nav-kurd-theme][data-ui-mode] :is(.owner-private-panel,.owner-navigation-history,.owner-feedback-item,.owner-editor-section,.user-contrib__section,.user-submission,.user-private-section,.user-private-message,.owner-place-row,.owner-contributor) {
-  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 1px solid var(--nk-border) !important;
+  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 0 !important;
   border-radius: 16px; box-sizing: border-box; min-width: 0;
 }
 html[data-nav-kurd-theme][data-ui-mode] .owner-private-panel { padding: 12px; margin-top: 14px; }
@@ -47,18 +47,18 @@ html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio,.user-contribution-stu
 html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio,.user-contribution-studio) :is(.owner-confirm__delete,.user-confirm__delete,.owner-review-action--reject,.owner-review-action--approve) span { color: inherit !important; }
 html[data-nav-kurd-theme][data-ui-mode] .compact-utility-action {
   display: inline-grid !important; place-items: center; flex: 0 0 44px; min-width: 44px !important; width: 44px !important;
-  min-height: 44px !important; height: 44px; padding: 10px !important; border: 1px solid var(--nk-border) !important; border-radius: 12px !important;
+  min-height: 44px !important; height: 44px; padding: 10px !important; border: 0 !important; border-radius: 12px !important;
   color: var(--nk-text) !important; background: var(--nk-elevated) !important; box-shadow: none !important;
 }
 .compact-utility-action > span { display: none !important; }
 .compact-utility-action svg { width: 21px; height: 21px; fill: none; stroke: currentColor; }
 html[data-nav-kurd-theme][data-ui-mode] :is(.user-contrib__file-preview-actions,.owner-media-card__actions) { gap: 8px; }
 html[data-nav-kurd-theme][data-ui-mode] .user-contrib__file-preview-actions label {
-  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 1px solid var(--nk-border); min-height: 44px;
+  color: var(--nk-text) !important; background: var(--nk-surface) !important; border: 0; min-height: 44px;
 }
 html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio__message,.user-contrib__message,.feedback-studio__message) {
   overflow-wrap: anywhere; font: 600 13px/1.7 var(--font-ui); padding: 10px 14px; margin: 8px 12px;
-  border: 1px solid var(--nk-border); border-radius: 12px;
+  border: 0; border-radius: 12px;
 }
 .owner-studio__toolbar--actions { flex-wrap: wrap; }
 .owner-studio__toolbar--actions > div { flex-wrap: wrap; }
@@ -69,14 +69,14 @@ html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio__message,.user-contrib
 
 html[data-nav-kurd-theme][data-ui-mode] .action-confirm {
   width: min(350px,calc(100% - 32px)); max-height: calc(100dvh - 32px); box-sizing: border-box;
-  padding: 20px; border: 1px solid var(--nk-border); border-radius: 20px;
+  padding: 20px; border: 0; border-radius: 20px;
   color: var(--nk-text); background: var(--nk-surface); box-shadow: 0 18px 60px #0005;
 }
 .action-confirm::backdrop { background: #06101e99; backdrop-filter: blur(4px); }
 .action-confirm h3 { margin: 0 0 8px; font-size: 17px; }
 .action-confirm p { margin: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--nk-muted); }
 .action-confirm > div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.action-confirm button { min-height: 44px; padding: 8px; font: 600 13px/1.5 var(--font-ui); color: var(--nk-text); border: 1px solid var(--nk-border); border-radius: 12px; background: var(--nk-elevated); }
+.action-confirm button { min-height: 44px; padding: 8px; font: 600 13px/1.5 var(--font-ui); color: var(--nk-text); border: 0; border-radius: 12px; background: var(--nk-elevated); }
 .action-confirm .action-confirm__proceed { color: var(--nk-error-text); }
 .action-confirm button:focus-visible { outline: 2px solid var(--nk-link); outline-offset: 2px; }
 @media(max-width:700px) {
@@ -111,7 +111,7 @@ html[data-nav-kurd-theme][data-ui-mode] progress::-webkit-progress-value { backg
 html[data-nav-kurd-theme][data-ui-mode] progress::-moz-progress-bar { background: var(--nk-action-bg) !important; }
 .owner-media__pending { display: flex; align-items: center; gap: 10px; margin-block: 10px; }
 .owner-media__pending img { width: 96px; height: 72px; object-fit: cover; border-radius: 12px; }
-.owner-media__pending button { display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid var(--nk-border); border-radius: 12px; color: var(--nk-text); background: var(--nk-elevated); }
+.owner-media__pending button { display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 0; border-radius: 12px; color: var(--nk-text); background: var(--nk-elevated); }
 .owner-media__pending button svg { width: 22px; height: 22px; }
 .owner-media__captions > summary, .owner-photo-card__editor > summary { min-height: 44px; align-content: center; cursor: pointer; color: var(--nk-text); font-size: 13px; }
 .owner-photo-card__editor { min-width: 0; }
@@ -148,7 +148,7 @@ html[data-nav-kurd-theme][data-ui-mode] :is(.owner-studio,.user-contribution-stu
 }
 html[data-nav-kurd-theme][data-ui-mode] .owner-studio__text-button {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0;
-  border: 1px solid var(--nk-border); background: var(--nk-elevated); padding: 8px 12px;
+  border: 0; background: var(--nk-elevated); padding: 8px 12px;
 }
 .owner-studio__text-button svg { width: 20px; height: 20px; flex: 0 0 20px; }
 .owner-studio__text-button:dir(rtl) svg { transform: rotate(180deg); }
@@ -172,3 +172,52 @@ html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { width: 260px; ma
 @media (min-width: 701px) {
   html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud { max-width: 300px; }
 }
+
+/* The controls share neutral ink and receive their accent through the surface or action. */
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .map-shell {
+  --nk-text: #f9fafc; --nk-muted: #d6deeb;
+  --nk-ink: var(--nk-text); --nk-panel: var(--nk-surface);
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode="light"] .map-shell { --nk-text: #192332; --nk-muted: #404d60; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-card,.search-field,.search-results,.search-result,.round-button,.map-button,.map-sheet,.map-status,.maplibregl-ctrl-group,.place-popup,.navigation-preferences,.navigation-preferences__fields,.route-panel,.map-coordinate-picker,.route-destination-prompt,.route-navigation-hud,.user-contrib__panel,.owner-studio__panel,.user-account-card,.user-navigation-history,.owner-navigation-history,.support-fold,.support-method,.weather-directory,.weather-city) {
+  border-width: 0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.navigation-preferences,.about-dialog,.user-contribution-studio,.owner-studio,.feedback-studio,.map-sheet,.search-card,.place-popup) :is(button,input,select,textarea,section,article,nav,details,label) { border-width: 0 !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-result, .user-private-tabs button:not(.is-active),.owner-private-tabs button:not(.is-active),.user-navigation-history__item) { background:var(--nk-elevated) !important; color:var(--nk-text) !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-result strong,.user-private-tabs button:not(.is-active) span,.owner-private-tabs button:not(.is-active) span) { color:var(--nk-text) !important; opacity:1; text-shadow:none !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.owner-private-tabs) { display:flex; overflow-x:auto; scrollbar-width:thin; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.owner-private-tabs) button {
+  position:relative; flex:1 0 max-content; min-width:0; padding:10px 6px !important; border:0; white-space:nowrap; word-break:normal; overflow-wrap:normal;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.owner-private-tabs) button > span { white-space:nowrap; font-size:clamp(11px,2.8vw,14px); line-height:1.7; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.owner-private-tabs) button b { position:absolute; inset:3px 3px auto auto; min-width:1.2em; padding:0 3px; line-height:1.4; }
+html[data-nav-kurd-theme] :is(.user-private-tabs,.owner-private-tabs) b[hidden] { display:none !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-results,.user-contrib__panel,.navigation-preferences) { box-shadow:0 6px 16px #12182512,0 18px 44px #12182522 !important; }
+html[data-nav-kurd-theme] :is(button,input,textarea,select):focus-visible { outline:3px solid var(--nk-link); outline-offset:2px; }
+body:has(.nav-kurd-place-popup, .place-detail:not([hidden])) .search-card { visibility:hidden !important; pointer-events:none !important; }
+.measurement, .place-weather [dir=ltr] { unicode-bidi:isolate; }
+.measurement { white-space:nowrap; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .place-weather[data-sky-phase], html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city {
+  color-scheme:only dark; background:var(--city-sky,#20334c) !important; color:#fff !important;
+  --nk-text:#fff; --nk-muted:#e8eef7; border:0 !important; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.place-weather[data-sky-phase],.weather-city) :is(strong,bdi,span,time,summary,small) { color:inherit !important; text-shadow:none !important; line-height:1.6; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .place-weather__forecast { padding:6px 12px 13px; scroll-padding-inline:12px; scroll-snap-type:x proximity; align-items:start; height:auto; }
+.place-weather__hour { scroll-snap-align:start; min-height:max-content; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-directory { color-scheme:only dark; color:#f6f9ff !important; background:#172638 !important; --nk-text:#fff; --nk-surface:#1e3044; --nk-elevated:#30435a; --nk-muted:#dee7f4; --nk-link:#b9dcff; }
+.weather-directory__status:empty { display:none; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; border-radius:16px; padding:6px; box-shadow:0 8px 22px #07111e28; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city button { color:#fff !important; background:transparent !important; box-shadow:none !important; border:0 !important; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city .weather-directory__place { display:flex; align-items:center; gap:.65rem; justify-content:space-between; padding:10px; min-height:82px; text-align:start; }
+.weather-city .weather-directory__place > span:first-child { display:grid; flex:1; }
+.weather-city__temp { font-size:1.55rem; font-variant-numeric:tabular-nums; }
+.weather-city__pin { min-width:44px; min-height:44px; font-size:1.4rem; }
+@media (prefers-reduced-motion:no-preference) { .weather-city button:active { transform:scale(.98); } }
+
+.weather-picker-page { margin:0; color-scheme:only dark; background:#172638; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-picker-page .weather-directory {
+  inset:0; width:100%; height:100dvh; max-width:none; max-height:none; margin:0; border-radius:0; box-sizing:border-box;
+  padding:16px max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+}
+.weather-picker-page:has(.weather-directory[data-weather-view="list"]) .weather-directory__details { display:none; }
+.weather-picker-page .weather-directory__content { grid-template-columns:minmax(0,1fr); }

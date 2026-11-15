@@ -37,3 +37,25 @@ export function query<T extends Element>(selector: string, root: ParentNode = do
   if (!element) throw new Error(`Missing required element: ${selector}`);
   return element;
 }
+
+/** Keep measurements together inside sentences in all three writing directions. */
+export function measurement(text: string): HTMLSpanElement {
+  const span = document.createElement("span");
+  span.dir = "ltr"; span.className = "measurement"; span.textContent = text;
+  return span;
+}
+
+export function setMeasuredText(element: HTMLElement, text: string): void {
+  const parts = text.split(/([+−-]?[\p{Nd}]+(?:[.,٫][\p{Nd}]+)?\s*(?:km\/h|µg\/m³|km|m|min|h|°C|°|%)(?![\p{L}]))/gu);
+  element.replaceChildren(...parts.map((part,index) => index % 2 ? measurement(part) : part));
+}
+
+export function historyDate(value: string, lang: "ku" | "ar" | "en"): string {
+  const date = new Date(value);
+  if (!Number.isFinite(+date)) return "";
+  if (lang !== "ku") return new Intl.DateTimeFormat(lang==="ar"?"ar-IQ":"en-GB",{dateStyle:"medium",timeStyle:"short"}).format(date);
+  const months=["کانوونی دووەم","شوبات","ئادار","نیسان","ئایار","حوزەیران","تەمموز","ئاب","ئەیلوول","تشرینی یەکەم","تشرینی دووەم","کانوونی یەکەم"];
+  const digits = new Intl.NumberFormat("ar-IQ-u-nu-arab",{useGrouping:false});
+  const time = new Intl.DateTimeFormat("ar-IQ-u-nu-arab",{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(date);
+  return `${digits.format(date.getDate())}ی ${months[date.getMonth()]}ی ${digits.format(date.getFullYear())} · ${time}`;
+}
