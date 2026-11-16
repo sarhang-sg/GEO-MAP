@@ -125,7 +125,7 @@
 }
 .support-section--neon .support-section__intro {
   padding: 1px 2px 15px;
-  border-bottom: 1px solid rgb(255 67 101 / 22%);
+  border-bottom: 0;
   color: #e6dbe1;
   line-height: 1.95;
 }

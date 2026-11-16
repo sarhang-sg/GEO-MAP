@@ -56,7 +56,7 @@ html.is-native-app .search-card {
 .map-actions :where(.round-button, .map-button)::before {
   position: absolute;
   inset: 50%;
-  border: 1px solid rgba(107, 211, 255, .28);
+  background: radial-gradient(ellipse at center, rgba(107, 211, 255, .22), transparent 72%);
   border-radius: inherit;
   opacity: 0;
   content: "";
@@ -95,7 +95,7 @@ html[data-hover="available"] #userAccountButton:hover::after { opacity: 1; anima
 #routePinButton::after {
   position: absolute;
   inset: 9px;
-  border: 1px solid rgba(104, 222, 255, .55);
+  background: radial-gradient(circle, rgba(104, 222, 255, .26), transparent 70%);
   border-radius: 50%;
   opacity: 0;
   content: "";

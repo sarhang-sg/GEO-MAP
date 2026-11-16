@@ -31,7 +31,7 @@
 .place-weather__details > summary {
   position: relative; z-index: var(--z-local-content); display: flex; align-items: center; justify-content: space-between;
   gap: 8px; min-height: 44px; box-sizing: border-box; cursor: pointer; list-style: none;
-  padding: 6px 0; color: inherit; border-top: 1px solid var(--nk-border, rgba(132,180,255,.16));
+  padding: 6px 0; color: inherit; border-top: 0;
   touch-action: manipulation;
 }
 .place-weather__details > summary::-webkit-details-marker { display: none; }

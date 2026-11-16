@@ -21,7 +21,7 @@
 .navigation-preferences dl div { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .navigation-preferences dd { margin: 0; }
 .navigation-preferences kbd { font: 600 13px/1.5 ui-monospace,monospace; direction: ltr; display: inline-block; }
-.navigation-preferences__note { font-size: 12px; border-top: 1px solid #7891ad44; padding-top: 14px; }
+.navigation-preferences__note { font-size: 12px; border-top: 0; padding-top: 14px; }
 .location-recovery { position: absolute; z-index: var(--z-health); inset: auto 16px max(110px,env(safe-area-inset-bottom)); margin-inline: auto; width: min(420px,calc(100% - 32px)); padding: 12px 16px; box-sizing: border-box; }
 .location-recovery[hidden] { display: none; }
 .location-recovery p { margin: 0 0 10px; }

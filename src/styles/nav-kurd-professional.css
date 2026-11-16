@@ -535,7 +535,7 @@ html[data-nav-kurd-theme="professional"] :where(.map-actions .round-button,
 
 html[data-nav-kurd-theme="professional"] .maplibregl-ctrl-group > button {
   border: 0 !important;
-  border-bottom: 1px solid var(--nk-border) !important;
+  border-bottom: 0 !important;
   background-color: transparent !important;
   box-shadow: none !important;
   filter: none !important;
@@ -2257,7 +2257,7 @@ html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
 html[data-nav-kurd-theme="professional"] .route-navigation-hud {
   flex-wrap: wrap; gap: 6px 10px; width: max-content; max-width: min(520px, calc(100% - 32px));
 }
-.route-navigation-hud__details { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; width: 100%; border-top: 1px solid var(--nk-border); padding-top: 6px; font-size: .74rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
+.route-navigation-hud__details { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; width: 100%; border-top: 0; padding-top: 6px; font-size: .74rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
 .route-navigation-hud__road { width: 100%; color: var(--nk-muted); text-align: center; font-size: .7rem; line-height: 1.45; }
 .route-navigation-hud :is(bdi, [data-navigation-distance], [data-navigation-duration]), [data-route-metrics] bdi { unicode-bidi: isolate; }
 .route-navigation-hud [hidden] { display: none !important; }
