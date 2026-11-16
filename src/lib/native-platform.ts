@@ -108,8 +108,10 @@ export async function initializeNativePlatform(getLanguage: () => Language): Pro
   installNativeAccountNotifications(getLanguage);
 }
 
-/** Flutter owns the native launch surface; the browser has no native splash. */
-export async function hideNativeSplash(): Promise<void> {}
+/** Android's fully-drawn timestamp begins with the first usable map frame. */
+export function reportNativeMapDrawn(): void {
+  if (isFlutterAndroidRuntime()) void flutterInvoke("nativeMapDrawn").catch(() => undefined);
+}
 
 type PlatformCopy = {
   eyebrow: string;

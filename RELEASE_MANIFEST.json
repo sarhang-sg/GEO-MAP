@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1717,
-  "totalBytes": 289721743,
+  "totalBytes": 289721825,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -3967,8 +3967,8 @@
       "sha256": "37cb5d7212fb87a2c6f6465d3a0c2339a72ef5cca3428fcb4002801e771c3a1f"
     },
     "src/lib/native-platform.ts": {
-      "bytes": 11739,
-      "sha256": "e44c264943891c0259abc4dede60503b25f8c24f817f3c64ad65e8f3145efd24"
+      "bytes": 11821,
+      "sha256": "e1fc6c1212a9009fb94b954dbe593fd857b7c9ffcf389f469498b88a457e9cbd"
     },
     "src/lib/native-share.ts": {
       "bytes": 3009,
@@ -4244,7 +4244,7 @@
     },
     "src/main.ts": {
       "bytes": 112611,
-      "sha256": "558c448d333bda0bbf27e67c8485b5deb9e8ba4d5f7016da118c1873c13cccd7"
+      "sha256": "746fa253357f5a207cf45fc376a208f1e3b57cf87ff9c36809fdb1ee341b1cd7"
     },
     "src/pwa-register.ts": {
       "bytes": 663,

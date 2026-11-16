@@ -72,7 +72,7 @@ import { PlaceWeatherService } from "./lib/place-weather";
 import { installRuntimeDiagnostics, recordRuntimeDiagnostic } from "./lib/runtime-diagnostics";
 import { installSupportHub } from "./lib/support-hub";
 import { createPopupShareButton, shareMapLocation } from "./lib/native-share";
-import { hideNativeSplash, initializeNativePlatform, installNativeSettingsPanel } from "./lib/native-platform";
+import { initializeNativePlatform, installNativeSettingsPanel, reportNativeMapDrawn } from "./lib/native-platform";
 import { installInputModeController } from "./lib/input-mode-controller";
 import { RuntimeStateController } from "./lib/runtime-state";
 import { waitForMapReadiness } from "./lib/map-readiness";
@@ -2161,8 +2161,8 @@ async function completeTruthfulMapReadyFlow(criticalInitialization: Promise<void
   await waitForMinimumMapLoadingVisibility();
   initialVisualReadyReached = true;
   await dismissMapLoading();
-  await hideNativeSplash();
   await waitForUiFrames(2);
+  reportNativeMapDrawn();
   if (new URLSearchParams(location.search).get("weatherReturn") !== "1") tutorialController.maybeStart();
 }
 
@@ -2173,8 +2173,8 @@ async function completeDegradedVisualReadyFlow(): Promise<void> {
   await waitForMinimumMapLoadingVisibility();
   initialVisualReadyReached = true;
   await dismissMapLoading();
-  await hideNativeSplash();
   await waitForUiFrames(2);
+  reportNativeMapDrawn();
   if (new URLSearchParams(location.search).get("weatherReturn") !== "1") tutorialController.maybeStart();
 }
 
