@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1717,
-  "totalBytes": 289721825,
+  "totalBytes": 289723946,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -3687,8 +3687,8 @@
       "sha256": "1995374f9a4065765fb57c88504d563d6282c974723f0f24209b45ccc0a970a1"
     },
     "README.md": {
-      "bytes": 2986,
-      "sha256": "f327b90a9c108d77468f38cb95a635b8b617fb66f3db7f29ec2e9ee2780afe40"
+      "bytes": 3301,
+      "sha256": "01c5e03d38e94226bc0442c7d051cc3fef120ad09b3f81cc7b24faad12655b20"
     },
     "release.config.json": {
       "bytes": 997,
@@ -4119,8 +4119,8 @@
       "sha256": "c4ca1cfc50b98471c3561feda0a0daf547f24017449d22d133778ca8b3d09376"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 79612,
-      "sha256": "9166988322720c8b7371826da16c35a8d3547e7c19ccf4b44c64c0ad6d42b486"
+      "bytes": 81418,
+      "sha256": "8687b5118f48ec7e32bef2336d10d9107ea2e5352801b07a08c5b3860c023950"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 15390,

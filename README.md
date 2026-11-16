@@ -6,6 +6,8 @@ NAV KURD is Sarhang Salah’s Kurdish-first map of Southern Kurdistan. The web a
 
 ## Architecture
 
+The Android WebView uses the same route rendering and turn guidance as the browser. When connectivity is unavailable, it requests driving, cycling and walking directions from the installed regional OpenStreetMap road graph. Browser routes and Android routes outside that graph use the configured online providers.
+
 | Component | Responsibility |
 | --- | --- |
 | Vite, TypeScript and MapLibre GL JS | Browser/PWA shell, map layers, 3D location geometry, camera, search and settings |

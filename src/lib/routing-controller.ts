@@ -1,4 +1,5 @@
 import { setMeasuredText } from "./dom";
+import { isFlutterAndroidRuntime } from "./runtime-platform";
 import { maneuverLabel } from "./route-maneuvers";
 import { NavigationAdvisory } from "./navigation-advisory";
 import { NAVIGATION_COPY, navigationClock, type DrivingWeather } from "./navigation-weather";
@@ -980,7 +981,8 @@ export class RoutingController {
       this.scheduledAnnouncement = this.scheduledAnnouncement || announce;
       return;
     }
-    if (ROUTING_PROVIDER === "mapbox" && !MAPBOX_ACCESS_TOKEN.startsWith("pk.")) {
+    const nativeRouting = isFlutterAndroidRuntime();
+    if (!nativeRouting && ROUTING_PROVIDER === "mapbox" && !MAPBOX_ACCESS_TOKEN.startsWith("pk.")) {
       this.renderRouteFailurePanel(UI[this.getLanguage()].routeServiceUnavailable);
       if (announce) this.setMessage(UI[this.getLanguage()].routeServiceUnavailable, "error");
       return;
@@ -1006,7 +1008,10 @@ export class RoutingController {
 
     try {
       const useMapbox = this.travelMode !== "car" || ROUTING_PROVIDER === "mapbox";
-      if (useMapbox) {
+      const offline = nativeRouting && (!navigator.onLine || document.querySelector('.map-shell')?.getAttribute('data-network-state') === 'offline');
+      if (offline) {
+        outcome = await this.tryOfflineRoute(currentSerial, origin, destination);
+      } else if (useMapbox) {
         const constrained = hadExistingRoute && this.travelMode === "car";
         outcome = await this.tryMapboxRoute(currentSerial, origin, destination, snapshot, mapboxProfileForMode(this.travelMode), constrained);
 
@@ -1033,6 +1038,10 @@ export class RoutingController {
         outcome = await this.tryOsrmRoute(currentSerial, origin, destination);
       }
 
+      if (nativeRouting && !offline && outcome !== "success" && this.isCurrentRequest(currentSerial, destination)) {
+        const local = await this.tryOfflineRoute(currentSerial, origin, destination);
+        if (local !== "unavailable") outcome = local;
+      }
       if (!this.isCurrentRequest(currentSerial, destination)) return;
       if (outcome === "success") {
         if (announce) this.setMessage(UI[this.getLanguage()].routeReady, "success");
@@ -1160,21 +1169,45 @@ export class RoutingController {
     try {
       const url = `${OSRM_BASE_URL}/route/v1/${encodeURIComponent(osrmProfileForMode(this.travelMode))}/${coordinatePath}?${params.toString()}`;
       const response = await this.fetchRouteJson<OsrmResponse>(url, "Routing", 8_000);
-      if (!this.isCurrentRequest(currentSerial, destination)) return "unavailable";
-      const route = response.routes?.[0];
-      if (response.code !== "Ok" || !route?.geometry || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) {
-        return response.code === "NoRoute" || response.code === "NoSegment" ? "no-route" : "unavailable";
-      }
-      const geometry = preciseRouteGeometry(route);
-      if (!geometry) return "unavailable";
-      this.maneuvers = routeManeuvers(route.legs);
-      this.routeSpeedLimits = [];
-      this.commitRoute(origin, destination, route.distance || 0, route.duration || 0, routeFeaturesFromGeometry(geometry, route.distance || 0, route.duration || 0, "unknown"), response.waypoints, response.waypoints?.[1]?.name || route.legs?.[0]?.summary);
-      return "success";
+      return this.acceptRoadRoute(currentSerial, origin, destination, response);
     } catch (error) {
       if (isAbortError(error)) throw error;
       return "unavailable";
     }
+  }
+
+  private async tryOfflineRoute(serial: number, origin: LngLatTuple, destination: LngLatTuple): Promise<RouteAttemptStatus> {
+    const bridge = window.flutter_inappwebview;
+    const signal = this.aborter?.signal;
+    if (!bridge || signal?.aborted) return "unavailable";
+    const cancel = () => { void bridge.callHandler("nativeCancelOfflineRoute", { id: serial }).catch(() => undefined); };
+    signal?.addEventListener("abort", cancel, { once: true });
+    try {
+      const response = await bridge.callHandler("nativeOfflineRoute", { id: serial, origin, destination, mode: this.travelMode });
+      if (!response || typeof response !== "object" || !("code" in response)) return "unavailable";
+      return this.acceptRoadRoute(serial, origin, destination, response as OsrmResponse);
+    } catch {
+      return "unavailable";
+    } finally {
+      signal?.removeEventListener("abort", cancel);
+    }
+  }
+
+  private acceptRoadRoute(serial: number, origin: LngLatTuple, destination: LngLatTuple, response: OsrmResponse): RouteAttemptStatus {
+    if (!this.isCurrentRequest(serial, destination)) return "unavailable";
+    const route = response.routes?.[0];
+    if (response.code !== "Ok" || !route?.geometry || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) {
+      return response.code === "NoRoute" || response.code === "NoSegment" ? "no-route" : "unavailable";
+    }
+    const geometry = preciseRouteGeometry(route);
+    if (!geometry) return "unavailable";
+    this.maneuvers = routeManeuvers(route.legs);
+    this.routeSpeedLimits = [];
+    const distance = route.distance ?? 0;
+    const duration = route.duration ?? 0;
+    this.commitRoute(origin, destination, distance, duration, routeFeaturesFromGeometry(geometry, distance, duration, "unknown"),
+      response.waypoints, response.waypoints?.[1]?.name || route.legs?.[0]?.summary);
+    return "success";
   }
 
   private commitRoute(origin: LngLatTuple, destination: LngLatTuple, distance: number, duration: number, features: RouteFeatureCollection["features"], waypoints: RouteWaypoint[] | undefined, roadName: unknown): void {
