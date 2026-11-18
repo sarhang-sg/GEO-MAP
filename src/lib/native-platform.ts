@@ -100,11 +100,25 @@ export async function initializeNativePlatform(getLanguage: () => Language): Pro
     window.dispatchEvent(new Event("nav-kurd:native-resume"));
   });
 
-  const synchronizeLanguage = (): void => {
-    void flutterInvoke("nativeSetLanguage", { language: getLanguage() }).catch(() => undefined);
+  let confirmed: Language | undefined;
+  let sending = false;
+  const synchronizeLanguage = async (): Promise<void> => {
+    if (sending || getLanguage() === confirmed) return;
+    const language = getLanguage();
+    sending = true;
+    try {
+      if (await flutterInvoke("nativeSetLanguage", { language }) === true) confirmed = language;
+    } catch {
+      // The first document can precede WebView bridge registration.
+    } finally {
+      sending = false;
+      if (language !== getLanguage()) void synchronizeLanguage();
+    }
   };
-  synchronizeLanguage();
-  window.addEventListener("nav-kurd:language-change", synchronizeLanguage);
+  for (const event of ["nav-kurd:language-change","flutterInAppWebViewPlatformReady","nav-kurd:native-ready","nav-kurd:native-resume"]) {
+    window.addEventListener(event, synchronizeLanguage);
+  }
+  void synchronizeLanguage();
   installNativeAccountNotifications(getLanguage);
 }
 

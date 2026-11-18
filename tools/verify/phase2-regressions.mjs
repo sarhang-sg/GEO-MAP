@@ -88,7 +88,7 @@ const nativeSource = read("src/lib/native-platform.ts");
 assert.match(nativeSource, /nativeClearTransientCache/);
 assert.match(nativeSource, /caches\.delete/);
 assert.match(nativeSource, /nativeOpenSettings/);
-assert.match(read("public/sw.js"), /const UI_REVISION = "V10";/);
+assert.match(read("public/sw.js"), /const UI_REVISION = "__KRI_UI_REVISION__";/);
 const shellSource = read("src/lib/app-shell.ts");
 assert.match(shellSource, /navIcon\("a1"\)/);
 assert.match(shellSource, /assets\/icons\/nav-kurd\/a2\.svg/);

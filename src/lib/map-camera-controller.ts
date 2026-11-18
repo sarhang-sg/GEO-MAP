@@ -2,7 +2,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 type MapCameraControllerOptions = { map: MapLibreMap; button: HTMLButtonElement };
 type MapWithOptionalTouchPitch = MapLibreMap & { touchPitch?: { enable: () => void } };
 const ACTIVE_3D_PITCH = 52;
-const ACTIVE_PITCH_THRESHOLD = 14;
+export function isCameraTilted(pitch: number): boolean { return pitch >= 14; }
 const cameraModeTransitions = new WeakSet<MapLibreMap>();
 /** GPS follow must not stop a user-requested tilt halfway through. */
 export function isCameraModeTransition(map: MapLibreMap): boolean { return cameraModeTransitions.has(map); }
@@ -13,7 +13,7 @@ export function installMapCameraController({ map, button }: MapCameraControllerO
   (map as MapWithOptionalTouchPitch).touchPitch?.enable();
   map.dragRotate.enable();
   const syncButtonState = (): void => {
-    const active = (requestedPitch ?? map.getPitch()) >= ACTIVE_PITCH_THRESHOLD;
+    const active = isCameraTilted(requestedPitch ?? map.getPitch());
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
     button.dataset.cameraMode = active ? "3d" : "2d";
@@ -24,7 +24,7 @@ export function installMapCameraController({ map, button }: MapCameraControllerO
     syncButtonState();
   };
   const toggle = (): void => {
-    const nextPitch = (requestedPitch ?? map.getPitch()) >= ACTIVE_PITCH_THRESHOLD ? 0 : ACTIVE_3D_PITCH;
+    const nextPitch = isCameraTilted(requestedPitch ?? map.getPitch()) ? 0 : ACTIVE_3D_PITCH;
     map.off("moveend", finishTransition);
     map.stop();
     requestedPitch = nextPitch;

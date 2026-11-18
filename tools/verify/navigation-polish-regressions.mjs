@@ -40,7 +40,8 @@ assert.equal(road.nearestRoadInformation([feature('a',44,30),feature('b',44.0001
 assert.equal(road.nearestRoadInformation([feature('a',44,30),feature('b',44.0001,80)],[44.00005,36.001],0),null);
 assert.equal(road.nearestRoadInformation([feature('a',44,30)],[44,36.001],90),null);
 console.log('PASS explicit surfaces and limits, mph conversion, unknown-speed rejection and ambiguous parallel-road protection');
-const volume=load('src/lib/location-volume.ts',{},'locationVolume,LocationVolume');
+const camera=load('src/lib/map-camera-controller.ts',{},'isCameraTilted');
+const volume=load('src/lib/location-volume.ts',camera,'locationVolume,LocationVolume');
 const north=volume.locationVolume([44,36],0,17),east=volume.locationVolume([44,36],90,17);
 assert.equal(north.features.length,3);assert.ok(north.features[0].geometry.coordinates[0][0][1]>36);assert.ok(east.features[0].geometry.coordinates[0][0][0]>44);
 for(const f of north.features){assert.ok(f.properties.height>f.properties.base);assert.deepEqual(Array.from(f.geometry.coordinates[0][0]),Array.from(f.geometry.coordinates[0].at(-1)));}
@@ -50,7 +51,8 @@ const pendingWrites=[];
 const map={on:(e,fn)=>events.set(e,fn),off(){},getStyle:()=>({layers:[]}),getPitch:()=>pitch,getZoom:()=>zoom,getSource:id=>sources.get(id),addSource:(id,s)=>sources.set(id,{...s,setData(data){writes++; return new Promise(resolve=>pendingWrites.push(()=>{this.data=data;resolve();}));}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty:(id,p,v)=>paint.set(id+':'+p,v),setPaintProperty:(id,p,v)=>paint.set(id+':'+p,v)};
 const tick=()=>new Promise(r=>setImmediate(r));
 const v=new volume.LocationVolume(map);v.update([44,36],90);assert.equal(writes,0);
-await tick(); assert.equal(writes,1, 'The extruded puck is built at zero pitch');
+await tick(); assert.equal(writes,0, 'The flat map uses the position dot and heading');
+pitch=52;events.get('pitch')();await tick();assert.equal(writes,1);
 pendingWrites.shift()();await tick();assert.equal(paint.get('location-dot:circle-opacity'),0);
 assert.equal(paint.get('location-dot:visibility'),'none');
 assert.equal(paint.get('location-3d-volume:visibility'),'visible');
@@ -66,10 +68,15 @@ for (const nextZoom of [19,15,8]) {
   assert.equal(paint.get('location-dot:visibility'),'none');
   pendingWrites.shift()(); await tick();
 }
-for (const angle of [0,20,65]) {
+for (const angle of [14,20,65]) {
   pitch=angle; events.get('pitch')();
   assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),1);
 }
+v.update([44.001,36],90);await tick();
+pitch=0;events.get('pitch')();
+pendingWrites.shift()();await tick();
+assert.equal(paint.get('location-dot:visibility'),'visible');
+assert.equal(paint.get('location-direction-arrow:visibility'),'visible');
 v.update(null,null);assert.equal(paint.get('location-3d-volume:visibility'),'none');
 assert.equal(volume.locationVolume([44,NaN],0,17).features.length,0);
 console.log('PASS delayed-worker 3D visibility, rapid zoom cancellation, continuous extrusion at overview zoom and unchanged-fix write suppression');

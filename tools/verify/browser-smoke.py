@@ -80,7 +80,8 @@ def verify_startup_loader(browser) -> None:
 def verify_theme_contrast(page) -> None:
     results = page.evaluate("""() => {
       const root = document.documentElement, shell = document.querySelector('.map-shell .search-card');
-      const initial = [root.dataset.accent, root.dataset.uiMode];
+      const mapShell = document.querySelector(".map-shell");
+      const initial = [root.dataset.accent, root.dataset.uiMode, mapShell.dataset.mapMode];
       const probe = document.createElement('span');
       shell.append(probe);
       const failures = [];
@@ -91,8 +92,8 @@ def verify_theme_contrast(page) -> None:
         return .2126*values[0]+.7152*values[1]+.0722*values[2];
       }
       for (const accent of ['original','blue','teal','amber','purple','pink','red','gold']) {
-        for (const mode of ['dark','light']) {
-          root.dataset.accent=accent; root.dataset.uiMode=mode;
+        for (const [mapMode,mode] of [['street','light'],['night','dark'],['satellite','dark']]) {
+          mapShell.dataset.mapMode=mapMode; root.dataset.accent=accent; root.dataset.uiMode=mode;
           for (const bg of ['surface','elevated']) for (const [fg,min] of [['text',7],['muted',4.5],['link',4.5]]) {
             probe.style.setProperty('color','var(--nk-'+fg+')','important');
             probe.style.setProperty('background-color','var(--nk-'+bg+')','important');
@@ -277,6 +278,8 @@ def main() -> int:
                   search?.focus();
                   const alpha = value => value === 'transparent' || value === 'rgba(0, 0, 0, 0)';
                   return {
+                    inputOutline: search ? getComputedStyle(search).outlineStyle : "missing",
+                    onlineBackground: getComputedStyle(document.querySelector("#mapOnlineIndicator")).backgroundColor,
                     inputBackground: search ? getComputedStyle(search).backgroundColor : 'missing',
                     iconFilter: icon ? getComputedStyle(icon).filter : 'missing',
                     threeDTransparent: threeD ? alpha(getComputedStyle(threeD).backgroundColor) : true,
@@ -292,6 +295,10 @@ def main() -> int:
             )
             if light_contract["inputBackground"] not in ("rgba(0, 0, 0, 0)", "transparent"):
                 raise AssertionError(f"light search input paints an overflow surface: {light_contract}")
+            if light_contract["inputOutline"] != "none":
+                raise AssertionError(f"Search input has an additional focus stroke: {light_contract}")
+            if light_contract["onlineBackground"] not in ("rgba(0, 0, 0, 0)", "transparent"):
+                raise AssertionError(f"Online heart paints a white backdrop: {light_contract}")
             if "drop-shadow" in light_contract["iconFilter"]:
                 raise AssertionError(f"light icons still use outline filters: {light_contract}")
             if light_contract["threeDTransparent"] or light_contract["eyeTransparent"]:
@@ -342,6 +349,21 @@ def main() -> int:
             about_button.click()
             page.locator("#aboutDialog").wait_for(state="visible", timeout=10_000)
             direct_download.wait_for(state="visible", timeout=10_000)
+            page.locator("#appearanceButton").click()
+            settings = page.locator("dialog.navigation-preferences")
+            settings.wait_for(state="visible")
+            choices = {"font":"system", "size":"large", "accent":"gold", "motion":"reduced",
+                       "quality":"medium", "satelliteQuality":"high", "satelliteContrast":"clear",
+                       "cameraZoom":"manual", "cameraBearing":"north", "controls":"auto"}
+            assert settings.locator("select").count() == len(choices)
+            page.evaluate("window.addEventListener('nav-kurd:appearance-change',e=>window.appliedAppearance=e.detail)")
+            for key, value in choices.items():
+                settings.locator(f'select[data-preference="{key}"]').select_option(value)
+                page.wait_for_function("([k,v]) => JSON.parse(localStorage.getItem('nav-kurd:appearance:v1'))[k] === v && window.appliedAppearance[k] === v", arg=[key,value])
+            assert settings.evaluate("e => getComputedStyle(e).backgroundColor") not in ("transparent", "rgba(0, 0, 0, 0)")
+            settings.locator("[data-reset]").click()
+            settings.locator("[data-close]").click()
+            print("PASS all ten appearance controls apply and persist through the settings dialog")
             support_button = page.locator("#supportButton")
             support_button.wait_for(state="visible", timeout=10_000)
             support_button.click()

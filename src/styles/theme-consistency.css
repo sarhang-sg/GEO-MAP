@@ -128,12 +128,13 @@ body[data-motion-preference="reduced"] .selection-card-glow { display: none !imp
 html[data-nav-kurd-theme][data-ui-mode="light"] :is(.round-button, .map-button, .feedback-quick-button, .maplibregl-ctrl-group button, .action-card__icon) { box-shadow: none !important; text-shadow: none !important; }
 
 html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {
-  left:calc(50% + clamp(6px,2vw,12px) + (env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2);
+  left:calc(50% + clamp(18px,5vw,36px) + (env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2);
   max-width:min(300px,calc(100% - 116px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)));
 }
 .home-greeting{display:block;color:var(--nk-muted);font-size:.78rem;}
 html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator {
-  color:#152536 !important;background:#f8fbff !important;border:0;border-radius:999px;padding:2px 6px;
+  color:#152536 !important; background:transparent !important; border:0; box-shadow:none !important; padding:2px 4px;
+  filter:drop-shadow(0 0 1px white) drop-shadow(0 0 1px white);
 }
 html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicatorCount,html[data-nav-kurd-theme][data-ui-mode="light"] .map-stats strong {color:#152536 !important;opacity:1;font-variant-numeric:tabular-nums;}
 html[data-nav-kurd-theme][data-ui-mode="light"] .about-dialog__links a{color:#14365a !important;background:#e4eef8 !important;border-color:#acbed1 !important;}

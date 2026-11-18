@@ -1,6 +1,6 @@
 /* Build placeholders are replaced in dist/sw.js by tools/build/build-offline-runtime.mjs. */
 const RELEASE_ID = "__KRI_RELEASE_ID__";
-const UI_REVISION = "V10";
+const UI_REVISION = "__KRI_UI_REVISION__";
 const CACHE_SCHEMA = "__KRI_CACHE_SCHEMA__";
 const MAP_DATA_VERSION = "__KRI_MAP_DATA_VERSION__";
 const OFFLINE_PACK_VERSION = "__KRI_OFFLINE_PACK_VERSION__";

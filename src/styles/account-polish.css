@@ -209,7 +209,25 @@ html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.own
 html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.user-private-tabs,.owner-private-tabs) button b { position:absolute; inset:3px 3px auto auto; min-width:1.2em; padding:0 3px; line-height:1.4; }
 html[data-nav-kurd-theme] :is(.user-private-tabs,.owner-private-tabs) b[hidden] { display:none !important; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.search-results,.user-contrib__panel,.navigation-preferences) { box-shadow:0 6px 16px #12182512,0 18px 44px #12182522 !important; }
-html[data-nav-kurd-theme] :is(button,input,textarea,select):focus-visible { outline:3px solid var(--nk-link); outline-offset:2px; }
+html[data-nav-kurd-theme] :is(button,input:not(#placeSearch),textarea,select):focus-visible { outline:3px solid var(--nk-link); outline-offset:2px; }
+/* The search card owns the focus treatment for its input and icon. */
+#placeSearch, #placeSearch:focus-visible { outline: none; border: 0; box-shadow: none; }
+@media (hover: hover) and (pointer: fine) {
+  html[data-nav-kurd-theme] .search-card:has(#placeSearch:focus-visible) { outline: 2px solid var(--nk-link); outline-offset: 3px; }
+}
+@media (forced-colors: active) {
+  .search-card:has(#placeSearch:focus-visible) { outline: 2px solid Highlight; }
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] dialog.navigation-preferences {
+  background: var(--nk-surface) !important; color: var(--nk-text) !important;
+  --ink:var(--nk-text); --muted:var(--nk-muted); --surface:var(--nk-surface);
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .navigation-preferences select {
+  color: var(--nk-text) !important; background: var(--nk-elevated) !important;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button)[aria-pressed="true"] svg {
+  color: #fff !important;
+}
 body:has(.nav-kurd-place-popup, .place-detail:not([hidden])) .search-card { visibility:hidden !important; pointer-events:none !important; }
 .measurement, .place-weather [dir=ltr] { unicode-bidi:isolate; }
 .measurement { white-space:nowrap; }

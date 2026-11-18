@@ -25,7 +25,7 @@ const directory = installWeatherDirectory({
     catalog ??= (await bridgeReady())?.callHandler("weatherLocalities").then(list=>Array.isArray(list)?list:[]).catch(()=>[]) ?? Promise.resolve([]);
     return (await catalog).filter(city=>cityMatches(city,term)).slice(0,32).map(cityFeature);
   },
-  selectCity:hosted ? city=>{ void native()?.callHandler("weatherSelect",{lat:city.lat,lon:city.lon,name:cityName(city,language)}); } : undefined,
+  selectCity:hosted ? city=>{ void native()?.callHandler("weatherSelect",{lat:city.lat,lon:city.lon,name:cityName(city,language),names:{ku:city.name,ar:city.ar,en:city.en}}); } : undefined,
   onGps:hosted ? ()=>{ void native()?.callHandler("weatherGps"); } : undefined,
   onClose:()=>{ if(hosted) void native()?.callHandler("weatherBack"); else location.assign("./"); }
 });

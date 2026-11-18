@@ -2,6 +2,8 @@ import type { FeatureCollection, Polygon } from "geojson";
 import type { GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import type { LngLatTuple } from "./location";
 
+import { isCameraTilted } from "./map-camera-controller";
+
 export const LOCATION_VOLUME_LAYER = "location-3d-volume";
 const SOURCE = "location-3d-source";
 type Volume = FeatureCollection<Polygon, { color: string; base: number; height: number }>;
@@ -66,8 +68,13 @@ export class LocationVolume {
   private paint = (): void => {
     if (this.destroyed || !this.map.getStyle()?.layers) return;
     const zoom = this.map.getZoom();
-    if (!this.coordinate) {
-      this.generation++; this.signature = ""; this.visible(false); return;
+    if (!this.coordinate || !isCameraTilted(this.map.getPitch())) {
+      if (this.active || this.signature) {
+        this.generation++;
+        this.signature = "";
+        this.visible(false);
+      }
+      return;
     }
     if (!this.map.getSource(SOURCE)) {
       this.map.addSource(SOURCE,{type:"geojson",data:{type:"FeatureCollection",features:[]},tolerance:0,maxzoom:22}); this.signature = "";
@@ -83,7 +90,7 @@ export class LocationVolume {
     this.writes = this.writes.catch(() => undefined).then(async () => {
       if (this.destroyed || generation !== this.generation || source !== this.map.getSource(SOURCE)) return;
       await source.setData(data);
-      if (this.destroyed || !this.coordinate || source !== this.map.getSource(SOURCE)) return;
+      if (this.destroyed || !this.coordinate || !isCameraTilted(this.map.getPitch()) || source !== this.map.getSource(SOURCE) || generation !== this.generation) return;
       if (!this.active && data.features.length) this.visible(true);
     }).catch(() => { if (!this.destroyed && generation === this.generation) { this.signature = ""; } });
   };

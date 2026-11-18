@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { dirname, posix, relative, resolve, sep } from "node:path";
@@ -187,7 +188,12 @@ for (const entry of requiredAssets) await stat(resolve(dist, entry.path));
 
 await writeFile(manifestPath, manifestJson);
 let sw = await readFile(swPath, "utf8");
+const shellDigest = createHash("sha256");
+for (const path of [...new Set([...generatedAssets, "weather-cities.html", "releases/latest.json"])].sort()) {
+  shellDigest.update(path).update("\0").update(await readFile(resolve(dist,path)));
+}
 const replacements = new Map([
+  ["__KRI_UI_REVISION__", release.appVersion + "-" + shellDigest.digest("hex").slice(0,16)],
   ["__KRI_RELEASE_ID__", release.serviceWorkerRelease],
   ["__KRI_CACHE_SCHEMA__", String(release.cacheSchemaVersion)],
   ["__KRI_MAP_DATA_VERSION__", release.mapDataVersion],
