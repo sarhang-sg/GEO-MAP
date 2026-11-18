@@ -37,3 +37,7 @@ npm run dev
 The Linux or Termux build can be used alongside the Android repository to regenerate the packaged presentation. Follow the Android README before making a coordinated release. For vulnerabilities, private reporting and credential handling, see [SECURITY.md](SECURITY.md).
 
 Developer: Sarhang Salah. Map data attribution and provider terms are displayed in the application. Weather attribution is Open-Meteo · Developer: Sarhang Salah.
+
+## Owner publication maintenance
+
+After the verified Android 11.0.0 release appears on the website, `bash TERMUX.sh finalize` updates the GitHub repository descriptions and removes superseded deployment records. Install `python` and `gh` in Termux and sign in with `gh auth login` first. The script requests a Vercel token locally using hidden input, checks the `sarhang` team and `geo-map` project against the live commit, and retains the active production deployment. It also retains deployments serving other custom domains and active builds. Credentials stay in the owner’s terminal environment.

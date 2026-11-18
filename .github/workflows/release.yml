@@ -46,6 +46,8 @@ jobs:
           npm audit --omit=dev --audit-level=high
 
       - name: Build and verify the production candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: npm run build:vercel
 
       - name: Retain the tested production build
@@ -202,3 +204,24 @@ jobs:
           name: nav-kurd-backend-release-evidence
           if-no-files-found: error
           path: ${{ runner.temp }}/NAV-KURD-BACKEND-REPORT.json
+
+  retire-deployments:
+    needs: [production, browser-smoke, deploy-supabase]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Remove superseded deployment records for the published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if node --input-type=module -e "import fs from 'node:fs'; process.exit(JSON.parse(fs.readFileSync('public/releases/latest.json')).version === '11.0.0' ? 0 : 1)"; then
+            python3 tools/release/finalize-publication.py --github-deployments
+          else
+            echo 'Deployment retirement waits for the signed 11.0.0 download binding.'
+          fi

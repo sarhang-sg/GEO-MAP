@@ -11,8 +11,8 @@
     "packageDefinitionSha256": "4d3e01efbeff38a6fbd8e8709b1e1baacec820d51c16677c09239381fa0c6748",
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
-  "fileCount": 1717,
-  "totalBytes": 289728153,
+  "fileCount": 1718,
+  "totalBytes": 289737615,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -51,8 +51,8 @@
       "sha256": "9b15afa2f50df9631457d3939c99316b2f1a73adc09171652c92b35b260a8b06"
     },
     ".github/workflows/release.yml": {
-      "bytes": 6868,
-      "sha256": "3fd52188b0e8055ebe52bdac003a650e3923f320d5b150a879e2e5ed4fbefd22"
+      "bytes": 7764,
+      "sha256": "d089b67e13f63c83da00341a5f2c94ae38c310e07ab8da912ae81ea3a3cc35a8"
     },
     ".github/workflows/web-checks.yml": {
       "bytes": 3289,
@@ -3687,8 +3687,8 @@
       "sha256": "679964129f56568bc93ca34d46c60005157bec90fe98c9c7b94c092c59884392"
     },
     "README.md": {
-      "bytes": 3301,
-      "sha256": "01c5e03d38e94226bc0442c7d051cc3fef120ad09b3f81cc7b24faad12655b20"
+      "bytes": 3904,
+      "sha256": "f664f11d460146e1ff5d763347ac7a7f66037754cd581673323023c090bb0399"
     },
     "release.config.json": {
       "bytes": 997,
@@ -4587,8 +4587,8 @@
       "sha256": "123f8d59511ba2e6a19add0296259309a6abe20f1ad33319e7bc89464bf956d7"
     },
     "TERMUX.sh": {
-      "bytes": 3189,
-      "sha256": "b1e158779f98025633477aad329e565ceb18039576ab214b79dcaffb3604e4a6"
+      "bytes": 3259,
+      "sha256": "11799ee970972a73aab0710084c6b98b6d23d72437cdd246e1d9c69ba4c236b4"
     },
     "tools/android/build-runtime.mjs": {
       "bytes": 4236,
@@ -4750,6 +4750,10 @@
       "bytes": 2022,
       "sha256": "3736bc2f8747de3c02e0c110f6daa79233cae28b365edf71505d4cb766a684aa"
     },
+    "tools/release/finalize-publication.py": {
+      "bytes": 7558,
+      "sha256": "d66befc3251be40bca92a6f7948f82b14cae1a199b590da21a0cb0c6eef53a96"
+    },
     "tools/release/generate-release-manifest.mjs": {
       "bytes": 2189,
       "sha256": "ef8e216e09057038974192e627324589864926aaa32d82fd1087de54bf18991f"
@@ -4771,8 +4775,8 @@
       "sha256": "342d2040674e91b37db35a28f647672b3d5af57ac70555309e89727363518997"
     },
     "tools/release/verify-published-android.mjs": {
-      "bytes": 4110,
-      "sha256": "7ab37e149229b78bdacb3c062e95998928e67c49eb5c6e843c9f0c7f2f90d7da"
+      "bytes": 4394,
+      "sha256": "24f5d037d3d949d5dba27559f4d2ca60414e5fac3ca2a748b392ab591fd1c358"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 795,
@@ -4783,8 +4787,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 29862,
-      "sha256": "c98469c2bf92e532d97cc6db29355dfa333923e8b3778be9ff440005390a14e3"
+      "bytes": 29913,
+      "sha256": "9d14d2b06b20d535feed15d54e9d95eaad261ea344eb06f681ddf50a99a67e46"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,

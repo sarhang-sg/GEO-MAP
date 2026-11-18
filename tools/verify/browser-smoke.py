@@ -105,12 +105,12 @@ def verify_theme_contrast(page) -> None:
         }
       }
       probe.remove();
-      [root.dataset.accent,root.dataset.uiMode]=initial;
+      [root.dataset.accent,root.dataset.uiMode,mapShell.dataset.mapMode]=initial;
       return failures;
     }""")
     if results:
         raise AssertionError(f"Theme contrast regression: {results}")
-    print("PASS primary, secondary and link contrast across all eight palettes in both modes")
+    print("PASS primary, secondary and link contrast across all eight palettes on street, night and satellite surfaces")
 
 
 def main() -> int:

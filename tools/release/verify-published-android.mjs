@@ -34,7 +34,13 @@ export function assertPublicAndroid(release, receipt, artifact, version='11.0.0'
 }
 
 async function getJson(url) {
-  const response = await fetch(url, {headers:{'User-Agent':'NAV-KURD-release-verifier'}, signal:AbortSignal.timeout(20000)});
+  const headers = {'User-Agent':'NAV-KURD-release-verifier'};
+  // Authenticate only GitHub API requests; never send CI credentials to assets.
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+  if (new URL(url).origin === 'https://api.github.com' && token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  const response = await fetch(url, {headers, signal:AbortSignal.timeout(20000)});
   if (!response.ok) throw new Error(`Release check returned HTTP ${response.status}`);
   return response.json();
 }

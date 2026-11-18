@@ -83,11 +83,12 @@ case "${1:-help}" in
     retry git pull --ff-only
     build
     ;;
+  finalize) python3 tools/release/finalize-publication.py ;;
   setup) setup ;;
   check) check ;;
   build) build ;;
   package) package_source ;;
   *)
-    printf '%s\n' "Usage: bash TERMUX.sh update|setup|check|build|package"
+    printf '%s\n' "Usage: bash TERMUX.sh update|setup|check|build|package|finalize"
     ;;
 esac
