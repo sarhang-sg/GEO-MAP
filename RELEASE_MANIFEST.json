@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1718,
-  "totalBytes": 289737615,
+  "totalBytes": 289737661,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -59,8 +59,8 @@
       "sha256": "a121c432743fc3a471f53590f7aa2cac09cf3b0a41798d92e2af0e97df071e2d"
     },
     ".gitignore": {
-      "bytes": 715,
-      "sha256": "f2100dba0ee85bc34b12cfe80c37e02acb4e0739f063368313d6ded2e9fb5c1c"
+      "bytes": 738,
+      "sha256": "fbad6fbfe6946c55ed290099853ff6476a324544e598d8acd34372f2db5d9caa"
     },
     ".npmrc": {
       "bytes": 218,
@@ -4787,8 +4787,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 29913,
-      "sha256": "9d14d2b06b20d535feed15d54e9d95eaad261ea344eb06f681ddf50a99a67e46"
+      "bytes": 29936,
+      "sha256": "4b549fc3ee62ee9fa2eade57fb3b9beee728c0c8c58a27a1c5a4eeedcbc4aad3"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,

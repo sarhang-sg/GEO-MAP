@@ -4,6 +4,8 @@ dist/
 .vercel
 .cache/
 coverage/
+__pycache__/
+*.py[cod]
 *.log
 *.tmp
 *.bak

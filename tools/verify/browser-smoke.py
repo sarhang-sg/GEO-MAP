@@ -350,7 +350,7 @@ def main() -> int:
             page.locator("#aboutDialog").wait_for(state="visible", timeout=10_000)
             direct_download.wait_for(state="visible", timeout=10_000)
             page.locator("#appearanceButton").click()
-            settings = page.locator("dialog.navigation-preferences")
+            settings = page.locator('dialog[aria-labelledby="navigationPreferencesTitle"]')
             settings.wait_for(state="visible")
             choices = {"font":"system", "size":"large", "accent":"gold", "motion":"reduced",
                        "quality":"medium", "satelliteQuality":"high", "satelliteContrast":"clear",
