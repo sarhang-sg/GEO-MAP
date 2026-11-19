@@ -72,7 +72,7 @@ export function parsePwaLaunchParams(urlValue: string): LaunchParams {
     .join(" ")
     .trim();
   const protocolText = protocolToSearchText(params.get("protocol") ?? "");
-  const label = safeDecode(params.get("label")?.trim() ?? "");
+  const label = params.get("label")?.trim() ?? "";
   return { action, searchText: shareText || protocolText, coordinate: finiteCoordinate(params), label };
 }
 

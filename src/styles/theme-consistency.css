@@ -134,8 +134,9 @@ html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {
 .home-greeting{display:block;color:var(--nk-muted);font-size:.78rem;}
 html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator {
   color:#152536 !important; background:transparent !important; border:0; box-shadow:none !important; padding:2px 4px;
-  filter:drop-shadow(0 0 1px white) drop-shadow(0 0 1px white);
+  filter:none !important; text-shadow:none !important;
 }
+html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator :is(svg, img, strong) { filter:none !important; box-shadow:none !important; text-shadow:none !important; }
 html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicatorCount,html[data-nav-kurd-theme][data-ui-mode="light"] .map-stats strong {color:#152536 !important;opacity:1;font-variant-numeric:tabular-nums;}
 html[data-nav-kurd-theme][data-ui-mode="light"] .about-dialog__links a{color:#14365a !important;background:#e4eef8 !important;border-color:#acbed1 !important;}
 html[data-nav-kurd-theme][data-ui-mode] button[data-account-action] {width:auto !important;min-height:44px;height:auto !important;display:inline-flex !important;align-items:center;justify-content:center;gap:8px;padding:12px 16px !important;}
@@ -151,9 +152,9 @@ html[data-nav-kurd-theme][data-accent="gold"][data-ui-mode]{
   --user-bg:#121212;--user-surface:#221e18;--user-elevated:#30281c;--user-border:#84683b;--user-light-bg:#121212;--user-light-surface:#221e18;--user-light-elevated:#30281c;--user-light-border:#84683b;
   --nk-bg:#121212;--nk-surface:#211d18;--nk-elevated:#30271e;--nk-text:#fff2cf;--nk-muted:#dfcda8;--nk-border:#84683b;--nk-link:#ffde92 !important;--nk-primary:#97722e;--nk-advice:#ffda8c;--nk-action-bg:linear-gradient(130deg,#4a3519,#72521e);
 }
-.place-weather[data-sky-phase]{--sky-a:#25257b;--sky-b:#421667;}
+.place-weather[data-sky-kind]{--sky-a:#25257b;--sky-b:#421667;}
 /* Forecast cards receive their measured sky colors from the active observation. */
-.place-weather[data-sky-phase] { color-scheme:only dark; }
+.place-weather[data-sky-kind] { color-scheme:only dark; }
 @keyframes navSkyPulse{50%{transform:scale(1.055)}}
 @keyframes navSkyDrift{50%{transform:translateX(3px)}}
 @media(prefers-reduced-motion:no-preference){

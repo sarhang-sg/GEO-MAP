@@ -103,6 +103,13 @@ for(const native of [false,true]){
  for(const query of ['action=place','action=place&lat=36','action=place&lat=&lng=44','action=place&lat=999&lng=44'])assert.equal(api.parsePwaLaunchParams('https://example.test/?'+query).coordinate,null);
  const position=api.parsePwaLaunchParams('https://example.test/?action=place&lat=36.19&lng=44.01').coordinate;
  assert.deepEqual(Array.from(position),[44.01,36.19]);
+ const {locationDeepLink}=load('src/lib/native-share.ts',{URL,browserEnv:{publicAppUrl:''}},'locationDeepLink');
+ const title='هەولێر · %2F + A&B';
+ const url=locationDeepLink({coordinate:[44.01,36.19],title});
+ assert.equal(new URL(url).origin,'https://geo-map-kappa.vercel.app');
+ const reopened=api.parsePwaLaunchParams(url);
+ assert.equal(reopened.label,title);
+ assert.deepEqual(Array.from(reopened.coordinate),[44.01,36.19]);
  console.log('PASS incomplete shared coordinates never become a false zero-degree location');
 }
 

@@ -1,22 +1,23 @@
 {
   "version": "11.0.0",
-  "versionCode": 110000,
+  "versionCode": 110001,
   "minimumVersion": "9.1.0",
   "packageName": "com.navkurd.app",
   "minimumAndroid": 24,
   "directApkAvailable": true,
-  "directApkUrl": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v11.0.0/NAV-KURD-11.0.0.apk",
+  "directApkUrl": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v11.0.0-build.110001/NAV-KURD-11.0.0.apk",
   "apkPureUrl": "https://apkpure.com/nav-kurd/com.navkurd.app/download",
-  "publishedAt": "2026-11-18T21:26:25Z",
-  "apkBytes": 219535949,
-  "apkSha256": "0f925cbe5e958e8796c9eee31b8e0569f60f1f530cce22b5e2541fd4929b67b5",
+  "publishedAt": "2026-11-19T20:46:43Z",
+  "apkBytes": 219543540,
+  "apkSha256": "f6ace7b5a996c7e3145bc0d88504d47a7f6fe4cdcd2d514d534d792340e1dae8",
   "artifact": {
     "version": "11.0.0",
-    "versionCode": 110000,
-    "url": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v11.0.0/NAV-KURD-11.0.0.apk",
-    "bytes": 219535949,
-    "sha256": "0f925cbe5e958e8796c9eee31b8e0569f60f1f530cce22b5e2541fd4929b67b5",
-    "gitCommit": "d3c3bc09c75a66abd893ee47b0a1814f604f9f21",
+    "versionCode": 110001,
+    "releaseTag": "v11.0.0-build.110001",
+    "url": "https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v11.0.0-build.110001/NAV-KURD-11.0.0.apk",
+    "bytes": 219543540,
+    "sha256": "f6ace7b5a996c7e3145bc0d88504d47a7f6fe4cdcd2d514d534d792340e1dae8",
+    "gitCommit": "62dd27a6046011aae5db297c2cf216a77a92c38d",
     "signingCertificateSha256": "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "release": "2026-11-15-nav-kurd-v11.0.0",
+  "release": "2026-11-19-nav-kurd-v11.0.0-build.110001",
   "app_version": "11.0.0",
   "map_data_version": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "source_dates": {
@@ -136,5 +136,5 @@
   "last_reviewed": "2026-07-19",
   "language_policy": "Verified Kurdish where source-backed; otherwise preserve source-original in every language shard. No fabricated proper names.",
   "r26_final_report": "kri-data-quality-report.json",
-  "generated_at": "2026-11-15"
+  "generated_at": "2026-11-19"
 }
