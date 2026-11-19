@@ -2071,7 +2071,7 @@ html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
   border-color: var(--nk-border) !important;
 }
 html[data-nav-kurd-theme][data-accent]:not([data-accent="original"]) :is(
-  .weather-card, .place-weather, .weather-inline, .nav-weather, .search-results, .search-result,
+  .weather-card, .place-weather:not([data-sky-kind]), .weather-inline, .nav-weather, .search-results, .search-result,
   .about-dialog__meta > div, .map-stats > div, .action-card, .backend-state,
   .user-account-card, .user-account-private, .owner-private-panel, .owner-place-row,
   .owner-feedback, .owner-notification, .user-notification, .user-private-message,

@@ -211,9 +211,27 @@ def verify_place_popup(browser) -> None:
         badge=popup.locator('.place-weather[data-sky-kind]')
         try:
             badge.wait_for(timeout=30000)
-            for accent in ['original','blue','teal','amber','purple','pink','red','gold']:
-                page.locator('html').evaluate('(el,accent)=>el.dataset.accent=accent',accent)
-                assert 'gradient' in badge.evaluate('el=>getComputedStyle(el).backgroundImage'),f'Desktop sky overridden by {accent}'
+            for width, height in [(390,844), (1280,800)]:
+                page.set_viewport_size({'width':width, 'height':height})
+                failures = badge.evaluate("""badge => {
+                    const root=document.documentElement, shell=document.querySelector('.map-shell');
+                    const original=[root.dataset.accent,root.dataset.uiMode,shell.dataset.mapMode];
+                    const probe=document.createElement('span');
+                    probe.style.backgroundImage=badge.style.getPropertyValue('--city-sky');
+                    document.body.append(probe);
+                    const expected=getComputedStyle(probe).backgroundImage, failures=[];
+                    for (const accent of ['original','blue','teal','amber','purple','pink','red','gold']) {
+                        for (const [mapMode,uiMode] of [['street','light'],['night','dark'],['satellite','dark']]) {
+                            root.dataset.accent=accent; root.dataset.uiMode=uiMode; shell.dataset.mapMode=mapMode;
+                            const actual=getComputedStyle(badge).backgroundImage;
+                            if (!expected.includes('gradient') || actual!==expected) failures.push({accent,mapMode,actual});
+                        }
+                    }
+                    [root.dataset.accent,root.dataset.uiMode,shell.dataset.mapMode]=original;
+                    probe.remove();
+                    return failures;
+                }""")
+                assert not failures, f'Weather sky changed at {width}×{height}: {failures}'
             page.screenshot(path=str(evidence/'place-desktop.png'))
         except Error as error:
             raise AssertionError('Live weather was unavailable for the desktop parity check') from error

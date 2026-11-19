@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1725,
-  "totalBytes": 290410956,
+  "totalBytes": 290416574,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -51,8 +51,8 @@
       "sha256": "9b15afa2f50df9631457d3939c99316b2f1a73adc09171652c92b35b260a8b06"
     },
     ".github/workflows/release.yml": {
-      "bytes": 8057,
-      "sha256": "1ec0ad622bbfc07f08c6e21c2991c2eb99ac5b6df466c70e9cdce76a70051a08"
+      "bytes": 8250,
+      "sha256": "a0e6df6c6becec56cd93469c49f6559de1149c8d7f8c053f357eec040a0f10c0"
     },
     ".github/workflows/web-checks.yml": {
       "bytes": 3582,
@@ -3703,8 +3703,8 @@
       "sha256": "679964129f56568bc93ca34d46c60005157bec90fe98c9c7b94c092c59884392"
     },
     "README.md": {
-      "bytes": 5170,
-      "sha256": "7f3eebaf40ed042ecfb5ef8578ac8bcf1f1bb97cbeaed386782e741a917ea9e3"
+      "bytes": 5285,
+      "sha256": "b46af66f045d4e24e23aa9ed311fd0c2c1e9e5f6ff0d79dee5cfd788db0d4621"
     },
     "release.config.json": {
       "bytes": 1057,
@@ -4375,8 +4375,8 @@
       "sha256": "8b38c22005d6d5f6b3010861a37b3e6414055a79a07b9dceec901fe5a9b9a48f"
     },
     "src/styles/nav-kurd-professional.css": {
-      "bytes": 94356,
-      "sha256": "46e1c205e72621a443e7982f0877c443fdbb3475db4e39905f0493bf69d5a894"
+      "bytes": 94377,
+      "sha256": "fb59a437d9264b52b3aa5f2e7e8cea1a37cce74025fdc16f6510cefa218b8b2a"
     },
     "src/styles/navigation-preferences.css": {
       "bytes": 8660,
@@ -4779,8 +4779,8 @@
       "sha256": "3736bc2f8747de3c02e0c110f6daa79233cae28b365edf71505d4cb766a684aa"
     },
     "tools/release/finalize-publication.py": {
-      "bytes": 7638,
-      "sha256": "9c68f6846f6fea1ddb73496c1f1785afe1d26bba7e77f23c28418af497bf8480"
+      "bytes": 11687,
+      "sha256": "bd34fdb8bf026dd943a3d5df76d8e82e7671d74f413f006e62ae534a586f890b"
     },
     "tools/release/generate-release-manifest.mjs": {
       "bytes": 2189,
@@ -4815,8 +4815,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 37788,
-      "sha256": "6ce6f028418b2a56ac67b57ac35446047b91c649a98d4d63f02c592a36bd2e85"
+      "bytes": 39028,
+      "sha256": "4ef3ef49f6bc3aafccf8592851db03ffe5316f4fad8739a70fb3349ac68d93c0"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,

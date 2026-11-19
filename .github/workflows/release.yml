@@ -9,6 +9,10 @@ on:
         description: Optional exact commit required by the coordinated updater
         required: false
         type: string
+      retire_superseded:
+        description: Retire superseded deployment records after owner verification
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -215,6 +219,7 @@ jobs:
           path: ${{ runner.temp }}/NAV-KURD-BACKEND-REPORT.json
 
   retire-deployments:
+    if: ${{ inputs.retire_superseded }}
     needs: [production, browser-smoke, deploy-supabase]
     runs-on: ubuntu-latest
     timeout-minutes: 10
