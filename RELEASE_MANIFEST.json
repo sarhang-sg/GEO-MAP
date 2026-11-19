@@ -8,11 +8,11 @@
   "generatedForDate": "2026-11-19",
   "secretSafe": true,
   "dependencyPreview": {
-    "packageDefinitionSha256": "4d3e01efbeff38a6fbd8e8709b1e1baacec820d51c16677c09239381fa0c6748",
+    "packageDefinitionSha256": "0ea22aa71a43ef8d0cac0b9c2ccff661191a9aabf6ef1187e50d851ac49e2cbc",
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
-  "fileCount": 1725,
-  "totalBytes": 290416574,
+  "fileCount": 1726,
+  "totalBytes": 290423035,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -215,8 +215,8 @@
       "sha256": "1d469b2c211b62c66879037a4ed4f6ad2d3049dc290c6163df2bb340b6f9f599"
     },
     "package.json": {
-      "bytes": 6181,
-      "sha256": "ba498280a9021fa8ec586583fef29c6814d95d5c331df36e521da0878b7efabc"
+      "bytes": 6228,
+      "sha256": "0aba3af2c514800b2d08d0927813b2e32bad4852be8d3cbc5dc25b6c983707e5"
     },
     "public/_headers": {
       "bytes": 2557,
@@ -3675,8 +3675,8 @@
       "sha256": "1cd9ad24030feb9942fcde7041ceae1be30073e127b8bc68cc528e23aa82b5dc"
     },
     "public/releases/latest.json": {
-      "bytes": 942,
-      "sha256": "6b9d056b32c5fdf2e118029ad9e3ee35d8805bc5b64381cf306c9f214b36b83d"
+      "bytes": 1010,
+      "sha256": "5aa3894ae336f59c496d8231c7ebba435890d726433638dfa06c35317d53ad67"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3703,8 +3703,8 @@
       "sha256": "679964129f56568bc93ca34d46c60005157bec90fe98c9c7b94c092c59884392"
     },
     "README.md": {
-      "bytes": 5285,
-      "sha256": "b46af66f045d4e24e23aa9ed311fd0c2c1e9e5f6ff0d79dee5cfd788db0d4621"
+      "bytes": 5464,
+      "sha256": "89a44646af947a30b71b402f32782700866b238261d021657b3de9b12bd7e876"
     },
     "release.config.json": {
       "bytes": 1057,
@@ -4779,8 +4779,8 @@
       "sha256": "3736bc2f8747de3c02e0c110f6daa79233cae28b365edf71505d4cb766a684aa"
     },
     "tools/release/finalize-publication.py": {
-      "bytes": 11687,
-      "sha256": "bd34fdb8bf026dd943a3d5df76d8e82e7671d74f413f006e62ae534a586f890b"
+      "bytes": 14946,
+      "sha256": "a7f934ced41d50855d8d2eedcdfc60cefb2af90390f2710e034dc55037b935a2"
     },
     "tools/release/generate-release-manifest.mjs": {
       "bytes": 2189,
@@ -4791,8 +4791,8 @@
       "sha256": "bcb4608d77ba34e333c9f60e037acbac568ad2307c1a481fa3617855230e6571"
     },
     "tools/release/prepare-android-download.mjs": {
-      "bytes": 4593,
-      "sha256": "e0fd14b0d476ed46ad9b09cc06cbfd9179808fe8540cce054833b6d7ef76a41b"
+      "bytes": 4434,
+      "sha256": "68578e84b68c69831304d02de95ffbaea339f9d09939a37a3bfac856e4f572ac"
     },
     "tools/release/prepare-dependency-preview.mjs": {
       "bytes": 3948,
@@ -4803,8 +4803,8 @@
       "sha256": "342d2040674e91b37db35a28f647672b3d5af57ac70555309e89727363518997"
     },
     "tools/release/verify-published-android.mjs": {
-      "bytes": 4610,
-      "sha256": "64ce69411c0fd2c1135c3e5a43be44a8d75a8ccd673e94d2febca96c4c04e2df"
+      "bytes": 4950,
+      "sha256": "249c7a5b81cf2be5571f26d2bff75661516e29d2ae474bb3b28b9a7b0e0ee319"
     },
     "tools/vendor/build-maplibre.mjs": {
       "bytes": 795,
@@ -4878,9 +4878,13 @@
       "bytes": 1835,
       "sha256": "313e71265a2fdd5696daea91d748940babd1b45e24dcd7566fea0c569d4132c8"
     },
+    "tools/verify/publication-cleanup.py": {
+      "bytes": 2384,
+      "sha256": "5433ccf6f20632c11af3fc471fe95ccdc2b2afa44359708d1683662c9111f4a7"
+    },
     "tools/verify/publication-regressions.mjs": {
-      "bytes": 2680,
-      "sha256": "ecaeb8425739267d3410ef6d5c16b5eeecbb9fff91c626fb0a533fb440fff8f1"
+      "bytes": 2936,
+      "sha256": "d53d6749dd5690ae0dcff1faeb03155eec9a409c28014814b6bde9d14c517885"
     },
     "tools/verify/refinement-regressions.mjs": {
       "bytes": 9006,
@@ -4895,8 +4899,8 @@
       "sha256": "0fd9a6e25b545f55620e31e3551a1539496ecf5c8c36e94eeafe5396456bd108"
     },
     "tools/verify/runtime.mjs": {
-      "bytes": 19922,
-      "sha256": "765238453b3421f0845e80aad168bad106916910b248254e06c738ba9324b1ad"
+      "bytes": 20009,
+      "sha256": "aef891c5cf9c0d4ad565fd1dc6114dd6b19acb25b77cc66b5569686e95a9b9b7"
     },
     "tools/verify/search-location-regressions.mjs": {
       "bytes": 5192,

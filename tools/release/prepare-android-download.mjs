@@ -4,6 +4,7 @@ import { createReadStream } from "node:fs";
 import { mkdir, open, readFile, stat, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { canonicalAndroidApkUrl } from "./verify-published-android.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const release = JSON.parse(await readFile(resolve(ROOT, "release.config.json"), "utf8"));
@@ -65,9 +66,7 @@ try {
 if (!apkInfo && metadata.artifact) {
   // Produced after Termux verifies the signed CI output; the publication gate confirms it is public.
   const artifact = metadata.artifact;
-  const tag = artifact.releaseTag ?? `v${metadata.version}`;
-  if (tag !== `v${metadata.version}` && tag !== `v${metadata.version}-build.${metadata.versionCode}`) throw new Error("Android release tag does not match the signed build.");
-  const expectedUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/${tag}/${apkName}`;
+  const expectedUrl = canonicalAndroidApkUrl(metadata.version, metadata.versionCode, artifact.releaseTag);
   if (artifact.version !== metadata.version || artifact.versionCode !== metadata.versionCode
       || artifact.url !== expectedUrl || !Number.isSafeInteger(artifact.bytes)
       || artifact.bytes < minimumApkBytes || artifact.bytes > maximumApkBytes

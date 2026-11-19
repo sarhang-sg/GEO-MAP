@@ -49,14 +49,75 @@ def gh(path, method='GET', payload=None):
     return json.loads(result.stdout) if result.stdout.strip() else None
 
 
-def pages(path):
+def pages(path, items_key=None):
     page = 1
     while True:
-        rows = gh(path + ('&' if '?' in path else '?') + f'per_page=100&page={page}')
+        result = gh(path + ('&' if '?' in path else '?') + f'per_page=100&page={page}')
+        rows = result[items_key] if items_key else result
         yield from rows
         if len(rows) < 100:
             return
         page += 1
+
+
+def artifact_source_version(repository, commit):
+    path = 'package.json' if repository == 'GEO-MAP' else 'pubspec.yaml'
+    url = f'https://raw.githubusercontent.com/{OWNER}/{repository}/{commit}/{path}'
+    try:
+        with urlopen(Request(url, headers={'User-Agent': 'NAV-KURD-release'}), timeout=30) as response:
+            body = response.read().decode()
+    except HTTPError as error:
+        if error.code == 404:
+            return None
+        raise
+    if repository == 'GEO-MAP':
+        version = json.loads(body).get('version', '')
+    else:
+        match = re.search(r'^version:\s*(\d+\.\d+\.\d+)(?:\+\d+)?\s*$', body, re.M)
+        version = match[1] if match else ''
+    return version if re.fullmatch(r'\d+\.\d+\.\d+', version) else None
+
+
+def old_workflow_artifacts(repository, protected):
+    known = {
+        'GEO-MAP': {'nav-kurd-web-production', 'nav-kurd-ui-captures',
+                    'nav-kurd-web-release-evidence', 'nav-kurd-backend-release-evidence'},
+        'GEO-ANDROID': {'nav-kurd-debug-device-candidate', 'nav-kurd-launcher-check',
+                        'nav-kurd-signed-launcher-check'},
+    }
+    repo = f'repos/{OWNER}/{repository}'
+    repository_id = gh(repo)['id']
+    protected = protected | {row['head']['sha'] for row in pages(repo + '/pulls?state=open')}
+    cutoff = tuple(map(int, VERSION.split('.')))
+    versions = {}
+    candidates = []
+    for row in pages(repo + '/actions/artifacts', 'artifacts'):
+        run = row.get('workflow_run') or {}
+        commit = run.get('head_sha') or ''
+        if (row.get('expired') or run.get('repository_id') != repository_id
+                or run.get('head_repository_id') != repository_id or commit in protected
+                or not re.fullmatch(r'[0-9a-f]{40}', commit)):
+            continue
+        name = row['name']
+        signed = re.fullmatch(r'NAV-KURD-(\d+\.\d+\.\d+)-signed-release', name) if repository == 'GEO-ANDROID' else None
+        if name not in known[repository] and not signed:
+            continue
+        if commit not in versions:
+            versions[commit] = artifact_source_version(repository, commit)
+        version = versions[commit]
+        if version and (not signed or signed[1] == version) and tuple(map(int, version.split('.'))) < cutoff:
+            candidates.append((row['id'], name, version))
+    return candidates
+
+
+def clean_workflow_artifacts(web_commit, android_commit):
+    for repository in ('GEO-MAP', 'GEO-ANDROID'):
+        candidates = old_workflow_artifacts(repository, {web_commit, android_commit})
+        for artifact_id, name, version in candidates:
+            if request(SITE + '/release-identity.json')['gitCommit'] != web_commit:
+                raise RuntimeError('Production changed during artifact cleanup. Run the command again.')
+            gh(f'repos/{OWNER}/{repository}/actions/artifacts/{artifact_id}', 'DELETE')
+            print('Removed old build artifact', repository, version, name, artifact_id)
 
 
 def published():
@@ -123,8 +184,9 @@ def android_download_and_cleanup(receipt):
 
 def github_deployments(commit):
     repo = f'repos/{OWNER}/GEO-MAP'
-    rows = list(pages(repo + '/deployments'))
-    current = [row for row in rows if row['sha'] == commit]
+    rows = [row for row in pages(repo + '/deployments')
+            if row.get('environment', '').lower() in {'preview', 'production'}]
+    current = [row for row in rows if row['sha'] == commit and row['environment'].lower() == 'production']
     if not current:
         raise RuntimeError('Current production deployment metadata has not reached GitHub yet. Rerun after it appears.')
     cutoff = min(row['created_at'] for row in current)
@@ -207,13 +269,14 @@ def main():
         return
     subprocess.run(['gh', 'auth', 'status'], check=True)
     android_download_and_cleanup(receipt)
+    clean_workflow_artifacts(commit, receipt['gitCommit'])
     for repo, description in [('GEO-MAP', 'NAV KURD 11.0.0 Web GIS'),
                               ('GEO-ANDROID', 'NAV KURD 11.0.0 Flutter Android')]:
         gh(f'repos/{OWNER}/{repo}', 'PATCH', {'description': description})
         print('Updated repository description', repo)
-    vercel_deployments(commit)
     github_deployments(commit)
-    print('NAV KURD 11.0.0 repository descriptions and deployment cleanup completed.')
+    vercel_deployments(commit)
+    print('NAV KURD 11.0.0 repository descriptions, old build artifacts and deployments finalized.')
 
 
 if __name__ == '__main__':

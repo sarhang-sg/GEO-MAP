@@ -4,11 +4,21 @@ import { pathToFileURL } from 'node:url';
 
 const repository = 'sarhang-sg/GEO-ANDROID';
 const certificate = 'A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246';
+
+export function canonicalAndroidApkUrl(version, code, releaseTag) {
+  assert.match(version, /^\d+\.\d+\.\d+$/u);
+  assert.ok(Number.isSafeInteger(code) && code > 0, 'invalid Android build code');
+  const versionTag = `v${version}`;
+  const tag = releaseTag ?? versionTag;
+  assert.ok(tag === versionTag || tag === `${versionTag}-build.${code}`, 'release tag does not match the signed build');
+  return `https://github.com/${repository}/releases/download/${tag}/NAV-KURD-${version}.apk`;
+}
+
 export function assertPublicAndroid(release, receipt, artifact, version='11.0.0', code=110001) {
   assert.equal(release.draft, false, 'APK is still a draft');
   assert.equal(release.prerelease, false, 'APK is a prerelease');
   const tag = artifact.releaseTag ?? `v${version}`;
-  assert.ok(tag === `v${version}` || tag === `v${version}-build.${code}`, "release tag does not match the signed build");
+  const url = canonicalAndroidApkUrl(version, code, tag);
   assert.equal(release.tag_name, tag);
   assert.ok(release.published_at && Number.isFinite(Date.parse(release.published_at)), 'missing real publication time');
   assert.equal(receipt.versionName, version);
@@ -24,7 +34,6 @@ export function assertPublicAndroid(release, receipt, artifact, version='11.0.0'
   assert.equal(apk.sha256, artifact.sha256);
   assert.ok(Number.isSafeInteger(apk.bytes) && apk.bytes >= 10*1024*1024 && apk.bytes <= 256*1024*1024);
   assert.match(apk.sha256, /^[a-f0-9]{64}$/u);
-  const url = `https://github.com/${repository}/releases/download/${tag}/${apk.name}`;
   assert.equal(artifact.url, url);
   const assets = release.assets.filter(a => a.name === apk.name);
   assert.equal(assets.length, 1);

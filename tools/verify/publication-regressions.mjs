@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { assertPublicAndroid } from '../release/verify-published-android.mjs';
+import { assertPublicAndroid, canonicalAndroidApkUrl } from '../release/verify-published-android.mjs';
 const cert='A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246';
 const url='https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v11.0.0/NAV-KURD-11.0.0.apk';
 const artifact={gitCommit:'a'.repeat(40),signingCertificateSha256:cert,url,bytes:20*1024*1024,sha256:'b'.repeat(64)};
@@ -33,4 +33,7 @@ const nativeRelease = {...release, tag_name: nativeTag,
 assert.equal(assertPublicAndroid(nativeRelease, nativeReceipt, nativeArtifact, nativeVersion, nativeCode), release.published_at);
 assert.throws(() => assertPublicAndroid(nativeRelease, {...receipt,versionCode:110000}, nativeArtifact, nativeVersion, nativeCode));
 assert.throws(() => assertPublicAndroid(release, nativeReceipt, nativeArtifact, nativeVersion, nativeCode));
-console.log(`PASS Android publication regressions: ${cases.length+4} cases / zero skipped.`);
+assert.equal(canonicalAndroidApkUrl(nativeVersion, 110000), url);
+assert.equal(canonicalAndroidApkUrl(nativeVersion, nativeCode, nativeTag), nativeUrl);
+assert.throws(() => canonicalAndroidApkUrl(nativeVersion, 110000, nativeTag));
+console.log(`PASS Android publication regressions: ${cases.length+7} cases / zero skipped.`);

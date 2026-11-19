@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { assert, fileExists, fileMeta, readJson, readText } from "../lib/project.mjs";
+import { canonicalAndroidApkUrl } from "../release/verify-published-android.mjs";
 
 const release = await readJson("release.config.json");
 const manifest = await readJson("public/manifest.webmanifest");
@@ -135,7 +136,8 @@ if (androidRelease.directApkAvailable === true) {
   assert(/^[a-f0-9]{64}$/u.test(androidRelease.apkSha256 ?? ""), "Direct APK hash is missing.");
   if (androidRelease.artifact) {
     const artifact = androidRelease.artifact;
-    assert(artifact.url === `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${androidRelease.version}/NAV-KURD-${androidRelease.version}.apk`, "Published APK URL is not canonical.");
+    const expectedUrl = canonicalAndroidApkUrl(androidRelease.version, androidRelease.versionCode, artifact.releaseTag);
+    assert(artifact.url === expectedUrl, "Published APK URL is not canonical.");
     assert(artifact.version === androidRelease.version && artifact.versionCode === androidRelease.versionCode, "Published APK version differs.");
     assert(artifact.signingCertificateSha256 === "A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246", "Published APK identity differs.");
     assert(artifact.bytes === androidRelease.apkBytes && artifact.sha256 === androidRelease.apkSha256 && artifact.url === androidRelease.directApkUrl, "Published APK receipt differs.");
