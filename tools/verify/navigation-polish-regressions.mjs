@@ -46,9 +46,15 @@ const north=volume.locationVolume([44,36],0,17),east=volume.locationVolume([44,3
 assert.equal(north.features.length,3);assert.ok(north.features[0].geometry.coordinates[0][0][1]>36);assert.ok(east.features[0].geometry.coordinates[0][0][0]>44);
 for(const f of north.features){assert.ok(f.properties.height>f.properties.base);assert.deepEqual(Array.from(f.geometry.coordinates[0][0]),Array.from(f.geometry.coordinates[0].at(-1)));}
 assert.ok(Math.abs(volume.locationVolume([44,36],0,18).features[0].properties.height*2-north.features[0].properties.height)<.00001);
+const desktop=volume.locationVolume([44,36],null,17,90);
+assert.deepEqual(JSON.stringify(desktop),JSON.stringify(east),'Desktop without compass uses the same 3D arrow');
+const metersPerPixel=40075016.686*Math.cos(36*Math.PI/180)/(512*2**17);
+const ring=north.features[0].geometry.coordinates[0];
+const width=(Math.max(...ring.map(p=>p[0]))-Math.min(...ring.map(p=>p[0])))*111195*Math.cos(36*Math.PI/180)/metersPerPixel;
+assert.ok(width>=32 && width<=38,'Arrow must remain clearly visible at about 34 CSS pixels');
 const sources=new Map(),layers=new Map([['location-dot',{}],['location-direction-arrow',{}]]),paint=new Map(),events=new Map();let pitch=0,zoom=17,writes=0;
 const pendingWrites=[];
-const map={on:(e,fn)=>events.set(e,fn),off(){},getStyle:()=>({layers:[]}),getPitch:()=>pitch,getZoom:()=>zoom,getSource:id=>sources.get(id),addSource:(id,s)=>sources.set(id,{...s,setData(data){writes++; return new Promise(resolve=>pendingWrites.push(()=>{this.data=data;resolve();}));}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty:(id,p,v)=>paint.set(id+':'+p,v),setPaintProperty:(id,p,v)=>paint.set(id+':'+p,v)};
+const map={on:(e,fn)=>events.set(e,fn),off(){},getStyle:()=>({layers:[]}),getPitch:()=>pitch,getZoom:()=>zoom,getBearing:()=>90,getSource:id=>sources.get(id),addSource:(id,s)=>sources.set(id,{...s,setData(data){writes++; return new Promise(resolve=>pendingWrites.push(()=>{this.data=data;resolve();}));}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty:(id,p,v)=>paint.set(id+':'+p,v),setPaintProperty:(id,p,v)=>paint.set(id+':'+p,v)};
 const tick=()=>new Promise(r=>setImmediate(r));
 const v=new volume.LocationVolume(map);v.update([44,36],90);assert.equal(writes,0);
 await tick(); assert.equal(writes,0, 'The flat map uses the position dot and heading');

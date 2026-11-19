@@ -53,6 +53,7 @@ export class LabelController {
   private frameHeight = 1;
   private frameZoom = 0;
   private frameCompact = false;
+  private controlBounds: Array<{ left:number; right:number; top:number; bottom:number }> = [];
   private localityOrderSource: readonly LocalityFeature[] | null = null;
   private localityOrder: readonly LocalityFeature[] = [];
   private roadOrderLayer: KriLayers["roadLabels"] | null = null;
@@ -88,6 +89,14 @@ export class LabelController {
     this.frameHeight = viewport.height;
     this.frameZoom = this.map.getZoom();
     this.frameCompact = this.isMobileViewport() || this.lowPowerProfile;
+    const container = this.map.getContainer(), origin = container.getBoundingClientRect();
+    this.controlBounds = [...(container.closest(".map-shell") ?? container).querySelectorAll(
+      ".topbar,.maplibregl-ctrl-top-left,.map-left-control-rail,.map-actions,.map-sheet,.route-navigation-hud,.nav-kurd-place-popup"
+    )].flatMap(element => {
+      const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+      if (!rect.width || !rect.height || style.visibility === "hidden" || Number(style.opacity) === 0) return [];
+      return [{left:rect.left-origin.left,right:rect.right-origin.left,top:rect.top-origin.top,bottom:rect.bottom-origin.top}];
+    });
   }
 
   private async runQueuedRefresh(): Promise<void> {
@@ -186,6 +195,8 @@ export class LabelController {
     const horizontalPadding = Math.min(118, Math.max(this.frameCompact ? 52 : 44, 28 + longestLabel * 3.7));
     const topPadding = this.frameCompact ? 42 : 34;
     const bottomPadding = this.frameCompact ? 38 : 30;
+    if (this.controlBounds.some(box => point.x + horizontalPadding > box.left && point.x - horizontalPadding < box.right &&
+      point.y + 20 > box.top && point.y - 20 < box.bottom)) return false;
     return point.x >= horizontalPadding &&
       point.x <= this.frameWidth - horizontalPadding &&
       point.y >= topPadding &&

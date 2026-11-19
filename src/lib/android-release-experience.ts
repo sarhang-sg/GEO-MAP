@@ -6,6 +6,7 @@ declare global {
 }
 type LatestRelease = {
   version: string;
+  versionCode: number;
   minimumVersion: string;
   directApkAvailable: boolean;
   directApkUrl: string | null;
@@ -140,15 +141,19 @@ async function readLatestRelease(): Promise<LatestRelease | null> {
     const candidateUrl = value.directApkAvailable === true && typeof value.directApkUrl === "string"
       ? absoluteReleaseUrl(value.directApkUrl)
       : "";
+    const buildCode = Number.isSafeInteger(value.versionCode) && Number(value.versionCode) > 0 ? Number(value.versionCode) : 0;
+    const buildUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${value.version}-build.${buildCode}/NAV-KURD-${value.version}.apk`;
     const directApkAvailable = Boolean(
       candidateUrl
       && apkBytes >= MINIMUM_DIRECT_APK_BYTES
       && apkSha256
       && (candidateUrl === `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${value.version}/NAV-KURD-${value.version}.apk`
-        || await directApkIsReachable(candidateUrl, apkBytes))
+        || buildCode > 0 && candidateUrl === buildUrl
+        || new URL(candidateUrl).origin === location.origin && await directApkIsReachable(candidateUrl, apkBytes))
     );
     return {
       version: value.version!,
+      versionCode: buildCode,
       minimumVersion: /^\d+\.\d+\.\d+$/u.test(value.minimumVersion ?? "") ? value.minimumVersion! : value.version!,
       directApkAvailable,
       directApkUrl: directApkAvailable ? candidateUrl : null,
@@ -254,7 +259,7 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
   };
 
   const showUpdateDialog = (release: LatestRelease, installed: string): void => {
-    const key = `nav-kurd:update-dismissed:${release.version}`;
+    const key = `nav-kurd:update-dismissed:${release.version}:${release.versionCode}`;
     try {
       const dismissedAt = Number(localStorage.getItem(key) ?? 0);
       if (Date.now() - dismissedAt < 24 * 60 * 60 * 1000) return;
@@ -285,7 +290,10 @@ export function installAndroidReleaseExperience(getLanguage: () => Language): An
     if (!release) return;
     synchronizeLinks(release);
     const installed = installedAndroidVersion();
-    if (!installed || !release.directApkAvailable || compareVersions(installed, release.version) >= 0) return;
+    if (!installed || !release.directApkAvailable) return;
+    const installedCode = Number(window.__NAV_KURD_NATIVE_HARDWARE__?.versionCode);
+    const newerBuild = Number.isSafeInteger(installedCode) && installedCode > 0 && release.versionCode > installedCode;
+    if (!newerBuild && compareVersions(installed, release.version) >= 0) return;
     if (document.querySelector(".app-update-dialog")) return;
     showUpdateDialog(release, installed);
     // The Android release job owns system notifications and delivery receipts.

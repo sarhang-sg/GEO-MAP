@@ -225,20 +225,38 @@ html[data-nav-kurd-theme][data-accent][data-ui-mode] dialog.navigation-preferenc
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .navigation-preferences select {
   color: var(--nk-text) !important; background: var(--nk-elevated) !important;
 }
-html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button)[aria-pressed="true"] svg {
-  color: #fff !important;
+/* Monochrome SVG images and inline SVGs share the button's actual state.
+   Brand artwork and profile photos deliberately have no icon filter. */
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button,.map-3d-button,.controls-visibility-button,.feedback-quick-button,.style-choice,.maplibregl-ctrl-group) {
+  background:var(--nk-surface) !important;
 }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button,.map-3d-button,.controls-visibility-button,.feedback-quick-button,.style-choice,.maplibregl-ctrl-group button):is([aria-pressed="true"],.is-active,:active:not(:disabled)) {
+  color:#fff !important; background:var(--nk-action-bg) !important;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button,.map-3d-button,.controls-visibility-button,.feedback-quick-button,.style-choice,.maplibregl-ctrl-group button):is([aria-pressed="true"],.is-active,:active:not(:disabled)) :is(.nav-ui-icon,.maplibregl-ctrl-icon,[data-map-mode-icon="satellite"]) {
+  filter:brightness(0) invert(1) !important; opacity:1 !important;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.round-button,.map-button,.map-3d-button,.controls-visibility-button,.feedback-quick-button,.style-choice):is([aria-pressed="true"],.is-active,:active:not(:disabled)) svg { color:#fff !important; }
 body:has(.nav-kurd-place-popup, .place-detail:not([hidden])) .search-card { visibility:hidden !important; pointer-events:none !important; }
 .measurement, .place-weather [dir=ltr] { unicode-bidi:isolate; }
 .measurement { white-space:nowrap; }
-html[data-nav-kurd-theme][data-accent][data-ui-mode] .place-weather[data-sky-phase], html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city {
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .place-weather[data-sky-kind], html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city {
   color-scheme:only dark; background:var(--city-sky,#20334c) !important; color:#fff !important;
   --nk-text:#fff; --nk-muted:#e8eef7; border:0 !important; backdrop-filter:none; -webkit-backdrop-filter:none;
 }
-html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.place-weather[data-sky-phase],.weather-city) :is(strong,bdi,span,time,summary,small) { color:inherit !important; text-shadow:none !important; line-height:1.6; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] :is(.place-weather[data-sky-kind],.weather-city) :is(strong,bdi,span,time,summary,small) { color:inherit !important; text-shadow:none !important; line-height:1.6; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .place-weather__forecast { padding:6px 12px 13px; scroll-padding-inline:12px; scroll-snap-type:x proximity; align-items:start; height:auto; }
 .place-weather__hour { scroll-snap-align:start; min-height:max-content; }
-html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-directory { color-scheme:only dark; color:#f6f9ff !important; background:#172638 !important; --nk-text:#fff; --nk-surface:#1e3044; --nk-elevated:#30435a; --nk-muted:#dee7f4; --nk-link:#b9dcff; }
+/* The directory follows the map palette. Only live sky cards own a dark palette. */
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-directory {
+  color:var(--nk-text) !important; background:var(--nk-surface) !important;
+  --ink:var(--nk-text); --muted:var(--nk-muted); --surface:var(--nk-surface);
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode="light"] .weather-directory { color-scheme:only light; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode="dark"] .weather-directory { color-scheme:only dark; }
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-directory > input { color:var(--nk-text) !important; background:var(--nk-elevated) !important; }
+.weather-directory__list { display:flex; flex-direction:column; gap:8px; }
+.weather-directory__list > .weather-city { flex-shrink:0; }
 .weather-directory__status:empty { display:none; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; border-radius:16px; padding:6px; box-shadow:0 8px 22px #07111e28; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city button { color:#fff !important; background:transparent !important; box-shadow:none !important; border:0 !important; }
@@ -248,10 +266,31 @@ html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-city .weather-dire
 .weather-city__pin { min-width:44px; min-height:44px; font-size:1.4rem; }
 @media (prefers-reduced-motion:no-preference) { .weather-city button:active { transform:scale(.98); } }
 
-.weather-picker-page { margin:0; color-scheme:only dark; background:#172638; }
+.weather-picker-page { margin:0; background:var(--nk-surface); }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-picker-page .weather-directory {
   inset:0; width:100%; height:100dvh; max-width:none; max-height:none; margin:0; border-radius:0; box-sizing:border-box;
   padding:16px max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
 }
 .weather-picker-page:has(.weather-directory[data-weather-view="list"]) .weather-directory__details { display:none; }
 .weather-picker-page .weather-directory__content { grid-template-columns:minmax(0,1fr); }
+
+
+/* QR stays monochrome for scanners; the surrounding sheet follows the app. */
+html[data-nav-kurd-theme] .location-share-dialog {
+  width:min(360px,calc(100vw - 24px)); max-height:calc(100dvh - 24px);
+  box-sizing:border-box; margin:auto; padding:20px; border:0; border-radius:24px;
+  color:var(--nk-text); background:var(--nk-surface); overflow:auto;
+  box-shadow:0 20px 64px rgb(0 0 0 / .24);
+}
+.location-share-dialog::backdrop { background:rgb(0 0 0 / .48); }
+.location-share-dialog header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.location-share-dialog h2 { margin:0; font-size:18px; }
+.location-share-dialog p { margin:12px 0; font-size:14px; color:var(--nk-text); }
+.location-share-dialog__place { font-weight:700; overflow-wrap:anywhere; }
+.location-share-dialog__qr { width:min(100%,264px); aspect-ratio:1; margin:16px auto; display:grid; place-items:center; }
+.location-share-dialog__qr svg { width:100%; height:100%; }
+.location-share-dialog input { box-sizing:border-box; width:100%; min-height:44px; padding:10px; border:0; border-radius:12px; background:var(--nk-elevated); color:var(--nk-text); font:inherit; font-size:13px; }
+.location-share-dialog button { border:0; border-radius:14px; min-height:44px; padding:10px 14px; background:var(--nk-elevated); color:var(--nk-text); font:inherit; font-weight:700; cursor:pointer; }
+.location-share-dialog__actions { display:flex; gap:8px; margin-top:12px; }
+.location-share-dialog__actions button { flex:1; }
+.location-share-dialog .location-share-dialog__native { background:var(--nk-action-bg); color:#fff; }

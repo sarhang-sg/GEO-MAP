@@ -4,10 +4,12 @@ import { pathToFileURL } from 'node:url';
 
 const repository = 'sarhang-sg/GEO-ANDROID';
 const certificate = 'A24575438CD4E1AFD611FE2EC8F72EEF70D5C11F3FE9BAEF0E75D576ECCE1246';
-export function assertPublicAndroid(release, receipt, artifact, version='11.0.0', code=110000) {
+export function assertPublicAndroid(release, receipt, artifact, version='11.0.0', code=110001) {
   assert.equal(release.draft, false, 'APK is still a draft');
   assert.equal(release.prerelease, false, 'APK is a prerelease');
-  assert.equal(release.tag_name, `v${version}`);
+  const tag = artifact.releaseTag ?? `v${version}`;
+  assert.ok(tag === `v${version}` || tag === `v${version}-build.${code}`, "release tag does not match the signed build");
+  assert.equal(release.tag_name, tag);
   assert.ok(release.published_at && Number.isFinite(Date.parse(release.published_at)), 'missing real publication time');
   assert.equal(receipt.versionName, version);
   assert.equal(receipt.versionCode, code);
@@ -22,7 +24,7 @@ export function assertPublicAndroid(release, receipt, artifact, version='11.0.0'
   assert.equal(apk.sha256, artifact.sha256);
   assert.ok(Number.isSafeInteger(apk.bytes) && apk.bytes >= 10*1024*1024 && apk.bytes <= 256*1024*1024);
   assert.match(apk.sha256, /^[a-f0-9]{64}$/u);
-  const url = `https://github.com/${repository}/releases/download/v${version}/${apk.name}`;
+  const url = `https://github.com/${repository}/releases/download/${tag}/${apk.name}`;
   assert.equal(artifact.url, url);
   const assets = release.assets.filter(a => a.name === apk.name);
   assert.equal(assets.length, 1);
@@ -59,7 +61,7 @@ async function main() {
   let lastError;
   do {
     try {
-      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/v${metadata.version}`);
+      const release = await getJson(`https://api.github.com/repos/${repository}/releases/tags/${encodeURIComponent(metadata.artifact.releaseTag ?? `v${metadata.version}`)}`);
       const asset = release.assets.find(a => a.name === 'DOWNLOAD-RECEIPT.json');
       assert.ok(asset && asset.size <= 32768, 'verified receipt missing');
       const receipt = await getJson(asset.browser_download_url);

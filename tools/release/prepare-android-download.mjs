@@ -65,7 +65,9 @@ try {
 if (!apkInfo && metadata.artifact) {
   // Produced after Termux verifies the signed CI output; the publication gate confirms it is public.
   const artifact = metadata.artifact;
-  const expectedUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v${metadata.version}/${apkName}`;
+  const tag = artifact.releaseTag ?? `v${metadata.version}`;
+  if (tag !== `v${metadata.version}` && tag !== `v${metadata.version}-build.${metadata.versionCode}`) throw new Error("Android release tag does not match the signed build.");
+  const expectedUrl = `https://github.com/sarhang-sg/GEO-ANDROID/releases/download/${tag}/${apkName}`;
   if (artifact.version !== metadata.version || artifact.versionCode !== metadata.versionCode
       || artifact.url !== expectedUrl || !Number.isSafeInteger(artifact.bytes)
       || artifact.bytes < minimumApkBytes || artifact.bytes > maximumApkBytes

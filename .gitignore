@@ -30,3 +30,6 @@ public/data/kri/.*.??????
 
 supabase/.temp/
 supabase/.branches/
+
+# CI browser captures are release evidence, not runtime assets.
+/artifacts/

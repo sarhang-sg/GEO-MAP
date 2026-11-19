@@ -95,6 +95,15 @@ jobs:
       - name: Run browser smoke tests
         run: python3 tools/verify/browser-smoke.py
 
+      - name: Retain actual interface captures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: nav-kurd-ui-captures
+          path: artifacts/ui/
+          if-no-files-found: ignore
+          retention-days: 7
+
   database-migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 25

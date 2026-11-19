@@ -1,19 +1,19 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-11-15-nav-kurd-v11.0.0",
+  "release": "2026-11-19-nav-kurd-v11.0.0-build.110001",
   "appVersion": "11.0.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
-  "generatedForDate": "2026-11-15",
+  "generatedForDate": "2026-11-19",
   "fileCount": 758,
-  "totalBytes": 131364590,
+  "totalBytes": 131364642,
   "files": {
     "public/data/kri/kirkuk-verified-name-corrections.json": {
       "bytes": 16229,
-      "sha256": "f497742f89a3e664497af311507d0394abbb304da4b8c73560c139cd01f730fd"
+      "sha256": "6106468331b77d58947e66b1dd515e20f883dcd3bcabb8bd1cdc267b52f3eff9"
     },
     "public/data/kri/kri-base-map-manifest.json": {
-      "bytes": 5287,
-      "sha256": "7da375f65fa807f0fcce09edb288b03c2c26ce070b48341357d5caa699c6c1f1"
+      "bytes": 5300,
+      "sha256": "0e1068dc516d197338a7642b0a461970979d1747f0f5268ba1fca5927880819b"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -28,16 +28,16 @@
       "sha256": "283078f52b3128701525b78d3ae8beee4ba6320204263135f8c3fc2521fc4fb5"
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
-      "bytes": 4219,
-      "sha256": "112cf2bea8fa5e7ab768f225b6a01fd17445421bd87ebf3d718ec0fa21b87371"
+      "bytes": 4232,
+      "sha256": "26431a10b4f435c513185caaa030caeed78f8c99ce5bea9bf2ee9f219a80f310"
     },
     "public/data/kri/kri-data-provenance.json": {
-      "bytes": 6226,
-      "sha256": "6fe912fb642f3cd7a39a43e76e1561e0b514463c81fa63f6bd01a77c6bf1cac1"
+      "bytes": 6239,
+      "sha256": "2bff13e4ff7750724c902625838cd565849d09513555a5c8f02dc0b55b2824e0"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
-      "sha256": "8cc617001624eacdf80c80aa9669e5717b7fadd23fa59a1c6ffded2fe4dfb59c"
+      "sha256": "f11d87346caadb92bc31eea5b24995365afb0a380ebb30a6ec57ed7df0ef0ccb"
     },
     "public/data/kri/kri-districts.geojson": {
       "bytes": 318663,
@@ -100,8 +100,8 @@
       "sha256": "59b962d300137c661c3a6ab711077879494c3f2d0b02b4a7d9e64140bcf28c3f"
     },
     "public/data/kri/kri-poi-catalog-report.json": {
-      "bytes": 6249,
-      "sha256": "ff7357f84a72283816e17a735d5a022cba64c490f1d5e8a4c07e729cd13fa37e"
+      "bytes": 6262,
+      "sha256": "5abbbb894f80937681c3782b58643637afd3b1c701cd79cde1f460682ab29874"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -1325,7 +1325,7 @@
     },
     "public/assets/icons/atlas/bundle.json": {
       "bytes": 663131,
-      "sha256": "8ef06020afb095e49da6e819b53236c40a1d0467655737749bfa052ce12643ab"
+      "sha256": "8afee5052f29c9bdaf4c0637031bb681a076fcfc4412b01a072090d2a3630287"
     },
     "public/assets/icons/atlas/bus_station.svg": {
       "bytes": 1335,
@@ -1793,7 +1793,7 @@
     },
     "public/assets/icons/atlas/groups-manifest.json": {
       "bytes": 19604,
-      "sha256": "c664a26e5d258327f4edc21f846d168305885aac9d8864a78e32e7a9f961c915"
+      "sha256": "11776cb0cc36506a8dcc3fd62eae1c65c97e33f9b52fd8eb10f12002d9d21687"
     },
     "public/assets/icons/atlas/groups/border_route.json": {
       "bytes": 22161,
@@ -2113,7 +2113,7 @@
     },
     "public/assets/icons/atlas/manifest.json": {
       "bytes": 95228,
-      "sha256": "b187fd59a9502e8c177138fb272e5e851550d44188104ee4d61ca7247841ec43"
+      "sha256": "de221c92cf36a3df58dbc59013bf4db312b33a6ddd26d4a88470a6989d15959a"
     },
     "public/assets/icons/atlas/market.svg": {
       "bytes": 1313,

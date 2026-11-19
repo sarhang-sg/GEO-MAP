@@ -136,7 +136,7 @@ export function installWeatherDirectory(options: {
     title.id = "weatherDirectoryTitle"; title.textContent = copy.title; close.type = "button"; close.textContent = copy.close;
     close.addEventListener("click", () => dialog.close()); header.append(title, close);
     if (options.onGps) { const gps=document.createElement("button"); gps.type="button"; gps.textContent={ku:"شوێنی ئێستام",ar:"موقعي الحالي",en:"Use my location"}[options.getLanguage()]; gps.onclick=options.onGps; header.append(gps); }
-    input = document.createElement("input"); input.type = "search"; input.placeholder = copy.search; input.setAttribute("aria-label", copy.search); input.autocomplete = "off";
+    input = document.createElement("input"); input.id = "weatherDirectorySearch"; input.name = "weather-place"; input.type = "search"; input.placeholder = copy.search; input.setAttribute("aria-label", copy.search); input.autocomplete = "off";
     input.addEventListener("input", () => { generation++; stopSummaries(); window.clearTimeout(timer); timer = window.setTimeout(() => { void search(); }, 220); });
     status = document.createElement("p"); status.className = "weather-directory__status"; status.setAttribute("role", "status");
     list = document.createElement("div"); list.className = "weather-directory__list";

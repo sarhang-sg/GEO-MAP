@@ -1,16 +1,26 @@
 import "./styles.css";
 import { preparePresentationConfig } from "./lib/presentation-config";
+import { applyAppearance, readAppearance } from "./lib/appearance-state";
+import { readAppLifecycleSnapshot } from "./lib/app-lifecycle-controller";
 
 import { cityFeature, cityMatches, cityName, type WeatherCity } from "./lib/weather-cities";
 import type { Language } from "./lib/types";
 
 await preparePresentationConfig();
+const applySavedTheme = (): void => {
+  applyAppearance(readAppearance());
+  document.documentElement.dataset.uiMode = readAppLifecycleSnapshot()?.mapMode === "street" ? "light" : "dark";
+};
+applySavedTheme();
+window.addEventListener("pageshow", applySavedTheme);
+window.addEventListener("storage", applySavedTheme);
 const [{installWeatherDirectory},{PlaceWeatherService}] = await Promise.all([import("./lib/weather-directory"),import("./lib/place-weather")]);
 const params = new URLSearchParams(location.search);
 const lang = params.get("lang");
 const language:Language = lang === "en" || lang === "ar" ? lang : "ku";
 document.documentElement.lang = language === "ku" ? "ckb" : language;
 document.documentElement.dir = language === "en" ? "ltr" : "rtl";
+document.body.dataset.language = language;
 let catalog:Promise<WeatherCity[]> | undefined;
 const native = () => window.flutter_inappwebview;
 const hosted = Boolean(native()) || params.has("native");

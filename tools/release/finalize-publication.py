@@ -14,6 +14,8 @@ SITE = 'https://geo-map-kappa.vercel.app'
 OWNER = 'sarhang-sg'
 TEAM = 'team_9pU9Kx8em9A8yRONSyyB9VGV'
 VERSION = '11.0.0'
+VERSION_CODE = 110001
+RELEASE_TAG = f'v{VERSION}-build.{VERSION_CODE}'
 
 
 def request(url, method='GET', payload=None, token=None):
@@ -56,9 +58,9 @@ def pages(path):
 def published():
     identity = request(SITE + '/release-identity.json')
     download = request(SITE + '/releases/latest.json')
-    receipt = request(f'https://github.com/{OWNER}/GEO-ANDROID/releases/download/v{VERSION}/DOWNLOAD-RECEIPT.json')
+    receipt = request(f'https://github.com/{OWNER}/GEO-ANDROID/releases/download/{RELEASE_TAG}/DOWNLOAD-RECEIPT.json')
     if (identity.get('appVersion') != VERSION or download.get('version') != VERSION
-            or receipt.get('versionName') != VERSION or receipt.get('versionCode') != 110000
+            or receipt.get('versionName') != VERSION or receipt.get('versionCode') != VERSION_CODE
             or download.get('apkSha256') != receipt.get('files', {}).get('apk', {}).get('sha256')
             or download.get('artifact', {}).get('gitCommit') != receipt.get('gitCommit')
             or not re.fullmatch('[0-9a-f]{40}', identity.get('gitCommit', ''))):

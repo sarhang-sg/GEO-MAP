@@ -9,6 +9,7 @@ import {coreStatistics,localCoreEnabled,NativeSearchProvider} from './android/lo
 import "./pwa-register";
 
 import * as maplibregl from "maplibre-gl";
+import { keepPlacePopupClear } from "./lib/place-popup-layout";
 import type { LngLatBoundsLike, Map as MapLibreMap, PropertyValueSpecification, StyleSpecification } from "maplibre-gl";
 import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { Protocol } from "pmtiles";
@@ -1161,6 +1162,7 @@ class KurdistanAtlasController {
       popupElement.classList.add("nav-kurd-place-popup--atlas");
     }
     this.activePlacePopup = popup;
+    keepPlacePopupClear(this.map, popup);
     popup.on("close", () => {
       if (this.activePlacePopup === popup) this.activePlacePopup = null;
     });

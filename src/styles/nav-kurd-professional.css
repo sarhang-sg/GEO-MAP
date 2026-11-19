@@ -2295,3 +2295,24 @@ html[data-nav-kurd-theme][data-ui-mode] .nav-kurd-road-popup .maplibregl-popup-c
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { border:0 !important; backdrop-filter:none; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { box-shadow:0 6px 16px #12182512,0 18px 44px #12182522 !important; }
 html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content { overflow:auto; max-height:min(58dvh,520px); overscroll-behavior:contain; }
+
+/* Card bounds are measured against the actual control rails and bottom sheet. */
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup {
+  width:var(--place-popup-width,280px); max-width:var(--place-popup-width,280px) !important;
+}
+html[data-nav-kurd-theme][data-accent][data-ui-mode] .nav-kurd-place-popup .maplibregl-popup-content {
+  box-sizing:border-box; width:100%; padding:10px; border-radius:16px;
+  max-height:var(--place-popup-max-height,58dvh); scrollbar-width:thin;
+}
+.nav-kurd-place-popup[data-shifted="true"] .maplibregl-popup-tip { visibility:hidden; }
+.nav-kurd-place-popup :is(.place-popup,.atlas-place-popup) { min-width:0; }
+.nav-kurd-place-popup .place-popup__title { gap:8px; }
+.nav-kurd-place-popup .place-popup__title img { width:30px; height:30px; }
+.nav-kurd-place-popup .place-popup__title strong { font-size:14px; line-height:1.6; }
+.nav-kurd-place-popup .place-popup__share { min-height:40px; padding:7px 10px; margin-block:8px; }
+.nav-kurd-place-popup .place-weather { padding:10px; margin-block:6px; border-radius:12px; }
+.nav-kurd-place-popup .place-weather__copy strong { font-size:24px !important; }
+.nav-kurd-place-popup :is(.place-weather__visual,.place-weather__visual img) { width:36px; height:36px; }
+.nav-kurd-place-popup .place-weather__details { margin-top:8px; font-size:12px; }
+.nav-kurd-place-popup .place-weather__body { max-height:none; overflow:visible; }
+.nav-kurd-place-popup .place-popup__weather-open { margin-top:4px; font-size:12px; }

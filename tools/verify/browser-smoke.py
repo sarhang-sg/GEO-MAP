@@ -78,9 +78,14 @@ def verify_startup_loader(browser) -> None:
 
 
 def verify_theme_contrast(page) -> None:
+    page.locator("#weatherDirectory").wait_for(state="attached")
     results = page.evaluate("""() => {
       const root = document.documentElement, shell = document.querySelector('.map-shell .search-card');
       const mapShell = document.querySelector(".map-shell");
+      const directory = document.querySelector('#weatherDirectory');
+      directory.showModal();
+      const action = document.querySelector('#layersButton');
+      const actionState = [action.getAttribute('aria-pressed'), action.className];
       const initial = [root.dataset.accent, root.dataset.uiMode, mapShell.dataset.mapMode];
       const probe = document.createElement('span');
       shell.append(probe);
@@ -102,15 +107,117 @@ def verify_theme_contrast(page) -> None:
             const ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
             if(ratio < min) failures.push({accent,mode,fg,bg,ratio});
           }
+          // Inspect real surfaces: inherited tokens alone missed the weather
+          // dialog's local dark override and black SVG images on blue actions.
+          for (const selector of ['#weatherDirectoryTitle','#weatherDirectory header button','#weatherDirectory > input']) {
+            const item=document.querySelector(selector), computed=getComputedStyle(item);
+            const bg=selector.endsWith('input') ? computed.backgroundColor : getComputedStyle(directory).backgroundColor;
+            const a=light(computed.color), b=light(bg), ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+            if(ratio<4.5) failures.push({accent,mode,selector,ratio,fg:computed.color,bg});
+          }
+          for (const active of [false,true]) {
+            action.setAttribute('aria-pressed',String(active)); action.classList.toggle('is-active',active);
+            const filter=getComputedStyle(action.querySelector('.nav-ui-icon')).filter;
+            if(active && !filter.includes('invert(1)') || !active && mode==='light' && filter!=='brightness(0)')
+              failures.push({accent,mode,active,filter});
+          }
+          if(mode==='light' && getComputedStyle(document.querySelector('#mapOnlineIndicator')).filter!=='none')
+            failures.push({accent,mode,heart:'decorative filter'});
         }
       }
       probe.remove();
       [root.dataset.accent,root.dataset.uiMode,mapShell.dataset.mapMode]=initial;
+      action.setAttribute('aria-pressed',actionState[0]); action.className=actionState[1]; directory.close();
       return failures;
     }""")
     if results:
         raise AssertionError(f"Theme contrast regression: {results}")
-    print("PASS primary, secondary and link contrast across all eight palettes on street, night and satellite surfaces")
+    print("PASS actual weather dialog, action SVGs, heart, and text contrast across eight palettes × three modes")
+
+
+def verify_place_popup(browser) -> None:
+    evidence = ROOT / 'artifacts/ui'
+    evidence.mkdir(parents=True, exist_ok=True)
+    context = browser.new_context(viewport={"width":390,"height":844},locale="ku",service_workers="block")
+    page = context.new_page()
+    page.add_init_script("localStorage.setItem('nav-kurd:tutorial:completed','1')")
+    # Vite preview has no serverless runtime. Forward requests unchanged to the
+    # deployed weather API: every captured reading is a real provider response.
+    def live_api(route):
+        try:
+            response = route.fetch(url=route.request.url.replace(BASE_URL,'https://geo-map-kappa.vercel.app'),timeout=30000)
+            route.fulfill(response=response)
+        except Error:
+            route.abort()
+    page.route(f'{BASE_URL}/api/**', live_api)
+    try:
+        page.goto(BASE_URL,wait_until='domcontentloaded')
+        page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
+        for _ in range(3):
+            if page.locator('html').get_attribute('data-ui-mode')=='light': break
+            page.locator('#mapModeCycleButton').click()
+            page.wait_for_timeout(250)
+        page.locator('#actionsToggleButton').click()
+        page.screenshot(path=str(evidence/'map-light.png'))
+        page.locator('#weatherListButton').click()
+        page.locator('.weather-city').first.wait_for()
+        try:
+            page.locator('.weather-city__temp').first.wait_for(timeout=35000)
+        except Error:
+            print('Weather provider unavailable; capture retains the honest offline state.')
+        page.screenshot(path=str(evidence/'weather-light.png'))
+        page.locator('#weatherDirectory header button').first.click()
+        page.locator('.search-card__icon').click()
+        page.locator('#placeSearch').fill('Erbil')
+        page.locator('#searchResults .search-result').first.wait_for()
+        page.locator('#searchResults .search-result').filter(has_text='هەولێر').first.click()
+        popup = page.locator('.nav-kurd-place-popup')
+        popup.wait_for()
+        # Check after camera arrival and after delayed weather resizes the card.
+        page.wait_for_timeout(1800)
+        for width,height in [(390,844),(360,740),(844,390),(1280,800)]:
+            page.set_viewport_size({'width':width,'height':height})
+            page.wait_for_timeout(500)
+            overlaps=page.evaluate("""() => {
+              const popup=document.querySelector('.nav-kurd-place-popup .maplibregl-popup-content').getBoundingClientRect();
+              const errors=[];
+              if(popup.left<0 || popup.top<0 || popup.right>innerWidth+1 || popup.bottom>innerHeight+1) errors.push('viewport');
+              for(const item of document.querySelectorAll('.topbar,.maplibregl-ctrl-top-left,.map-left-control-rail,.map-actions')) {
+                const s=getComputedStyle(item),r=item.getBoundingClientRect();
+                if(!r.width || !r.height || s.visibility==='hidden' || Number(s.opacity)===0) continue;
+                if(popup.left<r.right-1 && popup.right>r.left+1 && popup.top<r.bottom-1 && popup.bottom>r.top+1) errors.push(item.className);
+              }
+              return errors;
+            }""")
+            assert not overlaps,f'Place popup overlaps controls at {width}×{height}: {overlaps}'
+        page.set_viewport_size({'width':390,'height':844})
+        page.wait_for_timeout(400)
+        page.screenshot(path=str(evidence/'place-light.png'))
+        popup.locator('.place-popup__share').click()
+        page.locator('#locationShareDialog svg').wait_for(timeout=15000)
+        shared_url=page.locator('#locationShareUrl').input_value()
+        assert 'action=coordinate' in shared_url and 'lat=' in shared_url and 'lng=' in shared_url
+        page.locator('#locationShareDialog svg').screenshot(path=str(evidence/'location-qr.png'))
+        (evidence/'location-qr.txt').write_text(shared_url)
+        page.screenshot(path=str(evidence/'share-light.png'))
+        page.locator('#locationShareDialog header button').click()
+        page.set_viewport_size({'width':1280,'height':800})
+        badge=popup.locator('.place-weather[data-sky-kind]')
+        try:
+            badge.wait_for(timeout=30000)
+            for accent in ['original','blue','teal','amber','purple','pink','red','gold']:
+                page.locator('html').evaluate('(el,accent)=>el.dataset.accent=accent',accent)
+                assert 'gradient' in badge.evaluate('el=>getComputedStyle(el).backgroundImage'),f'Desktop sky overridden by {accent}'
+            page.screenshot(path=str(evidence/'place-desktop.png'))
+        except Error as error:
+            raise AssertionError('Live weather was unavailable for the desktop parity check') from error
+        popup.locator('.place-popup__share').click()
+        page.locator('#locationShareDialog svg').wait_for()
+        assert page.locator('#locationShareUrl').input_value()==shared_url
+        print('PASS shared mobile/desktop QR, exact coordinate URL and weather gradients in all eight palettes')
+        print('PASS real local-search place card clears controls at phone, landscape and desktop sizes')
+    finally:
+        context.close()
 
 
 def main() -> int:
@@ -188,7 +295,8 @@ def main() -> int:
                     "() => !document.querySelector('#androidDirectDownload')?.hidden",
                     timeout=10_000,
                 )
-                external_url = f"https://github.com/sarhang-sg/GEO-ANDROID/releases/download/v{android_release['version']}/NAV-KURD-{android_release['version']}.apk"
+                release_tag = android_release.get("artifact", {}).get("releaseTag", "v"+android_release["version"])
+                external_url = f"https://github.com/sarhang-sg/GEO-ANDROID/releases/download/{release_tag}/NAV-KURD-{android_release['version']}.apk"
                 if android_release.get("directApkUrl") == external_url:
                     receipt = android_release.get("artifact", {})
                     if receipt.get("url") != external_url or receipt.get("sha256") != android_release.get("apkSha256"):
@@ -495,6 +603,7 @@ def main() -> int:
                 raise AssertionError("same-origin HTTP failures:\n" + "\n".join(local_failures))
             if fatal_errors:
                 raise AssertionError("uncaught browser errors:\n" + "\n".join(fatal_errors))
+            verify_place_popup(browser)
 
         print("Chromium smoke test passed: dark boot, light controls, tutorial recovery, shell, support, legal pages, offline reload and fatal WebGL startup recovery.")
         return 0
