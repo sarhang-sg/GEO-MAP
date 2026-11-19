@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1725,
-  "totalBytes": 290410383,
+  "totalBytes": 290410229,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -195,8 +195,8 @@
       "sha256": "c651b569bb8b478247af066683661024255d95e63f2558213d2fd09b919eae7f"
     },
     "docs/RELEASE.md": {
-      "bytes": 1821,
-      "sha256": "80fac050407b83eca944a5548c44b6bd6bfc71039dd56fd1f20c606f12106a23"
+      "bytes": 1834,
+      "sha256": "0121c623a060ed70a5957e41058e6c44b01cbb8f55fac09f7b672bfba6429e09"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
@@ -3987,8 +3987,8 @@
       "sha256": "d35d7155d9cd9d42568f22670d2be6fbca6c04ef3c140468847623d867bc7d3c"
     },
     "src/lib/native-share.ts": {
-      "bytes": 8230,
-      "sha256": "c112dcc03a106f59e3c3a94b195e7216d29a59938397c5f2dff7b4ecafc8d44f"
+      "bytes": 7562,
+      "sha256": "fe0412e7c221d7147484fe6fef62552677b94650caf4625e12d0f5133112fdd1"
     },
     "src/lib/navigation-advisory.ts": {
       "bytes": 6342,
@@ -4087,8 +4087,8 @@
       "sha256": "ad36cee2f11bc35956f01f2046edb58b051ea0e0d5889a7b35110e1a27064938"
     },
     "src/lib/pwa-launch-intent.ts": {
-      "bytes": 4149,
-      "sha256": "bb276e3953191f86be2423af243d3a17d2198fc1443ea49984a68004860acdd9"
+      "bytes": 4137,
+      "sha256": "8a59f9ff40cac6da9a918bbba21e6b22156c1186e89dca0ea9253e1e6b88e3b1"
     },
     "src/lib/realtime-presence-controller.ts": {
       "bytes": 12124,
@@ -4771,8 +4771,8 @@
       "sha256": "d41c42127e732491aa5c3c257e8a04c052d301ea09a978317666063078193d23"
     },
     "tools/lib/project.mjs": {
-      "bytes": 3233,
-      "sha256": "8fcf308fe7498570e212822a9590b8dcaab98bc0de6231371059daadf1dd1c50"
+      "bytes": 3246,
+      "sha256": "d03532658185b85e10453df9b24dc78a3a4794f3fab02b6605d38c974e7e73ca"
     },
     "tools/lib/release-content.mjs": {
       "bytes": 2022,
@@ -4815,8 +4815,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 37000,
-      "sha256": "dbfe87a33435486f989b5193976f24472fdb18dae3ff9d73fa58f0c110e12d3b"
+      "bytes": 37061,
+      "sha256": "27edc587f8fd56b3b78e4e6ad87d959c21cd524391fdd58bf93511f5403093a8"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,
@@ -4835,8 +4835,8 @@
       "sha256": "6c9339f29204214026d073b3481eb62d590989c0073f914bd899ab4c856d9c29"
     },
     "tools/verify/local-catalog-regressions.mjs": {
-      "bytes": 21980,
-      "sha256": "31f91892cc4090f127287d9b6ac16c1e214b15edbd9d115583916db8bfd60b04"
+      "bytes": 22419,
+      "sha256": "9991ff0990656926f681ac321c920307f08f3aa59cad7856202cea09183ac812"
     },
     "tools/verify/maintenance-regressions.mjs": {
       "bytes": 12125,

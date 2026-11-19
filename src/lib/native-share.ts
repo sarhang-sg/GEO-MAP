@@ -10,26 +10,9 @@ export type ShareLocationOptions = {
 
 const CANONICAL_APP_URL = "https://geo-map-kappa.vercel.app/";
 
-function publicAppUrl(): URL {
-  const candidates = [
-    browserEnv.publicAppUrl,
-    typeof window !== "undefined" ? window.location.origin : "",
-    CANONICAL_APP_URL
-  ];
-  for (const candidate of candidates) {
-    if (!candidate) continue;
-    try {
-      const parsed = new URL(candidate);
-      if (parsed.protocol === "https:" || parsed.protocol === "http:") return parsed;
-    } catch {
-      // A malformed deployment variable must never break the share action.
-    }
-  }
-  return new URL(CANONICAL_APP_URL);
-}
-
 export function locationDeepLink(options: ShareLocationOptions): string {
-  const url = publicAppUrl();
+  // A recipient must be able to open a QR from a preview or an offline WebView.
+  const url = new URL(browserEnv.publicAppUrl || CANONICAL_APP_URL);
   url.search = "";
   url.hash = "";
   url.searchParams.set("action", "coordinate");
@@ -42,8 +25,8 @@ export function locationDeepLink(options: ShareLocationOptions): string {
 async function shareNativeLocation(options: ShareLocationOptions): Promise<boolean> {
   const title = options.title?.trim() || "NAV KURD";
   const text = options.text?.trim() || `${title}\n${options.coordinate[1].toFixed(6)}, ${options.coordinate[0].toFixed(6)}`;
+  const url = locationDeepLink(options);
   try {
-    const url = locationDeepLink(options);
     const flutterWindow = window as unknown as {
       __NAV_KURD_FLUTTER__?: boolean;
       navKurdAndroid?: { share?: (data: { title: string; text: string; url: string }) => Promise<boolean> };
@@ -59,11 +42,7 @@ async function shareNativeLocation(options: ShareLocationOptions): Promise<boole
     return copyText(`${text}\n${url}`);
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError" && window.__NAV_KURD_FLUTTER__ !== true) return false;
-    const fallback = new URL(CANONICAL_APP_URL);
-    fallback.searchParams.set("action", "coordinate");
-    fallback.searchParams.set("lng", options.coordinate[0].toFixed(6));
-    fallback.searchParams.set("lat", options.coordinate[1].toFixed(6));
-    return copyText(`${text}\n${fallback.toString()}`);
+    return copyText(`${text}\n${url}`);
   }
 }
 

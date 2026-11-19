@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 export const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 export const posixPath = (path) => relative(ROOT, path).split(sep).join("/");
 export const SOURCE_EXCLUDED_DIRECTORIES = Object.freeze([
-  ".git", ".vercel", ".temp", ".branches", "node_modules", "dist", ".data-inputs", ".build-cache",
+  ".git", ".vercel", ".temp", ".branches", "node_modules", "dist", "artifacts", ".data-inputs", ".build-cache",
   "__pycache__", ".pytest_cache", ".mypy_cache", ".idea", ".vscode"
 ]);
 

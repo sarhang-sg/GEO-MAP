@@ -225,7 +225,7 @@ def main() -> int:
         raise SystemExit("dist/index.html is missing; run npm run build:vercel first.")
 
     server = subprocess.Popen(
-        ["npm", "run", "preview", "--", "--host", "127.0.0.1", "--port", "4173", "--strictPort"],
+        ["node", str(ROOT / "node_modules/vite/bin/vite.js"), "preview", "--host", "127.0.0.1", "--port", "4173", "--strictPort"],
         cwd=ROOT,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -593,7 +593,7 @@ def main() -> int:
                 raise AssertionError("uncaught startup recovery errors:\n" + "\n".join(recovery_errors))
             recovery_context.close()
 
-            browser.close()
+            context.close()
 
             ignored_fragments = (
                 "ResizeObserver loop",
@@ -604,6 +604,7 @@ def main() -> int:
             if fatal_errors:
                 raise AssertionError("uncaught browser errors:\n" + "\n".join(fatal_errors))
             verify_place_popup(browser)
+            browser.close()
 
         print("Chromium smoke test passed: dark boot, light controls, tutorial recovery, shell, support, legal pages, offline reload and fatal WebGL startup recovery.")
         return 0
