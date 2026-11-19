@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1725,
-  "totalBytes": 290410229,
+  "totalBytes": 290410956,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -4815,8 +4815,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 37061,
-      "sha256": "27edc587f8fd56b3b78e4e6ad87d959c21cd524391fdd58bf93511f5403093a8"
+      "bytes": 37788,
+      "sha256": "6ce6f028418b2a56ac67b57ac35446047b91c649a98d4d63f02c592a36bd2e85"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,

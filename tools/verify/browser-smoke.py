@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 from urllib.request import urlopen
 
 from playwright.sync_api import Error, sync_playwright
@@ -153,11 +154,12 @@ def verify_place_popup(browser) -> None:
     try:
         page.goto(BASE_URL,wait_until='domcontentloaded')
         page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
+        page.locator('#actionsToggleButton').click()
         for _ in range(3):
             if page.locator('html').get_attribute('data-ui-mode')=='light': break
             page.locator('#mapModeCycleButton').click()
             page.wait_for_timeout(250)
-        page.locator('#actionsToggleButton').click()
+        assert page.locator('html').get_attribute('data-ui-mode') == 'light'
         page.screenshot(path=str(evidence/'map-light.png'))
         page.locator('#weatherListButton').click()
         page.locator('.weather-city').first.wait_for()
@@ -196,7 +198,11 @@ def verify_place_popup(browser) -> None:
         popup.locator('.place-popup__share').click()
         page.locator('#locationShareDialog svg').wait_for(timeout=15000)
         shared_url=page.locator('#locationShareUrl').input_value()
-        assert 'action=coordinate' in shared_url and 'lat=' in shared_url and 'lng=' in shared_url
+        link = urlsplit(shared_url)
+        params = parse_qs(link.query)
+        assert link.scheme == 'https' and link.hostname != '127.0.0.1'
+        assert params['action'] == ['coordinate'] and params['label'][0] in popup.inner_text()
+        assert 35 < float(params['lat'][0]) < 37 and 43 < float(params['lng'][0]) < 45
         page.locator('#locationShareDialog svg').screenshot(path=str(evidence/'location-qr.png'))
         (evidence/'location-qr.txt').write_text(shared_url)
         page.screenshot(path=str(evidence/'share-light.png'))
@@ -214,6 +220,12 @@ def verify_place_popup(browser) -> None:
         popup.locator('.place-popup__share').click()
         page.locator('#locationShareDialog svg').wait_for()
         assert page.locator('#locationShareUrl').input_value()==shared_url
+        page.goto(f'{BASE_URL}{link.path}?{link.query}', wait_until='domcontentloaded')
+        reopened = page.locator('.nav-kurd-place-popup')
+        reopened.wait_for(timeout=45000)
+        assert params['label'][0] in reopened.inner_text()
+        reopened.locator('.place-popup__share').click()
+        assert page.locator('#locationShareUrl').input_value() == shared_url
         print('PASS shared mobile/desktop QR, exact coordinate URL and weather gradients in all eight palettes')
         print('PASS real local-search place card clears controls at phone, landscape and desktop sizes')
     finally:
