@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1726,
-  "totalBytes": 290425366,
+  "totalBytes": 290430990,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -196,7 +196,7 @@
     },
     "docs/RELEASE.md": {
       "bytes": 1834,
-      "sha256": "0121c623a060ed70a5957e41058e6c44b01cbb8f55fac09f7b672bfba6429e09"
+      "sha256": "dd8e03c0de721af23489699a03b5a553f3f0099a3737a4b81b6993def49cb533"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
@@ -3703,8 +3703,8 @@
       "sha256": "679964129f56568bc93ca34d46c60005157bec90fe98c9c7b94c092c59884392"
     },
     "README.md": {
-      "bytes": 5336,
-      "sha256": "db82b89094649bf7cc1e2c17d6a133006dfed66f6c0abcb021d3bb80380e4960"
+      "bytes": 5419,
+      "sha256": "a191de22c6547a72a80f6a9f404cda4ca1fc0e61cdd92e2407b2813f8bc8b108"
     },
     "release.config.json": {
       "bytes": 1057,
@@ -3763,8 +3763,8 @@
       "sha256": "7353342c94a8bfdf1d9328fb629e39911cd406af7b39ef9f0058dfcd50b048ec"
     },
     "src/lib/appearance-state.ts": {
-      "bytes": 2527,
-      "sha256": "062b888ccf677b5c482ea07f7c92571932beb757154769309034b6543f613f79"
+      "bytes": 2647,
+      "sha256": "046f136fc7ae78bcec05d047d20e593882b01ec33f156ac6fbc22a64328c6442"
     },
     "src/lib/atlas-content-policy.ts": {
       "bytes": 6864,
@@ -3871,8 +3871,8 @@
       "sha256": "e2c382a204909098128c25cf26a20a809e7f97dc089f417a55c016bae36e5e28"
     },
     "src/lib/live-location-controller.ts": {
-      "bytes": 38989,
-      "sha256": "a5234ca86fe8ca4dc251866f154595c583d835f999c474604dc2b75910655ed9"
+      "bytes": 39158,
+      "sha256": "c44114465c99345b724120a7cc826f63f14ef28ac7eaad69929043ebd1c1707b"
     },
     "src/lib/live-location-layers.ts": {
       "bytes": 6356,
@@ -3891,8 +3891,8 @@
       "sha256": "c30f24116601790b270d9dd2de4f3b99ebd344b49f5187e1c33ca257a043d819"
     },
     "src/lib/location-volume.ts": {
-      "bytes": 6064,
-      "sha256": "533dae34b514b4326124f3883a858dbd1ccd1293ab0a2342619dcd6ffb3efdba"
+      "bytes": 6425,
+      "sha256": "024d55cf738f58e3075e6fc05af2a45dc9efe1b3d5e018bf9e3f87c0ab610e1d"
     },
     "src/lib/location.ts": {
       "bytes": 9683,
@@ -3999,8 +3999,8 @@
       "sha256": "f0dfb90f904f2e0e8f7349970abfa488dd35850fa9f71527724981a32e793181"
     },
     "src/lib/navigation-preferences.ts": {
-      "bytes": 18819,
-      "sha256": "abef7cd2b3f6a33d79f70b3db032df6232835439c017ce26a5bf3b10981e5751"
+      "bytes": 19387,
+      "sha256": "06cba20d601aecff2db005e63756c38d90e24b4d17490be5fed1009f77951b87"
     },
     "src/lib/navigation-tracking.ts": {
       "bytes": 3970,
@@ -4051,8 +4051,8 @@
       "sha256": "ca0ce41a97db9bfddbeb5b3ba3708e2a57dc7fa3f071fc10ebe319ca1451d3eb"
     },
     "src/lib/place-popup-layout.ts": {
-      "bytes": 4776,
-      "sha256": "6db15d965a42db95ce945b3fe1f33d7f951f0fdb4682b1616cc47d50726dcb19"
+      "bytes": 5228,
+      "sha256": "f0d78a2f0c768c2233b611bf7f6e4ba58e1130caa21c6c622f1ced26fa6f99b7"
     },
     "src/lib/place-weather.ts": {
       "bytes": 26879,
@@ -4815,8 +4815,8 @@
       "sha256": "36f55b39beb637774c21daf7e4aa59b258d334aa7af82fed4a4a125587704c1f"
     },
     "tools/verify/browser-smoke.py": {
-      "bytes": 40304,
-      "sha256": "87806ea637f59eda2edd14736018093b9bbfb5f889285947a6784382fd71cfb7"
+      "bytes": 43984,
+      "sha256": "3c4e9cae196051e4188b12dd208791abba6a3d85ff1a31758ef38dd20fbd5484"
     },
     "tools/verify/critical-runtime-regressions.mjs": {
       "bytes": 28134,
@@ -4863,8 +4863,8 @@
       "sha256": "8b78d2bc933e11bb422bc7b1d87a9a6497cf01250f33eb43c10f82cae50fc128"
     },
     "tools/verify/navigation-polish-regressions.mjs": {
-      "bytes": 16870,
-      "sha256": "68a739bd0d2c60b0781ccfe5afe3778cfcbaa4a3f131502aa3710455395ffa18"
+      "bytes": 17061,
+      "sha256": "fdda3e09fb62fd5d6c71fd64952c96df4c42ed2f1adca34899e293b90802b5eb"
     },
     "tools/verify/phase2-regressions.mjs": {
       "bytes": 5338,

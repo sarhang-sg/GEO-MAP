@@ -1,4 +1,5 @@
 import { isCameraModeTransition } from "./map-camera-controller";
+import type { AppearancePreferences } from "./appearance-state";
 import { LocationVolume } from "./location-volume";
 import { MovementCourseTracker, trustedTravelCourse, followCameraBearing, type TravelMode } from "./navigation-tracking";
 import {localCoreEnabled} from "../android/local-provider";
@@ -123,6 +124,10 @@ export class LiveLocationController {
   private navigationActive = false;
   private keepFollowingAfterZoom = true;
   private northUp = false;
+  setArrowSize(size: AppearancePreferences["gpsArrowSize"]): void {
+    this.volume.setSize(size);
+  }
+
   setCameraPreferences(zoom: "follow" | "manual", bearing: "travel" | "north"): void {
     this.keepFollowingAfterZoom = zoom === "follow";
     this.northUp = bearing === "north";

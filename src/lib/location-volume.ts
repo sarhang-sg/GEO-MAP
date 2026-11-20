@@ -1,4 +1,5 @@
 import type { CustomLayerInterface, Map as MapLibreMap } from "maplibre-gl";
+import type { AppearancePreferences } from "./appearance-state";
 import type { LngLatTuple } from "./location";
 import { isCameraTilted } from "./map-camera-controller";
 
@@ -64,6 +65,7 @@ function createProgram(gl: WebGL2RenderingContext): WebGLProgram {
 }
 
 export class LocationVolume {
+  private sizeScale = 1;
   private coordinate: LngLatTuple | null = null;
   private heading: number | null = null;
   private program: WebGLProgram | null = null;
@@ -77,6 +79,12 @@ export class LocationVolume {
     map.on("pitch",this.sync);
     map.on("style.load",this.sync);
     map.on("remove",this.destroy);
+  }
+  setSize(size: AppearancePreferences["gpsArrowSize"]): void {
+    const scale = size === "small" ? 0.82 : size === "large" ? 1.18 : 1;
+    if (scale === this.sizeScale) return;
+    this.sizeScale = scale;
+    this.map.triggerRepaint();
   }
   update(coordinate: LngLatTuple | null, heading: number | null): void {
     this.coordinate = coordinate && coordinate.every(Number.isFinite) && Math.abs(coordinate[0]) <= 180 && Math.abs(coordinate[1]) <= 85.1 ? coordinate : null;
@@ -129,7 +137,7 @@ export class LocationVolume {
       gl.cullFace(gl.BACK);
       gl.frontFace(gl.CCW);
       gl.uniform2f(this.anchor,2*x/w-1,1-2*y/h);
-      gl.uniform2f(this.scale,2/w,2/h);
+      gl.uniform2f(this.scale,2*this.sizeScale/w,2*this.sizeScale/h);
       gl.uniform4f(this.rotation,Math.cos(angle),Math.sin(angle),Math.cos(pitch*rad),Math.sin(pitch*rad));
       gl.drawArrays(gl.TRIANGLES,0,mesh.length/6);
       gl.bindVertexArray(null);

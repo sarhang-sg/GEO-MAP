@@ -78,6 +78,9 @@ for (const target of [19,6,15,8]) {
   assert.deepEqual(uniforms.get('pixelScale'),[2/360,2/800]);
   assert.equal(meshes.length,1,'Zoom never retessellates the GPS mesh');
 }
+for (const [size,factor] of [['small',.82],['large',1.18],['standard',1]]) {
+  puck.setSize(size);layer.render(gl);assert.deepEqual(uniforms.get('pixelScale'),[2*factor/360,2*factor/800]);
+}
 bearing=90;layer.render(gl);assert.ok(Math.abs(uniforms.get('rotation')[1])<1e-10);
 puck.update([44.001,36],null);bearing=28;layer.render(gl);assert.equal(uniforms.get('rotation')[1],0);
 for(const angle of [14,20,65]) { pitch=angle;events.get('pitch')();layer.render(gl);assert.equal(layout.get('location-direction-arrow'),'none'); }
