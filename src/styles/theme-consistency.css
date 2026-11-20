@@ -132,12 +132,17 @@ html[data-nav-kurd-theme][data-ui-mode] .route-navigation-hud {
   max-width:min(300px,calc(100% - 116px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)));
 }
 .home-greeting{display:block;color:var(--nk-muted);font-size:.78rem;}
-html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator {
-  color:#152536 !important; background:transparent !important; border:0; box-shadow:none !important; padding:2px 4px;
-  filter:none !important; text-shadow:none !important;
+html[data-nav-kurd-theme] #mapOnlineIndicator {
+  --presence-ink:#d8bbff;
+  color:var(--presence-ink) !important; background:transparent !important; border:0; box-shadow:none !important; padding:2px 4px;
+  width:auto; gap:4px; filter:none !important; text-shadow:none !important;
 }
-html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator :is(svg, img, strong) { filter:none !important; box-shadow:none !important; text-shadow:none !important; }
-html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicatorCount,html[data-nav-kurd-theme][data-ui-mode="light"] .map-stats strong {color:#152536 !important;opacity:1;font-variant-numeric:tabular-nums;}
+html[data-nav-kurd-theme][data-ui-mode="light"] #mapOnlineIndicator { --presence-ink:#6430a2; }
+html[data-nav-kurd-theme] #mapOnlineIndicator :is(svg,strong,.map-online-indicator__dot) {
+  color:var(--presence-ink) !important; filter:none !important; box-shadow:none !important; text-shadow:none !important;
+}
+html[data-nav-kurd-theme] #mapOnlineIndicatorCount { opacity:1; font-variant-numeric:tabular-nums; }
+html[data-nav-kurd-theme][data-ui-mode="light"] .map-stats strong {color:#152536 !important;opacity:1;font-variant-numeric:tabular-nums;}
 html[data-nav-kurd-theme][data-ui-mode="light"] .about-dialog__links a{color:#14365a !important;background:#e4eef8 !important;border-color:#acbed1 !important;}
 html[data-nav-kurd-theme][data-ui-mode] button[data-account-action] {width:auto !important;min-height:44px;height:auto !important;display:inline-flex !important;align-items:center;justify-content:center;gap:8px;padding:12px 16px !important;}
 html[data-nav-kurd-theme][data-ui-mode] button[data-account-action] span{display:inline !important;position:static !important;clip:auto !important;width:auto !important;height:auto !important;}

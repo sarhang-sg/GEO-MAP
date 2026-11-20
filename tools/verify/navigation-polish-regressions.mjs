@@ -41,51 +41,54 @@ assert.equal(road.nearestRoadInformation([feature('a',44,30),feature('b',44.0001
 assert.equal(road.nearestRoadInformation([feature('a',44,30)],[44,36.001],90),null);
 console.log('PASS explicit surfaces and limits, mph conversion, unknown-speed rejection and ambiguous parallel-road protection');
 const camera=load('src/lib/map-camera-controller.ts',{},'isCameraTilted');
-const volume=load('src/lib/location-volume.ts',camera,'locationVolume,LocationVolume');
-const north=volume.locationVolume([44,36],0,17),east=volume.locationVolume([44,36],90,17);
-assert.equal(north.features.length,3);assert.ok(north.features[0].geometry.coordinates[0][0][1]>36);assert.ok(east.features[0].geometry.coordinates[0][0][0]>44);
-for(const f of north.features){assert.ok(f.properties.height>f.properties.base);assert.deepEqual(Array.from(f.geometry.coordinates[0][0]),Array.from(f.geometry.coordinates[0].at(-1)));}
-assert.ok(Math.abs(volume.locationVolume([44,36],0,18).features[0].properties.height*2-north.features[0].properties.height)<.00001);
-const desktop=volume.locationVolume([44,36],null,17,90);
-assert.deepEqual(JSON.stringify(desktop),JSON.stringify(east),'Desktop without compass uses the same 3D arrow');
-const metersPerPixel=40075016.686*Math.cos(36*Math.PI/180)/(512*2**17);
-const ring=north.features[0].geometry.coordinates[0];
-const width=(Math.max(...ring.map(p=>p[0]))-Math.min(...ring.map(p=>p[0])))*111195*Math.cos(36*Math.PI/180)/metersPerPixel;
-assert.ok(width>=32 && width<=38,'Arrow must remain clearly visible at about 34 CSS pixels');
-const sources=new Map(),layers=new Map([['location-dot',{}],['location-direction-arrow',{}]]),paint=new Map(),events=new Map();let pitch=0,zoom=17,writes=0;
-const pendingWrites=[];
-const map={on:(e,fn)=>events.set(e,fn),off(){},getStyle:()=>({layers:[]}),getPitch:()=>pitch,getZoom:()=>zoom,getBearing:()=>90,getSource:id=>sources.get(id),addSource:(id,s)=>sources.set(id,{...s,setData(data){writes++; return new Promise(resolve=>pendingWrites.push(()=>{this.data=data;resolve();}));}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty:(id,p,v)=>paint.set(id+':'+p,v),setPaintProperty:(id,p,v)=>paint.set(id+':'+p,v)};
-const tick=()=>new Promise(r=>setImmediate(r));
-const v=new volume.LocationVolume(map);v.update([44,36],90);assert.equal(writes,0);
-await tick(); assert.equal(writes,0, 'The flat map uses the position dot and heading');
-pitch=52;events.get('pitch')();await tick();assert.equal(writes,1);
-pendingWrites.shift()();await tick();assert.equal(paint.get('location-dot:circle-opacity'),0);
-assert.equal(paint.get('location-dot:visibility'),'none');
-assert.equal(paint.get('location-3d-volume:visibility'),'visible');
-v.update([44.00001,36],91);await tick();
-assert.equal(paint.get('location-dot:visibility'),'none','GPS updates must not flash the fallback');
-assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity-transition').duration,0);
-pendingWrites.shift()();await tick();
-v.update([44,36],90);await tick();pendingWrites.shift()();await tick();
-const count=writes;v.update([44,36],90);await tick();assert.equal(writes,count);
-for (const nextZoom of [19,15,8]) {
-  zoom=nextZoom; events.get('zoom')(); await tick();
-  assert.equal(paint.get('location-3d-volume:visibility'),'visible');
-  assert.equal(paint.get('location-dot:visibility'),'none');
-  pendingWrites.shift()(); await tick();
+const volume = load('src/lib/location-volume.ts',camera,'LocationVolume');
+const layers = new Map(['location-dot','location-direction-arrow','location-pulse'].map(id=>[id,{}]));
+const layout=new Map(), events=new Map(), uniforms=new Map(), meshes=[], draws=[];
+let pitch=0, bearing=0, zoom=17, center=[44,36], removed=0;
+const gl={
+  createProgram:()=>({}),createShader:()=>({}),shaderSource(){},compileShader(){},attachShader(){},deleteShader(){},linkProgram(){},getProgramParameter:()=>true,
+  createBuffer:()=>({}),createVertexArray:()=>({}),getUniformLocation:(_,name)=>name,bindVertexArray(){},bindBuffer(){},
+  bufferData:(_,values)=>meshes.push(Array.from(values)),enableVertexAttribArray(){},vertexAttribPointer(){},useProgram(){},
+  disable(){},enable(){},depthMask(){},cullFace(){},frontFace(){},uniform2f:(u,...v)=>uniforms.set(u,v),uniform4f:(u,...v)=>uniforms.set(u,v),
+  drawArrays:(_,first,count)=>draws.push(count),deleteProgram:()=>removed++,deleteVertexArray(){},deleteBuffer(){}
+};
+const map={
+  on:(e,fn)=>events.set(e,fn),off:(e)=>events.delete(e),getStyle:()=>({layers:[]}),
+  getPitch:()=>pitch,getBearing:()=>bearing,getLayer:id=>layers.get(id),triggerRepaint(){},
+  getLayoutProperty:id=>layout.get(id),setLayoutProperty:(id,_,value)=>layout.set(id,value),
+  addLayer:l=>{layers.set(l.id,l);l.onAdd(map,gl);}, getCanvas:()=>({clientWidth:360,clientHeight:800}),
+  project:([x,y])=>({x:180+(x-center[0])*2**zoom,y:400-(y-center[1])*2**zoom})
+};
+const puck=new volume.LocationVolume(map);
+puck.update([44,36],90);assert.equal(meshes.length,0);
+pitch=52;events.get('pitch')();
+const layer=layers.get('location-3d-volume');
+layer.render(gl);
+assert.equal(draws.length,1,'First fix draws on the first pitched frame');
+assert.equal(layout.get('location-dot'),'none');
+assert.deepEqual(uniforms.get('anchor'),[0,0]);
+const vertices=meshes[0], xs=vertices.filter((_,i)=>i%6===0), ys=vertices.filter((_,i)=>i%6===1), zs=vertices.filter((_,i)=>i%6===2);
+assert.equal(Math.max(...xs)-Math.min(...xs),22);
+assert.equal(Math.max(...ys)-Math.min(...ys),28);
+assert.ok(Math.max(...zs)>Math.min(...zs),'Both raised faces and side walls have depth');
+for (const target of [19,6,15,8]) {
+  zoom=target;center=[44.0001,36.0002];layer.render(gl);
+  const p=map.project([44,36]);
+  assert.deepEqual(uniforms.get('anchor'),[2*p.x/360-1,1-2*p.y/800]);
+  assert.deepEqual(uniforms.get('pixelScale'),[2/360,2/800]);
+  assert.equal(meshes.length,1,'Zoom never retessellates the GPS mesh');
 }
-for (const angle of [14,20,65]) {
-  pitch=angle; events.get('pitch')();
-  assert.equal(paint.get('location-3d-volume:fill-extrusion-opacity'),1);
+for (const [size,factor] of [['small',.82],['large',1.18],['standard',1]]) {
+  puck.setSize(size);layer.render(gl);assert.deepEqual(uniforms.get('pixelScale'),[2*factor/360,2*factor/800]);
 }
-v.update([44.001,36],90);await tick();
-pitch=0;events.get('pitch')();
-pendingWrites.shift()();await tick();
-assert.equal(paint.get('location-dot:visibility'),'visible');
-assert.equal(paint.get('location-direction-arrow:visibility'),'visible');
-v.update(null,null);assert.equal(paint.get('location-3d-volume:visibility'),'none');
-assert.equal(volume.locationVolume([44,NaN],0,17).features.length,0);
-console.log('PASS delayed-worker 3D visibility, rapid zoom cancellation, continuous extrusion at overview zoom and unchanged-fix write suppression');
+bearing=90;layer.render(gl);assert.ok(Math.abs(uniforms.get('rotation')[1])<1e-10);
+puck.update([44.001,36],null);bearing=28;layer.render(gl);assert.equal(uniforms.get('rotation')[1],0);
+for(const angle of [14,20,65]) { pitch=angle;events.get('pitch')();layer.render(gl);assert.equal(layout.get('location-direction-arrow'),'none'); }
+pitch=0;events.get('pitch')();let count=draws.length;layer.render(gl);assert.equal(draws.length,count);assert.equal(layout.get('location-dot'),'visible');
+pitch=45;layer.onRemove(map,gl);layers.delete(layer.id);events.get('style.load')();assert.equal(removed,1);assert.equal(meshes.length,2);
+puck.update([44,NaN],0);layer.render(gl);assert.equal(draws.length,count);
+events.get('remove')();assert.equal(events.size,0);
+console.log('PASS immediate constant-size GPS mesh, camera anchoring, missing heading, style replacement and flat/tilted transitions');
 const weather=load('src/lib/navigation-weather.ts',{Intl},'drivingWeatherAdvisory,navigationClock,NAVIGATION_COPY,forecastWeekday');
 const now=Date.UTC(2026,9,16,12), normal={observedAt:now,stale:false,weatherCode:0,temperature:25,windGusts:0,hours:[]};
 for(const [code,kind] of [[65,'rain'],[75,'snow'],[95,'storm'],[67,'ice']])assert.equal(weather.drivingWeatherAdvisory({...normal,weatherCode:code},now).kind,kind);

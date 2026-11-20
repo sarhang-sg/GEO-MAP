@@ -8,16 +8,17 @@ export type AppearancePreferences = {
   quality: "auto" | "economy" | "medium" | "sharp";
   satelliteQuality: "auto" | "high" | "medium" | "low";
   satelliteContrast: "natural" | "clear";
+  gpsArrowSize: "small" | "standard" | "large";
   cameraZoom: "follow" | "manual";
   cameraBearing: "travel" | "north";
 };
 
 export const DEFAULT_APPEARANCE: AppearancePreferences = {
-  controls: "visible", font: "brand", size: "normal", accent: "original", motion: "auto", quality: "auto", satelliteQuality: "auto", satelliteContrast: "natural", cameraZoom: "follow", cameraBearing: "travel"
+  controls: "visible", font: "brand", size: "normal", accent: "original", motion: "auto", quality: "auto", satelliteQuality: "auto", satelliteContrast: "natural", cameraZoom: "follow", cameraBearing: "travel", gpsArrowSize: "standard"
 };
 export const APPEARANCE_VALUES = {
   controls: ["visible", "auto"], font: ["brand", "system"], size: ["normal", "large"],
-  accent: ["original", "blue", "teal", "amber", "purple", "pink", "red", "gold"], motion: ["auto", "reduced"], quality: ["auto", "economy", "medium", "sharp"], satelliteQuality: ["auto", "high", "medium", "low"], satelliteContrast: ["natural", "clear"], cameraZoom: ["follow", "manual"], cameraBearing: ["travel", "north"]
+  accent: ["original", "blue", "teal", "amber", "purple", "pink", "red", "gold"], motion: ["auto", "reduced"], quality: ["auto", "economy", "medium", "sharp"], satelliteQuality: ["auto", "high", "medium", "low"], satelliteContrast: ["natural", "clear"], cameraZoom: ["follow", "manual"], cameraBearing: ["travel", "north"], gpsArrowSize: ["small", "standard", "large"]
 };
 const STORAGE = "nav-kurd:appearance:v1";
 

@@ -122,6 +122,12 @@ def verify_theme_contrast(page) -> None:
             if(active && !filter.includes('invert(1)') || !active && mode==='light' && filter!=='brightness(0)')
               failures.push({accent,mode,active,filter});
           }
+          const presenceInk = mode === 'light' ? 'rgb(100, 48, 162)' : 'rgb(216, 187, 255)';
+          for (const sel of ['#mapOnlineIndicator svg path','#mapOnlineIndicatorCount']) {
+            const style=getComputedStyle(document.querySelector(sel));
+            if ((sel.endsWith('path') ? style.stroke : style.color) !== presenceInk)
+              failures.push({accent,mode,sel,stroke:style.stroke,color:style.color});
+          }
           if(mode==='light' && getComputedStyle(document.querySelector('#mapOnlineIndicator')).filter!=='none')
             failures.push({accent,mode,heart:'decorative filter'});
         }
@@ -134,6 +140,72 @@ def verify_theme_contrast(page) -> None:
     if results:
         raise AssertionError(f"Theme contrast regression: {results}")
     print("PASS actual weather dialog, action SVGs, heart, and text contrast across eight palettes × three modes")
+
+
+def verify_gps_mesh(browser) -> None:
+    context = browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,
+        permissions=["geolocation"],geolocation={"latitude":36.1911,"longitude":44.0092,"accuracy":6},
+        reduced_motion="reduce", service_workers="block")
+    page = context.new_page()
+    # Read the actual map framebuffer after the GPS draw. Chrome may discard it
+    # after composition, so a later read from the page can return transparent pixels.
+    page.add_init_script("""(() => {
+      localStorage.setItem('nav-kurd:tutorial:completed','1');
+      const glType=WebGL2RenderingContext.prototype, lookup=glType.getUniformLocation, draw=glType.drawArrays;
+      const targets=new WeakMap();
+      window.puckSample=null;
+      glType.getUniformLocation=function(program,name) {
+        const location=lookup.call(this,program,name);
+        if(name==='pixelScale' && location) targets.set(program,lookup.call(this,program,'anchor'));
+        return location;
+      };
+      glType.drawArrays=function(...args) {
+        const value=draw.apply(this,args);
+        if(window.puckSample!==null || args[0]!==this.TRIANGLES || args[2]!==30) return value;
+        const program=this.getParameter(this.CURRENT_PROGRAM), anchor=targets.get(program);
+        if(!anchor) return value;
+        const center=this.getUniform(program,anchor), w=this.drawingBufferWidth, h=this.drawingBufferHeight;
+        const dpr=w/this.canvas.clientWidth, size=Math.ceil(64*dpr);
+        const x=Math.round((1+center[0])*w/2-size/2), y=Math.round((1+center[1])*h/2-size/2);
+        if(x<0 || y<0 || x+size>w || y+size>h) return value;
+        const bytes=new Uint8Array(size*size*4), points=[];
+        this.readPixels(x,y,size,size,this.RGBA,this.UNSIGNED_BYTE,bytes);
+        for(let i=0;i<size*size;i++) {
+          const p=i*4;
+          if(Math.abs(bytes[p]-145)<6 && Math.abs(bytes[p+1]-120)<6 && bytes[p+2]>249 ||
+             Math.abs(bytes[p]-227)<6 && Math.abs(bytes[p+1]-240)<6 && bytes[p+2]>249) points.push(i);
+        }
+        if(points.length) {
+          const xs=points.map(i=>i%size), ys=points.map(i=>Math.floor(i/size));
+          window.puckSample={pixels:points.length/dpr**2,width:(Math.max(...xs)-Math.min(...xs)+1)/dpr,
+            height:(Math.max(...ys)-Math.min(...ys)+1)/dpr};
+        }
+        return value;
+      };
+    })()""")
+    try:
+        page.goto(BASE_URL,wait_until="domcontentloaded")
+        page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
+        page.locator('#locateButton').click()
+        page.locator('#locateButton[data-location-state="ready"]').wait_for(timeout=20000)
+        button=page.locator('#threeDButton')
+        if button.get_attribute('aria-pressed')!='true':
+            button.click()
+        for zoom_steps in [0,2,4]:
+            if zoom_steps:
+                page.evaluate("window.puckSample=null")
+                for _ in range(zoom_steps):
+                    page.locator('.maplibregl-ctrl-zoom-out').evaluate('button => button.click()')
+                    page.wait_for_timeout(350)
+            page.wait_for_function("window.puckSample !== null",timeout=20000)
+            sample=page.evaluate("window.puckSample")
+            assert 13 <= sample['width'] <= 26 and 5 <= sample['height'] <= 32 and sample['pixels'] > 40, sample
+        evidence=ROOT/'artifacts/ui'
+        evidence.mkdir(parents=True,exist_ok=True)
+        page.screenshot(path=str(evidence/'gps-overview.png'))
+        print('PASS rendered GPS mesh at street and overview zooms')
+    finally:
+        context.close()
 
 
 def verify_place_popup(browser) -> None:
@@ -155,10 +227,15 @@ def verify_place_popup(browser) -> None:
         page.goto(BASE_URL,wait_until='domcontentloaded')
         page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
         page.locator('#actionsToggleButton').click()
+        mode_button = page.locator('#mapModeCycleButton')
+        for _ in range(4):
+            mode = mode_button.get_attribute('data-map-mode')
+            assert mode_button.locator('[data-map-mode-icon]:visible').count() == 1
+            assert mode_button.locator('[data-map-mode-icon]:visible').get_attribute('data-map-mode-icon') == mode
+            mode_button.click()
         for _ in range(3):
             if page.locator('html').get_attribute('data-ui-mode')=='light': break
-            page.locator('#mapModeCycleButton').click()
-            page.wait_for_timeout(250)
+            mode_button.click()
         assert page.locator('html').get_attribute('data-ui-mode') == 'light'
         page.screenshot(path=str(evidence/'map-light.png'))
         page.locator('#weatherListButton').click()
@@ -183,7 +260,7 @@ def verify_place_popup(browser) -> None:
             overlaps=page.evaluate("""() => {
               const popup=document.querySelector('.nav-kurd-place-popup .maplibregl-popup-content').getBoundingClientRect();
               const errors=[];
-              if(popup.left<0 || popup.top<0 || popup.right>innerWidth+1 || popup.bottom>innerHeight+1) errors.push('viewport');
+              if(popup.left<0 || popup.top<0 || popup.right>innerWidth+1 || popup.bottom>innerHeight+1) errors.push({viewport:popup.toJSON()});
               for(const item of document.querySelectorAll('.topbar,.maplibregl-ctrl-top-left,.map-left-control-rail,.map-actions')) {
                 const s=getComputedStyle(item),r=item.getBoundingClientRect();
                 if(!r.width || !r.height || s.visibility==='hidden' || Number(s.opacity)===0) continue;
@@ -197,6 +274,13 @@ def verify_place_popup(browser) -> None:
         page.screenshot(path=str(evidence/'place-light.png'))
         popup.locator('.place-popup__share').click()
         page.locator('#locationShareDialog svg').wait_for(timeout=15000)
+        for width,height in [(320,568),(640,360),(390,844)]:
+            page.set_viewport_size({'width':width,'height':height})
+            box=page.locator('#locationShareDialog').bounding_box()
+            qr=page.locator('#locationShareDialog svg').bounding_box()
+            assert 140 <= qr['width'] <= 181 and abs(qr['width'] - qr['height']) < 1
+            assert box['width'] < width and box['height'] < height
+            assert page.locator('#locationShareDialog').evaluate('el=>el.scrollWidth<=el.clientWidth')
         shared_url=page.locator('#locationShareUrl').input_value()
         link = urlsplit(shared_url)
         params = parse_qs(link.query)
@@ -492,7 +576,7 @@ def main() -> int:
             settings.wait_for(state="visible")
             choices = {"font":"system", "size":"large", "accent":"gold", "motion":"reduced",
                        "quality":"medium", "satelliteQuality":"high", "satelliteContrast":"clear",
-                       "cameraZoom":"manual", "cameraBearing":"north", "controls":"auto"}
+                       "cameraZoom":"manual", "cameraBearing":"north", "gpsArrowSize":"small", "controls":"auto"}
             assert settings.locator("select").count() == len(choices)
             page.evaluate("window.addEventListener('nav-kurd:appearance-change',e=>window.appliedAppearance=e.detail)")
             for key, value in choices.items():
@@ -501,7 +585,7 @@ def main() -> int:
             assert settings.evaluate("e => getComputedStyle(e).backgroundColor") not in ("transparent", "rgba(0, 0, 0, 0)")
             settings.locator("[data-reset]").click()
             settings.locator("[data-close]").click()
-            print("PASS all ten appearance controls apply and persist through the settings dialog")
+            print("PASS all appearance controls apply and persist through the settings dialog")
             support_button = page.locator("#supportButton")
             support_button.wait_for(state="visible", timeout=10_000)
             support_button.click()
@@ -633,6 +717,7 @@ def main() -> int:
                 raise AssertionError("same-origin HTTP failures:\n" + "\n".join(local_failures))
             if fatal_errors:
                 raise AssertionError("uncaught browser errors:\n" + "\n".join(fatal_errors))
+            verify_gps_mesh(browser)
             verify_place_popup(browser)
             browser.close()
 

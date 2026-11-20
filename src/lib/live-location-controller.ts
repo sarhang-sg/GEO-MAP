@@ -1,4 +1,5 @@
 import { isCameraModeTransition } from "./map-camera-controller";
+import type { AppearancePreferences } from "./appearance-state";
 import { LocationVolume } from "./location-volume";
 import { MovementCourseTracker, trustedTravelCourse, followCameraBearing, type TravelMode } from "./navigation-tracking";
 import {localCoreEnabled} from "../android/local-provider";
@@ -123,6 +124,10 @@ export class LiveLocationController {
   private navigationActive = false;
   private keepFollowingAfterZoom = true;
   private northUp = false;
+  setArrowSize(size: AppearancePreferences["gpsArrowSize"]): void {
+    this.volume.setSize(size);
+  }
+
   setCameraPreferences(zoom: "follow" | "manual", bearing: "travel" | "north"): void {
     this.keepFollowingAfterZoom = zoom === "follow";
     this.northUp = bearing === "north";
@@ -516,9 +521,6 @@ export class LiveLocationController {
     // Snapshot the mutable coordinate once so TypeScript and the renderer use
     // the same confirmed GPS fix throughout this update cycle.
     const currentCoordinate = this.lastCoordinate;
-    const accuracyData = currentCoordinate
-      ? accuracyCircleFeature(currentCoordinate, this.lastAccuracy)
-      : emptyAccuracyCollection();
     const pointData = currentCoordinate
       ? locationPointFeature(
           currentCoordinate,
@@ -527,7 +529,8 @@ export class LiveLocationController {
         )
       : emptyLocationPointCollection();
     if (!liveLocationLayersReady(this.map)) this.lastRenderedAccuracyCoordinate = null;
-    ensureLiveLocationLayers(this.map, pointData, accuracyData);
+    ensureLiveLocationLayers(this.map, pointData);
+    this.volume.update(currentCoordinate, this.lastHeading);
     if (this.watchWanted && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) this.pulse?.start();
     const accuracySource = this.map.getSource(LOCATION_ACCURACY_SOURCE) as
       | maplibregl.GeoJSONSource
@@ -542,12 +545,15 @@ export class LiveLocationController {
       || Math.abs(this.lastRenderedAccuracyMeters - this.lastAccuracy) >= 0.5
     );
     if (shouldUpdateAccuracy && currentCoordinate) {
-      accuracySource?.setData(accuracyData);
+      accuracySource?.setData(accuracyCircleFeature(currentCoordinate, this.lastAccuracy));
       this.lastRenderedAccuracyCoordinate = [currentCoordinate[0], currentCoordinate[1]];
       this.lastRenderedAccuracyMeters = this.lastAccuracy;
     }
+    if (!currentCoordinate && this.lastRenderedAccuracyCoordinate) {
+      accuracySource?.setData(emptyAccuracyCollection());
+      this.lastRenderedAccuracyCoordinate = null;
+    }
     pointSource?.setData(pointData);
-    this.volume.update(currentCoordinate, this.lastHeading);
   }
 
   /** Re-assert the last confirmed GPS coordinate after a style/mode mutation. */

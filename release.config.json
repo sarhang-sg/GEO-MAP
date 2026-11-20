@@ -1,9 +1,9 @@
 {
   "appVersion": "11.0.0",
   "androidVersion": "11.0.0",
-  "androidVersionCode": 110001,
-  "releaseId": "2026-11-19-nav-kurd-v11.0.0-build.110001",
-  "releaseDate": "2026-11-19",
+  "androidVersionCode": 110002,
+  "releaseId": "2026-11-20-nav-kurd-v11.0.0-build.110002",
+  "releaseDate": "2026-11-20",
   "mapEdition": "2027",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "cacheSchemaVersion": 93,
@@ -28,7 +28,7 @@
   "offlineRuntimeBytes": 53011521,
   "releaseLabel": "NAV KURD 11.0.0",
   "uiTheme": "midnight-kurd",
-  "hardeningDate": "2026-11-19",
+  "hardeningDate": "2026-11-20",
   "hardeningRelease": "11.0.0",
-  "androidReleaseTag": "v11.0.0-build.110001"
+  "androidReleaseTag": "v11.0.0-build.110002"
 }

@@ -16,9 +16,11 @@ Kurdish-first navigation, local maps and live weather, with Arabic and English a
   <img src="docs/images/nav-kurd-screen-3.jpg" width="30%" alt="NAV KURD weather and controls" />
 </p>
 
-## Version 11.0.0 · build 110001
+## Version 11.0.0 · build 110002
 
-The light, dark and satellite interfaces share eight accent palettes. Active map controls use white icons; inactive controls use the surface's foreground color. The weather directory follows the selected palette while each city's live weather card keeps its own sky gradient. Place cards fit between map controls, and the enlarged 3D GPS arrow retains its size while zooming. Location sharing includes the same locally generated QR code on mobile and desktop. The original split launch animation is preserved. The public version remains 11.0.0; Android build 110001 updates the installed app without changing its signing identity.
+Street, night and satellite modes each show a single icon. The online heart and count share a purple foreground. The 3D GPS arrow follows each camera frame at a fixed screen size. Small, standard and large sizes are available under **Appearance & controls**. Place sharing uses a compact QR card with the full link and sharing actions.
+
+In Android weather details, open **Widget location** to pin the displayed city or choose **Automatic GPS**. When GPS is off the widget keeps the last device position. Opening another city or adding a favorite affects only the weather directory.
 
 ## Architecture
 
@@ -56,6 +58,6 @@ Developer: Sarhang Salah. Map data attribution and provider terms are displayed 
 
 ## Owner publication maintenance
 
-After the website selects Android build 110001, `bash TERMUX.sh finalize` verifies its receipt and saves the signed APK in Android Downloads. It retires superseded app releases, updates both GitHub About descriptions and removes old deployment records. It also checks the source version behind each recognized GitHub Actions artifact in both repositories before deleting pre-11 builds. Version 11 artifacts and open pull request heads are retained.
+After the website selects the signed Android build, `bash TERMUX.sh finalize` verifies its receipt and saves the signed APK in Android Downloads. It retires superseded app releases, updates both GitHub About descriptions and removes old deployment records. It also checks the source version behind each recognized GitHub Actions artifact in both repositories before deleting pre-11 builds. Version 11 artifacts and open pull request heads are retained.
 
 Install `python` and `gh` in Termux and sign in with `gh auth login`. Run `termux-setup-storage` if Termux needs access to Downloads. The Vercel token prompt uses hidden input. Deployment cleanup checks the `sarhang` team and `geo-map` project, and preserves production, active builds and other custom domains. Use `python3 tools/release/finalize-publication.py --check` to verify the public release separately.

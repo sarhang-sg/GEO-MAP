@@ -8,6 +8,7 @@ const visibleBounds = (element: Element): DOMRect | null => {
 /** Keep the geographic anchor, while fitting the card between map controls. */
 export function keepPlacePopupClear(map: MapLibreMap, popup: Popup): void {
   const element = popup.getElement(), container = map.getContainer();
+  const content = element.querySelector<HTMLElement>(".maplibregl-popup-content") ?? element;
   const shell = container.closest<HTMLElement>(".map-shell") ?? container;
   let frame = 0, disposed = false, dx = 0, dy = 0, boundsDirty = true;
   let safe = { left: 0, right: 0, top: 0, bottom: 0, surfaces: [] as DOMRect[] };
@@ -36,18 +37,22 @@ export function keepPlacePopupClear(map: MapLibreMap, popup: Popup): void {
     frame = 0;
     if (disposed || !element.isConnected) return;
     if (boundsDirty) measureControls();
-    // Read before writes. Cached control bounds avoid per-frame style/layout
-    // queries while dragging; ResizeObserver schedules a second size pass.
-    const card = element.getBoundingClientRect(), width = Math.max(140, Math.min(280, safe.right - safe.left));
-    const baseX = card.left - dx, baseY = card.top - dy;
+    // Changing width or maximum height also moves percentage-based popup anchors.
+    // Measure the visible card after sizing it, including MapLibre's current offset.
+    const set = (key: string, value: string): void => {
+      if (element.style.getPropertyValue(key) !== value) element.style.setProperty(key,value);
+    };
+    const width = Math.max(140, Math.min(280, safe.right - safe.left));
+    set("--place-popup-width", `${width}px`);
+    const baseX = content.getBoundingClientRect().left - dx;
     const x = Math.max(safe.left, Math.min(baseX, safe.right - width));
     let bottom = safe.bottom;
     for (const box of safe.surfaces) if (box.left < x + width && box.right > x) bottom = Math.min(bottom, box.top - 8);
-    const maxHeight = Math.max(68, Math.min(420, bottom - safe.top - 12));
-    const y = Math.max(safe.top, Math.min(baseY, bottom - Math.min(card.height, maxHeight + 12)));
-    dx = x - baseX; dy = y - baseY;
-    const set = (key: string, value: string): void => { if (element.style.getPropertyValue(key) !== value) element.style.setProperty(key, value); };
-    set("--place-popup-width", `${width}px`); set("--place-popup-max-height", `${maxHeight}px`);
+    const maxHeight = Math.max(68, Math.min(420, bottom - safe.top));
+    set("--place-popup-max-height", `${maxHeight}px`);
+    const card = content.getBoundingClientRect(), baseY = card.top - dy;
+    dx = x - (card.left - dx);
+    dy = Math.max(safe.top,Math.min(baseY,bottom-card.height)) - baseY;
     set("translate", `${dx}px ${dy}px`);
     element.dataset.shifted = String(Math.abs(dx) > 1 || Math.abs(dy) > 1);
   };
@@ -55,6 +60,13 @@ export function keepPlacePopupClear(map: MapLibreMap, popup: Popup): void {
   const invalidate = (): void => { boundsDirty = true; refresh(); };
   const cardObserver = new ResizeObserver(refresh), controlsObserver = new ResizeObserver(invalidate);
   cardObserver.observe(element); controlsObserver.observe(container);
+  let transform = element.style.transform;
+  const anchorObserver = new MutationObserver(() => {
+    if (element.style.transform === transform) return;
+    transform = element.style.transform;
+    refresh();
+  });
+  anchorObserver.observe(element,{attributes:true,attributeFilter:["style","class"]});
   const state = new MutationObserver(invalidate);
   state.observe(shell, { attributes: true, attributeFilter: ["class", "data-map-mode"] });
   for (const control of shell.querySelectorAll(controls)) {
@@ -66,7 +78,7 @@ export function keepPlacePopupClear(map: MapLibreMap, popup: Popup): void {
   window.visualViewport?.addEventListener("scroll", invalidate);
   window.addEventListener("nav-kurd:appearance-change", invalidate);
   const dispose = (): void => {
-    disposed = true; cancelAnimationFrame(frame); cardObserver.disconnect(); controlsObserver.disconnect(); state.disconnect();
+    disposed = true; cancelAnimationFrame(frame); cardObserver.disconnect(); anchorObserver.disconnect(); controlsObserver.disconnect(); state.disconnect();
     map.off("move", refresh); map.off("resize", invalidate); map.off("remove", dispose);
     window.visualViewport?.removeEventListener("resize", invalidate);
     window.visualViewport?.removeEventListener("scroll", invalidate);

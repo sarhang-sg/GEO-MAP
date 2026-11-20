@@ -199,7 +199,12 @@ function mapModeLabel(mode: MapMode, language = currentLanguage()): string {
 
 function syncMapModeControl(mode: MapMode): void {
   mapStyleButtons.forEach((button) => {
-    if (button.dataset.mapModeCycle === "true") button.dataset.mapMode = mode;
+    if (button.dataset.mapModeCycle === "true") {
+      button.dataset.mapMode = mode;
+      button.querySelectorAll("[data-map-mode-icon]").forEach(icon => {
+        icon.toggleAttribute("hidden", icon.getAttribute("data-map-mode-icon") !== mode);
+      });
+    }
     const active = button.dataset.mapModeCycle === "true" || button.dataset.mapMode === mode;
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));

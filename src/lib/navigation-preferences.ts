@@ -10,6 +10,12 @@ import { escapeText } from "./geo-format";
 import { mapNoticeStack, NoticeAutoHide } from "./map-notices";
 import { APPEARANCE_VALUES as VALID, DEFAULT_APPEARANCE, applyAppearance, readAppearance, saveAppearance, type AppearancePreferences as Preferences } from "./appearance-state";
 
+const GPS_ARROW_SIZE = {
+  ku: {label:"قەبارەی تیرەکەی GPS لە 3D",small:"بچووک",standard:"مامناوەند",large:"گەورە"},
+  ar: {label:"حجم سهم GPS ثلاثي الأبعاد",small:"صغير",standard:"متوسط",large:"كبير"},
+  en: {label:"3D GPS arrow size",small:"Small",standard:"Standard",large:"Large"}
+};
+
 const QUALITY_HELP = {
   ku: "بەرز: وردترین وێنە و 3D؛ داتا و بیرگەی زیاتر. مامناوەند: هاوسەنگ. نزم: سووک و خێرا. ئەوتۆ: بەپێی توانای ئامێر.",
   ar: "عالية: أدق الصور والعرض ثلاثي الأبعاد، مع استهلاك أكبر للبيانات والذاكرة. متوسطة: متوازنة. منخفضة: خفيفة وسريعة. تلقائي: حسب قدرة الجهاز.",
@@ -48,6 +54,7 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
     const ratio = renderingRatio(adaptive, container.clientWidth, container.clientHeight, budget);
     if(map.getPixelRatio()!==ratio) map.setPixelRatio(ratio);
     location.setCameraPreferences(preferences.cameraZoom, preferences.cameraBearing);
+    location.setArrowSize(preferences.gpsArrowSize);
     applySatelliteQuality(quality, preferences.satelliteContrast === "clear", satellite && preferences.satelliteQuality === "high");
     if (map.getMaxZoom() !== (satellite ? 21 : 18)) map.setMaxZoom(satellite ? 21 : 18);
     shell.dataset.qualityPreference=preferences.quality;
@@ -75,7 +82,8 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
     button.querySelector("span")!.textContent=c.title;
     dialog.dir=getLanguage()==="en"?"ltr":"rtl";
     const select=(key:keyof Preferences,label:string,entries:Array<[string,string]>)=>`<label><span>${escapeText(label)}</span><select id="appearance-${key}" name="appearance-${key}" data-preference="${key}">${entries.map(([value,text])=>`<option value="${value}" ${preferences[key]===value?"selected":""}>${escapeText(text)}</option>`).join("")}</select></label>`;
-    dialog.innerHTML=`<header><h2 id="navigationPreferencesTitle">${escapeText(c.title)}</h2><button type="button" data-close>${escapeText(c.close)}</button></header><div class="navigation-preferences__fields">${select("font",c.font,[["brand",c.brand],["system",c.system]])}${select("size",c.size,[["normal",c.normal],["large",c.large]])}${select("accent",c.color,[["original",c.original],["blue",c.blue],["teal",c.teal],["amber",c.amber],["purple",c.purple],["pink",c.pink],["red",c.red],["gold",({ku:"زێڕین",ar:"ذهبي",en:"Gold"})[getLanguage()]]])}${select("motion",c.motion,[["auto",c.auto],["reduced",c.reduced]])}${select("quality",c.quality,[["auto",c.auto],["sharp",q.high],["medium",q.medium],["economy",q.low]])}${select("satelliteQuality",q.satellite,[["auto",c.auto],["high",q.high],["medium",q.medium],["low",q.low]])}${select("satelliteContrast",q.contrast,[["natural",q.natural],["clear",q.clear]])}${select("cameraZoom",q.camera,[["follow",q.follow],["manual",q.manual]])}${select("cameraBearing",q.bearing,[["travel",q.travel],["north",q.north]])}${select("controls",c.controls,[["visible",c.visible],["auto",c.hideAuto]])}</div><p class="navigation-preferences__quality-hint">${escapeText(QUALITY_HELP[getLanguage()])}</p><button type="button" class="navigation-preferences__reset" data-reset>${escapeText(c.reset)}</button><details><summary>${escapeText(c.help)}</summary><p>${escapeText(c.mouse)}</p><dl>${["/ · Ctrl K","L","M","F","+ / −","?"].map((key,i)=>`<div><dt><kbd>${key}</kbd></dt><dd>${escapeText(c.keys[i])}</dd></div>`).join("")}</dl></details><p class="navigation-preferences__note">${escapeText(c.satellite)}</p>`;
+    const arrow = GPS_ARROW_SIZE[getLanguage()];
+    dialog.innerHTML=`<header><h2 id="navigationPreferencesTitle">${escapeText(c.title)}</h2><button type="button" data-close>${escapeText(c.close)}</button></header><div class="navigation-preferences__fields">${select("font",c.font,[["brand",c.brand],["system",c.system]])}${select("size",c.size,[["normal",c.normal],["large",c.large]])}${select("accent",c.color,[["original",c.original],["blue",c.blue],["teal",c.teal],["amber",c.amber],["purple",c.purple],["pink",c.pink],["red",c.red],["gold",({ku:"زێڕین",ar:"ذهبي",en:"Gold"})[getLanguage()]]])}${select("motion",c.motion,[["auto",c.auto],["reduced",c.reduced]])}${select("quality",c.quality,[["auto",c.auto],["sharp",q.high],["medium",q.medium],["economy",q.low]])}${select("satelliteQuality",q.satellite,[["auto",c.auto],["high",q.high],["medium",q.medium],["low",q.low]])}${select("satelliteContrast",q.contrast,[["natural",q.natural],["clear",q.clear]])}${select("gpsArrowSize",arrow.label,[["small",arrow.small],["standard",arrow.standard],["large",arrow.large]])}${select("cameraZoom",q.camera,[["follow",q.follow],["manual",q.manual]])}${select("cameraBearing",q.bearing,[["travel",q.travel],["north",q.north]])}${select("controls",c.controls,[["visible",c.visible],["auto",c.hideAuto]])}</div><p class="navigation-preferences__quality-hint">${escapeText(QUALITY_HELP[getLanguage()])}</p><button type="button" class="navigation-preferences__reset" data-reset>${escapeText(c.reset)}</button><details><summary>${escapeText(c.help)}</summary><p>${escapeText(c.mouse)}</p><dl>${["/ · Ctrl K","L","M","F","+ / −","?"].map((key,i)=>`<div><dt><kbd>${key}</kbd></dt><dd>${escapeText(c.keys[i])}</dd></div>`).join("")}</dl></details><p class="navigation-preferences__note">${escapeText(c.satellite)}</p>`;
     dialog.querySelector("[data-close]")?.addEventListener("click",()=>dialog.close());
     dialog.querySelector("[data-reset]")?.addEventListener("click",()=>{
       Object.assign(preferences,DEFAULT_APPEARANCE);saveAppearance(preferences);apply();render();

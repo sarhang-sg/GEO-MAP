@@ -71,7 +71,7 @@ export function shareMapLocation(options: ShareLocationOptions): Promise<boolean
   place.textContent = options.title?.trim() || "NAV KURD";
   const code = document.createElement("div"); code.className = "location-share-dialog__qr";
   code.textContent = copy.loading;
-  const hint = document.createElement("p"); hint.textContent = copy.scan;
+  const hint = document.createElement("p"); hint.className = "location-share-dialog__hint"; hint.textContent = copy.scan;
   const link = document.createElement("input"); link.id = "locationShareUrl"; link.name = "location-share-url";
   link.type = "url"; link.readOnly = true; link.dir = "ltr"; link.value = url;
   link.setAttribute("aria-label", copy.copy); link.addEventListener("focus", () => link.select());

@@ -22,7 +22,7 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
         <span>خەریکی ئامادەکردن</span>
       </div>
       <div id="mapOnlineIndicator" class="map-online-indicator" aria-live="polite" title="Online now">
-        <span class="map-online-indicator__dot" aria-hidden="true">${navIcon("07")}</span>
+        <span class="map-online-indicator__dot" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 6l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.3a5.5 5.5 0 0 0 0-7.8Z"/><path d="M3 11.5h4.3l1.7-2.8 3.4 6.3 2.3-4.2 1.1 1.4h4.5"/></svg></span>
         <span id="mapOnlineIndicatorLabel" class="visually-hidden">سەرھێڵ</span>
         <strong id="mapOnlineIndicatorCount">0</strong>
       </div>
@@ -47,9 +47,9 @@ export function renderAppShell(app: HTMLElement, brandLogoSrc: string, releaseVe
       <div class="style-picker" role="group" aria-label="Map style">
         <button id="mapModeCycleButton" class="style-choice is-active" type="button" data-map-mode="night" data-map-mode-cycle="true" aria-pressed="true">
           <span class="style-choice__icons" aria-hidden="true">
-            <svg data-map-mode-icon="street" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2m0 14.6v2.2M2.5 12h2.2m14.6 0h2.2M5.3 5.3l1.6 1.6m10.2 10.2 1.6 1.6m0-13.4-1.6 1.6M6.9 17.1l-1.6 1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg data-map-mode-icon="street" hidden viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2m0 14.6v2.2M2.5 12h2.2m14.6 0h2.2M5.3 5.3l1.6 1.6m10.2 10.2 1.6 1.6m0-13.4-1.6 1.6M6.9 17.1l-1.6 1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             <svg data-map-mode-icon="night" viewBox="0 0 24 24" fill="none"><path d="M19.6 15.1A8 8 0 0 1 8.9 4.4 8.1 8.1 0 1 0 19.6 15.1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-            <img data-map-mode-icon="satellite" src="${appUrl("assets/icons/nav-kurd/a2.svg")}" alt="" draggable="false" />
+            <img data-map-mode-icon="satellite" hidden src="${appUrl("assets/icons/nav-kurd/a2.svg")}" alt="" draggable="false" />
           </span>
           <span class="style-choice__label visually-hidden" data-map-mode-label>Night</span>
         </button>
