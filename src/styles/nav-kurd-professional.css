@@ -504,6 +504,7 @@ html[data-nav-kurd-theme="professional"] .style-choice__icons > :where(svg, img)
   transition: opacity .2s ease, transform .34s cubic-bezier(.2, .8, .2, 1);
 }
 
+#mapModeCycleButton [data-map-mode-icon][hidden] { display: none !important; }
 html[data-nav-kurd-theme="professional"] .style-choice[data-map-mode="street"] [data-map-mode-icon="street"],
 html[data-nav-kurd-theme="professional"] .style-choice[data-map-mode="night"] [data-map-mode-icon="night"],
 html[data-nav-kurd-theme="professional"] .style-choice[data-map-mode="satellite"] [data-map-mode-icon="satellite"] {

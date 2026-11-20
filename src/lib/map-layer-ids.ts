@@ -27,8 +27,7 @@ export const DYNAMIC_SOURCE_IDS = [
   "kri-locality-cluster-source",
   "atlas-places-source",
   "location-accuracy-source",
-  "location-point-source",
-  "location-3d-source"
+  "location-point-source"
 ] as const;
 
 export const ADMINISTRATIVE_LAYER_IDS = ["kri-districts", "kri-governorates"] as const;

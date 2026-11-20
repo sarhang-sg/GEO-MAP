@@ -122,6 +122,12 @@ def verify_theme_contrast(page) -> None:
             if(active && !filter.includes('invert(1)') || !active && mode==='light' && filter!=='brightness(0)')
               failures.push({accent,mode,active,filter});
           }
+          const presenceInk = mode === 'light' ? 'rgb(100, 48, 162)' : 'rgb(216, 187, 255)';
+          for (const sel of ['#mapOnlineIndicator svg path','#mapOnlineIndicatorCount']) {
+            const style=getComputedStyle(document.querySelector(sel));
+            if ((sel.endsWith('path') ? style.stroke : style.color) !== presenceInk)
+              failures.push({accent,mode,sel,stroke:style.stroke,color:style.color});
+          }
           if(mode==='light' && getComputedStyle(document.querySelector('#mapOnlineIndicator')).filter!=='none')
             failures.push({accent,mode,heart:'decorative filter'});
         }
@@ -155,10 +161,15 @@ def verify_place_popup(browser) -> None:
         page.goto(BASE_URL,wait_until='domcontentloaded')
         page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
         page.locator('#actionsToggleButton').click()
+        mode_button = page.locator('#mapModeCycleButton')
+        for _ in range(4):
+            mode = mode_button.get_attribute('data-map-mode')
+            assert mode_button.locator('[data-map-mode-icon]:visible').count() == 1
+            assert mode_button.locator('[data-map-mode-icon]:visible').get_attribute('data-map-mode-icon') == mode
+            mode_button.click()
         for _ in range(3):
             if page.locator('html').get_attribute('data-ui-mode')=='light': break
-            page.locator('#mapModeCycleButton').click()
-            page.wait_for_timeout(250)
+            mode_button.click()
         assert page.locator('html').get_attribute('data-ui-mode') == 'light'
         page.screenshot(path=str(evidence/'map-light.png'))
         page.locator('#weatherListButton').click()
@@ -197,6 +208,13 @@ def verify_place_popup(browser) -> None:
         page.screenshot(path=str(evidence/'place-light.png'))
         popup.locator('.place-popup__share').click()
         page.locator('#locationShareDialog svg').wait_for(timeout=15000)
+        for width,height in [(320,568),(640,360),(390,844)]:
+            page.set_viewport_size({'width':width,'height':height})
+            box=page.locator('#locationShareDialog').bounding_box()
+            qr=page.locator('#locationShareDialog svg').bounding_box()
+            assert 140 <= qr['width'] <= 181 and abs(qr['width'] - qr['height']) < 1
+            assert box['width'] < width and box['height'] < height
+            assert page.locator('#locationShareDialog').evaluate('el=>el.scrollWidth<=el.clientWidth')
         shared_url=page.locator('#locationShareUrl').input_value()
         link = urlsplit(shared_url)
         params = parse_qs(link.query)

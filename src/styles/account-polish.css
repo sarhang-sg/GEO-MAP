@@ -277,20 +277,28 @@ html[data-nav-kurd-theme][data-accent][data-ui-mode] .weather-picker-page .weath
 
 /* QR stays monochrome for scanners; the surrounding sheet follows the app. */
 html[data-nav-kurd-theme] .location-share-dialog {
-  width:min(360px,calc(100vw - 24px)); max-height:calc(100dvh - 24px);
-  box-sizing:border-box; margin:auto; padding:20px; border:0; border-radius:24px;
+  width:min(324px,calc(100vw - 32px)); max-height:calc(100dvh - 20px);
+  box-sizing:border-box; margin:auto; padding:16px; border:0; border-radius:20px;
   color:var(--nk-text); background:var(--nk-surface); overflow:auto;
   box-shadow:0 20px 64px rgb(0 0 0 / .24);
 }
 .location-share-dialog::backdrop { background:rgb(0 0 0 / .48); }
 .location-share-dialog header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .location-share-dialog h2 { margin:0; font-size:18px; }
-.location-share-dialog p { margin:12px 0; font-size:14px; color:var(--nk-text); }
+.location-share-dialog p { margin:6px 0; font-size:14px; color:var(--nk-text); }
 .location-share-dialog__place { font-weight:700; overflow-wrap:anywhere; }
-.location-share-dialog__qr { width:min(100%,264px); aspect-ratio:1; margin:16px auto; display:grid; place-items:center; }
-.location-share-dialog__qr svg { width:100%; height:100%; }
+.location-share-dialog__qr { width:min(100%,180px); aspect-ratio:1; margin:8px auto; display:grid; place-items:center; }
+.location-share-dialog__qr svg { display:block; width:100%; height:100%; }
+.location-share-dialog .location-share-dialog__hint { text-align:center; font-size:12px; margin:4px 0 10px; }
+.location-share-dialog [role="status"]:empty { display:none; }
+@media (max-height:480px) and (min-width:500px) {
+  html[data-nav-kurd-theme] .location-share-dialog[open] { width:min(490px,calc(100vw - 32px)); display:grid; grid-template-columns:148px 1fr; gap:6px 14px; align-items:center; }
+  .location-share-dialog header, .location-share-dialog [role="status"] { grid-column:1 / -1; }
+  .location-share-dialog__qr { grid-column:1; grid-row:2 / 6; margin:0; }
+  .location-share-dialog :is(.location-share-dialog__place,.location-share-dialog__hint,input,.location-share-dialog__actions) { grid-column:2; margin:0; }
+}
 .location-share-dialog input { box-sizing:border-box; width:100%; min-height:44px; padding:10px; border:0; border-radius:12px; background:var(--nk-elevated); color:var(--nk-text); font:inherit; font-size:13px; }
 .location-share-dialog button { border:0; border-radius:14px; min-height:44px; padding:10px 14px; background:var(--nk-elevated); color:var(--nk-text); font:inherit; font-weight:700; cursor:pointer; }
 .location-share-dialog__actions { display:flex; gap:8px; margin-top:12px; }
-.location-share-dialog__actions button { flex:1; }
+.location-share-dialog__actions button { flex:1; min-width:0; padding-inline:8px; overflow-wrap:anywhere; }
 .location-share-dialog .location-share-dialog__native { background:var(--nk-action-bg); color:#fff; }

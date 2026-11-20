@@ -1,97 +1,149 @@
-import type { FeatureCollection, Polygon } from "geojson";
-import type { GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
+import type { CustomLayerInterface, Map as MapLibreMap } from "maplibre-gl";
 import type { LngLatTuple } from "./location";
-
 import { isCameraTilted } from "./map-camera-controller";
 
 export const LOCATION_VOLUME_LAYER = "location-3d-volume";
-const SOURCE = "location-3d-source";
-type Volume = FeatureCollection<Polygon, { color: string; base: number; height: number }>;
+type Vertex = [number, number, number];
 
-/** Real extruded geometry in world coordinates, using the existing renderer. */
-export function locationVolume(coordinate: LngLatTuple, heading: number | null, zoom: number, referenceBearing = 0): Volume {
-  if (!coordinate.every(Number.isFinite) || Math.abs(coordinate[1]) > 85 || Math.abs(coordinate[0]) > 180 || !Number.isFinite(zoom) || !Number.isFinite(referenceBearing) || (heading !== null && !Number.isFinite(heading))) return { type: "FeatureCollection", features: [] };
-  // A 34px-wide, 47px-long arrow in CSS pixels, independent of zoom and DPR.
-  // Real extrusion supplies the depth; the flat camera retains its original dot.
-  const size = 28 * 40075016.686 * Math.cos(coordinate[1] * Math.PI / 180) / (512 * 2 ** zoom);
-  const angle = (heading ?? referenceBearing) * Math.PI / 180, sin = Math.sin(angle), cos = Math.cos(angle);
-  const latScale = 1 / 111195, lngScale = latScale / Math.max(.1, Math.cos(coordinate[1] * Math.PI / 180));
-  const feature = (shape: number[][], height: number, base: number, color: string): Volume["features"][number] => {
-    const points = shape.map(([x,y]) => [coordinate[0] + size * (x*cos + y*sin) * lngScale, coordinate[1] + size * (-x*sin + y*cos) * latScale]);
-    points.push([...points[0]]);
-    return { type: "Feature", properties: { color, height: size*height, base: size*base }, geometry: { type: "Polygon", coordinates: [points] } };
-  };
-  // Without a compass, point up the camera as a reference, not a measured heading.
-  return { type: "FeatureCollection", features: [feature([[0,1],[-.60,-.68],[0,-.34],[.60,-.68]],.25,0,"#443094"),
-    feature([[0,.94],[-.51,-.57],[0,-.27]],.34,.25,"#e5f5ff"), feature([[0,.94],[0,-.27],[.51,-.57]],.30,.25,"#8270ff")] };
+// A fixed mesh in CSS pixels. Only its anchor is in geographic coordinates.
+function arrowMesh(): Float32Array {
+  const footprint = [[0,16],[-11,-12],[0,-7],[11,-12]];
+  const base: Vertex[] = footprint.map(([x,y]) => [x,y,0]);
+  const roof: Vertex[] = footprint.map(([x,y],i) => [x,y,i === 2 ? 7 : 4]);
+  const data: number[] = [];
+  function triangle(a: Vertex, b: Vertex, c: Vertex, color: number[]): void {
+    for (const point of [a,b,c]) data.push(...point,...color);
+  }
+  for (let i=0; i<4; i++) {
+    const j=(i+1)%4;
+    const color = i<2 ? [.32,.23,.63] : [.27,.19,.54];
+    triangle(base[i],base[j],roof[j],color);
+    triangle(base[i],roof[j],roof[i],color);
+  }
+  triangle(roof[0],roof[1],roof[2],[.89,.94,1]);
+  triangle(roof[0],roof[2],roof[3],[.57,.47,1]);
+  return new Float32Array(data);
+}
+const mesh = arrowMesh();
+
+const vertexShader = `#version 300 es
+layout(location=0) in vec3 position;
+layout(location=1) in vec3 color;
+uniform vec2 anchor, pixelScale;
+uniform vec4 rotation;
+out vec3 ink;
+void main() {
+  vec2 ground = vec2(dot(position.xy, rotation.xy), dot(position.xy, vec2(-rotation.y,rotation.x)));
+  vec2 offset = vec2(ground.x, ground.y * rotation.z + position.z * rotation.w);
+  gl_Position = vec4(anchor + offset * pixelScale, 0.0, 1.0);
+  ink = color;
+}`;
+const fragmentShader = `#version 300 es
+precision mediump float;
+in vec3 ink;
+out vec4 pixel;
+void main() { pixel = vec4(ink, 1.0); }`;
+
+function createProgram(gl: WebGL2RenderingContext): WebGLProgram {
+  const program = gl.createProgram()!;
+  try {
+    for (const [type,source] of [[gl.VERTEX_SHADER,vertexShader],[gl.FRAGMENT_SHADER,fragmentShader]] as const) {
+      const shader = gl.createShader(type)!;
+      gl.shaderSource(shader,source);
+      gl.compileShader(shader);
+      gl.attachShader(program,shader);
+      gl.deleteShader(shader);
+    }
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program) || "GPS shader");
+    return program;
+  } catch (error) {
+    gl.deleteProgram(program);
+    throw error;
+  }
 }
 
 export class LocationVolume {
   private coordinate: LngLatTuple | null = null;
   private heading: number | null = null;
-  private signature = "";
-  private generation = 0;
-  private destroyed = false;
-  private active = false;
-  private writes: Promise<void> = Promise.resolve();
-  constructor(private readonly map: MapLibreMap) {
-    map.on("zoom", this.paint); map.on("rotate", this.paint);
-    map.on("pitch", this.paint); map.on("style.load", this.onStyleLoad); map.on("remove", this.destroy);
-  }
-  update(coordinate: LngLatTuple | null, heading: number | null): void { this.coordinate = coordinate; this.heading = heading; this.paint(); }
-  private visible(active: boolean): void {
-    this.active = active;
-    // Switch pucks atomically; opacity cross-fades briefly display both.
-    for (const [id, shown, properties] of [
-      [LOCATION_VOLUME_LAYER, active, ["fill-extrusion-opacity"]],
-      ["location-direction-arrow", !active, ["icon-opacity"]],
-      ["location-dot", !active, ["circle-opacity", "circle-stroke-opacity"]]
-    ] as const) {
-      if (!this.map.getLayer(id)) continue;
-      for (const property of properties) this.map.setPaintProperty(id, `${property}-transition`, { duration: 0, delay: 0 });
-      this.map.setLayoutProperty(id, "visibility", shown ? "visible" : "none");
-    }
-    if (this.map.getLayer(LOCATION_VOLUME_LAYER)) this.map.setPaintProperty(LOCATION_VOLUME_LAYER,"fill-extrusion-opacity",active ? 1 : 0);
-    if (this.map.getLayer("location-direction-arrow")) this.map.setPaintProperty("location-direction-arrow","icon-opacity",active ? 0 : .98);
-    if (this.map.getLayer("location-dot")) {
-      this.map.setPaintProperty("location-dot","circle-opacity",active ? 0 : 1);
-      this.map.setPaintProperty("location-dot","circle-stroke-opacity",active ? 0 : 1);
-    }
-  }
-  private onStyleLoad = (): void => { this.active = false; this.generation++; this.signature = ""; this.paint(); };
-  private destroy = (): void => {
-    this.destroyed = true; this.generation++;
-    this.map.off("zoom",this.paint); this.map.off("rotate",this.paint);
-    this.map.off("pitch",this.paint); this.map.off("style.load",this.onStyleLoad); this.map.off("remove",this.destroy);
-  };
-  private paint = (): void => {
-    if (this.destroyed || !this.map.getStyle()?.layers) return;
-    const zoom = this.map.getZoom();
-    if (!this.coordinate || !isCameraTilted(this.map.getPitch())) {
-      if (this.active || this.signature) {
-        this.generation++;
-        this.signature = "";
-        this.visible(false);
-      }
-      return;
-    }
-    if (!this.map.getSource(SOURCE)) {
-      this.map.addSource(SOURCE,{type:"geojson",data:{type:"FeatureCollection",features:[]},tolerance:0,maxzoom:22}); this.signature = "";
-    }
-    if (!this.map.getLayer(LOCATION_VOLUME_LAYER)) this.map.addLayer({id:LOCATION_VOLUME_LAYER,type:"fill-extrusion",source:SOURCE,
-      paint:{"fill-extrusion-color":["get","color"],"fill-extrusion-base":["get","base"],"fill-extrusion-height":["get","height"],"fill-extrusion-opacity":0,"fill-extrusion-vertical-gradient":true}});
-    const referenceBearing = this.heading === null ? this.map.getBearing() : 0;
-    const signature = `${this.coordinate}:${this.heading}:${zoom}:${referenceBearing}`;
-    if (signature === this.signature) return;
-    this.signature = signature;
-    const generation = ++this.generation, source = this.map.getSource(SOURCE) as GeoJSONSource;
-    const data = locationVolume(this.coordinate,this.heading,zoom,referenceBearing);
+  private program: WebGLProgram | null = null;
+  private buffer: WebGLBuffer | null = null;
+  private vao: WebGLVertexArrayObject | null = null;
+  private anchor: WebGLUniformLocation | null = null;
+  private scale: WebGLUniformLocation | null = null;
+  private rotation: WebGLUniformLocation | null = null;
 
-    this.writes = this.writes.catch(() => undefined).then(async () => {
-      if (this.destroyed || generation !== this.generation || source !== this.map.getSource(SOURCE)) return;
-      await source.setData(data);
-      if (this.destroyed || !this.coordinate || !isCameraTilted(this.map.getPitch()) || source !== this.map.getSource(SOURCE) || generation !== this.generation) return;
-      if (!this.active && data.features.length) this.visible(true);
-    }).catch(() => { if (!this.destroyed && generation === this.generation) { this.signature = ""; } });
+  constructor(private readonly map: MapLibreMap) {
+    map.on("pitch",this.sync);
+    map.on("style.load",this.sync);
+    map.on("remove",this.destroy);
+  }
+  update(coordinate: LngLatTuple | null, heading: number | null): void {
+    this.coordinate = coordinate && coordinate.every(Number.isFinite) && Math.abs(coordinate[0]) <= 180 && Math.abs(coordinate[1]) <= 85.1 ? coordinate : null;
+    this.heading = heading !== null && Number.isFinite(heading) ? heading : null;
+    this.sync();
+    if (this.coordinate && isCameraTilted(this.map.getPitch())) this.map.triggerRepaint();
+  }
+  private sync = (): void => {
+    const active = this.coordinate !== null && isCameraTilted(this.map.getPitch());
+    if (active && !this.map.getLayer(LOCATION_VOLUME_LAYER) && this.map.getStyle()?.layers) this.map.addLayer(this.layer);
+    for (const id of ["location-dot","location-direction-arrow","location-pulse"]) {
+      if (!this.map.getLayer(id)) continue;
+      const target = active ? "none" : "visible";
+      if ((this.map.getLayoutProperty(id,"visibility") ?? "visible") !== target) this.map.setLayoutProperty(id,"visibility",target);
+    }
+  };
+  private readonly layer: CustomLayerInterface = {
+    id: LOCATION_VOLUME_LAYER,
+    type: "custom",
+    renderingMode: "2d",
+    onAdd: (_,gl) => {
+      this.program = createProgram(gl);
+      this.anchor = gl.getUniformLocation(this.program,"anchor");
+      this.scale = gl.getUniformLocation(this.program,"pixelScale");
+      this.rotation = gl.getUniformLocation(this.program,"rotation");
+      this.vao = gl.createVertexArray();
+      this.buffer = gl.createBuffer();
+      gl.bindVertexArray(this.vao);
+      gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER,mesh,gl.STATIC_DRAW);
+      for (const index of [0,1]) {
+        gl.enableVertexAttribArray(index);
+        gl.vertexAttribPointer(index,3,gl.FLOAT,false,24,index*12);
+      }
+      gl.bindVertexArray(null);
+    },
+    render: gl => {
+      const pitch = this.map.getPitch();
+      if (!this.program || !this.coordinate || !isCameraTilted(pitch)) return;
+      const {x,y} = this.map.project(this.coordinate);
+      const {clientWidth:w,clientHeight:h} = this.map.getCanvas();
+      if (!w || !h || !Number.isFinite(x) || !Number.isFinite(y)) return;
+      const rad = Math.PI/180;
+      const angle = this.heading === null ? 0 : (this.heading - this.map.getBearing())*rad;
+      gl.useProgram(this.program);
+      gl.bindVertexArray(this.vao);
+      gl.disable(gl.DEPTH_TEST);
+      gl.depthMask(false);
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.BACK);
+      gl.frontFace(gl.CCW);
+      gl.uniform2f(this.anchor,2*x/w-1,1-2*y/h);
+      gl.uniform2f(this.scale,2/w,2/h);
+      gl.uniform4f(this.rotation,Math.cos(angle),Math.sin(angle),Math.cos(pitch*rad),Math.sin(pitch*rad));
+      gl.drawArrays(gl.TRIANGLES,0,mesh.length/6);
+      gl.bindVertexArray(null);
+    },
+    onRemove: (_,gl) => {
+      gl.deleteVertexArray(this.vao);
+      gl.deleteBuffer(this.buffer);
+      gl.deleteProgram(this.program);
+      this.program = null;
+    }
+  };
+  private destroy = (): void => {
+    this.map.off("pitch",this.sync);
+    this.map.off("style.load",this.sync);
+    this.map.off("remove",this.destroy);
   };
 }
