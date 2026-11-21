@@ -3,6 +3,7 @@ import { ATTRIBUTION_CHANGE_EVENT, normalizeAttributionLinks, updateAttributionF
 import { installMapTouchGuard } from "./lib/map-touch-guard";
 import { installRoadInformation } from "./lib/road-information-overlay";
 import { installKurdistanLiveTraffic } from "./lib/kurdistan-live-traffic";
+import { installKurdistanTransportHub } from "./lib/kurdistan-transport-hub";
 import { roadHazardDetails } from "./lib/road-hazards";
 import {NativeOfflineMapPack} from "./android/offline-map-pack";
 import {initializeLocalPreferences,flushNativePreferences} from "./android/ui-preferences";
@@ -254,6 +255,7 @@ class KurdistanAtlasController {
   private readonly coordinatePicker: MapCoordinatePicker;
   private readonly routing: RoutingController;
   private readonly traffic: ReturnType<typeof installKurdistanLiveTraffic>;
+  private readonly transportHub: ReturnType<typeof installKurdistanTransportHub>;
   private readonly poiIcons: PoiIconController;
   private readonly basePoiViewport: ViewportPoiSourceController;
   private readonly naturalPoiViewport: ViewportPoiSourceController;
@@ -369,6 +371,7 @@ class KurdistanAtlasController {
       getLanguage: () => this.language
     });
     installMapCameraController({ map: this.map, button: threeDButton });
+    this.transportHub = installKurdistanTransportHub({ map: this.map, mapShell, getLanguage: () => this.language });
     this.tutorialMapDemo = installTutorialMapDemoController({
       map: this.map,
       getMapMode: () => this.mapMode,
@@ -1116,6 +1119,7 @@ class KurdistanAtlasController {
     this.ownerPlaces.setLanguageStatus();
     this.routing.refreshLanguage();
     this.traffic.refreshLanguage();
+    this.transportHub.refreshLanguage();
     this.labelController.clear();
     this.clearTransientMapPopups();
     this.queueLabels();
