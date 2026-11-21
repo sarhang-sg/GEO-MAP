@@ -217,7 +217,10 @@ function flattenedRouteCoordinates(features: RouteFeatureCollection["features"])
     for (const coordinate of feature.geometry.coordinates) {
       if (!isLngLatTuple(coordinate)) continue;
       const next: LngLatTuple = [coordinate[0], coordinate[1]];
-      coordinates.push(next);
+      const previous = coordinates.at(-1);
+      // Adjacent traffic-color sections share a boundary point. Do not insert a
+      // zero-length segment that can confuse progress, turns and ETA.
+      if (!previous || distanceMeters(previous, next) > 0.05) coordinates.push(next);
     }
   }
   return coordinates;
