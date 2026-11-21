@@ -1,6 +1,6 @@
 {
   "schema": "NAV KURD published data integrity manifest v1",
-  "release": "2026-11-20-nav-kurd-v11.0.0-build.110002",
+  "release": "2026-11-20-nav-kurd-v11.0.0-build.110003",
   "appVersion": "11.0.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "generatedForDate": "2026-11-20",
@@ -13,7 +13,7 @@
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5300,
-      "sha256": "d61055f61e7cfae4dece669b2f6e2033ad796e78d72431bf4e5b7ed7efa8be1c"
+      "sha256": "004acc56e95f3b9c57c4a5b86ecf1849598f95befe20607049996f5e20b6b282"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -29,11 +29,11 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4232,
-      "sha256": "30e24026cc35a543f24d35d64f90afe8eb397cfd269fb43db7c9ad666132c4a9"
+      "sha256": "d9204e2c5af04513c0adb0ec2edebfe40ffb31f4ee0b9807d9c6f7ac48c31b1d"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6239,
-      "sha256": "f3666b0345cd37c6fd198d1462dcfd9e6befb72f29b05b4cd67fa1485deebc22"
+      "sha256": "5c8785c52eea002ed462dbe3ee8932ba7e3713b415b8ee87ae25afb8c2bfd61f"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
@@ -101,7 +101,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6262,
-      "sha256": "8822c22ed5d27ee6d68fc54b5378827f75723deddfc2eaa3788054f0c5be4cbb"
+      "sha256": "c1e6fbbc032e02beb584bcfe8a6ff56e7fe38193b6921b16bb3b9a059bebc073"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,

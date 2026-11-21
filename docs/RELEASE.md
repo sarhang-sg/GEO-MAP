@@ -1,6 +1,6 @@
 # NAV KURD 11.0.0
 
-The release identifier is `2026-11-20-nav-kurd-v11.0.0-build.110002`. The corresponding Android release uses version code `110002`.
+The release identifier is `2026-11-20-nav-kurd-v11.0.0-build.110003`. The corresponding Android release uses version code `110003`.
 
 ## Changes
 
@@ -8,7 +8,8 @@ The release identifier is `2026-11-20-nav-kurd-v11.0.0-build.110002`. The corres
 - All eight color schemes have distinct foreground and surface colors in both map modes. Search docks while a place card is open. Account tabs keep Kurdish labels on a single line. Navigation measurements use isolated left-to-right spans.
 - Location geometry stays extruded through zoom and pitch. Base satellite imagery remains under higher-resolution tiles during transitions.
 - The city directory contains 19 regional entries and supports worldwide search. City summaries share a batched request. Favorites persist locally and synchronize with the signed-in account under row-level security.
-- Android uses the same packaged presentation. Launcher widgets render from Flutter bitmaps and retain cached artwork during resizing. Widget weather opens directly. The signature split Loading animation remains the normal map launch.
+- The Android weather widget lays out its clock, current conditions, forecast and controls for the space the launcher provides. Narrow, tall cards stack the hourly forecast. Wide strips show hours alongside current conditions when space permits. Cached artwork is reused only for matching dimensions.
+- Tapping the widget forecast opens the weather screen directly. In-route notifications describe the detected weather hazard in the selected language.
 
 ## Verification and publication
 
