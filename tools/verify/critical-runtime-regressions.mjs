@@ -12,20 +12,114 @@ function load(path, globals, exports) {
   vm.runInContext(stripTypeScriptTypes(source,{mode:'transform'}).replace(/\bexport /g,'')+`\nglobalThis.api={${exports}}`,context);
   return context.api;
 }
-function gpsHarness() {
+const { isInsideKri } = load('src/lib/kri.ts', {}, 'isInsideKri');
+const coverage = JSON.parse(fs.readFileSync(new URL('public/data/kri/kri-boundary.geojson', root)));
+function gpsHarness(native = false) {
   const watches=[], moves=[], messages=[], timers=new Map(); let timerId=0;
-  const gps=load('src/lib/live-location-controller.ts',{localCoreEnabled:false,nativeBoolean:()=>false,saveNativeBoolean(){},distanceMeters:()=>0,Date,window:{performance:{now:()=>10000},setTimeout(fn){timers.set(++timerId,fn);return timerId;},clearTimeout(id){timers.delete(id);}},document:{dispatchEvent(){}},CustomEvent:class {constructor(type,options){this.type=type;this.detail=options.detail;}},localStorage:{setItem(){},removeItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable'}}},'LiveLocationController');
+  const gps=load('src/lib/live-location-controller.ts',{isInsideKri,localCoreEnabled:native,nativeBoolean:()=>false,saveNativeBoolean(){},distanceMeters:()=>0,Date,window:{performance:{now:()=>10000},setTimeout(fn){timers.set(++timerId,fn);return timerId;},clearTimeout(id){timers.delete(id);}},document:{dispatchEvent(){}},CustomEvent:class {constructor(type,options){this.type=type;this.detail=options.detail;}},localStorage:{setItem(){},removeItem(){}},UI:{en:{locating:'locating',locationReady:'ready',locationDenied:'denied',locationTimeout:'timeout',locationUnavailable:'unavailable',locationOutsideCoverage:'outside'}}},'LiveLocationController');
   const c=Object.create(gps.LiveLocationController.prototype);
   Object.assign(c,{watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,lastAccuracy:120,
     geolocation:{watchPosition(success,error,options){watches.push({success,error,options,active:true});return watches.length;},clearWatch(id){watches[id-1].active=false;},getCurrentPosition(){throw Error('Duplicate one-shot request');}},
     getLanguage:()=> 'en',setFollowEnabled(value){this.followEnabled=value;},setMessage(m){messages.push(m);},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,
-    trackingButtons:[],acquisitionTimer:null,locationState:'idle',movementCourse:{reset(){}},map:{getLayer:()=>null},
+    coverage,trackingButtons:[],acquisitionTimer:null,locationState:'idle',movementCourse:{reset(){}},map:{getLayer:()=>null},
     show(coordinate,_heading,accuracy){this.lastCoordinate=coordinate;this.lastAccuracy=accuracy;},recenter(){moves.push(this.lastCoordinate);}
   });
   const fix=(watch=watches.at(-1),age=0)=>watch.success({timestamp:Date.now()-age,coords:{longitude:44.2,latitude:36.2,accuracy:120,speed:0}});
   return {c,gps,watches,moves,messages,fix,timers};
 }
 
+{
+  const h = gpsHarness();
+  h.c.locate();
+  const sample = (longitude, latitude, accuracy = 12) => h.watches.at(-1).success({
+    timestamp: Date.now(), coords: {longitude, latitude, accuracy, speed: null}
+  });
+  for (const [lon,lat] of [[13.405,52.52], [41.5,33.6], [0,0]]) {
+    sample(lon,lat);
+    assert.equal(h.moves.length, 0, 'An accurate fix outside map coverage must not move the camera');
+    assert.equal(h.c.lastCoordinate, null, 'An unsupported location must not become a route origin');
+    assert.equal(h.c.state, 'outside-coverage');
+  }
+  sample(44.009414,36.191174);
+  assert.equal(h.c.state, 'ready');
+  assert.deepEqual(Array.from(h.c.lastCoordinate), [44.009414,36.191174]);
+  sample(13.405,52.52);
+  assert.equal(h.moves.length, 1);
+  assert.deepEqual(Array.from(h.c.lastCoordinate), [44.009414,36.191174]);
+  console.log('PASS real coverage polygon rejects foreign and masked in-bounds fixes and recovers on a valid fix');
+}
+{
+  const error = code => ({code, PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3});
+  for (const code of [2, 3]) {
+    const h = gpsHarness();
+    h.c.locate();
+    const deadline = h.c.acquisitionTimer;
+    const high = h.watches[0];
+    high.error(error(code));
+    h.c.locate();
+    assert.deepEqual(h.watches.map(w => [w.options.enableHighAccuracy,w.active]), [[true,false],[false,true]]);
+    assert.equal(h.c.acquisitionTimer, deadline);
+    h.fix(high);
+    high.error(error(1));
+    assert.equal(h.moves.length, 0);
+    assert.equal(h.c.state, 'acquiring');
+    h.fix();
+    assert.equal(h.moves.length, 1);
+    assert.equal(h.timers.size, 0);
+  }
+  for (const code of [1, 2, 3]) {
+    const h = gpsHarness();
+    h.c.locate();
+    const high = h.watches[0];
+    if (code !== 1) high.error(error(2));
+    h.watches.at(-1).error(error(code));
+    if (code === 3) [...h.timers.values()][0]();
+    assert.equal(h.watches.length, code === 1 ? 1 : 2);
+    assert.equal(h.c.state, ['','denied','unavailable','timed-out'][code]);
+    assert.equal(h.watches.some(w => w.active), false);
+    assert.equal(h.moves.length, 0);
+  }
+  console.log('PASS browser retries with one standard-accuracy watch, respects permission, cancellation and the original deadline');
+}
+{
+  const h = gpsHarness();
+  h.c.coverage = null;
+  h.c.locate();
+  h.fix();
+  assert.equal(h.c.lastCoordinate, null);
+  h.c.stopTracking();
+  h.c.setCoverage(coverage);
+  assert.equal(h.moves.length, 0);
+  h.c.coverage = null;
+  h.c.locate();
+  h.fix();
+  h.c.setCoverage(coverage);
+  assert.equal(h.moves.length, 1);
+  h.c.setCoverage(coverage);
+  assert.equal(h.moves.length, 1);
+  console.log('PASS early fix waits for map coverage and cancelled requests cannot replay on startup');
+}
+{
+  const h = gpsHarness();
+  h.c.locate();
+  const sample = (accuracy, longitude=44.2) => h.watches[0].success({
+    timestamp: Date.now(), coords: {longitude, latitude:36.2, accuracy, speed:null}
+  });
+  sample(800);
+  assert.equal(h.c.canPreviewArea, true);
+  assert.equal(h.c.lastCoordinate, null);
+  assert.equal(h.moves.length, 0);
+  sample(8_000);
+  assert.equal(h.c.canPreviewArea, false);
+  sample(800);
+  sample(800, 0);
+  assert.equal(h.c.canPreviewArea, false);
+  assert.equal(h.c.state, 'outside-coverage');
+  sample(18);
+  assert.equal(h.c.state, 'ready');
+  assert.equal(h.moves.length, 1);
+  console.log('PASS only a bounded in-coverage estimate offers a preview and never becomes a navigation point');
+}
 {
   const { RuntimeStateController } = load('src/lib/runtime-state.ts', { navigator: { onLine: true } }, 'RuntimeStateController');
   const attributes = new Map();
@@ -211,7 +305,7 @@ function gpsHarness() {
   console.log('PASS stalled native reads expire, cached statistics can retry, and cancelled viewport reads release their wait immediately');
 }
 for (const code of [1,2,3]) {
-  const h=gpsHarness();
+  const h=gpsHarness(true);
   for(let i=0;i<1000;i++)h.c.locate();
   assert.equal(h.watches.length,1);assert.equal(h.messages[0],'locating');
   h.watches[0].error({code,PERMISSION_DENIED:1,POSITION_UNAVAILABLE:2,TIMEOUT:3});
@@ -338,7 +432,7 @@ class Events {
 }
 
 {
- const h=gpsHarness();h.c.locate();const watch=h.watches[0];
+ const h=gpsHarness(true);h.c.locate();const watch=h.watches[0];
  watch.error({code:3,TIMEOUT:3});assert.equal(h.c.state,'acquiring');assert.equal(watch.active,true);
  for(const timestamp of [0,NaN,Date.now()-60000,Date.now()+10000])watch.success({timestamp,coords:{longitude:44.2,latitude:36.2,accuracy:12,speed:0}});
  assert.equal(h.moves.length,0);watch.success({timestamp:Date.now(),coords:{longitude:44.2,latitude:36.2,accuracy:12,speed:0}});

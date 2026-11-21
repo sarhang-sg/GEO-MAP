@@ -29,6 +29,7 @@ html[data-nav-kurd-theme][data-ui-mode] .map-notice-stack > :is(.location-recove
 .location-recovery button { color: var(--nk-text); border-color: var(--nk-border); }
 .location-recovery .location-recovery__close { padding: 0; width: 36px; min-height: 44px; border: 0; font-size: 23px; background: transparent; }
 .location-recovery .location-recovery__actions { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.5fr); gap: 6px; margin-top: 5px; }
+.location-recovery__actions [data-location-preview] { grid-column: 1 / -1; }
 .location-recovery__actions button { min-width: 0; min-height: 44px; padding: 5px 7px; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; border-radius: 10px; background: color-mix(in srgb,var(--nk-elevated) 58%,transparent); }
 .map-notice-stack .navigation-advisory { grid-template-columns: 24px minmax(0,1fr) 36px; gap: 8px; }
 .map-notice-stack .navigation-advisory__icon { width: 22px; height: 22px; margin-top: 6px; }

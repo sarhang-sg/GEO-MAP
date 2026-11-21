@@ -6,6 +6,8 @@ import {localCoreEnabled} from "../android/local-provider";
 import {nativeBoolean,saveNativeBoolean} from "../android/ui-preferences";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap } from "maplibre-gl";
+import type { FeatureCollection } from "geojson";
+import { isInsideKri } from "./kri";
 import { UI } from "./i18n";
 import {
   ensureLiveLocationLayers,
@@ -38,7 +40,7 @@ import {
   type GeolocationProvider,
 } from "./native-geolocation";
 
-export type LocationState = "idle" | "acquiring" | "approximate" | "ready" | "denied" | "unavailable" | "timed-out";
+export type LocationState = "idle" | "acquiring" | "approximate" | "ready" | "outside-coverage" | "denied" | "unavailable" | "timed-out";
 export const LOCATION_STATE_EVENT = "nav-kurd:location-state";
 export type LocationMessageKind = "normal" | "error" | "success";
 
@@ -75,6 +77,8 @@ const INITIAL_FIX_MAX_AGE_MS = 30_000;
 const INITIAL_FIX_MAX_ACCURACY_METERS = 100_000;
 const PRECISE_FIX_METERS = 50;
 const DISPLAY_FIX_MAX_ACCURACY_METERS = 250;
+// A neighbourhood estimate can be inspected explicitly, never used for navigation.
+const AREA_PREVIEW_MAX_METERS = 5_000;
 const ACQUISITION_DEADLINE_MS = 45_000;
 const TRACKING_PREFERENCE_KEY = "nav-kurd:gps:active";
 const STALE_WATCH_MS = 22_000;
@@ -114,6 +118,11 @@ export class LiveLocationController {
   private requestInFlight = false;
   private acquisitionTimer: number | null = null;
   private locationState: LocationState = "idle";
+  private coverage: FeatureCollection | null = null;
+  private deferredFix: (() => void) | null = null;
+  private estimate: {coordinate: LngLatTuple; accuracy: number; at: number; visible: boolean} | null = null;
+  private previousNoticeAccuracy = 0;
+  private previousPreviewAvailable = false;
   private lastPositionAt = 0;
   private orientationPermissionRequested = false;
   private lastAbsoluteOrientationAt = 0;
@@ -248,14 +257,63 @@ export class LiveLocationController {
 
   get state(): LocationState { return this.locationState; }
 
-  private publishState(state: LocationState): void {
-    const changed = this.locationState !== state;
+  setCoverage(boundary: FeatureCollection): void {
+    this.coverage = boundary;
+    const deferred = this.deferredFix;
+    this.deferredFix = null;
+    deferred?.();
+  }
+
+  covers(coordinate: LngLatTuple): boolean {
+    return this.coverage !== null && isInsideKri(coordinate, this.coverage);
+  }
+
+  get canPreviewArea(): boolean {
+    return Boolean(this.estimate && !this.estimate.visible && Date.now() - this.estimate.at <= INITIAL_FIX_MAX_AGE_MS);
+  }
+
+  previewArea(): void {
+    if (!this.estimate || !this.canPreviewArea) {
+      this.publishState(this.locationState, true);
+      return;
+    }
+    const { coordinate, accuracy } = this.estimate;
+    this.estimate.visible = true;
+    this.requestInFlight = false;
+    this.clearAcquisitionTimer();
+    this.updateLayers();
+    const bounds = maplibregl.LngLatBounds.fromLngLat(maplibregl.LngLat.convert(coordinate), accuracy);
+    this.map.stop();
+    this.map.off("moveend", this.finishCameraMove);
+    this.programmaticMove = true;
+    this.map.once("moveend", this.finishCameraMove);
+    this.map.fitBounds(bounds, { padding: 36, maxZoom: 14, duration: 350 });
+    if (!this.map.isMoving()) {
+      this.map.off("moveend", this.finishCameraMove);
+      this.finishCameraMove();
+    }
+    this.publishState("approximate");
+  }
+
+  private clearEstimate(): void {
+    const visible = this.estimate?.visible;
+    this.estimate = null;
+    if (visible) this.updateLayers();
+  }
+
+  private publishState(state: LocationState, force = false): void {
+    const preview = this.canPreviewArea;
+    const accuracy = Math.round(this.lastAccuracy);
+    const changed = force || this.locationState !== state || (state === "approximate" &&
+      (accuracy !== this.previousNoticeAccuracy || preview !== this.previousPreviewAvailable));
     this.locationState = state;
+    this.previousNoticeAccuracy = accuracy;
+    this.previousPreviewAvailable = preview;
     this.trackingButtons.forEach((button) => {
       button.dataset.locationState = state;
       button.setAttribute("aria-busy", state === "acquiring" ? "true" : "false");
     });
-    if (changed) document.dispatchEvent(new CustomEvent(LOCATION_STATE_EVENT, { detail: {state, accuracy:this.lastAccuracy} }));
+    if (changed) document.dispatchEvent(new CustomEvent(LOCATION_STATE_EVENT, { detail: {state, accuracy, preview} }));
   }
 
   private clearAcquisitionTimer(): void {
@@ -269,6 +327,8 @@ export class LiveLocationController {
     this.movementCourse?.reset();
     if (this.map.getLayer("location-pulse")) this.map.setPaintProperty("location-pulse", "circle-opacity", 0);
     this.watchGeneration += 1;
+    this.deferredFix = null;
+    this.clearEstimate();
     this.clearAcquisitionTimer();
     if (this.watchId !== null) this.geolocation?.clearWatch(this.watchId);
     this.watchId = null;
@@ -301,22 +361,29 @@ export class LiveLocationController {
     this.requestOrientationPermission();
     // A deliberate locate tap always recenters immediately when a confirmed fix
     // is already available. A parallel fresh request can refine it afterwards.
-    if (focus && this.lastCoordinate && this.lastAccuracy <= DISPLAY_FIX_MAX_ACCURACY_METERS && Date.now() - this.lastPositionAt <= INITIAL_FIX_MAX_AGE_MS) {
+    if (focus && this.watchId !== null && (this.locationState === "ready" || this.locationState === "approximate") &&
+        this.lastCoordinate && this.lastAccuracy <= DISPLAY_FIX_MAX_ACCURACY_METERS && Date.now() - this.lastAcceptedPositionTimestamp <= INITIAL_FIX_MAX_AGE_MS) {
       this.recenter(true);
       this.pendingCameraFocus = this.lastAccuracy > PRECISE_FIX_METERS;
       this.publishState(this.lastAccuracy > PRECISE_FIX_METERS ? "approximate" : "ready");
       if (this.lastAccuracy <= PRECISE_FIX_METERS) this.setMessage(UI[language].locationReady, "success");
     }
-    if (this.requestInFlight) return;
-    if (this.watchId !== null) return;
+    if (this.requestInFlight || this.watchId !== null) {
+      if (focus && (this.locationState === "outside-coverage" || this.locationState === "approximate")) {
+        this.publishState(this.locationState, true);
+        if (this.locationState === "outside-coverage") this.setMessage(UI[language].locationOutsideCoverage, "error");
+      }
+      return;
+    }
     this.requestInFlight = true;
     const requestGeneration = ++this.watchGeneration;
     this.publishState("acquiring");
     this.clearAcquisitionTimer();
     this.acquisitionTimer = window.setTimeout(() => {
       if (requestGeneration !== this.watchGeneration || !this.requestInFlight) return;
-      this.stopTracking("timed-out");
-      this.setMessage(UI[this.getLanguage()].locationTimeout, "error");
+      const outside = this.locationState === "outside-coverage";
+      this.stopTracking(outside ? "outside-coverage" : "timed-out");
+      this.setMessage(outside ? UI[this.getLanguage()].locationOutsideCoverage : UI[this.getLanguage()].locationTimeout, "error");
     }, ACQUISITION_DEADLINE_MS);
 
     const onSuccess = (position: GeolocationPosition): void => {
@@ -337,12 +404,31 @@ export class LiveLocationController {
         || Math.abs(position.coords.longitude) > 180 || Math.abs(position.coords.latitude) > 90
         || !Number.isFinite(rawAccuracy) || rawAccuracy > INITIAL_FIX_MAX_ACCURACY_METERS) return;
 
-      if (rawAccuracy <= 0 || sampleTimestamp > receivedAt + 5000 || sampleAgeMs > INITIAL_FIX_MAX_AGE_MS) return;
-      // A city-level desktop/network fix is uncertainty, not a usable GPS point.
-      // Keep listening without moving the camera to another city.
+      if (rawAccuracy <= 0 || sampleTimestamp > receivedAt + 5000 || sampleAgeMs > INITIAL_FIX_MAX_AGE_MS ||
+          sampleTimestamp < this.lastAcceptedPositionTimestamp) return;
+      const incomingCoordinate: LngLatTuple = [position.coords.longitude, position.coords.latitude];
+      if (!this.coverage) {
+        this.deferredFix = () => onSuccess(position);
+        return;
+      }
+      if (!this.covers(incomingCoordinate)) {
+        this.clearEstimate();
+        this.pendingJump = null;
+        if (this.locationState !== "outside-coverage") {
+          this.publishState("outside-coverage");
+          this.setMessage(UI[this.getLanguage()].locationOutsideCoverage, "error");
+        }
+        return;
+      }
       if (rawAccuracy > DISPLAY_FIX_MAX_ACCURACY_METERS) {
         if (!this.lastCoordinate) {
+          const visible = this.estimate?.visible === true;
           this.lastAccuracy = rawAccuracy;
+          if (localCoreEnabled || rawAccuracy > AREA_PREVIEW_MAX_METERS) this.clearEstimate();
+          else {
+            this.estimate = {coordinate: incomingCoordinate, accuracy: rawAccuracy, at: sampleTimestamp, visible};
+            if (visible) this.updateLayers();
+          }
           this.publishState("approximate");
         }
         return;
@@ -353,10 +439,6 @@ export class LiveLocationController {
       )
         return;
 
-      const incomingCoordinate: LngLatTuple = [
-        position.coords.longitude,
-        position.coords.latitude,
-      ];
       const elapsedMs =
         this.lastPositionAt > 0
           ? Math.max(0, receivedAt - this.lastPositionAt)
@@ -392,6 +474,12 @@ export class LiveLocationController {
         stabilized = { coordinate: blendCoordinate(pending.coordinate, incomingCoordinate, 0.65), rejectedJump: false };
       }
       this.pendingJump = null;
+      // Smoothing two valid points near a concave boundary can cross the mask.
+      if (stabilized.coordinate !== incomingCoordinate && !this.covers(stabilized.coordinate)) {
+        stabilized = {coordinate: incomingCoordinate, rejectedJump: false};
+      }
+      if (this.estimate?.visible && this.programmaticMove) this.map.stop();
+      this.clearEstimate();
 
       const previousRawCoordinate = this.lastRawCoordinate;
       const rawElapsedMs =
@@ -485,6 +573,10 @@ export class LiveLocationController {
         this.setMessage(UI[this.getLanguage()].locationDenied, "error");
         return;
       }
+      if (this.estimate?.visible) {
+        this.publishState("approximate");
+        return;
+      }
       // A failed initial request ends acquisition; an explicit tap can retry.
       // A running navigation watch retains its last valid position.
       if (!this.lastCoordinate) {
@@ -497,20 +589,32 @@ export class LiveLocationController {
     };
     // One provider watch supplies the initial cached/fresh fix and subsequent
     // updates. Repeated taps reuse it; no concurrent one-shot receivers exist.
-    const watchOptions: PositionOptions = {
-      enableHighAccuracy: true,
-      timeout: 10_000,
-      maximumAge: 2_000,
-    };
     this.watchStartedAt = Date.now();
-    if (this.watchId === null) {
+    let attempt = 0;
+    const watch = (highAccuracy: boolean): void => {
+      const number = ++attempt;
+      const active = () => requestGeneration === this.watchGeneration && number === attempt && this.watchWanted;
       try {
-        this.watchId = geolocation.watchPosition(onSuccess, onError, watchOptions);
+        const id = geolocation.watchPosition(position => { if (active()) onSuccess(position); }, error => {
+          if (!active()) return;
+          if (highAccuracy && !localCoreEnabled && this.requestInFlight &&
+              (error.code === error.POSITION_UNAVAILABLE || error.code === error.TIMEOUT)) {
+            if (this.watchId !== null) geolocation.clearWatch(this.watchId);
+            this.watchId = null;
+            this.deferredFix = null;
+            watch(false);
+            return;
+          }
+          onError(error);
+        }, {enableHighAccuracy: highAccuracy, timeout: 10_000, maximumAge: 2_000});
+        if (active()) this.watchId = id;
+        else geolocation.clearWatch(id);
       } catch {
         this.stopTracking("unavailable");
         this.setMessage(UI[this.getLanguage()].locationUnavailable, "error");
       }
-    }
+    };
+    watch(true);
   }
 
   updateLayers(): void {
@@ -538,18 +642,21 @@ export class LiveLocationController {
     const pointSource = this.map.getSource(LOCATION_POINT_SOURCE) as
       | maplibregl.GeoJSONSource
       | undefined;
-    const shouldUpdateAccuracy = currentCoordinate !== null && (
+    const area = this.estimate?.visible ? this.estimate : null;
+    const accuracyCenter = currentCoordinate ?? area?.coordinate ?? null;
+    const radius = currentCoordinate ? this.lastAccuracy : area?.accuracy ?? 0;
+    const shouldUpdateAccuracy = accuracyCenter !== null && (
       this.lastRenderedAccuracyCoordinate === null
-      || distanceMeters(this.lastRenderedAccuracyCoordinate, currentCoordinate) >= 0.75
+      || distanceMeters(this.lastRenderedAccuracyCoordinate, accuracyCenter) >= 0.75
       || !Number.isFinite(this.lastRenderedAccuracyMeters)
-      || Math.abs(this.lastRenderedAccuracyMeters - this.lastAccuracy) >= 0.5
+      || Math.abs(this.lastRenderedAccuracyMeters - radius) >= 0.5
     );
-    if (shouldUpdateAccuracy && currentCoordinate) {
-      accuracySource?.setData(accuracyCircleFeature(currentCoordinate, this.lastAccuracy));
-      this.lastRenderedAccuracyCoordinate = [currentCoordinate[0], currentCoordinate[1]];
-      this.lastRenderedAccuracyMeters = this.lastAccuracy;
+    if (shouldUpdateAccuracy && accuracyCenter) {
+      accuracySource?.setData(accuracyCircleFeature(accuracyCenter, radius));
+      this.lastRenderedAccuracyCoordinate = [...accuracyCenter];
+      this.lastRenderedAccuracyMeters = radius;
     }
-    if (!currentCoordinate && this.lastRenderedAccuracyCoordinate) {
+    if (!accuracyCenter && this.lastRenderedAccuracyCoordinate) {
       accuracySource?.setData(emptyAccuracyCollection());
       this.lastRenderedAccuracyCoordinate = null;
     }
@@ -610,12 +717,13 @@ export class LiveLocationController {
       if (!this.watchWanted || document.hidden || !geolocation) return;
       if (!force && this.requestInFlight) return;
       const now = Date.now();
+      const lastReading = this.lastPositionAt || (this.estimate?.visible ? this.estimate.at : 0);
       const waitingTooLong =
-        this.lastPositionAt === 0 &&
+        lastReading === 0 &&
         this.watchStartedAt > 0 &&
         now - this.watchStartedAt > STALE_WATCH_MS;
       const stale =
-        this.lastPositionAt > 0 && now - this.lastPositionAt > STALE_WATCH_MS;
+        lastReading > 0 && now - lastReading > STALE_WATCH_MS;
       if (!force && this.watchId !== null && !stale && !waitingTooLong) return;
       if (this.watchId !== null) geolocation.clearWatch(this.watchId);
       this.watchId = null;

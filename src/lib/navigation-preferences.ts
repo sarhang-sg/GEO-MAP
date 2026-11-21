@@ -5,6 +5,8 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import { LOCATION_STATE_EVENT, type LiveLocationController, type LocationState } from "./live-location-controller";
 import type { MapCoordinatePicker } from "./map-coordinate-picker";
 import type { Language } from "./types";
+import type { LngLatTuple } from "./location";
+import { UI } from "./i18n";
 import { setMeasuredText } from "./dom";
 import { escapeText } from "./geo-format";
 import { mapNoticeStack, NoticeAutoHide } from "./map-notices";
@@ -27,9 +29,9 @@ const QUALITY_COPY = {
   en: { satellite: "Satellite image quality", high: "High", medium: "Medium", low: "Low · faster", contrast: "Satellite contrast", natural: "Natural", clear: "Clearer", camera: "Follow after zoom", follow: "Keep following", manual: "Manual", bearing: "Camera direction", travel: "Direction of travel", north: "North up" }
 };
 const COPY = {
-  ku: { title:"ڕووکار و کۆنترۆڵ", controls:"دوگمەکانی نەخشە", visible:"هەمیشە دیار", hideAuto:"شاردنەوەی خۆکار", close:"داخستن", font:"فۆنت", brand:"فۆنتی NAV KURD", system:"فۆنتی ئامێر", size:"قەبارەی نووسین", normal:"ئاسایی", large:"گەورەتر", color:"ڕەنگی گشتی", original:"ڕەنگی سەرەتایی", reset:"گەڕاندنەوەی ڕووکار بۆ سەرەتا", blue:"شینی ئاوی", teal:"سەوز", purple:"مۆر", pink:"پەمەیی", red:"سوور", amber:"زەردی تۆخ", motion:"جووڵە", auto:"بەپێی ئامێر", reduced:"جووڵەی کەم", quality:"کوالێتی ڕەسمکردن", economy:"پاشەکەوتی وزە", sharp:"وردتر", help:"ڕێنمایی ماوس و کیبۆرد", mouse:"بۆ جووڵاندنی نەخشە ڕایبکێشە؛ بە سکڕۆڵ نزیک و دوور بکەوە. Ctrl و ڕاکێشان بۆ سووڕاندن؛ Shift و ڕاکێشان بۆ زوومی ناوچەیەک. کلیکی ڕاست یان دەستڕاگرتن بۆ هەڵبژاردنی مەبەست.", keys:["گەڕان","شوێنی من","گۆڕینی دۆخی نەخشە","نیشاندانی هەموو ناوچەکە","نزیک و دوورکردنەوە","ڕێنمایی"], acquiring:"گەڕان بۆ شوێنی تۆ…", approximate:"شوێنی نزیکەیی؛ وردی نزیکەی", denied:"دەستگەیشتن بە شوێن ڕەت کراوەتەوە. لە ڕێکخستن ڕێگەی پێ بدە.", unavailable:"شوێن نەدۆزرایەوە. GPS و ڕێگەپێدانی شوێن بپشکنە.", retry:"هەوڵدانەوە", stop:"ڕاگرتن", choose:"شوێن لە نەخشە هەڵبژێرە", chosen:"شوێنی هەڵبژێردراو؛ شوێنی پشتڕاستکراوەی GPS نییە.", satellite:"وێنەی سەتەلایت ڕاستەوخۆ نییە. بەروار و وردی بەپێی دابینکەر و ناوچە دەگۆڕێت؛ زوومی زیاتر وێنەی تازە دروست ناکات." },
-  ar: { title:"المظهر والتحكم", controls:"أزرار الخريطة", visible:"ظاهرة دائماً", hideAuto:"إخفاء تلقائي", close:"إغلاق", font:"الخط", brand:"خط NAV KURD", system:"خط الجهاز", size:"حجم النص", normal:"عادي", large:"أكبر", color:"ألوان الواجهة", original:"الألوان الأصلية", reset:"استعادة المظهر الافتراضي", blue:"أزرق", teal:"أخضر", purple:"بنفسجي", pink:"وردي", red:"أحمر", amber:"كهرماني", motion:"الحركة", auto:"تلقائي حسب الجهاز", reduced:"حركة أقل", quality:"جودة العرض", economy:"توفير الطاقة", sharp:"تفاصيل أعلى", help:"الماوس ولوحة المفاتيح", mouse:"اسحب لتحريك الخريطة، ومرّر للتكبير والتصغير. Ctrl مع السحب للتدوير؛ Shift مع السحب لتكبير منطقة. انقر بزر الماوس الأيمن أو اضغط مطولاً لاختيار الوجهة.", keys:["بحث","موقعي","تبديل نمط الخريطة","عرض المنطقة","تكبير وتصغير","مساعدة"], acquiring:"جارٍ تحديد موقعك…", approximate:"موقع تقريبي؛ دقة نحو", denied:"تم رفض إذن الموقع. اسمح به من الإعدادات.", unavailable:"تعذر تحديد الموقع. تحقق من GPS وإذن الموقع.", retry:"حاول مجدداً", stop:"إيقاف", choose:"اختر موقعاً على الخريطة", chosen:"موقع اخترته يدوياً، وليس موقع GPS مؤكداً.", satellite:"صور الأقمار الصناعية ليست مباشرة. تاريخها ودقتها يختلفان حسب المزود والمنطقة؛ التكبير لا يضيف صوراً أحدث." },
-  en: { title:"Appearance & controls", controls:"Map controls", visible:"Always visible", hideAuto:"Auto-hide", close:"Close", font:"Font", brand:"NAV KURD font", system:"Device font", size:"Text size", normal:"Standard", large:"Larger", color:"Interface colors", original:"Original colors", reset:"Reset appearance", blue:"Blue", teal:"Green", purple:"Purple", pink:"Pink", red:"Red", amber:"Amber", motion:"Motion", auto:"Device adaptive", reduced:"Reduced motion", quality:"Rendering quality", economy:"Battery saver", sharp:"Sharper", help:"Mouse & keyboard", mouse:"Drag to pan; scroll to zoom. Ctrl + drag to rotate; Shift + drag to zoom to an area. Right-click or long-press to choose a destination.", keys:["Search","My location","Map mode","Fit region","Zoom","Help"], acquiring:"Finding your location…", approximate:"Approximate location; accuracy about", denied:"Location permission was denied. Allow it in settings.", unavailable:"Location unavailable. Check GPS and location permission.", retry:"Retry", stop:"Stop", choose:"Choose on map", chosen:"Manually selected point; not a verified GPS position.", satellite:"Satellite imagery is not live. Capture date and resolution vary by provider and area; zooming cannot create newer imagery." }
+  ku: { title:"ڕووکار و کۆنترۆڵ", controls:"دوگمەکانی نەخشە", visible:"هەمیشە دیار", hideAuto:"شاردنەوەی خۆکار", close:"داخستن", font:"فۆنت", brand:"فۆنتی NAV KURD", system:"فۆنتی ئامێر", size:"قەبارەی نووسین", normal:"ئاسایی", large:"گەورەتر", color:"ڕەنگی گشتی", original:"ڕەنگی سەرەتایی", reset:"گەڕاندنەوەی ڕووکار بۆ سەرەتا", blue:"شینی ئاوی", teal:"سەوز", purple:"مۆر", pink:"پەمەیی", red:"سوور", amber:"زەردی تۆخ", motion:"جووڵە", auto:"بەپێی ئامێر", reduced:"جووڵەی کەم", quality:"کوالێتی ڕەسمکردن", economy:"پاشەکەوتی وزە", sharp:"وردتر", help:"ڕێنمایی ماوس و کیبۆرد", mouse:"بۆ جووڵاندنی نەخشە ڕایبکێشە؛ بە سکڕۆڵ نزیک و دوور بکەوە. Ctrl و ڕاکێشان بۆ سووڕاندن؛ Shift و ڕاکێشان بۆ زوومی ناوچەیەک. کلیکی ڕاست یان دەستڕاگرتن بۆ هەڵبژاردنی مەبەست.", keys:["گەڕان","شوێنی من","گۆڕینی دۆخی نەخشە","نیشاندانی هەموو ناوچەکە","نزیک و دوورکردنەوە","ڕێنمایی"], acquiring:"گەڕان بۆ شوێنی تۆ…", approximate:"شوێنی نزیکەیی؛ وردی نزیکەی", retry:"هەوڵدانەوە", stop:"ڕاگرتن", choose:"شوێن لە نەخشە هەڵبژێرە", chosen:"شوێنی هەڵبژێردراو؛ شوێنی پشتڕاستکراوەی GPS نییە.", satellite:"وێنەی سەتەلایت ڕاستەوخۆ نییە. بەروار و وردی بەپێی دابینکەر و ناوچە دەگۆڕێت؛ زوومی زیاتر وێنەی تازە دروست ناکات." },
+  ar: { title:"المظهر والتحكم", controls:"أزرار الخريطة", visible:"ظاهرة دائماً", hideAuto:"إخفاء تلقائي", close:"إغلاق", font:"الخط", brand:"خط NAV KURD", system:"خط الجهاز", size:"حجم النص", normal:"عادي", large:"أكبر", color:"ألوان الواجهة", original:"الألوان الأصلية", reset:"استعادة المظهر الافتراضي", blue:"أزرق", teal:"أخضر", purple:"بنفسجي", pink:"وردي", red:"أحمر", amber:"كهرماني", motion:"الحركة", auto:"تلقائي حسب الجهاز", reduced:"حركة أقل", quality:"جودة العرض", economy:"توفير الطاقة", sharp:"تفاصيل أعلى", help:"الماوس ولوحة المفاتيح", mouse:"اسحب لتحريك الخريطة، ومرّر للتكبير والتصغير. Ctrl مع السحب للتدوير؛ Shift مع السحب لتكبير منطقة. انقر بزر الماوس الأيمن أو اضغط مطولاً لاختيار الوجهة.", keys:["بحث","موقعي","تبديل نمط الخريطة","عرض المنطقة","تكبير وتصغير","مساعدة"], acquiring:"جارٍ تحديد موقعك…", approximate:"موقع تقريبي؛ دقة نحو", retry:"حاول مجدداً", stop:"إيقاف", choose:"اختر موقعاً على الخريطة", chosen:"موقع اخترته يدوياً، وليس موقع GPS مؤكداً.", satellite:"صور الأقمار الصناعية ليست مباشرة. تاريخها ودقتها يختلفان حسب المزود والمنطقة؛ التكبير لا يضيف صوراً أحدث." },
+  en: { title:"Appearance & controls", controls:"Map controls", visible:"Always visible", hideAuto:"Auto-hide", close:"Close", font:"Font", brand:"NAV KURD font", system:"Device font", size:"Text size", normal:"Standard", large:"Larger", color:"Interface colors", original:"Original colors", reset:"Reset appearance", blue:"Blue", teal:"Green", purple:"Purple", pink:"Pink", red:"Red", amber:"Amber", motion:"Motion", auto:"Device adaptive", reduced:"Reduced motion", quality:"Rendering quality", economy:"Battery saver", sharp:"Sharper", help:"Mouse & keyboard", mouse:"Drag to pan; scroll to zoom. Ctrl + drag to rotate; Shift + drag to zoom to an area. Right-click or long-press to choose a destination.", keys:["Search","My location","Map mode","Fit region","Zoom","Help"], acquiring:"Finding your location…", approximate:"Approximate location; accuracy about", retry:"Retry", stop:"Stop", choose:"Choose on map", chosen:"Manually selected point; not a verified GPS position.", satellite:"Satellite imagery is not live. Capture date and resolution vary by provider and area; zooming cannot create newer imagery." }
 };
 
 export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTMLElement; location:LiveLocationController; picker:MapCoordinatePicker; getLanguage:()=>Language; setMessage:(text:string)=>void}):void {
@@ -111,12 +113,25 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
   let state:LocationState="idle",accuracy=0,dismissed=false;
   const dismissal=new NoticeAutoHide(status,()=>{dismissed=true;status.hidden=true;});
   const renderStatus=(restart=false):void=>{
-    const c=COPY[getLanguage()];status.hidden=dismissed||state==="idle"||state==="ready";
+    const language=getLanguage(), c=COPY[language], ui=UI[language];
     status.dir=getLanguage()==="en"?"ltr":"rtl";status.dataset.state=state;
-    if(status.hidden){dismissal.clear();return;}
-    const text=state==="acquiring"?c.acquiring:state==="approximate"?`${c.approximate} ${Math.round(accuracy).toLocaleString()} m`:state==="denied"?c.denied:c.unavailable;
+    if(dismissed||state==="idle"||state==="ready"){status.hidden=true;dismissal.clear();return;}
+    status.hidden=false;
+    const formatter = new Intl.NumberFormat(language === "ku" ? "ckb" : language, {maximumFractionDigits: 1, useGrouping: false});
+    const radius = accuracy >= 1000 ? `${formatter.format(accuracy / 1000)} km` : `${formatter.format(accuracy)} m`;
+    const text = {
+      acquiring: c.acquiring, approximate: `${c.approximate} ${radius}`, "outside-coverage": ui.locationOutsideCoverage,
+      denied: ui.locationDenied, "timed-out": ui.locationTimeout, unavailable: ui.locationUnavailable
+    }[state];
     status.innerHTML=`<div class="location-recovery__body"><span class="location-recovery__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><p></p><button type="button" class="location-recovery__close" data-location-dismiss aria-label="${escapeText(c.close)}">×</button></div><div class="location-recovery__actions"><button type="button" ${state==="acquiring"?"data-location-stop":"data-location-retry"}>${escapeText(state==="acquiring"?c.stop:c.retry)}</button><button type="button" data-location-pick>${escapeText(c.choose)}</button></div>`;
     setMeasuredText(status.querySelector("p")!, text);
+    if (state === "approximate" && location.canPreviewArea) {
+      const preview = document.createElement("button");
+      preview.type = "button";
+      preview.dataset.locationPreview = "";
+      preview.textContent = ui.locationPreviewArea;
+      status.querySelector(".location-recovery__actions")!.prepend(preview);
+    }
     if(restart){dismissal.clear();if(state!=="acquiring")dismissal.start(state==="approximate"?12_000:24_000);}
   };
   document.addEventListener(LOCATION_STATE_EVENT,event=>{
@@ -126,11 +141,21 @@ export function installNavigationPreferences(options:{map:MapLibreMap; shell:HTM
   status.addEventListener("click",event=>{
     const b=(event.target as Element).closest("button");if(!b)return;
     if(b.hasAttribute("data-location-dismiss")){dismissed=true;dismissal.clear();status.hidden=true;document.getElementById("locateButton")?.focus({preventScroll:true});}
+    else if(b.hasAttribute("data-location-preview"))location.previewArea();
     else if(b.hasAttribute("data-location-retry")){location.stopTracking();location.locate();}
     else if(b.hasAttribute("data-location-stop"))location.stopTracking();
     else if(b.hasAttribute("data-location-pick")){
       location.stopTracking();
-      picker.start(coordinate=>{map.easeTo({center:coordinate,zoom:Math.max(14,map.getZoom()),duration:350});setMessage(COPY[getLanguage()].chosen);},{body:COPY[getLanguage()].chosen});
+      const prompt = {body:UI[getLanguage()].locationChoosePoint};
+      const choosePoint = (coordinate: LngLatTuple): void => {
+        if (!location.covers(coordinate)) {
+          picker.start(choosePoint, prompt);
+          return;
+        }
+        map.easeTo({center:coordinate,zoom:Math.max(14,map.getZoom()),duration:350});
+        setMessage(COPY[getLanguage()].chosen);
+      };
+      picker.start(choosePoint, prompt);
     }
   });
   map.scrollZoom.setWheelZoomRate(1/550);

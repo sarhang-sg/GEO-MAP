@@ -34,9 +34,12 @@ assert.deepEqual(search.phoneticSearchGroups('Sarhang'), originalKeys, 'Cached k
 for (let n = 0; n < 5000; n++) search.phoneticSearchGroups(`unique${n}`);
 assert.deepEqual(search.phoneticSearchGroups('Sarhang'), originalKeys, 'Eviction preserves matching semantics');
 console.log('PASS bounded phonetic cache, caller isolation and eviction');
+const { isInsideKri } = load('src/lib/kri.ts', {}, 'isInsideKri');
+const coverage = JSON.parse(fs.readFileSync(new URL('public/data/kri/kri-boundary.geojson', root)));
 for (const native of [false,true]) {
   let callback, calls=0, oneShots=0, centers=0;
   const gps = load('src/lib/live-location-controller.ts', {
+    isInsideKri,
     distanceMeters:()=>0,
     localCoreEnabled:native,
     nativeBoolean:()=>false,
@@ -50,7 +53,7 @@ for (const native of [false,true]) {
   const controller = Object.create(gps.LiveLocationController.prototype);
   Object.assign(controller, {geolocation:{watchPosition(fn){calls++;callback=fn;return 1;},getCurrentPosition(){oneShots++;},clearWatch(){}},getLanguage:()=> 'en',watchGeneration:0,watchId:null,requestInFlight:false,lastCoordinate:null,lastPositionAt:0,lastAcceptedPositionTimestamp:0,lastHeading:null,lastHeadingConfidence:0,lastRawCoordinate:null,lastRawPositionAt:0,locationReadyAnnounced:false,
     setFollowEnabled(value){this.followEnabled=value;},setMessage(){},requestOrientationPermission(){},shouldRejectDegradedFix:()=>false,stableCoordinate:coordinate=>({coordinate,rejectedJump:false}),resolveCourseHeading:()=>null,courseHeadingLocked:()=>false,
-    trackingButtons:[],acquisitionTimer:null,locationState:'idle',
+    coverage,trackingButtons:[],acquisitionTimer:null,locationState:'idle',
     show(coordinate,_heading,accuracy){this.lastCoordinate=coordinate;this.lastAccuracy=accuracy;},recenter(){if(this.followEnabled) centers++;}
   });
   controller.locate(); controller.locate();
