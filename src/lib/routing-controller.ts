@@ -13,6 +13,7 @@ import { measureRouteProgress, routeCoordinateAt, routeSlice, RerouteConfirmatio
 export { measureRouteProgress } from "./route-progress";
 import {routeManeuvers,nextManeuver,type ProviderStep,type Maneuver} from "./route-maneuvers";
 import { RouteGuidanceOverlay } from "./route-guidance-overlay";
+import { SmartJunctionInset } from "./smart-junction-inset";
 import { RouteAlertOverlay } from "./route-alert-overlay";
 import type { RoadAlertPoint } from "./route-alerts";
 import * as maplibregl from "maplibre-gl";
@@ -236,6 +237,7 @@ export class RoutingController {
   private maneuvers: Maneuver[] = [];
   private readonly rerouteConfirmation = new RerouteConfirmation();
   private readonly guidance: RouteGuidanceOverlay;
+  private readonly junction: SmartJunctionInset;
   private readonly alerts: RouteAlertOverlay;
   private readonly getRoadAlerts: () => RoadAlertPoint[];
   private progressMeters = 0;
@@ -337,6 +339,8 @@ export class RoutingController {
     this.navigationHudDuration = this.navigationHud.querySelector<HTMLElement>("[data-navigation-duration]")!;
     this.navigationHudDestination = this.navigationHud.querySelector<HTMLElement>("[data-navigation-destination]")!;
     this.mapShell.append(this.panel, this.destinationPrompt, this.navigationHud);
+    this.junction = new SmartJunctionInset(this.mapShell);
+    this.map.on("remove", () => this.junction.destroy());
     this.installLongPressDestination();
     this.destinationPrompt.querySelectorAll<HTMLButtonElement>("[data-route-prompt-action]").forEach((button) => {
       button.addEventListener("click", (event) => {
@@ -698,7 +702,7 @@ export class RoutingController {
     this.maneuvers = [];
     this.rerouteConfirmation.reset();
     this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
-    this.guidance.clear();
+    this.guidance.clear(); this.junction.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -775,7 +779,7 @@ export class RoutingController {
     this.maneuvers = [];
     this.rerouteConfirmation.reset();
     this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
-    this.guidance.clear();
+    this.guidance.clear(); this.junction.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -861,7 +865,7 @@ export class RoutingController {
     this.maneuvers = [];
     this.rerouteConfirmation.reset();
     this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
-    this.guidance.clear();
+    this.guidance.clear(); this.junction.clear();
     this.routeData = emptyRoute();
     (this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined)?.setData(this.routeData);
     this.stopRouteAnimation();
@@ -898,7 +902,7 @@ export class RoutingController {
     this.maneuvers = [];
     this.rerouteConfirmation.reset();
     this.progressMeters = 0; this.progressAt = 0; this.lastRouteLineProgress = -1;
-    this.guidance.clear();
+    this.guidance.clear(); this.junction.clear();
     this.navigationStartedAt = 0;
     this.navigationPlannedDistance = 0;
     this.navigationPlannedDuration = 0;
@@ -1256,7 +1260,7 @@ export class RoutingController {
   private clearRouteLineOnly(): void {
     this.routeData = emptyRoute();
     this.alerts.clear();
-    this.guidance.clear();
+    this.guidance.clear(); this.junction.clear();
     const routeSource = this.map.getSource(ROUTE_SOURCE) as maplibregl.GeoJSONSource | undefined;
     routeSource?.setData(this.routeData);
     this.stopRouteAnimation();
@@ -1337,6 +1341,7 @@ export class RoutingController {
     if (!this.navigating || !this.destination) {
       this.navigationHud.hidden = true;
       this.guidance.hideLabel();
+      this.junction.hide();
       return;
     }
     const language = this.getLanguage();
@@ -1355,6 +1360,16 @@ export class RoutingController {
     setMeasuredText(this.navigationHudDuration, formatDuration(this.lastDuration, language));
     this.navigationHudDestination.textContent = this.destinationName || UI[language].routeDestination;
     const copy = NAVIGATION_COPY[language], snapshot = this.getLocationSnapshot();
+    this.junction.update({
+      route: this.routeCoordinates,
+      next: this.rerouteConfirmation.pending ? null : next,
+      progressMeters: this.progressMeters,
+      speedMetersPerSecond: snapshot.speedMetersPerSecond,
+      accuracyMeters: snapshot.accuracyMeters > 0 ? snapshot.accuracyMeters : Infinity,
+      language,
+      navigating: this.navigating,
+      driving: this.travelMode === "car"
+    });
     const age = typeof snapshot.sampledAt === "number" ? Date.now() - snapshot.sampledAt : Infinity;
     const fresh = snapshot.coordinate !== null && age >= -5000 && age < 30000 && snapshot.accuracyMeters > 0 && snapshot.accuracyMeters <= 35;
     const position = routeCoordinateAt(this.routeCoordinates, this.progressMeters), ahead = routeCoordinateAt(this.routeCoordinates, this.progressMeters + 15);
