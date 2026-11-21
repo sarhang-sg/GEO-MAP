@@ -7,6 +7,7 @@ import { postedSpeed, roadInformationLabel } from "./road-information";
 import { readMapRoadInformation } from "./road-information-overlay";
 import { roadHazardDetails } from "./road-hazards";
 import { preciseRouteGeometry } from "./route-geometry";
+import { routeTrafficFeatures, remainingTrafficFeatures, type TrafficLevel } from "./route-traffic";
 import { navigationProfile, trustedTravelCourse, type TravelMode } from "./navigation-tracking";
 import { measureRouteProgress, routeCoordinateAt, routeSlice, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
 export { measureRouteProgress } from "./route-progress";
@@ -31,7 +32,6 @@ import { appUrl } from "./app-url";
 import { persistNavigationHistory } from "./navigation-history-store";
 import type { AtlasNavigationHistoryInput } from "./atlas-places";
 
-type TrafficLevel = "low" | "moderate" | "heavy" | "severe" | "closed" | "unknown";
 type RouteFeatureCollection = FeatureCollection<LineString, { distance: number; duration: number; traffic: TrafficLevel; congestion?: number; routeId?: number; connector?: boolean }>;
 type RoutePointCollection = FeatureCollection<Point, { kind: "destination" | "candidate" | "snapped-origin" | "snapped-destination" }>;
 type RoutingProvider = "osrm" | "mapbox";
@@ -202,44 +202,12 @@ function osrmProfileForMode(mode: TravelMode): string {
   return clean && clean !== "driving-traffic" ? clean : "driving";
 }
 
-function trafficLevel(value: string | undefined, numeric?: number): TrafficLevel {
-  const text = (value || "").toLowerCase();
-  if (text === "low" || text === "moderate" || text === "heavy" || text === "severe") return text;
-  if (text === "closed") return "closed";
-  if (typeof numeric === "number" && Number.isFinite(numeric)) {
-    if (numeric >= 90) return "severe";
-    if (numeric >= 70) return "heavy";
-    if (numeric >= 45) return "moderate";
-    if (numeric >= 0) return "low";
-  }
-  return "unknown";
-}
-
 function routeFeaturesFromGeometry(geometry: LineString, distance: number, duration: number, traffic: TrafficLevel = "unknown"): RouteFeatureCollection["features"] {
   return [{ type: "Feature", properties: { distance, duration, traffic, routeId: Date.now() }, geometry }];
 }
 
 function routeFeaturesFromMapbox(route: MapboxRoute): RouteFeatureCollection["features"] {
-  const geometry = preciseRouteGeometry(route);
-  const coords = geometry?.coordinates || [];
-  if (!geometry || coords.length < 2) return [];
-  const congestion = route.legs?.flatMap((leg) => leg.annotation?.congestion || []) || [];
-  const numeric = route.legs?.flatMap((leg) => leg.annotation?.congestion_numeric || []) || [];
-  const counts = new Map<TrafficLevel, number>();
-  const levels = numeric.length || congestion.length
-    ? Array.from({ length: Math.max(numeric.length, congestion.length) }, (_, index) => trafficLevel(congestion[index], numeric[index]))
-    : ["unknown" as TrafficLevel];
-  for (const level of levels) counts.set(level, (counts.get(level) || 0) + 1);
-  const priority: TrafficLevel[] = ["closed", "severe", "heavy", "moderate", "low", "unknown"];
-  const dominant = priority
-    .filter((level) => counts.has(level))
-    .sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0))[0] || "unknown";
-  const averageCongestion = numeric.length ? numeric.reduce((sum, value) => sum + (Number.isFinite(value) ? value : 0), 0) / numeric.length : undefined;
-  return [{
-    type: "Feature",
-    properties: { distance: route.distance || 0, duration: route.duration || 0, traffic: dominant, congestion: averageCongestion, routeId: Date.now() },
-    geometry
-  }];
+  return routeTrafficFeatures(route);
 }
 
 function flattenedRouteCoordinates(features: RouteFeatureCollection["features"]): LngLatTuple[] {
@@ -622,9 +590,9 @@ export class RoutingController {
       return;
     }
     if (!force && Math.abs(this.lastRouteLineProgress - this.progressMeters) < 1.5) return;
-    const coordinates = routeSlice(this.routeCoordinates, this.progressMeters);
-    source.setData({ type: "FeatureCollection", features: coordinates.length >= 2
-      ? [{ ...this.routeData.features[0], geometry: { type: "LineString", coordinates } }] : [] });
+    // Preserve Mapbox per-segment congestion while trimming the traveled route.
+    source.setData({ type: "FeatureCollection",
+      features: remainingTrafficFeatures(this.routeData.features, this.progressMeters) });
     this.lastRouteLineProgress = this.progressMeters;
   }
 
