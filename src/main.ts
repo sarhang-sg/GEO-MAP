@@ -316,17 +316,8 @@ class KurdistanAtlasController {
     this.map = new maplibregl.Map({
       container: mapElement,
       style: this.styleFor(this.mapMode),
-      ...(recoveredLifecycleState
-        ? {
-            center: recoveredLifecycleState.camera.center,
-            zoom: recoveredLifecycleState.camera.zoom,
-            bearing: recoveredLifecycleState.camera.bearing,
-            pitch: recoveredLifecycleState.camera.pitch
-          }
-        : {
-            bounds: KRI_BOUNDS,
-            fitBoundsOptions: { padding: this.fitPadding(), duration: 0, maxZoom: this.coverageFitMaxZoom() }
-          }),
+      bounds: KRI_BOUNDS,
+      fitBoundsOptions: { padding: this.fitPadding(), duration: 0, maxZoom: this.coverageFitMaxZoom() },
       maxBounds: KRI_BOUNDS,
       minZoom: this.coverageMinZoom(),
       maxZoom: 18,
@@ -866,14 +857,16 @@ class KurdistanAtlasController {
     this.installLayers();
     this.localityViewport.start();
     this.installInteractions();
-    if (!recoveredLifecycleState) this.fitToKri(false);
-    else {
+    if (recoveredLifecycleState) {
       this.setBasemapVisible(this.basemapVisible);
       this.setAdministrativeVisible(this.administrativeVisible);
       this.setPlacesVisible(this.placesVisible);
+    }
+    if (recoveredLifecycleState && isInsideKri(recoveredLifecycleState.camera.center, layers.boundary)) {
       this.map.jumpTo(recoveredLifecycleState.camera);
       this.map.triggerRepaint();
-    }
+    } else this.fitToKri(false);
+    this.liveLocation.setCoverage(layers.boundary);
     this.overlayLayout.refresh();
     this.map.resize();
     if (!localCoreEnabled) localityCount.textContent = new Intl.NumberFormat("en-US").format(this.localities.length);
@@ -1369,7 +1362,7 @@ class KurdistanAtlasController {
   }
   fitToKri(animate = true): void {
     const fit = (): void => {
-      this.beginManualMapFocus();
+      if (animate) this.beginManualMapFocus();
       this.map.setMinZoom(this.coverageMinZoom());
       this.map.resize();
       this.map.fitBounds(KRI_BOUNDS as LngLatBoundsLike, {
@@ -1382,8 +1375,7 @@ class KurdistanAtlasController {
     if (this.isMobileViewport() && !this.sheetCollapsed) {
       this.sheetCollapsed = true;
       this.applySheetState();
-      window.setTimeout(fit, 190);
-      return;
+      if (animate) { window.setTimeout(fit, 190); return; }
     }
     fit();
   }

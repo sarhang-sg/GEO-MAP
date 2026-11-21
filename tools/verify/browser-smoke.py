@@ -142,6 +142,94 @@ def verify_theme_contrast(page) -> None:
     print("PASS actual weather dialog, action SVGs, heart, and text contrast across eight palettes × three modes")
 
 
+def verify_desktop_location(browser) -> None:
+    context = browser.new_context(viewport={"width": 1366, "height": 768}, locale="en", service_workers="block")
+    page = context.new_page()
+    page.add_init_script("""(() => {
+      localStorage.setItem('nav-kurd:tutorial:completed', '1');
+      const sessionKey = 'nav-kurd:app-session';
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        schema: 1, savedAt: Date.now(), language: 'en', mapMode: 'street', sheetCollapsed: true,
+        basemapVisible: true, administrativeVisible: true, placesVisible: true, controlsHidden: false,
+        camera: {center: [41.5,33.6], zoom: 17, pitch: 0, bearing: 0}
+      }));
+      // Read the real map camera through the app's own session snapshot.
+      window.readCamera = () => {
+        document.dispatchEvent(new Event('freeze'));
+        return JSON.parse(sessionStorage.getItem(sessionKey)).camera;
+      };
+      const watches = [];
+      Object.defineProperty(navigator, 'geolocation', {value: {
+        watchPosition(success, error, options) {
+          watches.push({success, error, options, active: true});
+          return watches.length;
+        },
+        clearWatch(id) { watches[id - 1].active = false; }
+      }});
+      window.desktopGps = {
+        watches,
+        fail(code) { watches.at(-1).error({code, PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3}); },
+        fix(longitude, latitude, accuracy) {
+          watches.at(-1).success({timestamp: Date.now(), coords: {longitude, latitude, accuracy, speed: null, heading: null}});
+        }
+      };
+    })()""")
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    try:
+        page.goto(BASE_URL, wait_until="domcontentloaded")
+        page.locator('.map-shell[data-load-state="ready"]').wait_for(timeout=45000)
+        initial = page.evaluate("readCamera()")
+        assert initial["zoom"] < 10 and 42 < initial["center"][0] < 46, initial
+        locate = page.locator("#locateButton")
+        status = page.locator(".location-recovery")
+        locate.click()
+        page.evaluate("desktopGps.fail(1)")
+        assert status.get_attribute("data-state") == "denied"
+        assert status.locator("[data-location-pick]").is_visible()
+        assert page.evaluate("desktopGps.watches.length") == 1
+        status.locator("[data-location-retry]").click()
+        page.evaluate("desktopGps.fail(2)")
+        assert page.evaluate("desktopGps.watches.map(w => [w.options.enableHighAccuracy,w.active])") == [
+            [True, False], [True, False], [False, True]
+        ]
+        for coordinate in [[13.405, 52.52, 8], [41.5, 33.6, 7], [0, 0, 6]]:
+            page.evaluate("fix => desktopGps.fix(...fix)", coordinate)
+            assert status.get_attribute("data-state") == "outside-coverage"
+            assert "outside" in status.locator("p").inner_text().lower()
+            assert not status.locator("[data-location-preview]").count()
+        page.evaluate("desktopGps.fix(44.009414,36.191174,1200)")
+        preview = status.get_by_role("button", name="Show approximate area")
+        assert preview.is_visible()
+        assert "1.2 km" in status.locator("p").inner_text()
+        assert page.evaluate("readCamera()") == initial
+        preview.click()
+        page.wait_for_function("""() => {
+          const {center, zoom} = readCamera();
+          return Math.abs(center[0] - 44.009414) < 0.001 && Math.abs(center[1] - 36.191174) < 0.001 && zoom > 9 && zoom <= 14;
+        }""")
+        assert locate.get_attribute("data-location-state") == "approximate"
+        page.evaluate("desktopGps.fix(44.009414,36.191174,12)")
+        page.wait_for_function("""() => {
+          const {center, zoom} = readCamera();
+          return zoom > 15.8 && Math.abs(center[0] - 44.009414) < 0.001 && Math.abs(center[1] - 36.191174) < 0.001;
+        }""")
+        assert locate.get_attribute("data-location-state") == "ready"
+        page.evaluate("desktopGps.fix(13.405,52.52,8)")
+        assert locate.get_attribute("data-location-state") == "outside-coverage"
+        assert abs(page.evaluate("readCamera().center[0]") - 44.009414) < 0.001
+        status.locator("[data-location-pick]").click()
+        assert "inside" in page.locator("[data-coordinate-picker-body]").inner_text()
+        page.locator(".maplibregl-canvas").click()
+        page.locator(".map-coordinate-picker").wait_for(state="hidden")
+        assert locate.get_attribute("data-location-state") == "idle"
+        assert page.evaluate("desktopGps.watches.some(w => w.active)") is False
+        assert not errors, errors
+        print("PASS desktop location permission, provider fallback, masked session restore, outside coverage, area preview and precise recovery")
+    finally:
+        context.close()
+
+
 def verify_gps_mesh(browser) -> None:
     context = browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,
         permissions=["geolocation"],geolocation={"latitude":36.1911,"longitude":44.0092,"accuracy":6},
@@ -357,6 +445,7 @@ def main() -> int:
                 launch_args["executable_path"] = chromium_path
             browser = playwright.chromium.launch(**launch_args)
             verify_startup_loader(browser)
+            verify_desktop_location(browser)
             context = browser.new_context(
                 viewport={"width": 390, "height": 844},
                 locale="ku",
