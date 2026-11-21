@@ -9,7 +9,7 @@ import { roadHazardDetails } from "./road-hazards";
 import { preciseRouteGeometry } from "./route-geometry";
 import { routeTrafficFeatures, remainingTrafficFeatures, type TrafficLevel } from "./route-traffic";
 import { navigationProfile, trustedTravelCourse, type TravelMode } from "./navigation-tracking";
-import { measureRouteProgress, routeCoordinateAt, routeSlice, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
+import { measureRouteProgress, routeCoordinateAt, RerouteConfirmation, type RouteProgressMeasurement } from "./route-progress";
 export { measureRouteProgress } from "./route-progress";
 import {routeManeuvers,nextManeuver,type ProviderStep,type Maneuver} from "./route-maneuvers";
 import { RouteGuidanceOverlay } from "./route-guidance-overlay";
