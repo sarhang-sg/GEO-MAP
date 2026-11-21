@@ -16,9 +16,11 @@ Kurdish-first navigation, local maps and live weather, with Arabic and English a
   <img src="docs/images/nav-kurd-screen-3.jpg" width="30%" alt="NAV KURD weather and controls" />
 </p>
 
-## Version 11.0.0 · build 110002
+## Version 11.0.0 · build 110003
 
 Street, night and satellite modes each show a single icon. The online heart and count share a purple foreground. The 3D GPS arrow follows each camera frame at a fixed screen size. Small, standard and large sizes are available under **Appearance & controls**. Place sharing uses a compact QR card with the full link and sharing actions.
+
+The Android home-screen widget adapts its forecast and controls to the space you give it.
 
 In Android weather details, open **Widget location** to pin the displayed city or choose **Automatic GPS**. When GPS is off the widget keeps the last device position. Opening another city or adding a favorite affects only the weather directory.
 

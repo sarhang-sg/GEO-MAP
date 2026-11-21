@@ -1,6 +1,6 @@
 {
   "schema": "NAV KURD production source manifest v1",
-  "release": "2026-11-20-nav-kurd-v11.0.0-build.110002",
+  "release": "2026-11-20-nav-kurd-v11.0.0-build.110003",
   "version": "11.0.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "cacheSchemaVersion": 93,
@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1726,
-  "totalBytes": 290430990,
+  "totalBytes": 290431298,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -195,8 +195,8 @@
       "sha256": "c651b569bb8b478247af066683661024255d95e63f2558213d2fd09b919eae7f"
     },
     "docs/RELEASE.md": {
-      "bytes": 1834,
-      "sha256": "dd8e03c0de721af23489699a03b5a553f3f0099a3737a4b81b6993def49cb533"
+      "bytes": 2051,
+      "sha256": "1f0d048cbebdc22d98599ec984e43f85e217cff669990ed12dbc9f1f3cc93a20"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
@@ -2452,7 +2452,7 @@
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5300,
-      "sha256": "d61055f61e7cfae4dece669b2f6e2033ad796e78d72431bf4e5b7ed7efa8be1c"
+      "sha256": "004acc56e95f3b9c57c4a5b86ecf1849598f95befe20607049996f5e20b6b282"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -2468,11 +2468,11 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4232,
-      "sha256": "30e24026cc35a543f24d35d64f90afe8eb397cfd269fb43db7c9ad666132c4a9"
+      "sha256": "d9204e2c5af04513c0adb0ec2edebfe40ffb31f4ee0b9807d9c6f7ac48c31b1d"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6239,
-      "sha256": "f3666b0345cd37c6fd198d1462dcfd9e6befb72f29b05b4cd67fa1485deebc22"
+      "sha256": "5c8785c52eea002ed462dbe3ee8932ba7e3713b415b8ee87ae25afb8c2bfd61f"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
@@ -2540,7 +2540,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6262,
-      "sha256": "8822c22ed5d27ee6d68fc54b5378827f75723deddfc2eaa3788054f0c5be4cbb"
+      "sha256": "c1e6fbbc032e02beb584bcfe8a6ff56e7fe38193b6921b16bb3b9a059bebc073"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2584,7 +2584,7 @@
     },
     "public/data/kri/source-integrity-manifest.json": {
       "bytes": 128488,
-      "sha256": "43d0583bb25eb23fde3f32a129ec93d85c552405ad4ab5d011b33ad50c698925"
+      "sha256": "b713357662e59f481cfa48dcbad1b0db8f2f61fffee60c7af0e692568ceaaecc"
     },
     "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
       "bytes": 22951,
@@ -3676,7 +3676,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 1010,
-      "sha256": "76fc73d53c17dc636bffe798785794446de2bdba086065be81ab53dc4401a8cf"
+      "sha256": "d1b9a6bdef57440055efa7883a3bee410c91b2ef38683fe01e4e587bc612512e"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3703,12 +3703,12 @@
       "sha256": "679964129f56568bc93ca34d46c60005157bec90fe98c9c7b94c092c59884392"
     },
     "README.md": {
-      "bytes": 5419,
-      "sha256": "a191de22c6547a72a80f6a9f404cda4ca1fc0e61cdd92e2407b2813f8bc8b108"
+      "bytes": 5510,
+      "sha256": "a1e7a0ff8d77e54aa45645df83c22893de26deac6a9040c12652db3d048c6d47"
     },
     "release.config.json": {
       "bytes": 1057,
-      "sha256": "aa69996ebea9d9f24a50b83dd82bfd2dd9cdf038f51ccb2ada5a7ecb1128c748"
+      "sha256": "98c2118357f1a768740638148ee3d6c8f2d8db20e8e050a369304c5b7ba1a0c5"
     },
     "SECURITY.md": {
       "bytes": 1472,
@@ -4780,7 +4780,7 @@
     },
     "tools/release/finalize-publication.py": {
       "bytes": 14946,
-      "sha256": "267ed94b9b45c2c18e6bd9f3866fd3db81ca960f0c18b84f6ca54eebe7389836"
+      "sha256": "59a694ac8e90f31058543a3c0ff7fe5879ad3ffa764f9d14549728e4494ffcba"
     },
     "tools/release/generate-release-manifest.mjs": {
       "bytes": 2189,
