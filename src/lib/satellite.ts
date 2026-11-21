@@ -8,7 +8,7 @@ export type SatelliteSource =
   | { enabled: false; provider: "disabled"; reason: string; source: null; attribution: string }
   | {
       enabled: true;
-      provider: "maptiler" | "sentinel2" | "custom";
+      provider: "maptiler" | "mapbox" | "sentinel2" | "custom";
       source: RasterSatelliteSource;
       fallbackSource?: RasterSatelliteSource;
       detailSource?: RasterSatelliteSource;
@@ -108,6 +108,23 @@ export function resolveSatelliteSource(): SatelliteSource {
   const tileJson = clean(import.meta.env.VITE_KRI_SATELLITE_TILEJSON_URL);
   const template = clean(import.meta.env.VITE_KRI_SATELLITE_TILE_TEMPLATE);
   const attribution = clean(import.meta.env.VITE_KRI_SATELLITE_ATTRIBUTION);
+
+  // Explicit commercial alternative for comparing imagery currency in Kurdistan.
+  // Switching providers does not guarantee that any given capture is recent.
+  if (provider === "mapbox") {
+    const token = clean(import.meta.env.VITE_KRI_MAPBOX_ACCESS_TOKEN);
+    if (!token.startsWith("pk.")) {
+      return { enabled: false, provider: "disabled", reason: "missing-mapbox-key", source: null, attribution: "" };
+    }
+    const template = `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg90?access_token=${encodeURIComponent(token)}`;
+    return {
+      enabled: true,
+      provider: "mapbox",
+      source: { kind: "template", url: template, minzoom: 0, maxzoom: 22, tileSize: 256 },
+      attribution: '<a href="https://www.mapbox.com/about/maps/">© Mapbox</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · <a href="https://apps.mapbox.com/feedback/">Improve this map</a>',
+      probeUrls: [concreteProbeUrl(template)]
+    };
+  }
 
   // When a MapTiler key exists, use its globally continuous raster as the sole
   // operational base. Sentinel-2 is opt-in only: per-tile serverless Process API
