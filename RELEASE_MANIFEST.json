@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1727,
-  "totalBytes": 290456706,
+  "totalBytes": 290458213,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -219,8 +219,8 @@
       "sha256": "0aba3af2c514800b2d08d0927813b2e32bad4852be8d3cbc5dc25b6c983707e5"
     },
     "PROGRESS.md": {
-      "bytes": 1976,
-      "sha256": "2eb625125d3d0b9139a311acc4c1cc97551077ea77e1d81ed355ed1cfd94635f"
+      "bytes": 3483,
+      "sha256": "146cdbc8788eda095b69771c56b37e3afa8ed8182d85385622049f14c0ed0647"
     },
     "public/_headers": {
       "bytes": 2557,
