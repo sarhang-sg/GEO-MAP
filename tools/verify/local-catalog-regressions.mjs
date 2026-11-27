@@ -208,6 +208,16 @@ for(const native of [false,true]){
  const cut=api.routeSlice(loop,halfway.progressedMeters);
  assert.ok(geo.distanceMeters(cut[0],halfway.coordinate)<.1);assert.deepEqual(Array.from(cut.at(-1)),loop.at(-1));
  assert.equal(api.measureRouteProgress([44,36],[[44,36],[44,36]]),null);
+ const repeated=[loop[0],loop[0],loop[1],loop[1],loop[2],loop[2]];
+ const firstLeg=geo.distanceMeters(loop[0],loop[1]);
+ const totalLength=firstLeg+geo.distanceMeters(loop[1],loop[2]);
+ assert.deepEqual(Array.from(api.routeCoordinateAt(repeated,0)),loop[0]);
+ assert.deepEqual(Array.from(api.routeCoordinateAt(repeated,firstLeg)),loop[1]);
+ assert.deepEqual(Array.from(api.routeCoordinateAt(repeated,Infinity)),loop[2]);
+ assert.deepEqual(Array.from(api.routeSlice(repeated,firstLeg,totalLength),point=>Array.from(point)),[loop[1],loop[2]]);
+ assert.deepEqual(Array.from(api.routeSlice(repeated,-1,Infinity),point=>Array.from(point)),loop.slice(0,3));
+ assert.equal(api.routeSlice(repeated,firstLeg,firstLeg).length,0);
+ assert.equal(api.routeCoordinateAt([],0),null);
  const confirmation=new api.RerouteConfirmation();
  const fix=(n,extra={})=>confirmation.update({offRoute:true,coordinate:[44+n*.0001,36],accuracy:6,now:10_000+n*1000,timestamp:100+n,lastRequestAt:0,...extra});
  assert.equal(fix(0),false);assert.equal(fix(1),false);assert.equal(fix(1),false,'Repeated callback is not an independent fix');assert.equal(fix(2),true);

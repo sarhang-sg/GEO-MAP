@@ -12,7 +12,7 @@
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1727,
-  "totalBytes": 290449892,
+  "totalBytes": 290451470,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -219,8 +219,8 @@
       "sha256": "0aba3af2c514800b2d08d0927813b2e32bad4852be8d3cbc5dc25b6c983707e5"
     },
     "PROGRESS.md": {
-      "bytes": 956,
-      "sha256": "3691b03db63bec8abcfd3d0e1616a11a5231df7ff381d86918510c3006a77a5d"
+      "bytes": 1244,
+      "sha256": "db9f7e88a1d1ed67c8eeed427ab7a59551fb13dae992c1bc0402b16a84094c1c"
     },
     "public/_headers": {
       "bytes": 2557,
@@ -4135,8 +4135,8 @@
       "sha256": "7cab1a7e9801ac972797cec1f00a568984989e43d44c738e2ce5eaccb128529d"
     },
     "src/lib/route-progress.ts": {
-      "bytes": 5755,
-      "sha256": "678b25bb4e21586ec00037665d3ab0547c54ab564939ea2f3e6a57314b5482a1"
+      "bytes": 6276,
+      "sha256": "eede740b3d531da6f6d0cd0bebef6556ff30ea5cdef0bbb4f7cdd84c06bd25b6"
     },
     "src/lib/route-turn-geometry.ts": {
       "bytes": 2926,
@@ -4839,8 +4839,8 @@
       "sha256": "6c9339f29204214026d073b3481eb62d590989c0073f914bd899ab4c856d9c29"
     },
     "tools/verify/local-catalog-regressions.mjs": {
-      "bytes": 22419,
-      "sha256": "9991ff0990656926f681ac321c920307f08f3aa59cad7856202cea09183ac812"
+      "bytes": 23188,
+      "sha256": "4ad7522975b3d05cb396f8980cb179fdd6d31f8718da62d09c519417d6e2bc28"
     },
     "tools/verify/maintenance-regressions.mjs": {
       "bytes": 12125,
