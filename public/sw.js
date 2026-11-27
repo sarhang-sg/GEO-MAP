@@ -30,6 +30,8 @@ const REQUIRED_SHELL_PATHS = new Set(
     .filter((entry) => entry.required === true && typeof entry.path === "string")
     .map((entry) => new URL(entry.path.replace(/^\//, ""), self.registration.scope).pathname)
 );
+const PACK_ASSET_URLS = new Set(PRECACHE.filter((entry) => entry.offlineRuntime === true)
+  .map((entry) => new URL(entry.path.replace(/^\//, ""), BASE).toString()));
 let offlineRuntimeAborter = null;
 const cacheTrimStates = new Map();
 const versionedDataFetches = new Map();
@@ -335,40 +337,45 @@ async function notifyClients(type, detail = {}) {
   for (const client of clients) client.postMessage({ type, ...detail });
 }
 
-async function networkFirst(request, cacheName, fallbackUrl) {
+async function matchPackAsset(request) {
+  const url = canonicalDataUrl(request);
+  if (!PACK_ASSET_URLS.has(url)) return undefined;
+  return (await caches.open(DATA_CACHE)).match(url);
+}
+
+async function networkFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   if (!workerIsOffline()) {
     try {
       const response = await fetchWithTimeout(request, { cache: "no-store" });
-      if (response.ok) await cache.put(request, response.clone());
+      if (response.ok) await cache.put(request, response.clone()).catch(() => undefined);
       return response;
     } catch { /* Cache fallback below. */ }
   }
-  return (await cache.match(request)) || (fallbackUrl ? await caches.match(fallbackUrl) : undefined) || offlineFailureResponse(request);
+  return (await cache.match(request)) || (await matchPackAsset(request)) || offlineFailureResponse(request);
 }
 
 async function offlineNavigation(event) {
   const request = event.request;
-  const runtime = await caches.open(RUNTIME_CACHE);
   if (!workerIsOffline()) {
     try {
-      // Navigation preload starts in parallel with worker boot. Consume it
-      // before issuing a fallback fetch so one navigation never creates two
-      // competing network requests.
+      // Consume navigation preload before issuing a fallback fetch.
       const preloaded = await event.preloadResponse;
-      if (preloaded) {
-        if (preloaded.ok) await runtime.put(request, preloaded.clone());
-        return preloaded;
-      }
-      const response = await fetchWithTimeout(request, { cache: "no-store" }, NETWORK_TIMEOUT_MS);
-      if (response.ok) await runtime.put(request, response.clone());
-      return response;
+      return preloaded || await fetchWithTimeout(request, { cache: "no-store" }, NETWORK_TIMEOUT_MS);
     } catch { /* Deterministic offline response below. */ }
   }
-  if (await hasOfflineRuntimeMarker(null)) {
-    return (await caches.match(absolute("index.html"))) || (await caches.match(absolute(OFFLINE_FALLBACK_PATH))) || offlineFailureResponse(request);
+  const shell = await caches.open(SHELL_CACHE);
+  const url = canonicalDataUrl(request);
+  if (url !== absolute("index.html") && url.endsWith(".html")) {
+    const page = (await shell.match(url)) || (await matchPackAsset(request));
+    if (page) return page;
   }
-  return (await caches.match(absolute(OFFLINE_FALLBACK_PATH))) || (await caches.match(absolute("index.html"))) || offlineFailureResponse(request);
+  const offlinePath = absolute(OFFLINE_FALLBACK_PATH);
+  const indexPath = absolute("index.html");
+  const ready = await hasOfflineRuntimeMarker(null);
+  return (await shell.match(ready ? indexPath : offlinePath))
+    || (await shell.match(ready ? offlinePath : indexPath))
+    || offlineFailureResponse(request);
 }
 
 async function cacheFirst(request, cacheName) {
@@ -490,20 +497,21 @@ async function cacheFirstVisual(request, lifetimeEvent = null) {
   const [shell, runtime] = await Promise.all([caches.open(SHELL_CACHE), caches.open(RUNTIME_CACHE)]);
   const cached = (await shell.match(request)) || (await runtime.match(request));
   if (cached) return cached;
-  if (workerIsOffline()) return offlineFailureResponse(request);
+  if (workerIsOffline()) return (await matchPackAsset(request)) || offlineFailureResponse(request);
   try {
     // Visual assets are immutable and browser-cacheable. Do not impose the
     // general 4.5-second API timeout on fonts/icons over constrained mobile links.
     const response = await fetch(request, { cache: "force-cache", credentials: "same-origin" });
     if (response.ok) {
       const write = runtime.put(request, response.clone())
-        .then(() => trimCacheAfterWrite(RUNTIME_CACHE, runtime, RUNTIME_CACHE_LIMIT));
+        .then(() => trimCacheAfterWrite(RUNTIME_CACHE, runtime, RUNTIME_CACHE_LIMIT))
+        .catch(() => undefined);
       if (lifetimeEvent) lifetimeEvent.waitUntil(write);
       else await write;
     }
     return response;
   } catch {
-    return offlineFailureResponse(request);
+    return (await matchPackAsset(request)) || offlineFailureResponse(request);
   }
 }
 
