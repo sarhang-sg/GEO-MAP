@@ -1,6 +1,6 @@
 # NAV KURD 11.0.0
 
-The release identifier is `2026-11-20-nav-kurd-v11.0.0-build.110003`. The corresponding Android release uses version code `110003`.
+The release identifier is `2026-11-26-nav-kurd-v11.0.0-build.110004`. The corresponding Android release uses version code `110004`.
 
 ## Changes
 

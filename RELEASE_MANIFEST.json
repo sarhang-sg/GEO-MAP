@@ -1,18 +1,18 @@
 {
   "schema": "NAV KURD production source manifest v1",
-  "release": "2026-11-20-nav-kurd-v11.0.0-build.110003",
+  "release": "2026-11-26-nav-kurd-v11.0.0-build.110004",
   "version": "11.0.0",
   "mapDataVersion": "2026-07-22-nav-kurd-systematic-dedupe-2027",
   "cacheSchemaVersion": 93,
   "offlinePackVersion": "2027.13",
-  "generatedForDate": "2026-11-20",
+  "generatedForDate": "2026-11-26",
   "secretSafe": true,
   "dependencyPreview": {
     "packageDefinitionSha256": "0ea22aa71a43ef8d0cac0b9c2ccff661191a9aabf6ef1187e50d851ac49e2cbc",
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
   "fileCount": 1727,
-  "totalBytes": 290458213,
+  "totalBytes": 290459852,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -196,7 +196,7 @@
     },
     "docs/RELEASE.md": {
       "bytes": 2051,
-      "sha256": "1f0d048cbebdc22d98599ec984e43f85e217cff669990ed12dbc9f1f3cc93a20"
+      "sha256": "4a83d6cf1a4e6e2ea90f1a585b22e868020f33700752b090d9503518a52a22f9"
     },
     "docs/SECURITY.md": {
       "bytes": 613,
@@ -219,8 +219,8 @@
       "sha256": "0aba3af2c514800b2d08d0927813b2e32bad4852be8d3cbc5dc25b6c983707e5"
     },
     "PROGRESS.md": {
-      "bytes": 3483,
-      "sha256": "146cdbc8788eda095b69771c56b37e3afa8ed8182d85385622049f14c0ed0647"
+      "bytes": 4943,
+      "sha256": "b867bc11a42817d9868b9fe4a64ea85aa22ea891760d6fb9cc7f6e1cc04c911a"
     },
     "public/_headers": {
       "bytes": 2557,
@@ -2456,7 +2456,7 @@
     },
     "public/data/kri/kri-base-map-manifest.json": {
       "bytes": 5300,
-      "sha256": "004acc56e95f3b9c57c4a5b86ecf1849598f95befe20607049996f5e20b6b282"
+      "sha256": "620d12aa2d2d97bf46796f5b4cb4a6e04b9b5c81fb09e684e28436620609bd94"
     },
     "public/data/kri/kri-base.pmtiles": {
       "bytes": 15198962,
@@ -2472,11 +2472,11 @@
     },
     "public/data/kri/kri-canonical-data-quality-report.json": {
       "bytes": 4232,
-      "sha256": "d9204e2c5af04513c0adb0ec2edebfe40ffb31f4ee0b9807d9c6f7ac48c31b1d"
+      "sha256": "08cefedf4ff08def6815b59277497722def421c0b5371a18d891d7e045cf78d1"
     },
     "public/data/kri/kri-data-provenance.json": {
       "bytes": 6239,
-      "sha256": "5c8785c52eea002ed462dbe3ee8932ba7e3713b415b8ee87ae25afb8c2bfd61f"
+      "sha256": "045646acac75552953980b2fa3bd71c91ba474cf2e5d98de9247bffa0856f43b"
     },
     "public/data/kri/kri-data-quality-report.json": {
       "bytes": 3484,
@@ -2544,7 +2544,7 @@
     },
     "public/data/kri/kri-poi-catalog-report.json": {
       "bytes": 6262,
-      "sha256": "c1e6fbbc032e02beb584bcfe8a6ff56e7fe38193b6921b16bb3b9a059bebc073"
+      "sha256": "6b732c99e9c11cbe96972f063825268a9b774d4a59a46f7aa1ca846f0f843149"
     },
     "public/data/kri/kri-pois-render.geojson": {
       "bytes": 22430544,
@@ -2588,7 +2588,7 @@
     },
     "public/data/kri/source-integrity-manifest.json": {
       "bytes": 128488,
-      "sha256": "b713357662e59f481cfa48dcbad1b0db8f2f61fffee60c7af0e692568ceaaecc"
+      "sha256": "656bbfd435c1cc389511e7f59f5c2a578ea2811a239b93615d3dcad528d2463a"
     },
     "public/data/kri/viewport-poi-shards/base/10/632/398.json": {
       "bytes": 22951,
@@ -3680,7 +3680,7 @@
     },
     "public/releases/latest.json": {
       "bytes": 1010,
-      "sha256": "d1b9a6bdef57440055efa7883a3bee410c91b2ef38683fe01e4e587bc612512e"
+      "sha256": "99d88925e726ba358e178acbe01cadc04c9664eed8d79d07e523f8899357ff5a"
     },
     "public/robots.txt": {
       "bytes": 78,
@@ -3707,12 +3707,12 @@
       "sha256": "561f27b114443d6b81009035905ef8de4a57a7496bbccb72eeb5692d89125d9e"
     },
     "README.md": {
-      "bytes": 5510,
-      "sha256": "a1e7a0ff8d77e54aa45645df83c22893de26deac6a9040c12652db3d048c6d47"
+      "bytes": 5689,
+      "sha256": "09b711bd79461f68bc6f99e3ab8b52acf0538c8a8791e3a2ee8b09cdbde8d8c7"
     },
     "release.config.json": {
       "bytes": 1057,
-      "sha256": "98c2118357f1a768740638148ee3d6c8f2d8db20e8e050a369304c5b7ba1a0c5"
+      "sha256": "d6628bc96f96c61fc9d39ac60ac128213d43bb4a9284cab1448d147e150265ab"
     },
     "SECURITY.md": {
       "bytes": 1472,
@@ -4784,7 +4784,7 @@
     },
     "tools/release/finalize-publication.py": {
       "bytes": 14946,
-      "sha256": "59a694ac8e90f31058543a3c0ff7fe5879ad3ffa764f9d14549728e4494ffcba"
+      "sha256": "ac0502020404ab4d18cab7b680cd188294cc80bcd193137560e28967f04a3850"
     },
     "tools/release/generate-release-manifest.mjs": {
       "bytes": 2189,
