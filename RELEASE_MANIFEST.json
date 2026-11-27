@@ -11,8 +11,8 @@
     "packageDefinitionSha256": "0ea22aa71a43ef8d0cac0b9c2ccff661191a9aabf6ef1187e50d851ac49e2cbc",
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
-  "fileCount": 1726,
-  "totalBytes": 290446541,
+  "fileCount": 1727,
+  "totalBytes": 290449892,
   "files": {
     ".env.example": {
       "bytes": 3007,
@@ -217,6 +217,10 @@
     "package.json": {
       "bytes": 6228,
       "sha256": "0aba3af2c514800b2d08d0927813b2e32bad4852be8d3cbc5dc25b6c983707e5"
+    },
+    "PROGRESS.md": {
+      "bytes": 956,
+      "sha256": "3691b03db63bec8abcfd3d0e1616a11a5231df7ff381d86918510c3006a77a5d"
     },
     "public/_headers": {
       "bytes": 2557,
@@ -3887,8 +3891,8 @@
       "sha256": "ee825bcbefc6a20819aadb48a9a7851f35ffd4fae843cec20c5c6db525d7361e"
     },
     "src/lib/locality-viewport-source.ts": {
-      "bytes": 5689,
-      "sha256": "c30f24116601790b270d9dd2de4f3b99ebd344b49f5187e1c33ca257a043d819"
+      "bytes": 6440,
+      "sha256": "632285e0af392bd4ea7cd9308417c0780d6de51c83cd1f5e6e2e0e4482f6d519"
     },
     "src/lib/location-volume.ts": {
       "bytes": 6425,
@@ -4851,8 +4855,8 @@
       "sha256": "75a2fa2672714eff35cdf615e4bb0b5be17c2585a6e146607051dad50b05810d"
     },
     "tools/verify/map-reconciliation-regressions.mjs": {
-      "bytes": 5585,
-      "sha256": "bbedcc3aee5f42aa1c7a087b1eb26e67faca8a13ca3d3cc5de73c75fa3de4483"
+      "bytes": 7229,
+      "sha256": "4a32f6df22b88d69373945dfb291ec37c608d84b0400ffdaf75c1b79f5b67247"
     },
     "tools/verify/mobile-regressions.mjs": {
       "bytes": 8818,

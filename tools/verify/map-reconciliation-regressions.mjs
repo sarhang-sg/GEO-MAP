@@ -30,3 +30,38 @@ const flush=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const {installNativeAccountNotifications}=load('src/lib/native-account-notifications.ts',{getAtlasAuthIdentity:async()=>userid?{userId:userid}:null,loadAtlasNotifications:()=>new Promise(r=>{resolveRows=r;}),subscribeToAtlasAuth:fn=>{auth=fn;},subscribeToAtlasAccount:()=>{},navigator:{onLine:true},window:{addEventListener(){},setTimeout:fn=>{timer=fn;return 1;},flutter_inappwebview:{callHandler:async(n,p)=>sent.push(p)}}},'installNativeAccountNotifications');
  installNativeAccountNotifications(()=> 'en');timer();await flush();userid='';auth({event:'SIGNED_OUT'});timer();await flush();resolveRows([{id:'a',user_id:'user-a',title_en:'Private',title_ku:'Private',is_read:false,created_at:new Date().toISOString()}]);await flush();timer();await flush();assert.equal(sent.filter(p=>p.items.length).length,0);assert.equal(sent.at(-1).userId,'');console.log('PASS account notifications discard in-flight inbox after logout');
 }
+{
+  let localities = [];
+  let frame;
+  let visibleFeatures = [];
+  const target = {
+    setData(collection) { visibleFeatures = collection.features; },
+    updateData({ remove = [], add = [] }) {
+      visibleFeatures = [...visibleFeatures.filter(feature => !remove.includes(feature.id)), ...add];
+    }
+  };
+  const bounds = {getWest: () => 43, getEast: () => 45, getSouth: () => 35, getNorth: () => 37};
+  const map = {getZoom: () => 12, getBounds: () => bounds, getSource: () => target, on() {}, off() {}};
+  const {installLocalityViewportSourceController} = load('src/lib/locality-viewport-source.ts', {
+    document: {hidden: false},
+    window: {requestAnimationFrame: callback => { frame = callback; return 1; }},
+    recordRuntimeDiagnostic: error => { throw error; }
+  }, 'installLocalityViewportSourceController');
+  const controller = installLocalityViewportSourceController({map, getVisible: () => true, getLocalities: () => localities});
+  controller.start();
+  frame();
+  await flush();
+  localities = [{geometry: {coordinates: [44,36]}, properties: {id: 'village', place: 'village'}}];
+  controller.refresh();
+  frame();
+  await flush();
+  assert.deepEqual(Array.from(visibleFeatures, feature => feature.id), ['village']);
+  localities = [{geometry: {coordinates: [44.1,36]}, properties: {id: 'village', place: 'hamlet'}}];
+  controller.refresh();
+  frame();
+  await flush();
+  assert.equal(visibleFeatures[0].geometry.coordinates[0], 44.1);
+  assert.equal(visibleFeatures[0].properties.place, 'hamlet');
+  controller.destroy();
+  console.log('PASS locality catalog arrivals and corrections refresh the stationary viewport');
+}
