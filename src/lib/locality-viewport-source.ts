@@ -39,7 +39,8 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
   let destroyed = false;
   let frame: number | null = null;
   let lastSignature = "";
-  let committedIds = new Set<string>();
+  let committedLocalities: readonly LocalityFeature[] | null = null;
+  let committedFeatures = new Map<string, Feature<Point, Record<string, unknown>>>();
   let committedSource: GeoJSONSource | undefined;
   let writing = false;
   let refreshQueued = false;
@@ -55,13 +56,14 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
     if (!target) return;
     if (target !== committedSource) {
       committedSource = target;
-      committedIds = new Set();
+      committedFeatures = new Map();
       lastSignature = "";
     }
 
     const zoom = map.getZoom();
     const signature = `${visible}:${boundsSignature(map)}`;
-    if (signature === lastSignature) return;
+    const localities = getLocalities();
+    if (signature === lastSignature && localities === committedLocalities) return;
     // Visibility and minzoom belong to the layers. Retain this bounded viewport
     // so hiding/zooming does not destroy and recreate identical features.
     if (!visible || zoom < MIN_DETAIL_ZOOM) return;
@@ -74,32 +76,42 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
     const south = bounds.getSouth() - latitudePadding;
     const north = bounds.getNorth() + latitudePadding;
     const features: Feature<Point, Record<string, unknown>>[] = [];
-    const nextIds = new Set<string>();
+    const nextFeatures = new Map<string, Feature<Point, Record<string, unknown>>>();
 
-    for (const locality of getLocalities()) {
+    for (const locality of localities) {
       const place = locality.properties.place;
       if (!place || !MINOR_PLACES.has(place)) continue;
       const [longitude, latitude] = locality.geometry.coordinates;
       if (longitude < west || longitude > east || latitude < south || latitude > north) continue;
       const id = String(locality.properties.id);
-      nextIds.add(id);
-      features.push({
+      const feature: Feature<Point, Record<string, unknown>> = {
         type: "Feature",
         id,
         geometry: { type: "Point", coordinates: [longitude, latitude] },
         properties: { id, place }
-      });
+      };
+      features.push(feature);
+      nextFeatures.set(id, feature);
     }
 
-    const remove = [...committedIds].filter((id) => !nextIds.has(id));
-    const add = features.filter((feature) => !committedIds.has(String(feature.id)));
-    if (target.updateData && committedIds.size > 0) {
+    const remove = [...committedFeatures.keys()].filter((id) => !nextFeatures.has(id));
+    const add = [];
+    for (const [id, feature] of nextFeatures) {
+      const previous = committedFeatures.get(id);
+      if (previous && previous.properties.place === feature.properties.place
+        && previous.geometry.coordinates[0] === feature.geometry.coordinates[0]
+        && previous.geometry.coordinates[1] === feature.geometry.coordinates[1]) continue;
+      if (previous) remove.push(id);
+      add.push(feature);
+    }
+    if (target.updateData && committedFeatures.size > 0) {
       if (remove.length || add.length) await Promise.resolve(target.updateData({ remove: remove.length ? remove : undefined, add: add.length ? add : undefined }, true));
     } else {
       await Promise.resolve(target.setData({ type: "FeatureCollection", features }, true));
     }
     if (!destroyed && source() === target) {
-      committedIds = nextIds;
+      committedFeatures = nextFeatures;
+      committedLocalities = localities;
       lastSignature = signature;
     }
   };
@@ -139,7 +151,7 @@ export function installLocalityViewportSourceController(options: LocalityViewpor
       map.off("moveend", onSettledCamera);
       map.off("zoomend", onSettledCamera);
       map.off("style.load", onSettledCamera);
-      committedIds.clear();
+      committedFeatures.clear();
     }
   };
 }

@@ -51,22 +51,36 @@ export function measureRouteProgress(position: LngLatTuple, route: readonly LngL
   return best;
 }
 
+function distanceIndex(cumulative: readonly number[], distance: number, strictlyAfter: boolean): number {
+  let low = 0;
+  let high = cumulative.length;
+  while (low < high) {
+    const middle = low + Math.floor((high - low) / 2);
+    if (cumulative[middle] < distance || (strictlyAfter && cumulative[middle] === distance)) low = middle + 1;
+    else high = middle;
+  }
+  return low;
+}
+
 export function routeCoordinateAt(route: readonly LngLatTuple[], meters: number): LngLatTuple | null {
   if (!route.length) return null;
   const { segments, cumulative, total } = routeLengths(route);
   const at = Math.max(0, Math.min(total, meters));
-  for (let i = 0; i < segments.length; i++) if (segments[i] > 0 && at <= cumulative[i + 1]) {
-    const t = (at - cumulative[i]) / segments[i];
-    return [route[i][0] + t * (route[i + 1][0] - route[i][0]), route[i][1] + t * (route[i + 1][1] - route[i][1])];
-  }
-  return [...route[route.length - 1]];
+  if (at === 0) return [...route[0]];
+  if (!Number.isFinite(at)) return [...route[route.length - 1]];
+  const i = distanceIndex(cumulative, at, false) - 1;
+  const t = (at - cumulative[i]) / segments[i];
+  return [route[i][0] + t * (route[i + 1][0] - route[i][0]), route[i][1] + t * (route[i + 1][1] - route[i][1])];
 }
 
 export function routeSlice(route: readonly LngLatTuple[], start: number, end = Infinity): LngLatTuple[] {
+  if (end <= start) return [];
   const first = routeCoordinateAt(route, start), last = routeCoordinateAt(route, end);
-  if (!first || !last || end <= start) return [];
+  if (!first || !last) return [];
   const { cumulative } = routeLengths(route);
-  return [first, ...route.filter((_, i) => cumulative[i] > start && cumulative[i] < end), last]
+  const interior = Number.isNaN(start) || Number.isNaN(end) ? []
+    : route.slice(distanceIndex(cumulative, start, true), distanceIndex(cumulative, end, false));
+  return [first, ...interior, last]
     .filter((point, i, all) => i === 0 || distanceMeters(all[i - 1], point) > 0.05);
 }
 

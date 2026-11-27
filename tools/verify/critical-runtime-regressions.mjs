@@ -471,3 +471,85 @@ class Events {
 {
  const builder=fs.readFileSync(new URL('tools/android/build-runtime.mjs',root),'utf8');const sort=builder.match(/files\.sort\([^;]+;/)?.[0];assert.ok(sort);const files=['assets/a.js','assets/Z.js','assets/A.js','assets/z.js'].map(path=>({path}));vm.runInNewContext(sort,{files});assert.deepEqual(files.map(x=>x.path),['assets/A.js','assets/Z.js','assets/a.js','assets/z.js']);console.log('PASS Android inventory uses native UTF-16 ordering independent of locale');
 }
+
+{
+  const origin = 'https://map.example';
+  const packPaths = ['assets/icons/help.svg', 'assets/icons/groups.json', 'legal/privacy.html'];
+  const fetchHandlers = new Map();
+  const storage = new Map();
+  const puts = [];
+  let requests = 0;
+  let quotaExceeded = false;
+  const caches = {
+    async open(name) {
+      if (!storage.has(name)) storage.set(name, new Map());
+      const entries = storage.get(name);
+      return {
+        async match(request) { return entries.get(request.url ?? request)?.clone(); },
+        async put(request, response) {
+          if (quotaExceeded) throw new DOMException('Storage is full', 'QuotaExceededError');
+          puts.push(request.url ?? request);
+          entries.set(request.url ?? request, response);
+        }
+      };
+    },
+    async match(request) {
+      for (const entries of storage.values()) {
+        const response = entries.get(request.url ?? request);
+        if (response) return response.clone();
+      }
+    }
+  };
+  const self = {
+    registration: { scope: `${origin}/` },
+    location: { origin },
+    navigator: { onLine: true },
+    addEventListener: (type, handler) => fetchHandlers.set(type, handler)
+  };
+  const worker = fs.readFileSync(new URL('public/sw.js', root), 'utf8');
+  const context = vm.createContext({ self, caches, URL, Request, Response, Headers, atob,
+    AbortController, DOMException, setTimeout, clearTimeout,
+    __KRI_PRECACHE__: packPaths.map(path => ({ path, bytes: 1, offlineRuntime: true })),
+    async fetch() { requests++; return new Response('online'); }
+  });
+  vm.runInContext(`${worker}\nglobalThis.names = { SHELL_CACHE, DATA_CACHE, RELEASE_ID, MAP_DATA_VERSION, OFFLINE_PACK_VERSION };`, context);
+  const { SHELL_CACHE, DATA_CACHE, RELEASE_ID, MAP_DATA_VERSION, OFFLINE_PACK_VERSION } = context.names;
+  await (await caches.open('old-shell')).put(`${origin}/offline.html`, new Response('old fallback'));
+  const shell = await caches.open(SHELL_CACHE);
+  await shell.put(`${origin}/offline.html`, new Response('current fallback'));
+  await shell.put(`${origin}/index.html`, new Response('current app'));
+  const pack = await caches.open(DATA_CACHE);
+  for (const path of packPaths) await pack.put(`${origin}/${path}`, new Response(path));
+  await pack.put(`${origin}/unlisted.svg`, new Response('unexpected entry'));
+  const request = (path, mode, preloadResponse = undefined) => {
+    let result;
+    fetchHandlers.get('fetch')({
+      request: { url: `${origin}/${path}`, method: 'GET', mode, headers: new Headers() },
+      preloadResponse,
+      respondWith: response => { result = response; }
+    });
+    return result;
+  };
+
+  puts.length = 0;
+  assert.equal(await (await request('?action=coordinate&lng=44', 'navigate', Promise.resolve(new Response('preloaded')))).text(), 'preloaded');
+  assert.equal(requests, 0);
+  assert.equal(await (await request('?action=account', 'navigate')).text(), 'online');
+  assert.deepEqual(puts, [], 'Navigation URLs do not populate a private, unused runtime cache');
+  quotaExceeded = true;
+  assert.equal(await (await request('misc/public.json', 'cors')).text(), 'online');
+  quotaExceeded = false;
+
+  self.navigator.onLine = false;
+  assert.equal(await (await request('', 'navigate')).text(), 'current fallback');
+  assert.equal(await (await request('legal/privacy.html?lang=ku', 'navigate')).text(), 'legal/privacy.html');
+  assert.equal(await (await request('assets/icons/help.svg', 'cors')).text(), 'assets/icons/help.svg');
+  assert.equal(await (await request('assets/icons/groups.json?v=1', 'cors')).text(), 'assets/icons/groups.json');
+  assert.equal((await request('unlisted.svg', 'cors')).status, 504);
+  await pack.put(`${origin}/__nav-kurd-offline-pack-ready__.json`, Response.json({
+    schema: 1, release: RELEASE_ID, mapDataVersion: MAP_DATA_VERSION, offlinePackVersion: OFFLINE_PACK_VERSION,
+    preparedLanguages: ['ku'], languages: { ku: { cachedBytes: packPaths.length, cachedEntries: packPaths.length } }
+  }));
+  assert.equal(await (await request('?action=coordinate', 'navigate')).text(), 'current app');
+  console.log('PASS offline navigation uses the current shell, downloaded public assets resolve, and online responses survive cache quota errors');
+}
