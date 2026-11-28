@@ -2,6 +2,8 @@ import { installInterfaceFeedback } from "./lib/interface-feedback";
 import { ATTRIBUTION_CHANGE_EVENT, normalizeAttributionLinks, updateAttributionFeedback } from "./lib/satellite-credit";
 import { installMapTouchGuard } from "./lib/map-touch-guard";
 import { installRoadInformation } from "./lib/road-information-overlay";
+import { installKurdistanLiveTraffic } from "./lib/kurdistan-live-traffic";
+import { installKurdistanTransportHub } from "./lib/kurdistan-transport-hub";
 import { roadHazardDetails } from "./lib/road-hazards";
 import {NativeOfflineMapPack} from "./android/offline-map-pack";
 import {initializeLocalPreferences,flushNativePreferences} from "./android/ui-preferences";
@@ -252,6 +254,8 @@ class KurdistanAtlasController {
   private readonly liveLocation: LiveLocationController;
   private readonly coordinatePicker: MapCoordinatePicker;
   private readonly routing: RoutingController;
+  private readonly traffic: ReturnType<typeof installKurdistanLiveTraffic>;
+  private readonly transportHub: ReturnType<typeof installKurdistanTransportHub>;
   private readonly poiIcons: PoiIconController;
   private readonly basePoiViewport: ViewportPoiSourceController;
   private readonly naturalPoiViewport: ViewportPoiSourceController;
@@ -361,7 +365,13 @@ class KurdistanAtlasController {
     this.map.dragPan.enable();
     this.map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-left");
     installMapLeftControlRail({ map: this.map, threeDButton, visibilityButton: controlsVisibilityButton });
+    this.traffic = installKurdistanLiveTraffic({
+      map: this.map, mapShell,
+      accessToken: import.meta.env.VITE_KRI_MAPBOX_ACCESS_TOKEN || "",
+      getLanguage: () => this.language
+    });
     installMapCameraController({ map: this.map, button: threeDButton });
+    this.transportHub = installKurdistanTransportHub({ map: this.map, mapShell, getLanguage: () => this.language });
     this.tutorialMapDemo = installTutorialMapDemoController({
       map: this.map,
       getMapMode: () => this.mapMode,
@@ -1108,6 +1118,8 @@ class KurdistanAtlasController {
     setMessage(this.readyMessageFor(), "success");
     this.ownerPlaces.setLanguageStatus();
     this.routing.refreshLanguage();
+    this.traffic.refreshLanguage();
+    this.transportHub.refreshLanguage();
     this.labelController.clear();
     this.clearTransientMapPopups();
     this.queueLabels();

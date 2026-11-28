@@ -1,0 +1,53 @@
+/* Opt-in road congestion control: no fake traffic on missing-data roads. */
+.nav-traffic-control {
+  position: absolute;
+  z-index: 33;
+  bottom: clamp(74px, 13vh, 116px);
+  inset-inline-start: clamp(12px, 3vw, 26px);
+  max-width: min(310px, 60vw);
+  pointer-events: auto;
+  font-family: var(--font-ui);
+}
+.nav-traffic-control__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 15px;
+  color: #f0f6ff;
+  background: #14243a;
+  box-shadow: 0 8px 25px rgba(0,0,0,.24);
+  font: 750 12px/1.35 var(--font-ui);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.nav-traffic-control__toggle:focus-visible { outline: 2px solid #a8dbff; outline-offset: 2px; }
+.nav-traffic-control.is-enabled .nav-traffic-control__toggle { background: #1f4259; }
+.nav-traffic-control__dot {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #869bad;
+  box-shadow: inset 0 0 0 3px #c7d8e5;
+}
+.nav-traffic-control.is-enabled .nav-traffic-control__dot {
+  background: #56d78b;
+  box-shadow: 0 0 0 3px #56d78b33;
+}
+.nav-traffic-control__note {
+  display: block;
+  max-width: 240px;
+  margin-top: 4px;
+  padding: 5px 10px;
+  border-radius: 9px;
+  color: #d8e8f2;
+  background: #14243add;
+  font-size: 9px;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .nav-traffic-control { inset-inline-start: 10px; bottom: 106px; }
+  .nav-traffic-control__toggle { min-height: 38px; padding: 7px 11px; font-size: 11px; }
+}

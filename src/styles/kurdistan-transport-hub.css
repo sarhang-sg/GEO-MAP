@@ -1,0 +1,52 @@
+/* Regional transport directory; flight data comes from linked official sources. */
+.nav-transport-trigger svg { width: 21px; height: 21px; display: block; }
+.nav-transport-panel {
+  position: absolute;
+  z-index: 38;
+  inset-inline-end: clamp(14px, 3vw, 30px);
+  top: clamp(105px, 17vh, 168px);
+  width: min(360px, calc(100vw - 28px));
+  max-height: min(70dvh, 620px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 20px;
+  padding: 15px;
+  color: #eef5fb;
+  background: #12243a;
+  box-shadow: 0 18px 48px #0005;
+  font-family: var(--font-ui);
+}
+.nav-transport-panel[hidden] { display: none !important; }
+.nav-transport-panel header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.nav-transport-panel header strong { font-size: 16px; font-weight: 800; }
+.nav-transport-panel header button {
+  flex: 0 0 auto; width: 34px; height: 34px;
+  border: 0; border-radius: 12px; background: #283e57;
+  color: #fff; font-size: 23px; cursor: pointer;
+}
+.nav-transport-panel h3 { margin: 13px 0 7px; font-size: 12px; }
+.nav-transport-panel__airport {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 12px; margin-block: 7px;
+  border-radius: 13px;
+  background: #1e344c;
+}
+.nav-transport-panel__airport strong { font-size: 13px; }
+.nav-transport-panel__airport small { color: #a6c7e2; direction: ltr; }
+.nav-transport-panel__airport div { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.nav-transport-panel__airport a,
+.nav-transport-panel__airport button {
+  border: 0; border-radius: 10px; padding: 8px 9px;
+  color: #fff; background: #2a6f9f; cursor: pointer;
+  font: 650 11px/1.4 var(--font-ui);
+  text-decoration: none;
+}
+.nav-transport-panel__airport button { background: #35506b; }
+.nav-transport-panel p { margin: 0; line-height: 1.7; font-size: 12px; color: #e3edf5; }
+.nav-transport-panel > small { display: block; margin-top: 12px; color: #a9bccc; line-height: 1.6; font-size: 10px; }
+@media (max-width: 600px) {
+  .nav-transport-panel { inset-inline-end: 12px; top: 94px; max-height: min(70dvh, 590px); }
+}
