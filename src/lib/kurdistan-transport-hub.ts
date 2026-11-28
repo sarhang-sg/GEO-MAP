@@ -120,7 +120,7 @@ export function installKurdistanTransportHub(options: {
       list.append(card);
     });
   };
-  const onTrigger = (): void => setOpen(panel.hidden);
+  const onTrigger = (): void => setOpen(panel.hidden === true);
   trigger.addEventListener("click", onTrigger);
   close.addEventListener("click", () => { setOpen(false); trigger.focus(); });
   window.addEventListener("keydown", onKeyDown);

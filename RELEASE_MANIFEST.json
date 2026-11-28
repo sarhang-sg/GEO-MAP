@@ -11,12 +11,12 @@
     "packageDefinitionSha256": "0ea22aa71a43ef8d0cac0b9c2ccff661191a9aabf6ef1187e50d851ac49e2cbc",
     "lockRootDefinitionSha256": "5087b1d0b7577e07e6f58c4679e14bad7e1e638a0f2f124a8a67c0d188b3e4fd"
   },
-  "fileCount": 1726,
-  "totalBytes": 290446541,
+  "fileCount": 1734,
+  "totalBytes": 290483765,
   "files": {
     ".env.example": {
-      "bytes": 3007,
-      "sha256": "1b1aa2bfc406325b08b705c9161c7cbc1ddbb5ab6ec102311c16fe10341bb343"
+      "bytes": 3254,
+      "sha256": "f43d2c89bf35d0b47eaa1453b2548e7eb78616a421b209f23332309e14fb149f"
     },
     ".gitattributes": {
       "bytes": 743,
@@ -201,6 +201,10 @@
     "docs/SECURITY.md": {
       "bytes": 613,
       "sha256": "50b861e3a1550b7af4c5b4f26e8f7410ccfe795bb12019357de09a7e0c9afd92"
+    },
+    "docs/SMART_DRIVE_TRANSPORT_PLAN.md": {
+      "bytes": 5962,
+      "sha256": "28eca502a1a94c08f3bf416a277af3385259c3ba2d01c2b8619a0a413fc5c53c"
     },
     "index.html": {
       "bytes": 4383,
@@ -3858,6 +3862,14 @@
       "bytes": 2959,
       "sha256": "db46d45722c123abec7d8c2471610835dbf5f9968dfd13d8375fbee0159c9851"
     },
+    "src/lib/kurdistan-live-traffic.ts": {
+      "bytes": 4958,
+      "sha256": "08531dca4e8a31102d615051e2eff53eafd38bb433551a448a5a347ea98a58f7"
+    },
+    "src/lib/kurdistan-transport-hub.ts": {
+      "bytes": 7294,
+      "sha256": "218fb1aebe96081eba07e7a902be0e4fa42c5aa3bd6ef3eeb09a20c7a689050d"
+    },
     "src/lib/label-controller.ts": {
       "bytes": 23442,
       "sha256": "32423879da92dc9d932cc7396b0589f42c0fd262f909a430f2d173d8d664fb71"
@@ -4134,13 +4146,17 @@
       "bytes": 5755,
       "sha256": "678b25bb4e21586ec00037665d3ab0547c54ab564939ea2f3e6a57314b5482a1"
     },
+    "src/lib/route-traffic.ts": {
+      "bytes": 4796,
+      "sha256": "c53773e4ce7506252cbb842fa38b74145e062c2355626bd25b03edb79e9d0d75"
+    },
     "src/lib/route-turn-geometry.ts": {
       "bytes": 2926,
       "sha256": "c4ca1cfc50b98471c3561feda0a0daf547f24017449d22d133778ca8b3d09376"
     },
     "src/lib/routing-controller.ts": {
-      "bytes": 81418,
-      "sha256": "8687b5118f48ec7e32bef2336d10d9107ea2e5352801b07a08c5b3860c023950"
+      "bytes": 80646,
+      "sha256": "51a9f5b3e5098ee53e0efad33eec87973d2085a08aae035e0a43ca6760681638"
     },
     "src/lib/runtime-diagnostics.ts": {
       "bytes": 15390,
@@ -4167,8 +4183,8 @@
       "sha256": "6c18fd86338a440c98d752545252d32c9c3205195d6dbd44a1081013393730f7"
     },
     "src/lib/satellite.ts": {
-      "bytes": 9575,
-      "sha256": "4e4477b6fbfbe465ba6731d6cdc6e3d17e4225c6e27a0e8c7e305257051bb464"
+      "bytes": 10581,
+      "sha256": "8984998d7bdefa7f7bd28fc1204d79039ae0fe8acd657b04089e8aa06d9d0c9c"
     },
     "src/lib/search-controller.ts": {
       "bytes": 15006,
@@ -4197,6 +4213,10 @@
     "src/lib/service-worker-registration.ts": {
       "bytes": 2156,
       "sha256": "4cbd4a4e2804c1e95d66a5842fea2b4a2f8e5ae40997c1a406479b5244e06dad"
+    },
+    "src/lib/smart-junction-inset.ts": {
+      "bytes": 6606,
+      "sha256": "b9fe8a864b6a3faeec20671ffe37524ce25622256ecedd2187233f99b6e3263e"
     },
     "src/lib/static-search.ts": {
       "bytes": 20673,
@@ -4263,16 +4283,16 @@
       "sha256": "d78d285bf005d5bd2eebf51642190c488b888fab215adf9ff6ab5d771984efb1"
     },
     "src/main.ts": {
-      "bytes": 112760,
-      "sha256": "48a1b0a420e961e1da2d94f5cf9fb29fc6d52a5712192f8645e20a8ecaadf2a4"
+      "bytes": 113464,
+      "sha256": "5f5363e9f2d5506c74f452f27809f53bd1378e35daad24a3b41aac776239ef8b"
     },
     "src/pwa-register.ts": {
       "bytes": 663,
       "sha256": "030041564d4c4ae4a13440757ae665e230e6be1ab122c7e5a9e907a5a61f27ca"
     },
     "src/styles.css": {
-      "bytes": 1690,
-      "sha256": "41f35bafb56421fc7fa5a23ccdda80df83af21062fa5c2a3b71eaebf2d9319ab"
+      "bytes": 1833,
+      "sha256": "1f5662bd16206d3320bcc6823be308bef550c9e366158c7920d253ade5f4594b"
     },
     "src/styles/about-support.css": {
       "bytes": 6810,
@@ -4333,6 +4353,14 @@
     "src/styles/interaction-quality.css": {
       "bytes": 7737,
       "sha256": "d0dc50d9904c6b67c35183b327d889475baa384b45e55dd97d553567d5b29210"
+    },
+    "src/styles/kurdistan-live-traffic.css": {
+      "bytes": 1515,
+      "sha256": "eea63fd1b6e903b9cabd2f0e2c70d80aab163a27d0df0575c0b7aebd8a904b77"
+    },
+    "src/styles/kurdistan-transport-hub.css": {
+      "bytes": 2102,
+      "sha256": "90b5e8891e85e9243b1e9a9aab1baac451208b59a5a05013cea8af1f71b0d9cf"
     },
     "src/styles/labels-typography.css": {
       "bytes": 5039,
@@ -4421,6 +4449,10 @@
     "src/styles/search-performance.css": {
       "bytes": 1133,
       "sha256": "6e380ac7ef3f10c6f9403abcf26714b3117500a86e279cc6b64f4c3d84e317ac"
+    },
+    "src/styles/smart-junction-inset.css": {
+      "bytes": 2663,
+      "sha256": "c5f2d2adba2e41bc632ab8605d7ee81fe71f2e3233c011698d14d2cee3897041"
     },
     "src/styles/support-payment.css": {
       "bytes": 16936,
